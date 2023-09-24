@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Aplicacionesmast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>	
+	
+	<sql-query name="aplicacionesmast.estavivobd">
+         select cast(getdate() as varchar(400)) as "nombre"
+    </sql-query>
+    
+    <sql-query name="aplicacionesmast.obtenerDtoCore">
+         select 
+			AplicacionCodigo "aplicacioncodigo"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,UltimoPeriodoContable "ultimoperiodocontable"
+			,SistemaFuente "sistemafuente"
+			,cast(EstaDisponible as varchar(1))  as "estadisponible"
+			,RTRIM(DepartamentoRevisor) "departamentorevisor"
+			,UltimoPeriodoProcesado "ultimoperiodoprocesado"
+			,AplicacionUsuario "aplicacionusuario"
+			,cast(Estado as varchar(1))  as "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,AplicacionUsuario02 "aplicacionusuario02"
+			,AplicacionUsuario03 "aplicacionusuario03"
+			,AplicacionUsuario04 "aplicacionusuario04"
+			,ORDEN "orden"
+
+         from APLICACIONESMAST
+         where 
+			AplicacionCodigo = :p_aplicacioncodigo
+	
+
+    </sql-query>
+
+    <sql-query name="aplicacionesmast.listarPaginadoContar">
+         select count(1)
+         from APLICACIONESMAST
+         where 
+			AplicacionCodigo = ISNULL(:p_aplicacioncodigo, AplicacionCodigo)
+			
+
+    </sql-query>
+
+    <sql-query name="aplicacionesmast.listarPaginadoSentencia">
+         select 
+			AplicacionCodigo "aplicacioncodigo"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,UltimoPeriodoContable "ultimoperiodocontable"
+			,SistemaFuente "sistemafuente"
+			,cast(EstaDisponible as varchar(1))  as "estadisponible"
+			,DepartamentoRevisor "departamentorevisor"
+			,UltimoPeriodoProcesado "ultimoperiodoprocesado"
+			,AplicacionUsuario "aplicacionusuario"
+			,cast(Estado as varchar(1))  as "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,AplicacionUsuario02 "aplicacionusuario02"
+			,AplicacionUsuario03 "aplicacionusuario03"
+			,AplicacionUsuario04 "aplicacionusuario04"
+			,ORDEN "orden"
+			,CASE ESTADO WHEN 'A' THEN 'Activo' WHEN 'I' THEN 'Inactivo' ELSE '' END AS "estadodescripcion"
+         from APLICACIONESMAST
+         where 
+			AplicacionCodigo = ISNULL(:p_aplicacioncodigo, AplicacionCodigo)
+
+
+    </sql-query>
+
+    <sql-query name="aplicacionesmast.listarDtoCore">
+         select 
+			AplicacionCodigo "aplicacioncodigo"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,UltimoPeriodoContable "ultimoperiodocontable"
+			,SistemaFuente "sistemafuente"
+			,EstaDisponible "estadisponible"
+			,DepartamentoRevisor "departamentorevisor"
+			,UltimoPeriodoProcesado "ultimoperiodoprocesado"
+			,AplicacionUsuario "aplicacionusuario"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,AplicacionUsuario02 "aplicacionusuario02"
+			,AplicacionUsuario03 "aplicacionusuario03"
+			,AplicacionUsuario04 "aplicacionusuario04"
+			,ORDEN "orden"
+
+         from APLICACIONESMAST
+         where 
+			AplicacionCodigo = ISNULL(:p_aplicacioncodigo, AplicacionCodigo)
+			AplicacionCodigo = ISNULL(:p_aplicacioncodigo, AplicacionCodigo)
+
+    </sql-query>
+    
+	<sql-query name="aplicacionesmast.listardepartamentos">
+	    <![CDATA[
+	       SELECT departmentmst.description as "nombre",   
+         departmentmst.department  as "codigo"
+    FROM departmentmst  
+   WHERE ( departmentmst.status = 'A' )       
+ORDER BY departmentmst.description ASC   
+
+	    ]]>
+	</sql-query>
+	
+		<sql-query name="aplicacionesmast.listarsistemafuente">
+	    <![CDATA[
+  SELECT vouchersourcemst.vouchersource as "codigo",   
+         vouchersourcemst.localname as "nombre" 
+    FROM vouchersourcemst  
+   WHERE vouchersourcemst.status = 'A'    
+
+
+	    ]]>
+	</sql-query>
+
+
+
+
+
+
+
+ 
+ 
+</hibernate-mapping>

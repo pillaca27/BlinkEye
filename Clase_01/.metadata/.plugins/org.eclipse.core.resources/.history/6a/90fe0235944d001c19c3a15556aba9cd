@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : core.GpEvaaspecto -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="parametrosmast.listar">
+       select 
+			CompaniaCodigo companiacodigo,
+			AplicacionCodigo aplicacioncodigo,
+			ParametroClave parametroclave,
+			DescripcionParametro descripcionparametro
+			estado estado
+		from ParametrosMast
+		WHERE 
+		 ( ParametrosMast.CompaniaCodigo = ISNULL(:par_compania, ParametrosMast.CompaniaCodigo)  )
+		AND ( ParametrosMast.AplicacionCodigo = ISNULL(:par_aplicacion, ParametrosMast.AplicacionCodigo)  ) 
+		AND ( ParametrosMast.ParametroClave = ISNULL(:par_parametros, ParametrosMast.ParametroClave)  )   
+		AND  ( UPPER(ParametrosMast.DescripcionParametro) like  '%' + ISNULL(:par_descripcion,UPPER(ParametrosMast.DescripcionParametro)) + '%'   ) 
+	</sql-query>
+</hibernate-mapping>

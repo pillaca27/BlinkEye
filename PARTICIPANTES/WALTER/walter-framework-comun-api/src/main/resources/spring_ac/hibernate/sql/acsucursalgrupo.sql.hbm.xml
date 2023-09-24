@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : contabilidad.AcSucursalgrupo
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+
+	<sql-query name="acsucursalgrupo.obtenerDtoPorUuid">
+         select 
+			CAST(a.SucursalGrupo AS VARCHAR) "sucursalgrupo"
+			,CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPO a
+         where 
+			a.UUID = :p_uuid
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.obtenerDto">
+         select 
+			CAST(a.SucursalGrupo AS VARCHAR) "sucursalgrupo"
+			,CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPO a
+         where 
+			a.SucursalGrupo = :p_sucursalgrupo
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listarPaginadoContar">
+         select count(1)
+         from AC_SUCURSALGRUPO a
+         left join AC_SucursalGrupoMayor sg on sg.SucursalGrupoMayor = a.SucursalGrupoMayor and sg.Estado = 'A'
+         where 
+			a.SucursalGrupo = ISNULL(:p_sucursalgrupo, a.SucursalGrupo)
+			AND a.SucursalGrupoMayor = ISNULL(:p_sucursalgrupomayor, a.SucursalGrupoMayor)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listarPaginadoSentencia">
+         select 
+			CAST(a.SucursalGrupo AS VARCHAR) "sucursalgrupo"
+			,CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+			,sg.DescripcionLocal "sucursalgrupomayornombre"
+         from AC_SUCURSALGRUPO a
+         left join AC_SucursalGrupoMayor sg on sg.SucursalGrupoMayor = a.SucursalGrupoMayor and sg.Estado = 'A'
+         where 
+			a.SucursalGrupo = ISNULL(:p_sucursalgrupo, a.SucursalGrupo)
+			AND a.SucursalGrupoMayor = ISNULL(:p_sucursalgrupomayor, a.SucursalGrupoMayor)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listarDtoCore">
+         select 
+			CAST(a.SucursalGrupo AS VARCHAR) "sucursalgrupo"
+			,CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPO a
+         where 
+			a.SucursalGrupo = ISNULL(:p_sucursalgrupo, a.SucursalGrupo)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="acsucursalgrupo.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

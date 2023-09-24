@@ -1,0 +1,643 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : .Parametrosmast -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<sql-query name="usuario.estavivobd">
+		select cast(getdate() as varchar(400)) as "nombre"
+	</sql-query>
+	
+	<sql-query name="usuario.listarFiltros">
+		select cast(companiacodigo as varchar) as
+		"companiacodigo"
+		,cast(aplicacioncodigo as varchar) as
+		"aplicacioncodigo"
+		,cast(parametroclave as varchar) as "parametroclave"
+		,cast(descripcionparametro as varchar) as "descripcionparametro"
+		,cast(estado as varchar) as "estado"
+		from [dbo].[ParametrosMast]
+		where
+		1=1
+		and AplicacionCodigo = isnull(:p_aplicacion,AplicacionCodigo)
+		and
+		DescripcionParametro like '%' +
+		isnull(:p_descripcion,DescripcionParametro) + '%'
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerProveedorCorreo">
+	  select CorreoElectronico codigo
+		from personamast
+		where CorreoElectronico=:p_correo
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerDatosPorCorreo">
+	 select busqueda nombre,
+		 Usuario.Clave codigo
+		from personamast
+		JOIN Usuario ON Usuario.Usuario=personamast.Documento
+		where CorreoElectronico=:p_correo
+	</sql-query>
+	
+	
+
+	<sql-query name="usuario.obtenerParametros">
+		SELECT
+		ParametrosMast.Texto "texto",
+		ParametrosMast.DescripcionParametro "descripcionparametro",
+		ParametrosMast.Numero "numero",
+		ParametrosMast.Explicacion "explicacion"
+		FROM ParametrosMast
+		WHERE (
+		ParametrosMast.CompaniaCodigo =
+		:par_company ) AND
+		(
+		ParametrosMast.AplicacionCodigo = :par_application
+		) AND
+		(
+		ParametrosMast.ParametroClave = :par_key )
+	</sql-query>
+
+	<sql-query name="usuario.obtenerDatosEmpleadoPorUsuario">
+    	<![CDATA[
+         select 
+         	emp.Empleado as "personaId",
+				EMP.CompaniaSocio AS "companiaCodigo"
+				,COM.description AS "companiaNombre"
+				,EMP.CodigoUsuario AS  "usuario"
+				,cast(PER.TIPODOCUMENTO as varchar(50)) AS "personaTipoDocumentoId"
+				,PER.DOCUMENTO AS "personaNroDocumento"
+				,cast(PER.NOMBRECOMPLETO as varchar(200)) AS "personaNombreCompleto"
+				,PER.NOMBRES AS "personaNombres"
+				,ISNULL(PER.APELLIDOPATERNO,'') +  ' ' + ISNULL(PER.APELLIDOMATERNO,'')  AS "personaApellidos"
+				,PER.APELLIDOPATERNO AS "personaApellidoPaterno"
+				,PER.APELLIDOMATERNO AS "personaApellidoMaterno"
+				,EMP.UnidadNegocioAsignada AS "unidadNegocioAsignadaCodigo"
+				,UNE.DescripcionLocal AS "unidadNegocioAsignadaNombre"
+				,EMP.Sucursal AS "sucursalCodigo"
+				,SUC.DescripcionLocal AS "sucursalNombre"
+				,EMP.DeptoOrganizacion AS "departamentoCodigo"
+				,DEP.description AS "departamentoNombre"
+				,EMP.CodigoCargo AS "puestoEmpresaCodigo"
+				,EMP.CentroCostos AS "centroCostosCodigo"
+				,CC.LocalName AS "centroCostosNombre"
+				,EMP.responsableempleado AS "puestoEmpresaNombre"
+				,rtrim(EMP.unidadreplicacion) as "unidadReplicacionCodigo"
+			from EmpleadoMast EMP
+				INNER JOIN PersonaMast PER
+					ON PER.PERSONA=EMP.EMPLEADO
+				LEFT JOIN companyowner COM
+					ON EMP.COMPANIASOCIO = COM.COMPANYOWNER
+				LEFT JOIN MA_UnidadNegocio UNE
+					ON EMP.UnidadNegocioAsignada = UNE.UnidadNegocio
+				LEFT JOIN AC_Sucursal SUC
+					ON EMP.Sucursal = SUC.Sucursal
+				LEFT JOIN DEPARTMENTMST DEP
+					ON EMP.DeptoOrganizacion=DEP.department
+				LEFT JOIN HR_PUESTOEMPRESA PUE
+					ON EMP.CodigoCargo = PUE.CodigoPuesto
+				LEFT JOIN AC_COSTCENTERMST CC
+					ON EMP.CentroCostos = CC.CostCenter
+			where EMP.CompaniaSocio = isnull(:p_id_compania ,EMP.CompaniaSocio)
+			and EMP.codigousuario = :p_codigo_usuario
+			
+		]]>
+	</sql-query>
+
+	<sql-query name="usuario.insertarUsuarioLog">
+		INSERT INTO SY_SeguridadLog(
+		Secuencia,Usuario,CodigoError,EstacionID,UltimaFechaModif)
+		VALUES(:p_secuncia,:p_usuario,
+		:p_codigoError,:p_estacion,:p_fecha)
+	</sql-query>
+	<sql-query name="usuario.obtenerCorrelativo">
+		select correlativonumero "correlativonumero"
+		from correlativosmast where
+		companiacodigo=:p_compania AND
+		tipocomprobante=:p_tipocomprobante
+		AND serie=:p_serie
+	</sql-query>
+	<sql-query name="usuario.insertarCorrelativo">
+		INSERT INTO correlativosmast
+		(companiacodigo,tipocomprobante,serie,correlativonumero,CORRELATIVODESDE,CORRELATIVOHASTA,ESTADO)
+		VALUES(:p_compania,:p_tipocomprobante,:p_serie,:p_correlativo,:p_correlativodesde,:p_correlativohasta,:p_correlativoestado)
+	</sql-query>
+
+	<sql-query name="usuario.actualizarCorrelativo">
+		UPDATE correlativosmast
+		SET
+		correlativonumero=:p_correlativo,
+		ULTIMOUSUARIO =:p_usuario,
+		ULTIMAFECHAMODIF =:p_fechamodificacion
+		WHERE
+		companiacodigo=:p_compania
+		AND
+		tipocomprobante=:p_tipocomprobante
+		AND serie=:p_serie
+	</sql-query>
+	<sql-query name="usuario.obtenerEmpleadoEstados">
+    	<![CDATA[
+             select 
+				EMP.EMPLEADO as "idEmpleado"
+				,cast(EMP.ESTADO as varchar(2)) as "idEstado"
+				,cast(EMP.ESTADOEMPLEADO as varchar(2)) as "idEstadoEmpleado"
+				,EMP.codigousuario as "codigoUsuario"
+				,EMP.CompaniaSocio  as "idCompaniaSocio"
+			from EmpleadoMast EMP
+			 JOIN Personamast PER ON PER.persona=EMP.EMPLEADO
+			where 
+			 EMP.codigousuario = :p_codigo_usuario
+		]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerProveedorEstados">
+    	<![CDATA[
+	select 
+                PRO.Proveedor as "idEmpleado"
+                ,cast(PER.ESTADO as varchar(2)) as "idEstado"
+                ,cast(PER.ESTADO as varchar(2)) as "idEstadoEmpleado"
+                ,US.usuario as "codigoUsuario"                
+            from ProveedorMast  PRO                
+                left join PersonaMast PER on PRO.Proveedor = PER.Persona 
+                inner join Usuario US on PER.documento like US.usuario  + '%' 
+            where 
+             PER.documento  =  :p_codigo_usuario
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.listarCompanias">
+		SELECT
+		companyowner.companyowner as"codigo",
+		companyowner.description as "nombre",
+		cast(isnull(CompaniaMast.TipoCompania, '') as varchar(1)) as "estadoId"
+		FROM
+		companyowner
+		INNER
+		JOIN CompaniaMast
+		ON (companyowner.company =
+		CompaniaMast.CompaniaCodigo)
+		INNER JOIN SY_SeguridadAutorizaciones
+		ON (companyowner.companyowner =
+		SY_SeguridadAutorizaciones.Concepto)
+		WHERE
+		( CompaniaMast.Estado = 'A' )
+		AND
+		( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND
+		(
+		SY_SeguridadAutorizaciones.Grupo = 'COMPANIASOCIO' ) AND
+		(
+		SY_SeguridadAutorizaciones.Estado = 'A' ) AND
+		(
+		LOWER(SY_SeguridadAutorizaciones.Usuario) = LOWER(:p_usuario))
+		ORDER
+		BY
+		companyowner.companyowner ASC
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerParametroCorreo">
+	<![CDATA[
+		SELECT   rtrim(P.PARAMETROCLAVE) as "codigo" 
+        ,P.EXPLICACION as "nombre"
+    	FROM PARAMETROSMAST P 
+    	WHERE P.PARAMETROCLAVE IN ('MAILCLAVE','MAILCUENTA','MAILENV','MAILFLGPRU','MAILFLGSSL','MAILHOST','MAILPUERTO','MAILASINC','MAILPRUEBA','MAILRUTATM','MAIFLGCRED',','MAICOPIOCU') 
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerParametroFotos">
+	<![CDATA[
+		select '1' as "codigo"
+		,(select Texto from ParametrosMast where ParametroClave='EXTARCHFOT') as "extension"
+		,(select Texto from ParametrosMast where ParametroClave='BMPCODIGO') as "tipo"
+		,(select DescripcionParametro from ParametrosMast where ParametroClave='PATHBITMAP') as "ruta"
+		,(select DescripcionParametro from ParametrosMast where ParametroClave='WEBRBITMAP') as "rutaweb" 
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerConceptosPorUsuarioAdministrador">
+	<![CDATA[
+		SELECT CAST(det.aplicacioncodigo AS VARCHAR(10)) as "aplicacioncodigo"
+            ,det.grupo as "grupo"
+            ,det.concepto as "concepto"  
+		FROM
+		(
+		SELECT a.grupo, a.concepto, a.aplicacioncodigo
+		FROM   seguridadautorizaciones a
+		       inner join seguridadconcepto c
+		       ON a.aplicacioncodigo = c.aplicacioncodigo
+		                  AND a.grupo = c.grupo AND a.concepto = c.concepto
+		WHERE  a.aplicacioncodigo NOT IN ('WW','RT')
+		       AND c.visibleflag = 'S'
+		       AND C.webflag = 'S'
+		       AND A.estado = 'A'
+		GROUP  BY a.aplicacioncodigo, a.grupo, a.concepto) DET
+		inner join AplicacionesMast app
+		    on det.aplicacioncodigo = app.aplicacioncodigo
+		inner join seguridadgrupo grp
+		    on   det.aplicacioncodigo = grp.aplicacioncodigo
+		    and det.grupo = grp.grupo
+		inner join seguridadconcepto con
+		    on   det.aplicacioncodigo = con.aplicacioncodigo
+		    and det.grupo = con.grupo
+		    and det.concepto = con.concepto            
+		order by isnull(app.orden,0), isnull(grp.orden,0), isnull(con.orden,0)
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerConceptosPorAplicacionUsuarioAdministrador">
+	<![CDATA[
+		SELECT CAST(det.aplicacioncodigo  AS VARCHAR(10)) as "aplicacioncodigo"
+            ,det.grupo as "grupo"
+            ,det.concepto as "concepto"  
+		FROM
+		(
+		SELECT a.grupo, a.concepto, a.aplicacioncodigo
+		FROM   seguridadautorizaciones a
+		       inner join seguridadconcepto c
+		       ON a.aplicacioncodigo = c.aplicacioncodigo
+		                  AND a.grupo = c.grupo AND a.concepto = c.concepto
+		WHERE  a.aplicacioncodigo = :aplicacionCodigo
+		       AND c.visibleflag = 'S'
+		       AND C.webflag = 'S'
+		       AND A.estado = 'A'
+		GROUP  BY a.aplicacioncodigo, a.grupo, a.concepto) DET
+		inner join AplicacionesMast app
+		    on det.aplicacioncodigo = app.aplicacioncodigo
+		inner join seguridadgrupo grp
+		    on   det.aplicacioncodigo = grp.aplicacioncodigo
+		    and det.grupo = grp.grupo
+		inner join seguridadconcepto con
+		    on   det.aplicacioncodigo = con.aplicacioncodigo
+		    and det.grupo = con.grupo
+		    and det.concepto = con.concepto            
+		order by isnull(app.orden,0), isnull(grp.orden,0), isnull(con.orden,0)
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerConceptosPorUsuario">
+	<![CDATA[
+		SELECT det.aplicacioncodigo as "aplicacioncodigo"
+            ,det.grupo as "grupo"
+            ,det.concepto as "concepto"  
+		FROM
+		(
+		SELECT a.grupo, a.concepto, a.aplicacioncodigo
+		FROM   seguridadautorizaciones a
+		       inner join seguridadconcepto c
+		       ON a.aplicacioncodigo = c.aplicacioncodigo
+		                  AND a.grupo = c.grupo AND a.concepto = c.concepto
+		WHERE  a.usuario IN (SELECT p.perfil FROM   seguridadperfilusuario p WHERE  p.usuario = :par_usuario AND P.ESTADO = 'A'
+		                                UNION ALL SELECT :par_usuario )
+		       AND a.aplicacioncodigo NOT IN ('WW','RT')
+		       AND c.visibleflag = 'S'
+		       AND C.webflag = 'S'
+		       AND A.estado = 'A'
+		GROUP  BY a.aplicacioncodigo, a.grupo, a.concepto) DET
+		inner join AplicacionesMast app
+		    on det.aplicacioncodigo = app.aplicacioncodigo
+		inner join seguridadgrupo grp
+		    on   det.aplicacioncodigo = grp.aplicacioncodigo
+		    and det.grupo = grp.grupo
+		inner join seguridadconcepto con
+		    on   det.aplicacioncodigo = con.aplicacioncodigo
+		    and det.grupo = con.grupo
+		    and det.concepto = con.concepto            
+		order by isnull(app.orden,0), isnull(grp.orden,0), isnull(con.orden,0)
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerConceptosPorAplicacionUsuario">
+	<![CDATA[
+		SELECT det.aplicacioncodigo as "aplicacioncodigo"
+            ,det.grupo as "grupo"
+            ,det.concepto as "concepto"  
+		FROM
+		(
+		SELECT a.grupo, a.concepto, a.aplicacioncodigo
+		FROM   seguridadautorizaciones a
+		       inner join seguridadconcepto c
+		       ON a.aplicacioncodigo = c.aplicacioncodigo
+		                  AND a.grupo = c.grupo AND a.concepto = c.concepto
+		WHERE  a.usuario IN (SELECT p.perfil FROM   seguridadperfilusuario p WHERE  p.usuario = :par_usuario AND P.ESTADO = 'A'
+		                                UNION ALL SELECT :par_usuario )
+		       AND a.aplicacioncodigo = :aplicacionCodigo
+		       AND c.visibleflag = 'S'
+		       AND C.webflag = 'S'
+		       AND A.estado = 'A'
+		GROUP  BY a.aplicacioncodigo, a.grupo, a.concepto) DET
+		inner join AplicacionesMast app
+		    on det.aplicacioncodigo = app.aplicacioncodigo
+		inner join seguridadgrupo grp
+		    on   det.aplicacioncodigo = grp.aplicacioncodigo
+		    and det.grupo = grp.grupo
+		inner join seguridadconcepto con
+		    on   det.aplicacioncodigo = con.aplicacioncodigo
+		    and det.grupo = con.grupo
+		    and det.concepto = con.concepto            
+		order by isnull(app.orden,0), isnull(grp.orden,0), isnull(con.orden,0)
+	]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerConceptos">
+	<![CDATA[
+	   	    select
+        CAST(sc.AplicacionCodigo as varchar(2)) as "aplicacionCodigo",
+        CAST(sc.Grupo as varchar(6)) as "grupo",
+        CAST(sc.Concepto as varchar(6)) as "concepto",
+        CAST(sc.VisibleFlag as varchar(1)) as "visibleflag",
+        CAST(sc.WebPage as varchar(100)) as "webpage",
+        CAST(sc.WebAction as varchar(20)) as "webaction",
+        sc.imagen as "icono",
+        CAST(sc.WEBFLAG as varchar(1)) AS "webflag",
+        sc.descripcion as "descripcion",
+        sc.ORDEN as "orden",
+        sc.webgrupo as "webgrupo" 
+       -- cast(sa.OpcionAgregarFlag as varchar(1)) as "workagregarflag",
+       -- cast(sa.OpcionModificarFlag as varchar(1)) as "workmodificarflag", 
+       -- cast(sa.OpcionBorrarFlag as varchar(1)) as "workborrarflag" 
+        from SeguridadConcepto sc
+	   -- inner join Seguridadautorizaciones sa
+	   -- on sc.AplicacionCodigo = sa.AplicacionCodigo 
+	   -- 	and sc.Grupo = sa.Grupo 
+	   -- 	and sc.Concepto = sa.Concepto 
+        where 1=1
+	        and (sc.Aplicacioncodigo=:aplicacionCodigo AND sc.Aplicacioncodigo <> 'WW')
+	        and sc.Grupo=:grupo
+	        and sc.Concepto=:concepto
+	        and (sc.WebPage is not null OR sc.WebAction is not null)
+	       -- and sa.Usuario = :par_usuario
+	    ORDER BY sc.Orden
+	]]>
+	</sql-query>
+
+
+	<sql-query name="usuario.obtenerGruposPorUsuario">
+		select
+		CAST(AplicacionCodigo as varchar(2)) as "aplicacioncodigo",
+		CAST(Grupo as varchar(6)) as "grupo",
+		CAST(Descripcion as varchar(100)) as "descripcion",
+		imagen as "icono",
+		orden as "orden"
+		from SeguridadGrupo
+		WHERE AplicacionCodigo=:aplicacionCodigo 
+			AND Grupo=:grupo
+			AND WebGrupo is null
+		ORDER BY Orden
+	</sql-query>	
+	
+		<sql-query name="usuario.obtenerNivelesGrupo">
+		select
+		CAST(AplicacionCodigo as varchar(2)) as "aplicacioncodigo",
+		CAST(Grupo as varchar(6)) as "grupo",
+		CAST(Descripcion as varchar(100)) as "descripcion",
+		CAST(WebGrupoSecuencia as varchar) as "id",
+		cast(WebGrupo as varchar) as "webgrupo",
+		orden as "orden",
+		imagen as "icono"
+		from SeguridadGrupo
+		where webgrupo is not null
+		ORDER BY Orden
+	</sql-query>	
+			
+	<sql-query name="usuario.obtenerProveedorDatos">
+     	<![CDATA[
+	        select
+            PersonaMast.documento as "usuario",
+            RTRIM(PersonaMast.NOMBRECOMPLETO)  AS "personaNombreCompleto",
+            ProveedorMast.proveedor AS "personaId"
+            from ProveedorMast  inner join PersonaMast on ProveedorMast.Proveedor = PersonaMast.Persona inner join Usuario on Usuario.usuario = PersonaMast.documento
+            where PersonaMast.documento like :p_proveedor + '%'
+       ]]>
+	</sql-query>
+	
+<!-- DARIO: NADIE PUEDE TOCAR EL MODULO DE SEGURIDAD SIN MI PERMISO -->
+	<sql-query name="usuario.usuarioEsAdministradorDeAplicacion">
+     	<![CDATA[
+ SELECT  AplicacionCodigo AS "codigo" 
+	FROM SeguridadAutorizaciones 
+	WHERE AplicacionCodigo = :p_aplicacion
+	--AND Grupo = 'SYSTEM'
+	AND Concepto = 'SYSADM'
+	AND Usuario IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+					WHERE spu.Usuario = :p_usuario and spu.Estado='A'						
+					UNION  ALL 
+					SELECT :p_usuario
+					)
+	AND ESTADO = 'A'
+       ]]>
+	</sql-query>
+	
+	<sql-query name="usuario.listarcompaniaslogin">
+		SELECT
+		companyowner.companyowner as"codigo",
+		companyowner.description as "nombre",
+		cast(isnull(CompaniaMast.TipoCompania, '') as varchar(1)) as "estadoId"
+		FROM
+		companyowner
+		INNER
+		JOIN CompaniaMast
+		ON (companyowner.company =
+		CompaniaMast.CompaniaCodigo)
+		ORDER
+		BY
+		companyowner.companyowner ASC
+	</sql-query>
+	
+	<sql-query name="usuario.listarDtoAutorizacionesPorUsuario">
+		select 
+			 a.APLICACIONCODIGO "aplicacionId"
+			,a.GRUPO "contenedorId"
+			,a.Concepto "componenteId"
+			,a.USUARIO "usuarioId"
+			,cast(a.OpcionAgregarFlag as varchar(10)) "flgNuevo"
+			,cast(a.OpcionModificarFlag as varchar(10)) "flgEditar"
+			,cast(a.OpcionBorrarFlag as varchar(10)) "flgEliminar"
+			,cast(a.OpcionAprobarFlag as varchar(10)) "flgAprobar"
+			,cast(a.ESTADO as varchar(10)) "estadoId"
+			,a.UltimoUsuario "modificacionUsuario"
+			,a.UltimaFechaModif "modificacionFecha"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+			,d.Descripcion 'auxComponenteNombre'
+			,d.orden 'auxComponenteOrden'
+			,d.imagen 'auxComponenteImagen'
+			,d.WebPage 'auxComponenteRutaWeb'
+         from SeguridadAutorizaciones a
+         	INNER JOIN AplicacionesMast b
+         		on 	a.APLICACIONCODIGO = b.APLICACIONCODIGO 
+         	INNER JOIN SeguridadGrupo c
+         		on 	a.APLICACIONCODIGO = c.APLICACIONCODIGO
+         		and a.GRUPO = c.GRUPO 
+         	INNER JOIN SeguridadConcepto d
+         		on 	a.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and a.GRUPO = d.GRUPO 
+         		and a.Concepto = d.Concepto
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	a.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND a.APLICACIONCODIGO = :p_aplicacionid
+			AND a.USUARIO = :p_usuarioid
+			AND a.ESTADO = 'A'			
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)
+			
+		 order by isnull(d.orden,0), isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion, d.Descripcion
+	</sql-query>
+	
+	<sql-query name="usuario.listarDtoAutorizacionesPorAdministrador">
+		select 
+			 a.APLICACIONCODIGO "aplicacionId"
+			,a.GRUPO "contenedorId"
+			,a.Concepto "componenteId"
+			,a.USUARIO "usuarioId"
+			,cast(a.OpcionAgregarFlag as varchar(10)) "flgNuevo"
+			,cast(a.OpcionModificarFlag as varchar(10)) "flgEditar"
+			,cast(a.OpcionBorrarFlag as varchar(10)) "flgEliminar"
+			,cast(a.OpcionAprobarFlag as varchar(10)) "flgAprobar"
+			,cast(a.ESTADO as varchar(10)) "estadoId"
+			,a.UltimoUsuario "modificacionUsuario"
+			,a.UltimaFechaModif "modificacionFecha"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+			,d.Descripcion 'auxComponenteNombre'
+			,d.orden 'auxComponenteOrden'
+			,d.imagen 'auxComponenteImagen'
+			,d.WebPage 'auxComponenteRutaWeb'
+         from SeguridadAutorizaciones a
+         	INNER JOIN AplicacionesMast b
+         		on 	a.APLICACIONCODIGO = b.APLICACIONCODIGO 
+         	INNER JOIN SeguridadGrupo c
+         		on 	a.APLICACIONCODIGO = c.APLICACIONCODIGO
+         		and a.GRUPO = c.GRUPO 
+         	INNER JOIN SeguridadConcepto d
+         		on 	a.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and a.GRUPO = d.GRUPO 
+         		and a.Concepto = d.Concepto
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	a.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND a.APLICACIONCODIGO = :p_aplicacionid
+			AND a.ESTADO = 'A'			
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)
+			
+		 order by isnull(d.orden,0), isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion, d.Descripcion
+	</sql-query>
+	
+	<sql-query name="usuario.listarDtoAutorizacionesGruposPorAplicacion">
+		select 
+			 c.APLICACIONCODIGO "aplicacionId"
+			,c.GRUPO "contenedorId"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+         from AplicacionesMast b
+         	INNER JOIN SeguridadGrupo c
+         		on 	b.APLICACIONCODIGO = c.APLICACIONCODIGO
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	c.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND c.APLICACIONCODIGO = :p_aplicacionid
+		 order by isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion
+	</sql-query>
+	
+	<sql-query name="usuario.listarDtoAutorizacionesAplicacionesUsuarioPerfilAdministrador">
+		select       
+			 b.APLICACIONCODIGO 'aplicacionId'
+			,isnull(b.DescripcionCorta,'') 'auxAplicacionNombre'
+			,isnull(b.orden,0) 'auxAplicacionOrden'
+			,isnull(b.imagen,'fad fa-list') 'auxAplicacionImagen'
+			,isnull(b.WebPage,'#') 'auxAplicacionWebPage'			
+         from SeguridadAutorizaciones a
+         	INNER JOIN AplicacionesMast b
+         		on 	a.APLICACIONCODIGO = b.APLICACIONCODIGO 
+         	INNER JOIN SeguridadGrupo c
+         		on 	a.APLICACIONCODIGO = c.APLICACIONCODIGO
+         		and a.GRUPO = c.GRUPO 
+         	INNER JOIN SeguridadConcepto d
+         		on 	a.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and a.GRUPO = d.GRUPO 
+         		and a.Concepto = d.Concepto
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	a.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND (
+				a.USUARIO IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+							WHERE spu.Usuario = :p_usuarioid and spu.Estado='A'						
+							UNION  ALL 
+							SELECT :p_usuarioid )
+				OR
+				b.APLICACIONCODIGO IN (SELECT  AplicacionCodigo AS "codigo" 
+							FROM SeguridadAutorizaciones 
+							WHERE Concepto = 'SYSADM'
+							AND Usuario IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+											WHERE spu.Usuario = :p_usuarioid and spu.Estado='A'						
+											UNION  ALL 
+											SELECT :p_usuarioid
+											)
+							AND ESTADO = 'A')
+				)
+			AND a.ESTADO = 'A'			
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)
+			AND b.WebPage is not null
+		 group by b.APLICACIONCODIGO, isnull(b.DescripcionCorta,''),isnull(b.orden,0),isnull(b.imagen,'fad fa-list'),isnull(b.WebPage,'#')
+		 order by isnull(b.orden,0), isnull(b.DescripcionCorta,'')
+	</sql-query>
+	<sql-query
+		name="usuario.obtenerFotoActual">
+	<![CDATA[
+		DECLARE @I_EMPLEADO INT = :p_empleado
+		DECLARE @V_COMPANIA VARCHAR(8) = :p_compania
+		DECLARE @V_DOCUMENTO VARCHAR(30) = (SELECT Documento FROM PersonaMast WHERE Persona = @I_EMPLEADO )
+		DECLARE @V_TIPONOMBRE VARCHAR(20)  = (select TEXTO from ParametrosMast where ParametroClave = 'BMPCODIGO')
+		DECLARE @V_EXTENSION VARCHAR(20) = (select TEXTO from ParametrosMast where ParametroClave = 'EXTARCHFOT')
+		select RTRIM(DescripcionParametro) + RTRIM(CASE WHEN @V_TIPONOMBRE ='S' THEN CAST(@I_EMPLEADO AS varchar(20)) ELSE  @V_DOCUMENTO END) + '.' + RTRIM(@V_EXTENSION) AS "codigo"
+		from ParametrosMast where ParametroClave = 'PATHBITMAP'
+	]]>
+	</sql-query>
+</hibernate-mapping>

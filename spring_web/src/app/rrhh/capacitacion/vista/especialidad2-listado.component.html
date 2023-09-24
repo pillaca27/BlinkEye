@@ -1,0 +1,141 @@
+<p-blockUI #pnl [blocked]="blocked" >
+    <div class="ui-g"
+        style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto;width:100px;height: 100px;">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <i class="pi pi-spin pi-spinner" style="color:white; margin: 0 auto;font-size: 5rem"></i>
+        </div>
+        <br>
+        <div class="ui-g-12 ui-md-12 ui-lg-12" style="color:white; margin: 0 auto;">
+            <strong>Procesando</strong>
+        </div>
+    </div>
+</p-blockUI>
+
+<div class="card">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Especialidad</label>
+                    <input pInputText type="text" [(ngModel)]="filtro.especialidad" class="hoverDisabled"
+                        style="width:100%" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Descripción</label>
+                    <input pInputText type="text" class="hoverDisabled" [(ngModel)]="filtro.descripcion"
+                        style="width:100%" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Estado</label>
+                    <p-dropdown [options]="lstEstados" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Empleado Solicitante</label>
+                    <div class="p-inputgroup">
+                        <input pInputText type="text" class="hoverDisabled"
+                            [(ngModel)]="dtoHrEspecialidad2.auxSolicitanteNombre" style="width:100%" disabled />
+
+                        <button pButton type="button" icon="pi pi-search-plus" class="ui-button-warn"
+                            [disabled]="editable" (click)="verSolicitante()" title="Buscar Solicitante"></button>
+                        <button pButton type="button" icon="pi pi-trash" class="ui-button-warn"
+                            [disabled]="editable" (click)="limpiarSolicitante()"
+                            title="Limpiar Solicitante"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-md-2">
+            <button pButton pRipple label="Nuevo" icon="pi pi-plus" (click)="nuevo()"></button>
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <button pButton pRipple label="Buscar" icon="pi pi-search" (click)="buscar()"></button>
+        </div>
+    </div>
+</div>
+
+<p-table [scrollable]="true" [rows]="20" [responsive]="true" [lazy]="true" [paginator]="true"
+[value]="paginacion.paginacionListaResultado" [totalRecords]="paginacion.paginacionRegistrosEncontrados"
+(onLazyLoad)="cargarEvent($event)">
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th style="width:100px">Acciones</th>
+            <th style="width:100px">Especialidad</th>
+            <th style="width:100px">Descripcion</th>
+            <th style="width:60px">Unidad Replicación</th>
+            <th style="width:60px">Ultimo Usuario</th>
+            <th style="width:100px">Fecha Modificación</th>
+            <th style="width:160px">Solicitante</th>
+            <th style="width:60px">Estado</th>
+        </tr>
+
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td  style="width:100px;text-align:center">
+                <span class="p-column-title">Acción</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton type="button" icon="pi pi-pencil" class="ui-button-rounded"
+                                (click)="editar(rowData)"></button>
+                        </th>
+
+                        <th>
+                            <button pButton type="button" icon="pi pi-trash" class="ui-button-rounded"
+                                (click)="anular(rowData)"></button>
+                        </th>
+                    </tr>
+                </table>
+            </td>
+
+            <td style="width:100px"> <span class="p-column-title">Especialidad</span>{{rowData.especialidad}}</td>
+            
+            <td style="width:100px"> <span class="p-column-title">Descripcion</span>{{rowData.descripcion}}</td>
+
+            <td style="width:60px;"> <span class="p-column-title">Unidad Repliación</span>{{rowData.unidadReplicacion}}</td>
+
+            <td style="width:60px;"> <span class="p-column-title">Última Usuario</span>{{rowData.ultimoUsuario}}</td>
+            
+            <td style="width:100px;"> <span class="p-column-title">Última
+                    Fecha</span>{{rowData.ultimaFechaModif | date: 'dd/MM/yyyy'}}</td>
+           
+            <td style="width:160px;"> <span class="p-column-title">Solicitante
+                    </span>{{rowData.auxSolicitanteNombre}}</td>
+
+            <ng-template [ngIf]="rowData.estado == 'A'">
+                <td style="width:60px;"> <span class="p-column-title">Estado</span>Aprobado</td>
+            </ng-template>
+
+            <ng-template [ngIf]="rowData.estado == 'N'">
+                <td style="width:60px;"> <span class="p-column-title">Estado</span>Anulado</td>
+            </ng-template>
+
+            <ng-template [ngIf]="rowData.estado == 'P'">
+                <td style="width:60px;"> <span class="p-column-title">Estado</span>Preparación</td>
+            </ng-template>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="12">
+                No se encontraron registros
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog #c>
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-personacomun-selector (cargarSeleccionEvent)="cargarEmpleado($event)"></app-personacomun-selector>

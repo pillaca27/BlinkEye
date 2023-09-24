@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Zonadespacho
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="zonadespacho.obtenerDto">
+         select 
+			ZONADESPACHO "zonadespacho"
+			,TRANSPORTISTA "transportista"
+			,DESCRIPCION "descripcion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+
+         from ZONADESPACHO
+         where 
+			ZONADESPACHO = :p_zonadespacho
+
+    </sql-query>
+
+    <sql-query name="zonadespacho.listarPaginadoContar">
+         select count(1)
+         from ZONADESPACHO
+         where 
+			ZONADESPACHO = ISNULL(:p_zonadespacho, ZONADESPACHO)
+
+    </sql-query>
+
+    <sql-query name="zonadespacho.listarPaginadoSentencia">
+         select 
+			ZONADESPACHO "zonadespacho"
+			,TRANSPORTISTA "transportista"
+			,DESCRIPCION "descripcion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+
+         from ZONADESPACHO
+         where 
+			ZONADESPACHO = ISNULL(:p_zonadespacho, ZONADESPACHO)
+
+    </sql-query>
+
+    <sql-query name="zonadespacho.listarDtoCore">
+         select 
+			ZONADESPACHO "zonadespacho"
+			,TRANSPORTISTA "transportista"
+			,DESCRIPCION "descripcion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+
+         from ZONADESPACHO
+         where 
+			ZONADESPACHO = ISNULL(:p_zonadespacho, ZONADESPACHO)
+
+    </sql-query>
+
+    <sql-query name="zonadespacho.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="zonadespacho.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+</hibernate-mapping>

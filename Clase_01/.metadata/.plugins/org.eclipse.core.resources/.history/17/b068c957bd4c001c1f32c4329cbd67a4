@@ -1,0 +1,26 @@
+package com.royal.demo.util;
+
+public class SeguridadUsuarioActual {
+	private String companiaNombre;
+	private String usuario;
+	private Integer personaId;
+	
+	public String getCompaniaNombre() {
+		return companiaNombre;
+	}
+	public void setCompaniaNombre(String companiaNombre) {
+		this.companiaNombre = companiaNombre;
+	}
+	public String getUsuario() {
+		return usuario;
+	}
+	public void setUsuario(String usuario) {
+		this.usuario = usuario;
+	}
+	public Integer getPersonaId() {
+		return personaId;
+	}
+	public void setPersonaId(Integer personaId) {
+		this.personaId = personaId;
+	}
+}

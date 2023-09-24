@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="colormast.listar">
+	    <![CDATA[
+	        select color as "codigo", descripcioncorta as "nombre", Estado as "estadoId" 
+	        from colormast	        
+	        order by descripcioncorta
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="colormast.listarActivos">
+	    <![CDATA[
+	        select color as "codigo", descripcioncorta as "nombre", Estado as "estadoId" 
+	        from colormast
+	        where Estado = 'A'
+	        order by descripcioncorta
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="colormast.obtenerTabla">
+	    <![CDATA[
+	        select color as "codigo", descripcioncorta as "nombre", Estado as "estadoId" 
+	        from colormast
+			where color = :p_color
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="colormast.listarfiltros">
+    	select color as "codigo", descripcioncorta as "nombre"
+    			,Estado as "estadoId" 
+    	from colormast 
+    	where  color = ISNULL(:p_color,color)
+			and UPPER(ISNULL(descripcioncorta,'xxx')) like '%' || ISNULL(:p_descripcioncorta,UPPER(descripcioncorta)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcioncorta	    	
+	</sql-query>
+	
+    
+</hibernate-mapping>

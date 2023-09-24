@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : monedamast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="monedamast.listar">
+    <![CDATA[
+		select monedacodigo as "codigo", descripcioncorta as "nombre"
+				,sigla as "descripcion"
+				,estado as "estadoId" 
+		From monedamast 
+		order by descripcioncorta
+    ]]>
+	</sql-query>
+	
+    <sql-query name="monedamast.listaractivos">
+    <![CDATA[
+		select monedacodigo as "codigo", descripcioncorta as "nombre", sigla as "descripcion" 
+				,estado as "estadoId" 
+		From monedamast 
+		where estado = 'A'
+		order by descripcioncorta
+    ]]>
+	</sql-query>
+	
+	<sql-query name="monedamast.obtenertabla">
+	<![CDATA[
+	select  monedacodigo as "codigo"
+			,descripcioncorta as "nombre"  
+			,Estado as "estadoId"
+		from monedamast 
+		where monedacodigo = :p_monedacodigo
+	]]>
+	</sql-query>
+	
+	<sql-query name="monedamast.obtenerdto">
+           select 
+			MONEDACODIGO "monedacodigo"
+			,DESCRIPCIONCORTA "descripcioncorta"
+			,SIGLA "sigla"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CODIGOFISCAL "codigofiscal"
+         from MONEDAMAST
+         where 
+			MONEDACODIGO = :p_monedacodigo
+    </sql-query>
+    
+    <sql-query name="monedamast.listardtofiltros">
+          select 
+			MONEDACODIGO "monedacodigo"
+			,DESCRIPCIONCORTA "descripcioncorta"
+			,SIGLA "sigla"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CODIGOFISCAL "codigofiscal"
+         from MONEDAMAST
+         where 
+				MONEDACODIGO = ISNULL(:p_monedacodigo,MONEDACODIGO)
+			AND UPPER(ISNULL(descripcioncorta,'xxx')) like '%' || ISNULL(:p_descripcioncorta,UPPER(descripcioncorta)) || '%'
+			and estado = ISNULL(:p_estado,estado)			
+		 order by descripcioncorta 
+    </sql-query>
+    
+</hibernate-mapping>

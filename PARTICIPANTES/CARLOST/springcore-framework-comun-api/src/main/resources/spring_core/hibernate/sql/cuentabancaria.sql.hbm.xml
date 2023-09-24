@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="cuentabancaria.listar">
+	    <![CDATA[
+	        select cuentabancaria as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CUENTABANCARIA	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="cuentabancaria.listarActivos">
+	    <![CDATA[
+	        select cuentabancaria as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CUENTABANCARIA
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="cuentabancaria.obtenerTabla">
+	    <![CDATA[
+	        select cuentabancaria as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CUENTABANCARIA
+			where cuentabancaria = :p_cuentabancaria
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="cuentabancaria.listarfiltros">
+    	select cuentabancaria as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from CUENTABANCARIA 
+    	where  cuentabancaria = ISNULL(:p_cuentabancaria,cuentabancaria)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	<sql-query name="cuentabancaria.obtenerDto">
+          select 
+			CUENTABANCARIA "cuentabancaria"
+			,BANCO "banco"
+			,DESCRIPCION "descripcion"
+			,COMPANIACODIGO "companiacodigo"
+			,FECHAAPERTURA "fechaapertura"
+			,FECHACIERRECUENTA "fechacierrecuenta"
+			,MONEDACODIGO "monedacodigo"
+			,TIPOCUENTA "tipocuenta"
+			,CUENTACONTABLE "cuentacontable"
+			,SOBREGIROAUTORIZADO "sobregiroautorizado"
+			,AGENCIABANCO "agenciabanco"
+			,AGENCIADISTRITO "agenciadistrito"
+			,SUCURSALCODIGO "sucursalcodigo"
+			,IDIOMA "idioma"
+			,ULTIMOPERIODOCONCILIACION "ultimoperiodoconciliacion"
+			,VOUCHERTIPO "vouchertipo"
+			,VOUCHERCLASIFICACION "voucherclasificacion"
+			,ATENCIONPERSONA "atencionpersona"
+			,ATENCIONCARGO "atencioncargo"
+			,FLUJODECAJAFLAG "flujodecajaflag"
+			,FLUJODECAJAORDEN "flujodecajaorden"
+			,CODIGODISKETTE "codigodiskette"
+			,CONCILIACIONBANCARIAFLAG "conciliacionbancariaflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,SMARTCREDFLAG "smartcredflag"
+			,NUMCTABANCO "numctabanco"
+			,MONTOAPERTURA "montoapertura"
+			,CUENTABANCARIACONSOLIDADA "cuentabancariaconsolidada"
+			,CUENTABANCOORIGINAL "cuentabancooriginal"
+			,CUENTACONTABLEDESCUENTO "cuentacontabledescuento"
+			,ARCHIVODISKETTE "archivodiskette"
+			,REFERENCIAFISCAL03 "referenciafiscal03"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,ITFFLAG "itfflag"
+			,CONCILIACIONAPFLAG "conciliacionapflag"
+			,CONCILIACIONPERIODO "conciliacionperiodo"
+			,PAGOSINTERFASEFLAG "pagosinterfaseflag"
+         from CUENTABANCARIA
+         where 
+			CUENTABANCARIA = :p_cuentabancaria
+    </sql-query>
+    
+    <sql-query name="cuentabancaria.listardtofiltros">
+         select 
+			CUENTABANCARIA "cuentabancaria"
+			,BANCO "banco"
+			,DESCRIPCION "descripcion"
+			,COMPANIACODIGO "companiacodigo"
+			,FECHAAPERTURA "fechaapertura"
+			,FECHACIERRECUENTA "fechacierrecuenta"
+			,MONEDACODIGO "monedacodigo"
+			,TIPOCUENTA "tipocuenta"
+			,CUENTACONTABLE "cuentacontable"
+			,SOBREGIROAUTORIZADO "sobregiroautorizado"
+			,AGENCIABANCO "agenciabanco"
+			,AGENCIADISTRITO "agenciadistrito"
+			,SUCURSALCODIGO "sucursalcodigo"
+			,IDIOMA "idioma"
+			,ULTIMOPERIODOCONCILIACION "ultimoperiodoconciliacion"
+			,VOUCHERTIPO "vouchertipo"
+			,VOUCHERCLASIFICACION "voucherclasificacion"
+			,ATENCIONPERSONA "atencionpersona"
+			,ATENCIONCARGO "atencioncargo"
+			,FLUJODECAJAFLAG "flujodecajaflag"
+			,FLUJODECAJAORDEN "flujodecajaorden"
+			,CODIGODISKETTE "codigodiskette"
+			,CONCILIACIONBANCARIAFLAG "conciliacionbancariaflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,SMARTCREDFLAG "smartcredflag"
+			,NUMCTABANCO "numctabanco"
+			,MONTOAPERTURA "montoapertura"
+			,CUENTABANCARIACONSOLIDADA "cuentabancariaconsolidada"
+			,CUENTABANCOORIGINAL "cuentabancooriginal"
+			,CUENTACONTABLEDESCUENTO "cuentacontabledescuento"
+			,ARCHIVODISKETTE "archivodiskette"
+			,REFERENCIAFISCAL03 "referenciafiscal03"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,ITFFLAG "itfflag"
+			,CONCILIACIONAPFLAG "conciliacionapflag"
+			,CONCILIACIONPERIODO "conciliacionperiodo"
+			,PAGOSINTERFASEFLAG "pagosinterfaseflag"
+         from CUENTABANCARIA
+         where 
+				CUENTABANCARIA = ISNULL(:p_cuentabancaria,CUENTABANCARIA)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and banco = ISNULL(:p_banco,banco)
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+</hibernate-mapping>

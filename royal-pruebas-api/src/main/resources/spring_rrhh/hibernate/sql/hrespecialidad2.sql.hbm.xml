@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+	<sql-query name="hrespecialidad2.contarPaginacion">
+		SELECT
+		COUNT(1)
+		FROM 
+		HR_Especialidad_2 E
+		WHERE 
+		E.especialidad = ISNULL(:p_especialidad, E.especialidad)
+		AND E.descripcion = ISNULL(:p_descripcion, E.descripcion)
+		AND E.estado = ISNULL(:p_estado, E.estado)
+		AND E.empleadoSolicitante = ISNULL(:p_empleadoSolicitante, E.empleadoSolicitante)
+	</sql-query>
+	
+	<sql-query name="hrespecialidad2.generarCodigo">
+		SELECT 
+		CAST((ISNULL(MAX(Especialidad)+1, 0)) AS VARCHAR(6)) AS 'codigo' 
+		from dbo.HR_Especialidad_2
+	</sql-query>
+	
+	<sql-query name="hrespecialidad2.listarparametros">
+		SELECT 
+		E.especialidad AS "especialidad",
+		E.descripcion AS "descripcion",
+		E.ultimoUsuario AS "ultimoUsuario",
+		E.ultimaFechaModif AS "ultimaFechaModif",
+		E.unidadReplicacion AS "unidadReplicacion",
+		E.empleadoSolicitante "empleadoSolicitante",
+		cast(E.estado as varchar(1)) AS "estado",
+		S.NombreCompleto AS "auxSolicitanteNombre"
+		FROM HR_Especialidad_2 E
+		LEFT JOIN PersonaMast S ON S.Persona = E.EmpleadoSolicitante
+		WHERE 
+		E.especialidad = ISNULL(:p_especialidad, E.especialidad)
+		AND E.descripcion = ISNULL(:p_descripcion, E.descripcion)
+		AND E.estado = ISNULL(:p_estado, E.estado)
+		AND E.empleadoSolicitante = ISNULL(:p_empleadoSolicitante, E.empleadoSolicitante)
+	</sql-query>
+	
+	<sql-query name="hrespecialidad2.obtenerDto">
+		select
+		E.especialidad AS "especialidad",
+		E.descripcion AS "descripcion",
+		E.ultimoUsuario AS "ultimoUsuario",
+		E.ultimaFechaModif AS "ultimaFechaModif",
+		E.unidadReplicacion AS "unidadReplicacion",
+		cast(E.estado as varchar(1)) AS "estado",
+		S.NombreCompleto AS "auxSolicitanteNombre"
+		from dbo.HR_Especialidad_2 E
+		LEFT JOIN PersonaMast S ON S.Persona = E.EmpleadoSolicitante
+		where E.especialidad = :p_especialidad
+	</sql-query>
+	
+</hibernate-mapping>

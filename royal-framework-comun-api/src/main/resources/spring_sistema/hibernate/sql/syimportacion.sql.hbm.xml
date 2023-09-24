@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="syimportacion.obtenerDto">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,TABLACODIGO "tablacodigo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,TIPOFORMATOFLAG "tipoformatoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SY_IMPORTACION
+         where 
+			APLICACIONCODIGO = :p_aplicacioncodigo
+			AND TABLACODIGO = :p_tablacodigo
+    </sql-query>
+    
+    <sql-query name="syimportacion.listardtofiltros">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,TABLACODIGO "tablacodigo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,TIPOFORMATOFLAG "tipoformatoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SY_IMPORTACION
+         where 
+				APLICACIONCODIGO = ISNULL(:p_aplicacioncodigo,APLICACIONCODIGO)
+			AND TABLACODIGO = ISNULL(:p_tablacodigo,TABLACODIGO)			
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Companiamast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="companiamast.obtenerDto">
+select 
+			CompaniaCodigo "companiacodigo"
+			,rtrim(DescripcionCorta) "descripcioncorta"
+			,rtrim(DescripcionLarga) "descripcionlarga"
+			,DireccionComun "direccioncomun"
+			,DireccionAdicional "direccionadicional"
+			,FechaFundacion "fechafundacion"
+			,Telefono1 "telefono1"
+			,Telefono2 "telefono2"
+			,Telefono3 "telefono3"
+			,Fax1 "fax1"
+			,Fax2 "fax2"
+			,COMPANIAMAST.DocumentoFiscal "documentofiscal"
+			,PropietarioPorDefecto "propietariopordefecto"
+			,DescripcionExtranjera "descripcionextranjera"
+			,MonedaPorDefecto "monedapordefecto"
+			,cast(TipoCompania as varchar) "tipocompania"	
+			,cast(FactorRValidacion as varchar) "factorrvalidacion"
+			,cast (AfectoIGVFlag as varchar) "afectoigvflag"
+			,cast (CreditoFiscalFactorFlag as varchar) "creditofiscalfactorflag"
+			,cast (CuentaProvisionSBSFlag as varchar) "cuentaprovisionsbsflag"
+			,LogoFile "logofile"
+			,COMPANIAMAST.Persona "persona"
+			,cast(COMPANIAMAST.Estado as varchar) "estado"
+			,COMPANIAMAST.UltimoUsuario "ultimousuario"
+			,COMPANIAMAST.UltimaFechaModif "ultimafechamodif"
+			,RepresentanteLegal "representantelegal"
+			,PaginaWeb "paginaweb"
+			,cast(AfectoRetencionIGVFlag as varchar) "afectoretencionigvflag"
+			,CertificadoInscripcion "certificadoinscripcion"
+			,DetraccionCuentaBancaria "detraccioncuentabancaria"
+			,RegimenLaboralRTPS "regimenlaboralrtps"
+			,CODIGOREPRESENTANTELEGAL "codigorepresentantelegal"
+			,RepresentanteLegalDocumento "representantelegaldocumento"
+			,CodEstableSunat "codestablesunat"
+			, cast(per.persona as varchar) + ' - ' + per.NombreCompleto as "personaDescri"
+
+         from COMPANIAMAST left join PersonaMast per on per.Persona = CompaniaMast.Persona
+
+         where 
+			CompaniaCodigo = :p_companiacodigo
+
+    </sql-query>
+    
+        <sql-query name="companiamast.obtenerDtoDetalle1">
+         select 
+			companyowner "companyowner"
+			,description "description"
+			,cast (percentage as varchar) "percentage"
+			,company "company"
+			,owner "owner"
+			,ChangeRate "changerate"
+			,lastuser "lastuser"
+			,lastdate "lastdate"
+			,cast('A' as varchar) as "accion"
+
+         from COMPANYOWNER
+         where 
+			company = :p_companiacodigo
+    </sql-query>
+
+    <sql-query name="companiamast.obtenerDtoDetalle2">
+         select 
+			rtrim(REPORTINGCOMPANY.CompaniaCodigo) "companiacodigo"
+			,REPORTINGCOMPANY.companyowner "companyowner"
+			,cast(REPORTINGCOMPANY.percentage as varchar) "percentage"
+			,cast('A' as varchar) as "accion"
+
+         from REPORTINGCOMPANY,companyowner  
+         WHERE ( reportingcompany.companyowner = companyowner.companyowner ) and  
+         ( ( reportingcompany.CompaniaCodigo = :p_companiacodigo ) )    
+
+    </sql-query>
+
+    <sql-query name="companiamast.listarPaginadoContar">
+         select count(1)
+         from COMPANIAMAST
+         where 
+			CompaniaCodigo > :p_companiacodigo
+
+    </sql-query>
+
+    <sql-query name="companiamast.listarPaginadoSentencia">
+         select 
+			CompaniaCodigo "companiacodigo"
+			,DescripcionCorta "descripcioncorta"			
+			,case when  cast(TipoCompania as varchar) = 'P' then 'Principal' else 'Reporteadora' end "tipocompania"		
+			,cast(Estado as varchar) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+         from COMPANIAMAST
+         where 
+			CompaniaCodigo > :p_companiacodigo
+			 ORDER BY TipoCompania ASC,   
+         CompaniaCodigo ASC   
+
+    </sql-query>
+
+    <sql-query name="companiamast.listarDtoCore">
+         select 
+			CompaniaCodigo "companiacodigo"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,DireccionComun "direccioncomun"
+			,DireccionAdicional "direccionadicional"
+			,FechaFundacion "fechafundacion"
+			,Telefono1 "telefono1"
+			,Telefono2 "telefono2"
+			,Telefono3 "telefono3"
+			,Fax1 "fax1"
+			,Fax2 "fax2"
+			,DocumentoFiscal "documentofiscal"
+			,PropietarioPorDefecto "propietariopordefecto"
+			,DescripcionExtranjera "descripcionextranjera"
+			,MonedaPorDefecto "monedapordefecto"
+			,TipoCompania "tipocompania"
+			,FactorRValidacion "factorrvalidacion"
+			,AfectoIGVFlag "afectoigvflag"
+			,CreditoFiscalFactorFlag "creditofiscalfactorflag"
+			,CuentaProvisionSBSFlag "cuentaprovisionsbsflag"
+			,LogoFile "logofile"
+			,Persona "persona"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,RepresentanteLegal "representantelegal"
+			,PaginaWeb "paginaweb"
+			,AfectoRetencionIGVFlag "afectoretencionigvflag"
+			,CertificadoInscripcion "certificadoinscripcion"
+			,DetraccionCuentaBancaria "detraccioncuentabancaria"
+			,RegimenLaboralRTPS "regimenlaboralrtps"
+			,CODIGOREPRESENTANTELEGAL "codigorepresentantelegal"
+			,RepresentanteLegalDocumento "representantelegaldocumento"
+			,CodEstableSunat "codestablesunat"
+
+         from COMPANIAMAST
+         where 
+			CompaniaCodigo = ISNULL(:p_companiacodigo, CompaniaCodigo)
+			CompaniaCodigo = ISNULL(:p_companiacodigo, CompaniaCodigo)
+
+    </sql-query>
+
+    <sql-query name="companiamast.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="companiamast.listarActivos">
+		select 
+		     cm.CompaniaCodigo AS "codigo"
+		     ,cm.DescripcionCorta AS "nombre"
+		from CompaniaMast cm 
+		where cm.Estado = 'A'
+    </sql-query>
+
+    <sql-query name="companiamast.logo_compania">
+        select LogoFile as "codigo" 
+from CompaniaMast 
+where LogoFile= :p_logo
+    </sql-query>
+
+</hibernate-mapping>

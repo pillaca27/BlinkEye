@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="banco.listarActivos">
+	    <![CDATA[
+ 	        select Banco as "codigo", DescripcionCorta as "nombre", Estado as "estadoId" 
+ 	        from Banco 
+ 	        where Estado = 'A'
+ 	        order by DescripcionCorta 
+ 	    ]]> 
+	</sql-query>
+	
+	<sql-query name="banco.listar">
+	    <![CDATA[
+ 	        select Banco as "codigo", DescripcionCorta as "nombre", Estado as "estadoId"  
+  	        from Banco	        
+  	        order by DescripcionCorta  
+     ]]> 
+	</sql-query>
+	
+	<sql-query name="banco.obtenerDtoTablaPorId">
+	    <![CDATA[
+	        select Banco as "codigo", DescripcionCorta as "nombre", Estado as "estadoId" from Banco
+			where banco = :p_banco
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="banco.listarfiltros">
+    	select Banco as "codigo", DescripcionCorta as "nombre"
+    			,Estado as "estadoId" 
+    	from Banco 
+    	where  Banco = ISNULL(:p_banco,Banco)
+			and UPPER(ISNULL(DescripcionCorta,'xxx')) like '%' || ISNULL(:p_descripcioncorta,UPPER(DescripcionCorta)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by DescripcionCorta	    	
+	</sql-query>
+	
+	
+	
+	
+<!-- 	MANTENIMIENTO SQL -->
+
+
+<sql-query name="banco.obtenerDto">
+select 
+			banco.Banco "banco"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,BancoNumero "banconumero"
+			,PersonaContacto "personacontacto"
+			,cast(ConciliacionAutomaticaFlag as varchar) "conciliacionautomaticaflag"
+			,cast(FormatoPropioFlag as varchar) "formatopropioflag"
+			,cast(FormatoDatawindow as varchar)"formatodatawindow"
+			,cast(banco.Estado as varchar) "estado"
+			,banco.UltimaFechaModif "ultimafechamodif"
+			,banco.UltimoUsuario "ultimousuario"
+			,cast(ConciliacionFormatoFlag as varchar) "conciliacionformatoflag"
+			, per.NombreCompleto as "persona"
+
+         from BANCO banco
+
+		 left join PersonaMast per on per.Persona=banco.BancoNumero
+         where 
+			Banco = :p_banco
+
+    </sql-query>
+
+    <sql-query name="banco.listarPaginadoContar">
+         select count(1)
+         from BANCO 
+         left join PersonaMast per on per.Persona=banco.BancoNumero
+         where 
+			banco.Banco like '%'+ isnull(:p_banco,banco.Banco) +'%'
+
+    </sql-query>
+
+    <sql-query name="banco.listarPaginadoSentencia">
+         select 
+			Banco "banco"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,cast(Estado as varchar) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+
+         from BANCO
+         where 
+			banco.Banco like '%'+ isnull(:p_banco,banco.Banco) +'%'
+
+    </sql-query>
+
+    <sql-query name="banco.listarDtoCore">
+         select 
+			Banco "banco"
+			,DescripcionCorta "descripcioncorta"
+			,DescripcionLarga "descripcionlarga"
+			,BancoNumero "banconumero"
+			,PersonaContacto "personacontacto"
+			,ConciliacionAutomaticaFlag "conciliacionautomaticaflag"
+			,FormatoPropioFlag "formatopropioflag"
+			,FormatoDatawindow "formatodatawindow"
+			,Estado "estado"
+			,UltimaFechaModif "ultimafechamodif"
+			,Timestamp "timestamp"
+			,UltimoUsuario "ultimousuario"
+			,ConciliacionFormatoFlag "conciliacionformatoflag"
+			,CODIGOINTERFASEAFP "codigointerfaseafp"
+			,DisponibleEDflag "disponibleedflag"
+			,TasaEfectivaAnual "tasaefectivaanual"
+			,CodigoFiscal "codigofiscal"
+
+         from BANCO
+         where 
+			Banco = ISNULL(:p_banco, Banco)
+			Banco = ISNULL(:p_banco, Banco)
+
+    </sql-query>
+
+<!--     <sql-query name="banco.listar"> -->
+<!--          select  -->
+<!--              'codigo' AS "codigo" -->
+<!--              ,'nombre' AS "nombre" -->
+<!--              ,'estadoid' AS "estadoId" -->
+<!--          from dual -->
+<!--     </sql-query> -->
+
+<!--     <sql-query name="banco.listarActivos"> -->
+<!--          select  -->
+<!--              'codigo' AS "codigo" -->
+<!--              ,'nombre' AS "nombre" -->
+<!--              ,'estadoid' AS "estadoId" -->
+<!--          from dual -->
+<!--     </sql-query> -->
+	
+	
+</hibernate-mapping>

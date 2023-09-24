@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : sistema.SyReporte
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="syreporte.obtenerDtoPorId">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,REPORTECODIGO "reportecodigo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,TOPICO "topico"
+			,PERIODOIMPLEMENTACION "periodoimplementacion"
+			,VENTANAOBJETO "ventanaobjeto"
+			,PARAMETROSFLAG "parametrosflag"
+			,FORMATODEFAULTFLAG "formatodefaultflag"
+			,DESCRIPCIONDATA "descripciondata"
+			,COMENTARIOS "comentarios"
+			,RESTRICCIONES "restricciones"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REPORTESTANDARDFLAG "reportestandardflag"
+			,ASUNTO "asunto"
+			,PADRE_ID_APLICACION "padreIdAplicacion"
+			,PADRE_ID_REPORTE "padreIdReporte"
+			,TIPOREPORTE "tiporeporte"
+			,CARPETATEMPORAL "carpetatemporal"
+			,HOJAID "hojaid"
+			,SENTENCIA "sentencia"
+			,URLINFORMEGOOGLE "urlinformegoogle"
+			,FECHAREPORTEACTUALIZACION "fechareporteactualizacion"
+
+         from SY_REPORTE
+         where 
+			APLICACIONCODIGO = :p_aplicacioncodigo
+			AND REPORTECODIGO = :p_reportecodigo
+
+    </sql-query>
+
+    <sql-query name="syreporte.listarPaginadoContar">
+         select count(1)
+         from SY_REPORTE
+    </sql-query>
+
+    <sql-query name="syreporte.listarPaginadoSentencia">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,REPORTECODIGO "reportecodigo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,TOPICO "topico"
+			,PERIODOIMPLEMENTACION "periodoimplementacion"
+			,VENTANAOBJETO "ventanaobjeto"
+			,PARAMETROSFLAG "parametrosflag"
+			,FORMATODEFAULTFLAG "formatodefaultflag"
+			,DESCRIPCIONDATA "descripciondata"
+			,COMENTARIOS "comentarios"
+			,RESTRICCIONES "restricciones"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REPORTESTANDARDFLAG "reportestandardflag"
+			,ASUNTO "asunto"
+			,PADRE_ID_APLICACION "padreIdAplicacion"
+			,PADRE_ID_REPORTE "padreIdReporte"
+			,TIPOREPORTE "tiporeporte"
+			,CARPETATEMPORAL "carpetatemporal"
+			,HOJAID "hojaid"
+			,SENTENCIA "sentencia"
+			,URLINFORMEGOOGLE "urlinformegoogle"
+			,FECHAREPORTEACTUALIZACION "fechareporteactualizacion"
+
+         from SY_REPORTE
+    </sql-query>
+    <sql-query
+		name="syreporte.obtenerParametroValorExplicacion">
+	<![CDATA[
+        select Explicacion as "descripcion" from ParametrosMast
+        where AplicacionCodigo = :p_aplicacion and ParametroClave = :p_parametro
+        and CompaniaCodigo = :p_compania
+    ]]>
+	</sql-query>
+	
+		<sql-query
+		name="syreporte.syreportesListar">
+    <![CDATA[
+		    SELECT 
+		         CAST(SY_Reporte.AplicacionCodigo as varchar) aplicacioncodigo,   
+		         CAST(SY_Reporte.ReporteCodigo  as varchar) reportecodigo,   
+		         SY_Reporte.DescripcionLocal descripcionlocal,   
+		         CAST(SY_Reporte.Topico  as varchar) topico,   
+		         SY_AplicacionReporteTopico.DescripcionLocal topicoDescripcion,   
+		         SY_Reporte.VentanaObjeto ventanaobjeto,   
+		         SY_Reporte.Comentarios comentarios,   
+		         CAST(SY_Reporte.ReporteStandardFlag  as varchar)  reportestandardflag
+		    FROM SY_Reporte,   
+		         SY_ReporteEmpresa,   
+		         SY_AplicacionReporteTopico,   
+		         SeguridadAutorizacionReporte  
+		   WHERE ( SY_Reporte.AplicacionCodigo = SY_ReporteEmpresa.AplicacionCodigo ) and  
+		         ( SY_Reporte.ReporteCodigo = SY_ReporteEmpresa.ReporteCodigo ) and  
+		         ( SY_ReporteEmpresa.AplicacionCodigo = SY_AplicacionReporteTopico.AplicacionCodigo ) and  
+		         ( SY_Reporte.Topico = SY_AplicacionReporteTopico.Topico ) and  
+		         ( SY_Reporte.AplicacionCodigo = SeguridadAutorizacionReporte.AplicacionCodigo ) and  
+		         ( SY_Reporte.ReporteCodigo = SeguridadAutorizacionReporte.ReporteCodigo ) and  
+		         ( ( SY_Reporte.AplicacionCodigo = :p_aplicacion ) AND  
+		         (SY_ReporteEmpresa.Empresa = 'ROYAL') AND  
+		         SeguridadAutorizacionReporte.Disponible = 'S' AND  
+		         (SeguridadAutorizacionReporte.Usuario in (select PERFIL From SeguridadPerfilUsuario where Estado='A' and Usuario in (:p_usuario) union all SELECT :p_usuario ) ) AND  
+		         SY_Reporte.ReporteCodigo not like 'P%' AND  
+		         
+		         SY_Reporte.ReporteCodigo=ISNULL(:p_codigo, SY_Reporte.ReporteCodigo) AND
+				 UPPER( SY_Reporte.DescripcionLocal) Like '%' +ISNULL(UPPER(:p_nombre) , UPPER( SY_Reporte.DescripcionLocal)) + '%' AND
+		         SY_Reporte.Topico = ISNULL(:p_topico, SY_Reporte.Topico) and
+		          
+		         SY_Reporte.Estado = 'A' )   
+		GROUP BY SY_Reporte.AplicacionCodigo,   
+		         SY_Reporte.ReporteCodigo,   
+		         SY_Reporte.DescripcionLocal,   
+		         SY_Reporte.Topico,   
+		         SY_AplicacionReporteTopico.DescripcionLocal,   
+		         SY_Reporte.Comentarios,   
+		         SY_Reporte.VentanaObjeto,   
+		         SY_Reporte.ReporteStandardFlag  
+		ORDER BY SY_AplicacionReporteTopico.DescripcionLocal ASC,   
+		         SY_Reporte.ReporteCodigo ASC   
+    
+        ]]>
+	</sql-query>
+	
+	<sql-query
+		name="syreporte.syreportesContar">
+    <![CDATA[
+                  
+	   SELECT COUNT(1) FROM (
+	   SELECT SY_Reporte.AplicacionCodigo aplicacioncodigo  
+		    FROM SY_Reporte,   
+		         SY_ReporteEmpresa,   
+		         SY_AplicacionReporteTopico,   
+		         SeguridadAutorizacionReporte  
+		   WHERE ( SY_Reporte.AplicacionCodigo = SY_ReporteEmpresa.AplicacionCodigo ) and  
+		         ( SY_Reporte.ReporteCodigo = SY_ReporteEmpresa.ReporteCodigo ) and  
+		         ( SY_ReporteEmpresa.AplicacionCodigo = SY_AplicacionReporteTopico.AplicacionCodigo ) and  
+		         ( SY_Reporte.Topico = SY_AplicacionReporteTopico.Topico ) and  
+		         ( SY_Reporte.AplicacionCodigo = SeguridadAutorizacionReporte.AplicacionCodigo ) and  
+		         ( SY_Reporte.ReporteCodigo = SeguridadAutorizacionReporte.ReporteCodigo ) and  
+		         ( ( SY_Reporte.AplicacionCodigo = :p_aplicacion ) AND  
+		         (SY_ReporteEmpresa.Empresa = 'ROYAL') AND  
+		         SeguridadAutorizacionReporte.Disponible = 'S' AND  
+		         (SeguridadAutorizacionReporte.Usuario in (select PERFIL From SeguridadPerfilUsuario where Estado='A' and Usuario in (:p_usuario) union all SELECT :p_usuario ) ) AND  
+		         SY_Reporte.ReporteCodigo not like 'P%' AND  
+		         SY_Reporte.ReporteCodigo=ISNULL(:p_codigo, SY_Reporte.ReporteCodigo) AND
+				 UPPER( SY_Reporte.DescripcionLocal) Like '%' +ISNULL(UPPER(:p_nombre) , UPPER( SY_Reporte.DescripcionLocal)) + '%' AND
+				 SY_Reporte.Topico = ISNULL(:p_topico, SY_Reporte.Topico) and
+		         SY_Reporte.Estado = 'A' )  
+		GROUP BY SY_Reporte.AplicacionCodigo,   
+		         SY_Reporte.ReporteCodigo,   
+		         SY_Reporte.DescripcionLocal,   
+		         SY_Reporte.Topico,   
+		         SY_AplicacionReporteTopico.DescripcionLocal,   
+		         SY_Reporte.Comentarios,   
+		         SY_Reporte.VentanaObjeto,   
+		         SY_Reporte.ReporteStandardFlag  
+		          ) as record
+        ]]>
+	</sql-query>
+    
+    	<sql-query
+		name="syreporte.obtenerTopicos">
+    <![CDATA[
+      SELECT SY_AplicacionReporteTopico.Topico codigo,   
+         SY_AplicacionReporteTopico.DescripcionLocal descripcion 
+    FROM SY_AplicacionReporteTopico  
+   WHERE SY_AplicacionReporteTopico.AplicacionCodigo = :p_aplicacionCodigo   
+ORDER BY SY_AplicacionReporteTopico.DescripcionLocal ASC  
+    ]]>
+	</sql-query>
+	
+	
+	<sql-query
+		name="syreporte.syreportesolicitudListarContar">
+    <![CDATA[
+       	select
+		COUNT(1)
+		from SY_REPORTE rep
+		JOIN AplicacionesMast apl ON apl.AplicacionCodigo=rep.APLICACIONCODIGO
+		WHERE rep.ESTADO = ISNULL(:p_id_estado, rep.ESTADO) AND rep.APLICACIONCODIGO = ISNULL(:p_aplicacion, rep.APLICACIONCODIGO)
+		AND UPPER(  ISNULL(rep.ReporteCodigo, 'XXX' ) )  like '%' + UPPER(ISNULL(:p_codigo, ISNULL(rep.ReporteCodigo, 'XXX' ))) + '%'
+		AND UPPER( ISNULL(rep.descripcionlocal, 'XXX')   ) like '%' + UPPER(ISNULL(:p_nombre, ISNULL(rep.descripcionlocal,  'XXX'))) +'%'
+        AND UPPER(  ISNULL(rep.Tiporeporte, 'XXX' )   ) like '%' + UPPER(ISNULL(:p_tiporeporte, ISNULL(rep.Tiporeporte, 'XXX'))) +'%'
+		--AND REP.aplicacioncodigo in ('HR', 'AS', 'PR', 'SN')		
+    ]]>
+	</sql-query>
+	
+	<sql-query
+		name="syreporte.syreportesolicitudListarPaginacion">
+    <![CDATA[
+		    select
+		rep.APLICACIONCODIGO AS "aplicacioncodigo",
+		rep.ReporteCodigo AS "reportecodigo",
+		rep.DescripcionLocal AS "descripcionlocal",
+		rep.Tiporeporte AS "tiporeporte",
+		CAST(rep.ESTADO as varchar(3)) AS "estado",
+		apl.DescripcionLarga as "aplicacionDescripcion"	
+		,case when cast(rep.Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+		,case when rtrim(rep.Tiporeporte) = 'HTML' then 'HTML'
+		when rtrim(rep.Tiporeporte) = 'HTML' then 'HTML'
+		when rtrim(rep.Tiporeporte) = 'JASPE' then 'JASPER'
+		when rtrim(rep.Tiporeporte) = 'POWER' then 'POWER'
+		when rtrim(rep.Tiporeporte) = 'CORRE' then 'CORREO'
+		else rtrim(rep.Tiporeporte) end as "tipo"
+		from SY_REPORTE rep
+		JOIN AplicacionesMast apl ON apl.AplicacionCodigo=rep.APLICACIONCODIGO
+		WHERE rep.ESTADO = ISNULL(:p_id_estado, rep.ESTADO) AND rep.APLICACIONCODIGO = ISNULL(:p_aplicacion, rep.APLICACIONCODIGO)
+		AND UPPER(  ISNULL(rep.ReporteCodigo, 'XXX' ) )  like '%' + UPPER(ISNULL(:p_codigo, ISNULL(rep.ReporteCodigo, 'XXX' ))) + '%'
+		AND UPPER( ISNULL(rep.descripcionlocal, 'XXX')   ) like '%' + UPPER(ISNULL(:p_nombre, ISNULL(rep.descripcionlocal,  'XXX'))) +'%'
+        AND UPPER(  ISNULL(rep.Tiporeporte, 'XXX' )   ) like '%' + UPPER(ISNULL(:p_tiporeporte, ISNULL(rep.Tiporeporte, 'XXX'))) +'%'
+		--AND REP.aplicacioncodigo in ('HR', 'AS', 'PR', 'SN')
+		ORDER BY rep.APLICACIONCODIGO
+       	
+    ]]>
+	</sql-query>
+	
+	
+	<sql-query
+		name="syreporte.syreportesoRuta">
+    <![CDATA[
+    	select LTRIM(RTRIM(Explicacion)) as "explicacion" from Parametrosmast where ParametroClave = 'RUTAREPWEB' and AplicacionCodigo = 'SY' and CompaniaCodigo = '999999'
+    ]]>
+	</sql-query>
+	
+</hibernate-mapping>

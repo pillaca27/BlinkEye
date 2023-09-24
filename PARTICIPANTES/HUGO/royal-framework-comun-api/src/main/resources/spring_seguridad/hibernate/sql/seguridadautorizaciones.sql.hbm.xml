@@ -1,0 +1,456 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : aplicacionesmast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="seguridadautorizaciones.usuarioAutorizadoAplicacion">
+         SELECT Max(seguridadautorizaciones.aplicacioncodigo) AS "aplicacioncodigo"
+		FROM   seguridadautorizaciones,
+		       seguridadperfilusuario
+		WHERE  ( seguridadautorizaciones.aplicacioncodigo = :p_aplicacioncodigo )
+		       AND ( seguridadautorizaciones.grupo = :p_grupo )
+		       AND ( seguridadautorizaciones.usuario = seguridadperfilusuario.perfil )
+		       AND ( seguridadautorizaciones.concepto = :p_concepto )
+		       AND ( Lower(seguridadperfilusuario.usuario) = Lower(:p_usuario) )
+		       AND ( seguridadperfilusuario.estado = 'A' ) 
+    </sql-query>
+    
+    <sql-query name="seguridadautorizaciones.obtenerDto">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,GRUPO "grupo"
+			,CONCEPTO "concepto"
+			,USUARIO "usuario"
+			,CAST(OPCIONAGREGARFLAG  as VARCHAR(1)) "opcionagregarflag"
+			,CAST(OPCIONMODIFICARFLAG  as VARCHAR(1)) "opcionmodificarflag"
+			,CAST(OPCIONBORRARFLAG  as VARCHAR(1)) "opcionborrarflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(OPCIONAPROBARFLAG "opcionaprobarflag"
+         from SEGURIDADAUTORIZACIONES
+         where 
+			APLICACIONCODIGO = :p_aplicacioncodigo
+			AND GRUPO = :p_grupo
+			AND CONCEPTO = :p_concepto
+			AND USUARIO = :p_usuario
+
+    </sql-query>
+    
+    <sql-query name="seguridadautorizaciones.listarPorAplicacionUsuario">
+    <![CDATA[
+		select s.aplicacioncodigo as "aplicacioncodigo",
+		       s.grupo as "grupo",
+		       s.concepto as "concepto",
+		       s.usuario as "usuario",
+		       CAST(s.opcionagregarflag  as VARCHAR(1))  as "opcionagregarflag",
+		       CAST( s.opcionmodificarflag  as VARCHAR(1))  as "opcionmodificarflag", 
+		       CAST( s.opcionborrarflaas VARCHAR(1))  as g  "opcionborrarflag",
+		       CAST( s.opcionaprobarflag  as VARCHAR(1))  as "opcionaprobarflag",
+		       s.estado as "estado",
+		       s.ultimousuario as "ultimousuario",
+		       s.ultimafechamodif as "ultimafechamodif"
+		from  seguridadautorizaciones s
+		where s.aplicacioncodigo = :p_aplicacion
+		and s.usuario = :p_usuario
+		and s.estado = ISNULL(:p_estado, s.estado)
+    ]]>
+	</sql-query>
+	
+	<sql-query name="seguridadautorizaciones.listarPorPkYEstado">
+         select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,GRUPO "grupo"
+			,CONCEPTO "concepto"
+			,USUARIO "usuario"
+			,CAST(OPCIONAGREGARFLAG  as VARCHAR(1)) "opcionagregarflag"
+			,CAST(OPCIONMODIFICARFLAG  as VARCHAR(1)) "opcionmodificarflag"
+			,CAST(OPCIONBORRARFLAG  as VARCHAR(1)) "opcionborrarflag"
+			,CAST(ESTADO as VARCHAR(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(OPCIONAPROBARFLAG  as VARCHAR(1))  "opcionaprobarflag"
+         from SEGURIDADAUTORIZACIONES
+         where 
+				APLICACIONCODIGO = :p_aplicacioncodigo
+			AND GRUPO = :p_grupo
+			AND CONCEPTO = :p_concepto
+			AND USUARIO = :p_usuario
+			AND ESTADO = ISNULL(:p_estado,estado)
+    </sql-query>
+    
+    <sql-query name="seguridadautorizaciones.listarConPerfilPorPkYEstado">
+         select 
+			 a.APLICACIONCODIGO "aplicacioncodigo"
+			,a.GRUPO "grupo"
+			,a.CONCEPTO "concepto"
+			,a.USUARIO "usuario"
+			,CAST( a.OPCIONAGREGARFLAG  as VARCHAR(1)) "opcionagregarflag"
+			,CAST(a.OPCIONMODIFICARFLAG  as VARCHAR(1)) "opcionmodificarflag"
+			,CAST(a.OPCIONBORRARFLAG  as VARCHAR(1)) "opcionborrarflag"
+			,CAST(a.ESTADO  as VARCHAR(1)) "estado"
+			,a.ULTIMOUSUARIO "ultimousuario"
+			,a.ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(a.OPCIONAPROBARFLAG  as VARCHAR(1)) "opcionaprobarflag"
+         FROM   seguridadautorizaciones a
+		        inner join seguridadperfilusuario p
+		        on a.usuario = p.perfil
+		WHERE  1=1
+		    AND a.estado = ISNULL(:p_estado,a.estado)
+		    AND p.estado = ISNULL(:p_estado,p.estado)
+		    AND a.aplicacioncodigo = :p_aplicacioncodigo
+		    AND a.grupo = :p_grupo
+		    AND a.concepto = :p_concepto
+		    AND p.usuario = :p_usuario
+    </sql-query>
+    
+    
+    <!-- LEONARDO MANTENIMIENTO SEGURIDAD -->
+    <sql-query name="seguridadautorizaciones.ContarFunciones">
+      <![CDATA[ 
+		SELECT sum(tem.conteo)    FROM (
+		     SELECT 
+		     COUNT(*) as "conteo"
+		    FROM SEGURIDADGRUPO G
+		        INNER JOIN SEGURIDADCONCEPTO C
+		            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+		            AND G.GRUPO = C.GRUPO
+		        full JOIN SEGURIDADAUTORIZACIONES A
+		            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+		            AND C.GRUPO = A.GRUPO
+		            AND C.CONCEPTO = A.CONCEPTO
+		            AND :p_usuario = A.USUARIO
+		    WHERE 1=1
+		    AND C.APLICACIONCODIGO=:p_aplicacion
+		    AND C.Grupo = isnull( :p_grupo ,C.Grupo)
+		    AND C.Grupo <> 'SYSTEM'
+		    AND ISNULL(C.WebFlag,'N')='S'
+		    
+		    UNION ALL
+		    
+		    SELECT 
+		     COUNT(*) as "conteo"
+		    FROM SEGURIDADGRUPO G
+		        INNER JOIN SEGURIDADCONCEPTO C
+		            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+		            AND G.GRUPO = C.GRUPO
+		        full JOIN SEGURIDADAUTORIZACIONES A
+		            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+		            AND C.GRUPO = A.GRUPO
+		            AND C.CONCEPTO = A.CONCEPTO
+		            AND :p_usuario = A.USUARIO
+		    WHERE 1=1
+		    AND C.APLICACIONCODIGO=:p_aplicacion
+		    AND C.Grupo = 'SYSTEM'
+		)  AS tem
+	]]>	
+    </sql-query>
+    
+     <sql-query name="seguridadautorizaciones.ListarFunciones">
+     <![CDATA[ 
+SELECT 
+temp.seleccionar as "seleccionar" 
+,temp.grupo as "grupo"
+,temp.concepto as "concepto"   
+,temp.usuario as "usuario"
+,temp.aplicacion "aplicacion"
+,temp.grupoDescripcion AS "grupoDescripcion"
+,temp.objetoAutorizar AS "objetoAutorizar"
+,temp.flgAgregar AS "flgAgregar"
+,temp.flgModificar AS "flgModificar"
+,temp.flgBorrar AS "flgBorrar" 
+,temp.flgAprobar AS "flgAprobar"  
+,temp.ultimoUsuario AS "ultimoUsuario"
+,temp.ultimaFecha as "ultimaFecha"
+FROM (
+     SELECT 
+     CAST(ISNULL(A.ESTADO, 'I') as varchar)  AS "seleccionar" 
+        ,C.GRUPO AS "grupo"
+        ,C.CONCEPTO AS "concepto"     
+        ,A.USUARIO AS "usuario"   
+        ,C.APLICACIONCODIGO AS "aplicacion"
+        ,rtrim(G.DESCRIPCION)+isnull(C.Jerarquia,'') AS "grupoDescripcion"
+        ,C.DESCRIPCION AS "objetoAutorizar"
+       , CAST(ISNULL(A.OPCIONAGREGARFLAG, 'N') as varchar)  AS "flgAgregar"
+        , CAST(ISNULL(A.OPCIONMODIFICARFLAG, 'N') as varchar) AS "flgModificar"
+        , CAST(ISNULL(A.OPCIONBORRARFLAG, 'N') as varchar) AS "flgBorrar" 
+          , CAST(ISNULL(A.OPCIONAPROBARFLAG, 'N') as varchar) AS "flgAprobar"  
+        , CAST(A.ULTIMOUSUARIO as varchar) AS "ultimoUsuario"
+           ,FORMAT(A.ULTIMAFECHAMODIF,'dd/mm/yyyy') as "ultimaFecha"
+        ,C.ORDEN AS "orden" 
+         ,C.WebGrupo AS "webgrupo"
+    FROM SEGURIDADGRUPO G
+        INNER JOIN SEGURIDADCONCEPTO C
+            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+            AND G.GRUPO = C.GRUPO
+        full JOIN SEGURIDADAUTORIZACIONES A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.GRUPO = A.GRUPO
+            AND C.CONCEPTO = A.CONCEPTO
+            AND :p_usuario = A.USUARIO
+    WHERE 1=1
+    AND C.APLICACIONCODIGO=:p_aplicacion
+    AND C.Grupo = isnull( :p_grupo ,C.Grupo)
+    AND C.Grupo <> 'SYSTEM'
+    AND ISNULL(C.WebFlag,'N')='S'
+    
+    UNION ALL
+    
+    SELECT 
+    CAST(ISNULL(A.ESTADO, 'I') as varchar)  AS "seleccionar" 
+        ,C.GRUPO AS "grupo"
+        ,C.CONCEPTO AS "concepto"     
+        ,A.USUARIO AS "usuario"   
+        ,C.APLICACIONCODIGO AS "aplicacion"
+        ,rtrim(G.DESCRIPCION)+isnull(C.Jerarquia,'') AS "grupoDescripcion"
+        ,C.DESCRIPCION AS "objetoAutorizar"
+       , CAST(ISNULL(A.OPCIONAGREGARFLAG, 'N') as varchar)  AS "flgAgregar"
+        , CAST(ISNULL(A.OPCIONMODIFICARFLAG, 'N') as varchar) AS "flgModificar"
+        , CAST(ISNULL(A.OPCIONBORRARFLAG, 'N') as varchar) AS "flgBorrar" 
+          , CAST(ISNULL(A.OPCIONAPROBARFLAG, 'N') as varchar) AS "flgAprobar"  
+        , CAST(A.ULTIMOUSUARIO as varchar) AS "ultimoUsuario"
+           ,FORMAT(A.ULTIMAFECHAMODIF,'dd/mm/yyyy') as "ultimaFecha" 
+         ,C.ORDEN AS "orden" 
+         ,C.WebGrupo AS "webgrupo"
+    FROM SEGURIDADGRUPO G
+        INNER JOIN SEGURIDADCONCEPTO C
+            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+            AND G.GRUPO = C.GRUPO
+        full JOIN SEGURIDADAUTORIZACIONES A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.GRUPO = A.GRUPO
+            AND C.CONCEPTO = A.CONCEPTO
+            AND :p_usuario = A.USUARIO
+    WHERE 1=1
+    AND C.APLICACIONCODIGO=:p_aplicacion
+    AND C.Grupo = 'SYSTEM'
+ ) temp   
+ORDER BY isnull(temp.orden,99999),temp.grupo, temp.webgrupo , temp.ORDEN , temp.grupoDescripcion
+  
+   ]]>	
+    </sql-query>
+    
+    
+     <sql-query name="seguridadautorizaciones.ListarReportesSeguridad">
+       
+<!--     SELECT       -->
+<!--          ISNULL(A.DISPONIBLE, 'N')  AS "seleccionar", -->
+<!--          C.APLICACIONCODIGO AS "aplicacion", -->
+<!--          C.REPORTECODIGO AS "grupo", -->
+<!--          C.DESCRIPCIONLOCAL AS "concepto", -->
+<!--          A.ULTIMOUSUARIO AS "ultimoUsuario", -->
+<!--          to_char(A.ULTIMAFECHAMODIF,'dd/mm/yyyy') as "ultimaFecha"  -->
+<!--     FROM SY_REPORTE C -->
+<!--         full JOIN SEGURIDADAUTORIZACIONREPORTE A -->
+<!--             ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO -->
+<!--             AND C.REPORTECODIGO = A.REPORTECODIGO  -->
+<!--             AND :p_usuario = A.USUARIO -->
+<!--     WHERE 1=1 -->
+<!--     AND C.APLICACIONCODIGO=:p_aplicacion -->
+<!--     and C.Tiporeporte = 'INGOO' -->
+<!--     ORDER BY C.APLICACIONCODIGO, C.REPORTECODIGO  -->
+          
+   	 SELECT      
+     LTRIM(RTRIM(SY_AplicacionReporteTopico.DescripcionLocal))  "grupoDescripcion",  
+      CAST(c.Topico AS VARCHAR(100)) "topico",  
+      CAST(ISNULL(A.DISPONIBLE, 'N') AS VARCHAR(100))  AS "seleccionar",
+      CAST(C.APLICACIONCODIGO AS VARCHAR(100)) AS "aplicacion",
+      CAST(C.REPORTECODIGO AS VARCHAR(100)) AS "grupo",
+      CAST(C.DESCRIPCIONLOCAL AS VARCHAR(100)) AS "concepto",
+      CAST(A.ULTIMOUSUARIO AS VARCHAR(100)) AS "ultimoUsuario",
+         FORMAT(A.ULTIMAFECHAMODIF,'dd/mm/yyyy') as "ultimaFecha" 
+    FROM SY_REPORTE C
+        FULL JOIN SEGURIDADAUTORIZACIONREPORTE A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.REPORTECODIGO = A.REPORTECODIGO 
+            AND :p_usuario = A.USUARIO
+            
+        INNER JOIN SY_ReporteEmpresa
+		ON (C.AplicacionCodigo = SY_ReporteEmpresa.AplicacionCodigo AND
+			 C.ReporteCodigo = SY_ReporteEmpresa.ReporteCodigo )
+		INNER JOIN SY_AplicacionReporteTopico  
+		ON (C.Topico = SY_AplicacionReporteTopico.Topico AND 
+			 C.AplicacionCodigo = SY_AplicacionReporteTopico.AplicacionCodigo)
+    WHERE 1=1
+    AND  ( C.AplicacionCodigo = :p_aplicacion ) 
+	AND  (SY_ReporteEmpresa.Empresa = 'ROYAL' OR  SY_ReporteEmpresa.Empresa = :empresa) 
+   -- and C.Tiporeporte = 'INGOO'
+    --ORDER BY C.APLICACIONCODIGO, C.REPORTECODIGO 
+      ORDER BY   C.TOPICO ASC  
+    </sql-query>
+    
+    
+     <sql-query name="seguridadautorizaciones.ListarReportesSeguridadCount">
+       
+      
+<!--     select  count(1) from ( -->
+<!--       SELECT       -->
+<!--          ISNULL(A.DISPONIBLE, 'N')  AS "seleccionar", -->
+<!--          A.APLICACIONCODIGO AS "aplicacion", -->
+<!--          C.DESCRIPCIONLOCAL AS "concepto", -->
+<!--          A.ULTIMOUSUARIO AS "ultimoUsuario", -->
+<!--          A.ULTIMAFECHAMODIF AS "ultimaFecha"  -->
+<!--     FROM SY_REPORTE C -->
+<!--         full JOIN SEGURIDADAUTORIZACIONREPORTE A -->
+<!--             ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO -->
+<!--             AND C.REPORTECODIGO = A.REPORTECODIGO  -->
+<!--             AND :p_usuario = A.USUARIO -->
+<!--     WHERE 1=1 -->
+<!--     AND C.APLICACIONCODIGO=:p_aplicacion -->
+<!--      and C.Tiporeporte = 'INGOO' -->
+<!--     ORDER BY C.APLICACIONCODIGO, C.REPORTECODIGO  -->
+<!--     ) -->
+            SELECT      
+          count(1)
+    FROM SY_REPORTE C
+        FULL JOIN SEGURIDADAUTORIZACIONREPORTE A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.REPORTECODIGO = A.REPORTECODIGO 
+            AND :p_usuario = A.USUARIO
+            
+        INNER JOIN SY_ReporteEmpresa
+		ON (C.AplicacionCodigo = SY_ReporteEmpresa.AplicacionCodigo AND
+			 C.ReporteCodigo = SY_ReporteEmpresa.ReporteCodigo )
+		INNER JOIN SY_AplicacionReporteTopico  
+		ON (C.Topico = SY_AplicacionReporteTopico.Topico AND 
+			 C.AplicacionCodigo = SY_AplicacionReporteTopico.AplicacionCodigo)
+    WHERE 1=1
+    AND  ( C.AplicacionCodigo = :p_aplicacion ) 
+	AND  (SY_ReporteEmpresa.Empresa = 'ROYAL' OR  SY_ReporteEmpresa.Empresa = :empresa) 
+   -- and C.Tiporeporte = 'INGOO'
+   -- ORDER BY C.APLICACIONCODIGO, C.REPORTECODIGO 
+   
+          
+    </sql-query>
+    
+     <sql-query name="seguridadautorizaciones.ContarConceptos">
+          <![CDATA[ 
+  SELECT 
+	count(*)
+FROM SY_SEGURIDADGRUPO G
+        INNER JOIN SY_SEGURIDADCONCEPTO C
+            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+            AND G.GRUPO = C.GRUPO
+        LEFT JOIN SY_SEGURIDADAUTORIZACIONES A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.GRUPO = A.GRUPO
+            AND C.CONCEPTO = A.CONCEPTO
+            AND A.USUARIO = :p_usuario  
+    WHERE 1=1
+    AND G.APLICACIONCODIGO = :p_aplicacion
+    AND G.Grupo = isnull( :p_grupo ,C.Grupo)
+   
+   ]]>	
+    </sql-query>
+    
+     <sql-query name="seguridadautorizaciones.ListarConceptos">
+          <![CDATA[ 
+ 
+SELECT 
+		--CAST(ISNULL(A.ESTADO, 'I') as varchar) 
+		 CASE WHEN A.ESTADO IS NULL THEN 'I' ELSE 'A' END AS "seleccionar"
+        ,C.GRUPO AS "grupo"
+        ,A.USUARIO AS "usuariocodigo"
+         ,G.APLICACIONCODIGO as "aplicacioncodigo"
+        ,C.CONCEPTO AS "concepto"
+        ,G.DESCRIPCIONLOCAL AS "grupoDescripcion"
+        ,C.DESCRIPCIONLOCAL AS "objetoAutorizar"
+       ,A.ULTIMOUSUARIO AS "ultimoUsuario",
+         A.ULTIMAFECHAMODIF   as "ultimaFecha"
+    FROM SY_SEGURIDADGRUPO G
+        INNER JOIN SY_SEGURIDADCONCEPTO C
+            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+            AND G.GRUPO = C.GRUPO
+        LEFT JOIN SY_SEGURIDADAUTORIZACIONES A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.GRUPO = A.GRUPO
+            AND C.CONCEPTO = A.CONCEPTO
+            AND A.USUARIO = :p_usuario  
+    WHERE 1=1
+    AND G.APLICACIONCODIGO = :p_aplicacion
+    AND G.Grupo = isnull( :p_grupo ,C.Grupo)
+   ORDER BY G.Grupo ,G.DescripcionLocal    
+   ]]>	
+    
+    </sql-query>
+    
+    
+    <sql-query name="seguridadautorizaciones.obtenerSeguridadTabsMenu">
+    SELECT        
+        C.CONCEPTO AS "concepto"        
+        ,C.DESCRIPCION AS "descripcion"
+       , ISNULL(A.OPCIONAGREGARFLAG, 'N')  AS "flgAgregar"
+        , ISNULL(A.OPCIONMODIFICARFLAG, 'N')  AS "flgModificar"
+        , ISNULL(A.OPCIONBORRARFLAG, 'N')  AS "flgBorrar" 
+        , ISNULL(A.OpcionAprobarFlag, 'N')  AS "flgAprobar"        
+        , ISNULL(A.OpcionVerDocsFlag, 'N') AS "flgVerDocs"
+        , ISNULL(A.OpcionEnviarCorreoFlag, 'N') AS "flgEnviarCorreo"
+        , ISNULL(A.OpcionOtrosFlag, 'N') AS "flgOtros"
+    FROM SEGURIDADGRUPO G
+        INNER JOIN SEGURIDADCONCEPTO C
+            ON  G.APLICACIONCODIGO = C.APLICACIONCODIGO
+            AND G.GRUPO = C.GRUPO
+        full JOIN SEGURIDADAUTORIZACIONES A
+            ON  C.APLICACIONCODIGO = A.APLICACIONCODIGO
+            AND C.GRUPO = A.GRUPO
+            AND C.CONCEPTO = A.CONCEPTO
+            AND A.USUARIO IN (SELECT p.perfil 
+                             FROM   sgagrosys.seguridadperfilusuario p 
+                             WHERE  p.usuario = :p_usuario)           
+    WHERE 1=1
+    AND C.APLICACIONCODIGO=:p_aplicacion
+    AND C.Grupo=:p_grupo
+    AND C.CONCEPTO =:p_concepto     
+    AND A.ESTADO = 'A'
+    ORDER BY C.APLICACIONCODIGO, C.GRUPO, C.CONCEPTO
+    </sql-query>
+  
+    <sql-query name="seguridadautorizaciones.esSUPERUSER">
+	<![CDATA[
+	SELECT COUNT(1) FROM SEGURIDADAUTORIZACIONES WHERE USUARIO IN(
+	SELECT p.perfil FROM seguridadperfilusuario p 
+	WHERE  p.usuario = :p_usuario union all select :p_usuario from dual) AND APLICACIONCODIGO = 'SY' AND GRUPO = 'SYSTEM'
+	AND CONCEPTO = 'SYSADM'
+	]]>	
+	</sql-query>
+    <!-- FIN -->
+    
+	<!--  SEGURIDAD  KPI - INDICADORES -->
+    <sql-query name="seguridadautorizaciones.listarUsuariospaginadoContar">
+		<![CDATA[
+				select 
+				count(1)
+				from PersonaMast p
+				inner join empleadomast e on p.persona=e.empleado
+				inner join usuario u on e.codigousuario=u.usuario
+				where p.estado = 'A'
+				AND u.estado = 'A'
+				AND e.estadoempleado = '0'
+				AND u.usuario IN (select DISTINCT a.usuario from seguridadautorizaciones a 
+									where a.aplicacioncodigo='RT')
+		]]>	
+	</sql-query>
+	
+	<sql-query name="seguridadautorizaciones.listarUsuariospaginadoSentencia">
+		<![CDATA[
+			select 
+			p.persona "persona"
+			,CAST(u.usuario AS VARCHAR(20)) "usuario"
+			,CAST(u.nombre AS VARCHAR(20)) "nombre"
+			from PersonaMast p
+			inner join empleadomast e on p.persona=e.empleado
+			inner join usuario u on e.codigousuario=u.usuario
+			where p.estado = 'A'
+			AND u.estado = 'A'
+			AND e.estadoempleado = '0'
+			AND u.usuario IN (select DISTINCT a.usuario from seguridadautorizaciones a 
+								where a.aplicacioncodigo='RT')
+		]]>	
+	</sql-query>
+    <!-- FIN --> 
+</hibernate-mapping>

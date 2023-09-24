@@ -1,0 +1,5 @@
+package com.royal.demo.genericos;
+
+public class GenericoServicioImpl extends GenericoServicioBase {
+
+}

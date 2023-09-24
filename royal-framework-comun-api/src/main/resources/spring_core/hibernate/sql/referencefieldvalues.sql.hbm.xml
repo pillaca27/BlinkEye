@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="referencefieldvalues.obtenerDto">
+         select 
+			REFERENCEFIELD "referencefield"
+			,REFERENCEVALUE "referencevalue"
+			,DESCRIPTION "description"
+         from REFERENCEFIELDVALUES
+         where 
+			REFERENCEFIELD = :p_referencefield
+			AND REFERENCEVALUE = :p_referencevalue
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.listardtofiltros">
+         select 
+			REFERENCEFIELD "referencefield"
+			,REFERENCEVALUE "referencevalue"
+			,DESCRIPTION "description"
+         from REFERENCEFIELDVALUES
+         where 
+				REFERENCEFIELD = ISNULL(:p_referencefield,referencefield)
+			AND REFERENCEVALUE = ISNULL(:p_referencevalue,referencevalue)
+			and UPPER(ISNULL(description,'xxx')) like '%' + ISNULL(:p_description,UPPER(description)) + '%'
+		 order by description
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.listardtoporreferencefield">
+        select 
+			CAST(referencefield AS VARCHAR(2)) "referencefield"
+			,CAST(referencevalue  AS VARCHAR(12)) "referencevalue"
+			,CAST(description AS VARCHAR(30)) "description"
+		 from REFERENCEFIELDVALUES
+		 where 
+				REFERENCEFIELD = :p_referencefield
+		 order by REFERENCEVALUE ASC
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.obtenerreferencefield">
+                select
+		CAST(referencefield AS VARCHAR(2)) as "referencefield",
+		CAST(screentitle as VARCHAR(30)) "screentitle",
+		CAST(length AS DECIMAL(10,3)) as "length",
+		CAST(tablevalidatedflag as VARCHAR(1)) as "tablevalidatedflag",
+		CAST(localname as VARCHAR(30)) as "localname",
+		CAST(englishname as   VARCHAR(30)) as "englishname",
+		CAST(internalcodeflag as VARCHAR(1)) as "internalcodeflag",
+		CAST(availableflag as VARCHAR(1)) as "availableflag",
+		CAST(internalcode as VARCHAR(10)) as "internalcode"
+		From REFERENCEFIELDMST
+		where REFERENCEFIELD = :p_referencefield   
+    </sql-query>
+    
+</hibernate-mapping>

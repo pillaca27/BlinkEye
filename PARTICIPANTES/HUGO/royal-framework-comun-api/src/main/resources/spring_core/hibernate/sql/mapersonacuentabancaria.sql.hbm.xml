@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.MaPersonacuentabancaria
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="mapersonacuentabancaria.obtenerDto">
+         select 
+			Persona "persona"
+			,Secuencia "secuencia"
+			,MonedaCodigo "monedacodigo"
+			,TipoCuenta "tipocuenta"
+			,BancoCodigo "bancocodigo"
+			,CuentaBancariaNumero "cuentabancarianumero"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,DiferidoModalidad "diferidomodalidad"
+
+         from MA_PERSONACUENTABANCARIA
+         where 
+			Persona = :p_persona
+			AND Secuencia = :p_secuencia
+			Persona = :p_persona
+			AND Secuencia = :p_secuencia
+
+    </sql-query>
+
+    <sql-query name="mapersonacuentabancaria.listarPaginadoContar">
+         select count(1)
+         from MA_PERSONACUENTABANCARIA
+         where 
+			Persona = ISNULL(:p_persona, Persona)
+			AND Secuencia = ISNULL(:p_secuencia, Secuencia)
+			Persona = ISNULL(:p_persona, Persona)
+			AND Secuencia = ISNULL(:p_secuencia, Secuencia)
+
+    </sql-query>
+
+    <sql-query name="mapersonacuentabancaria.listarPaginadoSentencia">
+         select 
+			Persona "persona"
+			,Secuencia "secuencia"
+			,MonedaCodigo "monedacodigo"
+			,cast(TipoCuenta as varchar) "tipocuenta"
+			,BancoCodigo "bancocodigo"
+			,CuentaBancariaNumero "cuentabancarianumero"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,DiferidoModalidad "diferidomodalidad"
+			,'UPDATE' as "acciones"
+
+         from MA_PERSONACUENTABANCARIA
+         where 
+			Persona = ISNULL(:p_persona, Persona)
+
+    </sql-query>
+
+    <sql-query name="mapersonacuentabancaria.listarDtoCore">
+         select 
+			Persona "persona"
+			,Secuencia "secuencia"
+			,MonedaCodigo "monedacodigo"
+			,TipoCuenta "tipocuenta"
+			,BancoCodigo "bancocodigo"
+			,CuentaBancariaNumero "cuentabancarianumero"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,DiferidoModalidad "diferidomodalidad"
+
+         from MA_PERSONACUENTABANCARIA
+         where 
+			Persona = ISNULL(:p_persona, Persona)
+			AND Secuencia = ISNULL(:p_secuencia, Secuencia)
+			Persona = ISNULL(:p_persona, Persona)
+			AND Secuencia = ISNULL(:p_secuencia, Secuencia)
+
+    </sql-query>
+
+    <sql-query name="mapersonacuentabancaria.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="mapersonacuentabancaria.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+</hibernate-mapping>

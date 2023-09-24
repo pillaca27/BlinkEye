@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : aplicacionesmast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="seguridadperfilusuario.listarCore">
+    <![CDATA[
+		select a.perfil as "perfil"
+		        ,a.usuario as "usuario"
+		        ,a.estado as "estado"
+		        ,a.ultimousuario as "ultimousuario"
+		        ,a.ultimafechamodif as "ultimafechamodif"
+		    from seguridadperfilusuario a
+		    where a.perfil = ISNULL(:p_perfil,a.perfil)
+		    and a.usuario = ISNULL(:p_usuario,a.usuario)
+		    and a.estado = ISNULL(:p_estado,a.estado)
+    ]]>
+	</sql-query>
+	
+	
+	<!--  MANTENIMIENTO SEGURIDAD MIGRADO DE AGRO -->
+
+<sql-query name="seguridadperfilusuario.contar">
+         select  count(*)  from SEGURIDADPERFILUSUARIO PU
+			INNER JOIN USUARIO U
+			ON U.usuario = PU.perfil
+			where pu.usuario = ISNULL(:p_usuario, '')
+			and pu.estado = 'A'
+    </sql-query>
+    <sql-query name="seguridadperfilusuario.listar">
+		select  PU.PERFIL as "perfil", U.NOMBRE as "nombre", Pu.estado as "estado"  from SEGURIDADPERFILUSUARIO PU
+			INNER JOIN USUARIO U
+			ON U.usuario = PU.perfil
+			where pu.usuario = ISNULL(:p_usuario, '')
+			and pu.estado = 'A'
+    </sql-query>
+    
+    
+     <sql-query name="seguridadperfilusuario.contarlistaruUsuariosByPerifl">
+		 select   count(*)           
+   from SEGURIDADPERFILUSUARIO PU
+            INNER JOIN USUARIO U
+            ON U.usuario = PU.USUARIO
+            where pu.PERFIL = ISNULL(:p_usuario, pu.PERFIL)
+            and pu.estado = 'A'    
+    </sql-query>
+    <sql-query name="seguridadperfilusuario.listaruUsuariosByPerifl">
+    
+	select  PU.USUARIO as "perfil"  ,PU.PERFIL as "usuario", 
+  U.NOMBRE as "nombre", Pu.estado as "estado",
+  (SELECT NOMBRE FROM USUARIO where USUARIO=PU.PERFIL) AS "nombreperfil"  
+   from SEGURIDADPERFILUSUARIO PU
+            INNER JOIN USUARIO U
+            ON U.usuario = PU.USUARIO
+            where pu.PERFIL = ISNULL(:p_usuario, pu.PERFIL)
+            and pu.estado = 'A'   
+    </sql-query>
+    <!-- FIN -->
+	
+
+</hibernate-mapping>

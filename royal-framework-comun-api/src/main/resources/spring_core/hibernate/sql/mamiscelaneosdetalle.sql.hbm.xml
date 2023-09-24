@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : mamiscelaneosdetalle
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    
+    <sql-query name="mamiscelaneosdetalle.listarActivos">
+    <![CDATA[
+        select LTRIM(RTRIM(CAST(CodigoElemento as varchar(2000)))) as "codigo", 
+        CAST(DescripcionLocal as varchar) as "nombre" 
+        from MA_MiscelaneosDetalle
+        where   AplicacionCodigo = :p_aplicacion 
+	        and CodigoTabla = :p_codigotabla
+	        and Compania = :p_compania 
+	        and Estado = ISNULL(:p_estado,Estado)
+    ]]>
+  	</sql-query>
+  	
+  	<sql-query name="mamiscelaneosdetalle.obtenerDtoPorId">
+    <![CDATA[
+  	select 
+		aplicacioncodigo as "aplicacioncodigo",
+		codigotabla as "codigotabla",
+		compania as "compania",
+		LTRIM(RTRIM(CAST(CodigoElemento as varchar))) as "codigoelemento",
+		CAST(DescripcionLocal as varchar(2000)) as "descripcionlocal",
+		CAST(estado as varchar(1)) as "estado",
+		descripcionextranjera as "descripcionextranjera",
+		valornumerico as "valornumerico",
+		valorfecha as "valorfecha",
+		ultimousuario as "ultimousuario",
+		ultimafechamodif as "ultimafechamodif",
+		valorcodigo1 as valorcodigo1,
+		valorcodigo2 as valorcodigo2,
+		valorcodigo3 as valorcodigo3			
+		 From ma_miscelaneosdetalle
+		 where aplicacioncodigo = :p_aplicacioncodigo
+		 and codigotabla = :p_codigotabla
+		 and compania = :p_compania
+		 and codigoelemento = :p_codigoelemento
+  	]]>
+  	</sql-query>
+  	
+  	<sql-query name="mamiscelaneosdetalle.listarDtoPorHeader">
+    <![CDATA[
+        select 
+		aplicacioncodigo as "aplicacioncodigo",
+		codigotabla as "codigotabla",
+		compania as "compania",
+		LTRIM(RTRIM(CAST(CodigoElemento as varchar))) as "codigoelemento",
+		CAST(DescripcionLocal as varchar(2000)) as "descripcionlocal",
+		CAST(estado as varchar(1)) as "estado",
+		valorcodigo1 as "valorcodigo1",
+		valornumerico as "valornumerico"
+		 From ma_miscelaneosdetalle
+		 where aplicacioncodigo = :p_aplicacioncodigo
+		 and codigotabla = :p_codigotabla
+		 and compania = :p_compania
+		 and UPPER(codigoelemento) like '%' + UPPER(ISNULL(:p_codigoelemento, codigoelemento ))  + '%'
+		 and UPPER(estado) like '%' + UPPER(ISNULL(:p_estado, estado ))  + '%'
+		 and UPPER(descripcionlocal) like '%' + UPPER(ISNULL(:p_descripcionlocal, descripcionlocal ))  + '%'
+		 
+    ]]>
+  	</sql-query>
+	
+	<sql-query name="mamiscelaneosdetalle.listarDtoPorAplicacionCodigoTabla">
+    <![CDATA[
+        select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,CODIGOTABLA "codigotabla"
+			,COMPANIA "compania"
+			,LTRIM(RTRIM(CAST(CodigoElemento as varchar))) "codigoelemento"
+			,CAST(DescripcionLocal as varchar(2000)) "descripcionlocal"
+			,CAST(DescripcionExtranjera as varchar(2000)) "descripcionextranjera"
+			,VALORNUMERICO "valornumerico"
+			,VALORCODIGO1 "valorcodigo1"
+			,VALORCODIGO2 "valorcodigo2"
+			,VALORCODIGO3 "valorcodigo3"
+			,VALORCODIGO4 "valorcodigo4"
+			,VALORCODIGO5 "valorcodigo5"
+			,VALORFECHA "valorfecha"
+			,CAST(Estado as varchar(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,VALORCODIGO6 "valorcodigo6"
+			,VALORCODIGO7 "valorcodigo7"
+			,VALORCODIGO8 "valorcodigo8"
+			,VALORCODIGO9 "valorcodigo9"
+			,VALORCODIGO10 "valorcodigo10"
+
+         from MA_MISCELANEOSDETALLE
+         where 
+				APLICACIONCODIGO = :p_aplicacioncodigo
+			AND CODIGOTABLA = :p_codigotabla	
+			AND ESTADO = ISNULL(:p_estado,ESTADO)
+		 order by DESCRIPCIONLOCAL
+    ]]>
+  	</sql-query>
+  	
+  	<sql-query name="mamiscelaneosdetalle.obtenerDtoPorAplicacionTablaElemento">
+    <![CDATA[
+        select 
+			APLICACIONCODIGO "aplicacioncodigo"
+			,CODIGOTABLA "codigotabla"
+			,COMPANIA "compania"
+			,LTRIM(RTRIM(CAST(CodigoElemento as varchar))) "codigoelemento"
+			,CAST(DescripcionLocal as varchar(2000)) "descripcionlocal"
+			,CAST(DescripcionExtranjera as varchar(2000)) "descripcionextranjera"
+			,VALORNUMERICO "valornumerico"
+			,VALORCODIGO1 "valorcodigo1"
+			,VALORCODIGO2 "valorcodigo2"
+			,VALORCODIGO3 "valorcodigo3"
+			,VALORCODIGO4 "valorcodigo4"
+			,VALORCODIGO5 "valorcodigo5"
+			,VALORFECHA "valorfecha"
+			,CAST(Estado as varchar(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,VALORCODIGO6 "valorcodigo6"
+			,VALORCODIGO7 "valorcodigo7"
+			,VALORCODIGO8 "valorcodigo8"
+			,VALORCODIGO9 "valorcodigo9"
+			,VALORCODIGO10 "valorcodigo10"
+
+         from MA_MISCELANEOSDETALLE
+         where 
+				APLICACIONCODIGO = :p_aplicacioncodigo
+			AND CODIGOTABLA = :p_codigotabla
+			AND CODIGOELEMENTO = :p_codigoelemento	
+    ]]>
+  	</sql-query>
+  	
+</hibernate-mapping>

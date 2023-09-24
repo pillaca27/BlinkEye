@@ -1,0 +1,684 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Personamast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <sql-query name="personamast.obtenerPersona">
+         select 
+			Persona "persona"
+			,Documento "documento"
+			,rtrim(Busqueda) "busqueda"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+
+         from PERSONAMAST
+         where 
+			Persona = :p_persona
+
+    </sql-query>
+    
+    <sql-query name="personamast.obtenerDto">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,RTRIM(Busqueda) "busqueda"
+			,FECHAINACTIVACION "fechainactivacion"
+			,cast (rtrim(TipoDocumento) as varchar(1)) "tipodocumento"
+			,RTRIM(Documento) "documento"
+			,CodigoBarras "codigobarras"
+			,cast (EsCliente as varchar(1)) as "escliente"
+			,cast (EsProveedor as varchar(1)) "esproveedor"
+			,cast (EsEmpleado as varchar(1)) "esempleado"
+			,cast (EsOtro as varchar(1)) "esotro"
+			,cast (rtrim(TipoPersona) as varchar(1)) "tipopersona"
+			,FechaNacimiento "fechanacimiento"
+			,CiudadNacimiento "ciudadnacimiento"
+			,cast (Sexo as varchar(1)) "sexo"
+			,Nacionalidad "nacionalidad"
+			,cast (EstadoCivil as varchar(1)) "estadocivil"
+			,NivelInstruccion "nivelinstruccion"
+			,Direccion "direccion"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,Departamento "departamento"
+			,Telefono "telefono"
+			,IngresoFechaRegistro "ingresofecharegistro"
+			,IngresoAplicacionCodigo "ingresoaplicacioncodigo"
+			,IngresoUsuario "ingresousuario"
+			,Fax "fax"
+			,RTRIM(DocumentoFiscal) "documentofiscal"
+			,RTRIM(DocumentoIdentidad) "documentoidentidad"
+			,TelefonoEmergencia "telefonoemergencia"
+			,CorreoElectronico "correoelectronico"
+			,cast (Estado as varchar(1)) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,correoelectronicootros as "correoelectronicootros"
+			,estadogestionproveedor  as "estadogestionproveedor"
+
+         from PERSONAMAST
+         where 
+			Persona = :p_persona
+
+    </sql-query>
+
+
+    <sql-query name="personamast.listarPaginadoSentenciaP">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,Busqueda "busqueda"
+			,FECHAINACTIVACION "fechainactivacion"
+			,cast (TipoDocumento as varchar(1)) "tipodocumento"
+			,Documento "documento"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,Departamento "departamento"
+			,cast (EsCliente as varchar(1)) as "escliente"
+			,cast (EsProveedor as varchar(1)) "esproveedor"
+			,cast (EsEmpleado as varchar(1)) "esempleado"
+			,cast (EsOtro as varchar(1)) "esotro"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+			,nacionalidad as "nacionalidad"
+			,cast (Estado as varchar(1)) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,case when cast(ESTADO as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(EsCliente as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "cli"
+			,case when cast(EsProveedor as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "prov"
+			,case when cast(EsEmpleado as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "emp"
+         from PERSONAMAST
+       where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsProveedor = 'S'
+		order by busqueda ASC
+    </sql-query>
+
+    <sql-query name="personamast.listarPaginadoContarP">
+         select count(1)
+         from PERSONAMAST
+         where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsProveedor = 'S'
+    </sql-query>
+
+    <sql-query name="personamast.listarPaginadoSentenciaE">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,Busqueda "busqueda"
+			,FECHAINACTIVACION "fechainactivacion"
+			,cast (TipoDocumento as varchar(1)) "tipodocumento"
+			,Documento "documento"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,Departamento "departamento"
+			,cast (EsCliente as varchar(1)) as "escliente"
+			,cast (EsProveedor as varchar(1)) "esproveedor"
+			,cast (EsEmpleado as varchar(1)) "esempleado"
+			,cast (EsOtro as varchar(1)) "esotro"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+			,nacionalidad as "nacionalidad"
+			,cast (Estado as varchar(1)) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,case when cast(ESTADO as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(EsCliente as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "cli"
+			,case when cast(EsProveedor as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "prov"
+			,case when cast(EsEmpleado as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "emp"
+         from PERSONAMAST
+       where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsEmpleado = 'S'
+		order by busqueda ASC
+    </sql-query>
+
+    <sql-query name="personamast.listarPaginadoContarE">
+         select count(1)
+         from PERSONAMAST
+         where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsEmpleado = 'S'
+    </sql-query>
+    
+        <sql-query name="personamast.listarPaginadoSentenciaC">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,Busqueda "busqueda"
+			,FECHAINACTIVACION "fechainactivacion"
+			,cast (TipoDocumento as varchar(1)) "tipodocumento"
+			,Documento "documento"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,Departamento "departamento"
+			,cast (EsCliente as varchar(1)) as "escliente"
+			,cast (EsProveedor as varchar(1)) "esproveedor"
+			,cast (EsEmpleado as varchar(1)) "esempleado"
+			,cast (EsOtro as varchar(1)) "esotro"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+			,nacionalidad as "nacionalidad"
+			,cast (Estado as varchar(1)) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,case when cast(ESTADO as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(EsCliente as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "cli"
+			,case when cast(EsProveedor as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "prov"
+			,case when cast(EsEmpleado as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "emp"
+         from PERSONAMAST
+       where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsCliente = 'S'
+		order by busqueda ASC
+    </sql-query>
+
+    <sql-query name="personamast.listarPaginadoContarC">
+         select count(1)
+         from PERSONAMAST
+         where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			  and EsCliente = 'S'
+    </sql-query>
+    
+    <sql-query name="personamast.listarPaginadoContar">
+         select count(1)
+         from PERSONAMAST
+         where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+    </sql-query>
+
+
+    <sql-query name="personamast.listarPaginadoSentencia">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,Busqueda "busqueda"
+			,cast (TipoDocumento as varchar(1)) "tipodocumento"
+			,Documento "documento"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,FECHAINACTIVACION "fechainactivacion"
+			,Departamento "departamento"
+			,cast (EsCliente as varchar(1)) as "escliente"
+			,cast (EsProveedor as varchar(1)) "esproveedor"
+			,cast (EsEmpleado as varchar(1)) "esempleado"
+			,cast (EsOtro as varchar(1)) "esotro"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+			,nacionalidad as "nacionalidad"
+			,cast (Estado as varchar(1)) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,case when cast(ESTADO as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(EsCliente as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "cli"
+			,case when cast(EsProveedor as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "prov"
+			,case when cast(EsEmpleado as varchar(1)) = 'S' THEN 'X' else
+			' ' end AS "emp"
+         from PERSONAMAST
+       where 
+			Persona = ISNULL(:p_persona, Persona) and
+			  UPPER(ISNULL(Busqueda,'A')) like '%' + ISNULL(:p_busqueda,UPPER('A')) + '%' and
+			  UPPER(ISNULL(documento,'A')) like '%' + ISNULL(:p_documento,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoFiscal,'A')) like '%' + ISNULL(:p_documentofiscal,UPPER('A')) + '%' and
+			  UPPER(ISNULL(DocumentoIdentidad,'A')) like '%' + ISNULL(:p_documentoidentidad,UPPER('A')) + '%' and
+			  Estado = ISNULL(:p_estado, Estado)  
+			   
+		order by busqueda ASC
+    </sql-query>
+    
+    <sql-query name="personamast.listarDtoCore">
+         select 
+			Persona "persona"
+			,Origen "origen"
+			,ApellidoPaterno "apellidopaterno"
+			,ApellidoMaterno "apellidomaterno"
+			,Nombres "nombres"
+			,NombreCompleto "nombrecompleto"
+			,Busqueda "busqueda"
+			,TipoDocumento "tipodocumento"
+			,Documento "documento"
+			,CodigoBarras "codigobarras"
+			,EsCliente "escliente"
+			,EsProveedor "esproveedor"
+			,EsEmpleado "esempleado"
+			,EsOtro "esotro"
+			,TipoPersona "tipopersona"
+			,FechaNacimiento "fechanacimiento"
+			,CiudadNacimiento "ciudadnacimiento"
+			,Sexo "sexo"
+			,Nacionalidad "nacionalidad"
+			,EstadoCivil "estadocivil"
+			,NivelInstruccion "nivelinstruccion"
+			,Direccion "direccion"
+			,CodigoPostal "codigopostal"
+			,Provincia "provincia"
+			,Departamento "departamento"
+			,Telefono "telefono"
+			,Fax "fax"
+			,DocumentoFiscal "documentofiscal"
+			,DocumentoIdentidad "documentoidentidad"
+			,CarnetExtranjeria "carnetextranjeria"
+			,DocumentoMilitarFA "documentomilitarfa"
+			,TipoBrevete "tipobrevete"
+			,Brevete "brevete"
+			,Pasaporte "pasaporte"
+			,NombreEmergencia "nombreemergencia"
+			,DireccionEmergencia "direccionemergencia"
+			,TelefonoEmergencia "telefonoemergencia"
+			,BancoMonedaLocal "bancomonedalocal"
+			,TipoCuentaLocal "tipocuentalocal"
+			,CuentaMonedaLocal "cuentamonedalocal"
+			,BancoMonedaExtranjera "bancomonedaextranjera"
+			,TipoCuentaExtranjera "tipocuentaextranjera"
+			,CuentaMonedaExtranjera "cuentamonedaextranjera"
+			,PersonaAnt "personaant"
+			,CorreoElectronico "correoelectronico"
+			,ClasePersonaCodigo "clasepersonacodigo"
+			,EnfermedadGraveFlag "enfermedadgraveflag"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,TipoPersonaUsuario "tipopersonausuario"
+			,IngresoFechaRegistro "ingresofecharegistro"
+			,IngresoAplicacionCodigo "ingresoaplicacioncodigo"
+			,IngresoUsuario "ingresousuario"
+			,PYMEFlag "pymeflag"
+			,GrupoEmpresarial "grupoempresarial"
+			,PersonaClasificacion "personaclasificacion"
+			,TarjetadeCredito "tarjetadecredito"
+			,FlagActualizacion "flagactualizacion"
+			,Celular "celular"
+			,ParentescoEmergencia "parentescoemergencia"
+			,CelularEmergencia "celularemergencia"
+			,LugarNacimiento "lugarnacimiento"
+			,SUNATNacionalidad "sunatnacionalidad"
+			,SUNATVia "sunatvia"
+			,SUNATZona "sunatzona"
+			,SUNATUbigeo "sunatubigeo"
+			,SUNATDomiciliado "sunatdomiciliado"
+			,brevete_fecvcto "breveteFecvcto"
+			,PaisEmisor "paisemisor"
+			,CodigoLDN "codigoldn"
+			,CodigoInterbancario "codigointerbancario"
+			,DireccionReferencia "direccionreferencia"
+			,SUNATConvenio "sunatconvenio"
+			,FlagSolicitaUsuario "flagsolicitausuario"
+			,CarnetExtranjeria_FecVcto "carnetextranjeriaFecvcto"
+			,PAIS "pais"
+			,SUNATNDConvenio "sunatndconvenio"
+			,SUNATNDTipoRenta "sunatndtiporenta"
+			,SUNATNDExoneracion "sunatndexoneracion"
+			,SUNATNDServicio "sunatndservicio"
+
+         from PERSONAMAST
+         where 
+			Persona = ISNULL(:p_persona, Persona)
+
+    </sql-query>
+
+    <sql-query name="personamast.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="personamast.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+    
+        <sql-query name="personamast.listarZonas">
+    select 
+   
+    (dep.Departamento + pro.Provincia + pos.CodigoPostal) as "codigo",
+	 (RTRIM(dep.DescripcionCorta) + '-' + RTRIM(pro.DescripcionCorta) + '-' + RTRIM(pos.DescripcionCorta)) as "nombre"
+    from Departamento dep inner join Provincia pro
+    on dep.Departamento = pro.Departamento
+    inner join ZonaPostal pos on dep.Departamento = pos.Departamento
+    and pro.Provincia = pos.Provincia
+
+	where dep.Departamento=:p_departamento and pos.CodigoPostal=:p_codigopostal and pro.Provincia=:p_provincia
+
+    </sql-query>
+
+    <sql-query name="personamast.obtenerDocFiscal">
+         select 
+			DocumentoFiscal "documentofiscal",
+			busqueda "busqueda",
+			Persona "persona"
+
+         from PERSONAMAST
+         where 
+			DocumentoFiscal = :p_documento
+
+    </sql-query>
+    
+        <sql-query name="personamast.obtenerDocumento">
+         select 
+			Documento "documento",
+			busqueda "busqueda",
+			Persona "persona"
+
+         from PERSONAMAST
+         where 
+			Documento = :p_documento
+
+    </sql-query>
+    
+        <sql-query name="personamast.obtenerDocIdentidad">
+         select 
+			DocumentoIdentidad "documentoidentidad",
+			busqueda "busqueda",
+			Persona "persona"
+
+         from PERSONAMAST
+         where 
+			DocumentoIdentidad = :p_documento
+
+    </sql-query>
+    
+            <sql-query name="personamast.obtenerBusqueda">
+         select 
+			busqueda "busqueda",
+			Persona "persona"
+
+         from PERSONAMAST
+         where 
+			busqueda like '%' + :p_documento + '%'
+
+    </sql-query>
+    
+    
+<!--     Copiado desde su comun -->
+      <sql-query name="personamast.paginadoClienteProveedorOtroContar">
+  <![CDATA[
+        SELECT count(1)
+	    FROM personamast p
+	    WHERE 1=1
+	    AND (p.escliente = 'S' OR p.esproveedor = 'S' OR p.esotro = 'S')
+	    AND p.persona = ISNULL(:p_codigo,p.persona)
+	    AND upper(ISNULL(P.busqueda,'xxx')) LIKE upper('%' + ISNULL(:p_nombre,ISNULL(P.busqueda,'ISNULL') ) + '%')
+	    AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento, ISNULL(P.documento,'ddd') ) + '%'
+	    AND ISNULL(p.documentofiscal,'qqq') LIKE '%' + ISNULL(:p_docfiscal, ISNULL(P.documentofiscal,'qqq') ) + '%'
+	    AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad, ISNULL(P.documentoidentidad,'eee') ) + '%'
+	    AND p.estado = ISNULL(:p_estado,p.estado)
+	    and (p.busqueda <> '' and p.NombreCompleto <> '')
+	    ]]>
+    </sql-query>    
+    
+    <sql-query name="personamast.paginadoClienteProveedorOtroListar">
+    <![CDATA[
+        SELECT   CAST(p.persona as int ) as "persona" 
+	         ,p.busqueda as "busqueda"  
+	         ,p.nombrecompleto  AS "nombrecompleto"
+	         ,CAST(p.escliente as VARCHAR) as "escliente"
+	         ,CAST(p.esproveedor as VARCHAR) as "esproveedor" 
+	         ,CAST(p.esempleado as VARCHAR) as "esempleado" 
+	         ,CAST(p.esotro as VARCHAR) as "esotro"
+	         ,p.documento as "documento" 
+	         ,p.documentofiscal as "documentofiscal" 
+	         ,p.documentoidentidad as "documentoidentidad"
+	         ,CAST(p.estado as VARCHAR) as "estado"
+	          ,case when p.estado='A' then 'Activo'
+	         else 'Inactivo' end as "estadoNombre"
+	    FROM personamast p
+	    WHERE 1=1
+	    AND (p.escliente = 'S' OR p.esproveedor = 'S' OR p.esotro = 'S')
+	    AND p.persona = ISNULL(:p_codigo,p.persona)
+	    AND upper(ISNULL(P.busqueda,'xxx')) LIKE upper('%' + ISNULL(:p_nombre,ISNULL(P.busqueda,'ISNULL') ) + '%')
+	    AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento, ISNULL(P.documento,'ddd') ) + '%'
+	    AND ISNULL(p.documentofiscal,'qqq') LIKE '%' + ISNULL(:p_docfiscal, ISNULL(P.documentofiscal,'qqq') ) + '%'
+	    AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad, ISNULL(P.documentoidentidad,'eee') ) + '%'
+	    AND p.estado = ISNULL(:p_estado,p.estado)
+	    and (p.busqueda <> '' and p.NombreCompleto <> '')
+	    order by p.busqueda
+	    ]]>
+    </sql-query>
+    
+    
+    
+    	<sql-query name="personamast.paginadoEmpleadoOtroListar">
+        SELECT    CAST(p.persona as int ) as "persona",
+               p.busqueda                         AS "busqueda",
+               p.nombrecompleto                   AS "nombrecompleto",
+               p.nombres                          AS "nombres",
+               p.apellidopaterno                  AS "apellidopaterno",
+               p.apellidomaterno                  AS "apellidomaterno",
+               cast(p.sexo as varchar(5))                             AS "sexo",
+               cast(p.tipodocumento  as varchar(5))                  AS "tipodocumento",
+               cast(p.tipopersona  as varchar(5))                      AS "tipopersona",
+               p.fechanacimiento                  AS "fechanacimiento",
+               cast(p.escliente as varchar(5))                        AS "escliente",
+               cast(p.esproveedor as varchar(5))                      AS "esproveedor",
+               cast(p.esempleado as varchar(5))                       AS "esempleado",
+               cast(p.esotro as varchar(5))                          AS "esotro",
+               p.documento                        AS "documento",
+               p.documentofiscal                  AS "documentofiscal",
+               p.documentoidentidad               AS "documentoidentidad",
+               p.correoelectronico               AS "correoelectronico",
+               cast(p.estado as varchar(5))                           AS "estado",
+               CASE WHEN p.estado = 'A' THEN 'Activo'
+                 ELSE 'Inactivo' END              AS "estadoNombre",
+               
+               empleadomast.empleado         	  AS "empleado",  
+               empleadomast.codigousuario         AS "codigousuario",
+               cast(empleadomast.estadoempleado as varchar(5))        AS "estadoEmpleado",
+               CASE empleadomast.estadoempleado  WHEN '0' THEN 'Activo' WHEN '2' THEN 'Cesado' ELSE '' END AS "estadoEmpleadoNombre",
+               empleadomast.centrocostos          AS "centrocostos",               
+               empleadomast.unidadnegocioasignada AS "unidadnegocioasignada",
+               empleadomast.companiasocio         AS "companiasocio",               
+               empleadomast.sucursal              AS "sucursal",               
+               empleadomast.fechaingreso          AS "fechaingreso",
+               empleadomast.fechainiciocontrato   AS "fechainiciocontrato",
+               empleadomast.fechafincontrato      AS "fechafincontrato",
+               empleadomast.tipohorario           AS "tipohorario",
+               empleadomast.sueldoactuallocal     AS "sueldoactuallocal",
+               empleadomast.codigocargo           AS "codigocargo",               
+               empleadomast.tipocontrato          AS "tipocontrato",               
+               empleadomast.tipoplanilla          AS "tipoplanilla",               
+               empleadomast.cargo                 AS "cargo",               
+               empleadomast.deptoorganizacion     AS "deptoorganizacion",
+               empleadomast.correointerno     	  AS "correointerno",
+               
+               ma_unidadnegocio.descripcionlocal  AS "unidadnegocioasignadaNombre",
+               ac_costcentermst.localname         AS "centrocostosNombre",
+               COMP.description                   AS "companiasocioNombre",
+               ac_sucursal.descripcionlocal       AS "sucursalnombre",
+               pue.descripcion                    AS "codigocargoNombre",
+               tcn.descripcion                    AS "tipocontratoNombre",
+               tpl.descripcion                    AS "tipoplanillaNombre",
+               dep.description                    AS "deptoorganizacionNombre",
+               car.descripcionlocal               AS "cargoNombre",
+			   UNO.UnidadOperativa as "unidadoperativa",
+			   UNO.Descripcion as "unidadoperativaNombre",
+			   empleadomast.MOTIVOCESE as "motivocese",
+			   empleadomast.FECHACESE as "fechacese"
+        FROM personamast p
+         JOIN empleadomast ON empleadomast.empleado=p.persona
+         LEFT JOIN AC_COSTCENTERMST ON AC_COSTCENTERMST.COSTCENTER=EMPLEADOMAST.CENTROCOSTOS
+         LEFT JOIN ma_unidadnegocio ON MA_UNIDADNEGOCIO.UNIDADNEGOCIO=EMPLEADOMAST.UNIDADNEGOCIOASIGNADA
+         LEFT JOIN AC_SUCURSAL ON  AC_SUCURSAL.SUCURSAL=EMPLEADOMAST.SUCURSAL          
+         LEFT JOIN companyowner comp ON comp.companyowner = empleadomast.companiasocio          
+         
+         LEFT JOIN HR_PUESTOEMPRESA PUE ON empleadomast.CodigoCargo = PUE.CodigoPuesto
+		 LEFT JOIN HR_TipoContrato TCN ON empleadomast.TipoContrato = TCN.TipoContrato
+		 LEFT JOIN PR_TipoPlanilla TPL ON empleadomast.TipoPlanilla = TPL.TipoPlanilla
+		 LEFT JOIN hr_cargosmast CAR ON empleadomast.cargo = CAR.cargo
+		 LEFT JOIN departmentmst DEP ON empleadomast.DeptoOrganizacion = DEP.department
+		 LEFT JOIN HR_UnidadOperativa UNO ON UNO.UnidadOperativa = EmpleadoMast.UNIDADOPERATIVA
+	    WHERE 1=1
+	    AND (p.esempleado = 'S' OR p.esotro = 'S')
+	    AND p.persona = ISNULL(:p_codigo,p.persona)
+	    AND upper(ISNULL(P.nombrecompleto,'xxx')) LIKE upper('%' + ISNULL(:p_nombre,ISNULL(P.nombrecompleto,'ISNULL') ) + '%')
+	    AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento, ISNULL(P.documento,'ddd') ) + '%'
+	    AND ISNULL(p.documentofiscal,'qqq') LIKE '%' + ISNULL(:p_docfiscal, ISNULL(P.documentofiscal,'qqq') ) + '%'
+	    AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad, ISNULL(P.documentoidentidad,'eee') ) + '%'
+	    AND p.estado = ISNULL(:p_estado,p.estado)
+	    AND ISNULL(empleadomast.centrocostos, 'XXX') = ISNULL(:p_centrocosto, ISNULL(empleadomast.centrocostos, 'XXX') )
+	    order by p.busqueda
+    </sql-query>
+    
+    
+    	<sql-query name="personamast.paginadoEmpleadoOtroContar">
+		SELECT count(1)
+		FROM personamast p
+         JOIN empleadomast ON empleadomast.empleado=p.persona
+         LEFT JOIN AC_COSTCENTERMST ON AC_COSTCENTERMST.COSTCENTER=EMPLEADOMAST.CENTROCOSTOS
+         LEFT JOIN ma_unidadnegocio ON MA_UNIDADNEGOCIO.UNIDADNEGOCIO=EMPLEADOMAST.UNIDADNEGOCIOASIGNADA
+         LEFT JOIN AC_SUCURSAL ON  AC_SUCURSAL.SUCURSAL=EMPLEADOMAST.SUCURSAL          
+         LEFT JOIN companyowner comp ON comp.companyowner = empleadomast.companiasocio  
+         
+         LEFT JOIN HR_PUESTOEMPRESA PUE ON empleadomast.CodigoCargo = PUE.CodigoPuesto
+		 LEFT JOIN HR_TipoContrato TCN ON empleadomast.TipoContrato = TCN.TipoContrato
+		 LEFT JOIN PR_TipoPlanilla TPL ON empleadomast.TipoPlanilla = TPL.TipoPlanilla
+		 LEFT JOIN hr_cargosmast CAR ON empleadomast.cargo = CAR.cargo
+		 LEFT JOIN departmentmst DEP ON empleadomast.DeptoOrganizacion = DEP.department
+		WHERE 1=1
+		AND (p.esempleado = 'S' OR p.esotro = 'S')
+		AND p.persona = ISNULL(:p_codigo,p.persona)
+		AND upper(ISNULL(P.nombrecompleto,'xxx')) LIKE
+		upper('%' +
+		ISNULL(:p_nombre,ISNULL(P.nombrecompleto,'ISNULL') ) + '%')
+		AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento,
+		ISNULL(P.documento,'ddd') ) + '%'
+		AND ISNULL(p.documentofiscal,'qqq') LIKE
+		'%' + ISNULL(:p_docfiscal,
+		ISNULL(P.documentofiscal,'qqq') ) + '%'
+		AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad,
+		ISNULL(P.documentoidentidad,'eee') ) + '%'
+		AND p.estado = ISNULL(:p_estado,p.estado)
+		AND ISNULL(empleadomast.centrocostos, 'XXX') = ISNULL(:p_centrocosto, ISNULL(empleadomast.centrocostos, 'XXX') )
+	</sql-query>
+
+	    <sql-query name="personamast.paginadoProveedorContar">
+  <![CDATA[
+        SELECT count(1)
+	    FROM personamast p
+	    WHERE 1=1
+	    AND ( p.esproveedor = 'S')
+	    AND p.persona = ISNULL(:p_codigo,p.persona)
+	    AND upper(ISNULL(P.busqueda,'xxx')) LIKE upper('%' + ISNULL(:p_nombre,ISNULL(P.busqueda,'ISNULL') ) + '%')
+	    AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento, ISNULL(P.documento,'ddd') ) + '%'
+	    AND ISNULL(p.documentofiscal,'qqq') LIKE '%' + ISNULL(:p_docfiscal, ISNULL(P.documentofiscal,'qqq') ) + '%'
+	    AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad, ISNULL(P.documentoidentidad,'eee') ) + '%'
+	    AND p.estado = ISNULL(:p_estado,p.estado)
+	    and (p.busqueda <> '' and p.NombreCompleto <> '')
+	    ]]>
+    </sql-query>    
+    
+    <sql-query name="personamast.paginadoProveedorListar">
+    <![CDATA[
+        SELECT   CAST(p.persona as int ) as "persona" 
+	         ,rtrim(p.busqueda) as "busqueda"  
+	         ,p.nombrecompleto  AS "nombrecompleto"
+	         ,CAST(p.escliente as VARCHAR) as "escliente"
+	         ,CAST(p.esproveedor as VARCHAR) as "esproveedor" 
+	         ,CAST(p.esempleado as VARCHAR) as "esempleado" 
+	         ,CAST(p.esotro as VARCHAR) as "esotro"
+	         ,rtrim(p.documento) as "documento" 
+	         ,rtrim(p.documentofiscal) as "documentofiscal" 
+	         ,p.documentoidentidad as "documentoidentidad"
+	         ,CAST(p.estado as VARCHAR) as "estado"
+	          ,case when p.estado='A' then 'Activo'
+	         else 'Inactivo' end as "estadoNombre",
+	         rtrim(p.telefono) as "telefono",
+	         rtrim(p.fax) as "fax",
+	         rtrim(p.correoelectronico) as "correoelectronico"
+	    FROM personamast p
+	    WHERE 1=1
+	    AND (p.esproveedor = 'S')
+	    AND p.persona = ISNULL(:p_codigo,p.persona)
+	    AND upper(ISNULL(P.busqueda,'xxx')) LIKE upper('%' + ISNULL(:p_nombre,ISNULL(P.busqueda,'ISNULL') ) + '%')
+	    AND ISNULL(p.documento,'ddd') LIKE '%' + ISNULL(:p_documento, ISNULL(P.documento,'ddd') ) + '%'
+	    AND ISNULL(p.documentofiscal,'qqq') LIKE '%' + ISNULL(:p_docfiscal, ISNULL(P.documentofiscal,'qqq') ) + '%'
+	    AND ISNULL(p.documentoidentidad,'eee') LIKE '%' + ISNULL(:p_docidentidad, ISNULL(P.documentoidentidad,'eee') ) + '%'
+	    AND p.estado = ISNULL(:p_estado,p.estado)
+	    and (p.busqueda <> '' and p.NombreCompleto <> '')
+	    order by p.busqueda
+	    ]]>
+    </sql-query>
+	 
+</hibernate-mapping>

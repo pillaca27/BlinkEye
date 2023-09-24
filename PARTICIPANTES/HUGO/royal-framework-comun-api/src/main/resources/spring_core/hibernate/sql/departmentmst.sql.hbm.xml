@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Departmentmst
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="departmentmst.obtenerDto">
+         select 
+			department "department"
+			,rtrim(description) "description"
+			,cast(AccountAvailableFlag as varchar) "accountavailableflag"
+			,cast(WarehouseAvailableFlag as varchar) "warehouseavailableflag"
+			,cast(status as varchar) "status"
+			,lastuser "lastuser"
+			,lastdate "lastdate"
+
+         from DEPARTMENTMST
+         where 
+			department = :p_department
+
+    </sql-query>
+
+    <sql-query name="departmentmst.listarPaginadoContar">
+         select count(1)
+         from DEPARTMENTMST
+         where 
+			department >= ISNULL(:p_department, department)
+
+    </sql-query>
+
+    <sql-query name="departmentmst.listarPaginadoSentencia">
+         select 
+			department "department"
+			,description "description"
+			,cast(AccountAvailableFlag as varchar) "accountavailableflag"
+			,cast(WarehouseAvailableFlag as varchar) "warehouseavailableflag"
+			,cast(status as varchar) "status"
+			,case when cast(status as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(AccountAvailableFlag as varchar(1)) = 'Y' THEN 'X' else
+			' ' end AS "discontabilidad"
+			,case when cast(WarehouseAvailableFlag as varchar(1)) = 'Y' THEN 'X' else
+			' ' end AS "dislogistica"
+			
+         from DEPARTMENTMST
+         where 
+			department >= ISNULL(:p_department, department)
+
+		ORDER BY department ASC   
+    </sql-query>
+
+    <sql-query name="departmentmst.listarDtoCore">
+         select 
+			department "department"
+			,description "description"
+			,AccountAvailableFlag "accountavailableflag"
+			,WarehouseAvailableFlag "warehouseavailableflag"
+			,application "application"
+			,status "status"
+			,lastuser "lastuser"
+			,lastdate "lastdate"
+
+         from DEPARTMENTMST
+         where 
+			department = ISNULL(:p_department, department)
+			department = ISNULL(:p_department, department)
+
+    </sql-query>
+
+    <sql-query name="departmentmst.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="departmentmst.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+</hibernate-mapping>

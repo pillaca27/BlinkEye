@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="asarea.listarActivos">
+    	select 	CAST(area as INT) as "id",  
+    			nombre as "nombre"
+    	from as_area where Estado = 'A'
+    	order by NOMBRE
+	</sql-query>
+	
+	<sql-query name="asarea.listarActivosPorUsuario">
+	   SELECT 	CAST(AS_Area.Area as INT) as id, 
+	            AS_Area.Nombre   
+			FROM 	AS_Area 
+			WHERE 	Area IN (
+									SELECT 	Area 
+									FROM 	AS_Area 
+									WHERE 	EmpleadoResponsable = (
+																				SELECT 	Empleado 
+																				FROM 	EmpleadoMast 
+																				WHERE 	CodigoUsuario = :par_usuario)
+									)
+			
+			UNION
+				
+			SELECT	CAST(AS_Area.Area as INT) as id,
+			        AS_Area.Nombre as nombre
+			FROM		AS_Area
+			WHERE	Estado = 'A' 
+						AND ('S' = (SELECT Valortexto FROM PR_Seguridad WHERE ConceptoSeguridad = 'ALLAREA' AND usuario = :par_usuario))
+			
+			UNION   	
+			
+			SELECT	CAST(AS_Area.Area as INT) as id,  
+			        AS_Area.Nombre  as nombre
+			FROM		PR_Seguridad 
+						INNER JOIN 	AS_Area
+							on	PR_Seguridad.ValorNumero = AS_Area.Area
+			WHERE	Usuario = :par_usuario 
+						AND ConceptoSeguridad = 'TIPOAR'  
+			
+			UNION
+			
+			SELECT	CAST(AS_Area.Area as INT) as id, 
+			        AS_Area.Nombre  as nombre
+			FROM		AS_Area
+			WHERE	Estado = 'A' 
+						AND 'S'= (
+									SELECT	TOP 1 Valortexto 
+									FROM		PR_Seguridad 
+									WHERE	ValorTexto = 'S' 
+												AND ConceptoSeguridad = 'ALLAREA' 
+												AND usuario IN (SELECT perfil FROM SeguridadPerfilUsuario WHERE Estado = 'A' AND Usuario = :par_usuario)
+									)
+			
+			UNION
+			
+			SELECT	CAST(AS_Area.Area as INT) as id,  
+			           AS_Area.Nombre  as nombre
+			FROM		PR_Seguridad 
+						INNER JOIN 	AS_Area
+							ON PR_Seguridad.ValorNumero = AS_Area.Area
+			WHERE	Usuario in (SELECT perfil FROM SeguridadPerfilUsuario WHERE Estado = 'A' AND Usuario = :par_usuario) 
+						AND ConceptoSeguridad = 'TIPOAR'
+			ORDER BY 	2 ASC
+	   
+	</sql-query>
+	
+    
+</hibernate-mapping>

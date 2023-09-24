@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : companyowner
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="companyowner.listar">
+		SELECT companyowner.companyowner as "codigo", 
+			   companyowner.description as "nombre"        
+        FROM companyowner INNER JOIN CompaniaMast
+        ON (companyowner.company = CompaniaMast.CompaniaCodigo)        
+        WHERE 1=1        
+        ORDER BY companyowner.companyowner ASC
+	</sql-query>
+	
+	<sql-query name="companyowner.listaractivos">
+		SELECT companyowner.companyowner as "codigo", 
+			   companyowner.description as "nombre"        
+        FROM companyowner INNER JOIN CompaniaMast
+        ON (companyowner.company = CompaniaMast.CompaniaCodigo)        
+        WHERE ( CompaniaMast.Estado = 'A' )        
+        ORDER BY companyowner.companyowner ASC
+	</sql-query>
+	
+		<sql-query name="companyowner.listaractivosP">
+		SELECT companyowner.companyowner as "codigo", 
+			   companyowner.description as "nombre"        
+        FROM companyowner INNER JOIN CompaniaMast
+        ON (companyowner.company = CompaniaMast.CompaniaCodigo)        
+        WHERE ( CompaniaMast.Estado = 'A' ) and CompaniaMast.TipoCompania='P'          
+        ORDER BY companyowner.companyowner ASC
+	</sql-query>
+	
+	<sql-query name="companyowner.obtenertabla">
+	<![CDATA[
+	select  companyowner as "codigo"
+			,description as "nombre"  
+		from companyowner 
+		where companyowner = :p_companyowner
+	]]>
+	</sql-query>
+	
+	<sql-query name="companyowner.listarfiltros">
+	<![CDATA[
+	select  companyowner as "codigo"
+			,description as "nombre"  
+		from companyowner 
+		where companyowner = ISNULL(:p_companyowner,companyowner)
+		AND UPPER(ISNULL(description,'xxx')) like '%' || ISNULL(:p_description,UPPER(description)) || '%'
+		ORDER BY companyowner ASC
+	]]>
+	</sql-query>
+	
+	<sql-query name="companyowner.obtenerdto">
+         select 
+			COMPANYOWNER "companyowner"
+			,DESCRIPTION "description"
+			,ENGLISHDESCRIPTION "englishdescription"
+			,PERCENTAGE "percentage"
+			,COMPANY "company"
+			,OWNER "owner"
+			,CHANGERATE "changerate"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from COMPANYOWNER
+         where 
+			COMPANYOWNER = :p_companyowner
+    </sql-query>
+    
+    <sql-query name="companyowner.listardtofiltros">
+         select 
+			COMPANYOWNER "companyowner"
+			,DESCRIPTION "description"
+			,ENGLISHDESCRIPTION "englishdescription"
+			,PERCENTAGE "percentage"
+			,COMPANY "company"
+			,OWNER "owner"
+			,CHANGERATE "changerate"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from COMPANYOWNER
+         where 
+				COMPANYOWNER = ISNULL(:p_companyowner,COMPANYOWNER)
+			AND UPPER(ISNULL(description,'xxx')) like '%' || ISNULL(:p_description,UPPER(description)) || '%'
+		ORDER BY companyowner ASC
+    </sql-query>
+    
+    
+  <sql-query name="companyowner.listarCompaniasPorSeguridad">		
+        SELECT 
+			companyowner.companyowner as "codigo", 
+			companyowner.description as "nombre" 
+		FROM 
+			companyowner
+				INNER JOIN CompaniaMast
+					ON (companyowner.company = CompaniaMast.CompaniaCodigo)
+				INNER JOIN SY_SeguridadAutorizaciones  
+					ON (companyowner.companyowner = SY_SeguridadAutorizaciones.Concepto)
+				INNER JOIN SeguridadAutorizacionCompania
+					ON (companyowner.companyowner = SeguridadAutorizacionCompania.companyowner and
+						 SeguridadAutorizacionCompania.companyowner = SY_SeguridadAutorizaciones.Concepto and
+						 SY_SeguridadAutorizaciones.Usuario = SeguridadAutorizacionCompania.usuario)
+			WHERE 
+			( CompaniaMast.Estado = 'A' ) AND  
+			( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND  
+			( SY_SeguridadAutorizaciones.Grupo = 'COMPANIASOCIO' ) AND  
+			( SY_SeguridadAutorizaciones.Estado = 'A' ) AND  
+			( SY_SeguridadAutorizaciones.Usuario = :par_usuario )
+			ORDER BY 
+			companyowner.companyowner ASC   
+	</sql-query>
+
+    <sql-query name="companyowner.contarcompanyownerporfiltro">		
+    	SELECT  COUNT(*)
+		FROM COMPANYOWNER 
+		INNER JOIN COMPANIAMAST ON LEFT(COMPANYOWNER.COMPANYOWNER, 6) = COMPANIAMAST.COMPANIACODIGO
+		INNER JOIN SEGURIDADAUTORIZACIONCOMPANIA ON COMPANYOWNER.COMPANYOWNER = SEGURIDADAUTORIZACIONCOMPANIA.COMPANYOWNER
+		WHERE 1=1 
+		AND USUARIO = :p_usuario 
+		AND (ISNULL(:p_companyowner, '-') = '-' OR COMPANYOWNER.COMPANYOWNER = :p_companyowner)
+		AND (ISNULL(:p_description, '-') = '-' OR COMPANYOWNER.DESCRIPTION LIKE '%'+isnull(:p_description,COMPANYOWNER.DESCRIPTION)+'%')
+
+	</sql-query>
+	
+	<sql-query name="companyowner.listarcompanyownerporfiltro">	
+		SELECT --'N' AS SELECCIONADO, 
+		CAST(COMPANYOWNER.COMPANYOWNER AS VARCHAR) AS companyowner, 
+		LTRIM(RTRIM(UPPER(COMPANYOWNER.DESCRIPTION))) AS description,
+		CAST(COMPANIAMAST.ESTADO AS VARCHAR) AS estado
+		FROM COMPANYOWNER 
+		INNER JOIN COMPANIAMAST ON LEFT(COMPANYOWNER.COMPANYOWNER, 6) = COMPANIAMAST.COMPANIACODIGO
+		INNER JOIN SEGURIDADAUTORIZACIONCOMPANIA ON COMPANYOWNER.COMPANYOWNER = SEGURIDADAUTORIZACIONCOMPANIA.COMPANYOWNER
+		WHERE 1=1 
+		AND USUARIO = :p_usuario 
+		AND (ISNULL(:p_companyowner, '-') = '-' OR COMPANYOWNER.COMPANYOWNER = :p_companyowner)
+		AND (ISNULL(:p_description, '-') = '-' OR COMPANYOWNER.DESCRIPTION LIKE '%'+isnull(:p_description,COMPANYOWNER.DESCRIPTION)+'%')
+		ORDER BY COMPANYOWNER.DESCRIPTION
+	</sql-query>
+</hibernate-mapping>

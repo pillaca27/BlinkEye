@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="servicioximpuesto.obtenerDto">
+         select 
+			TIPOSERVICIO "tiposervicio"
+			,IMPUESTO "impuesto"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SERVICIOXIMPUESTO
+         where 
+			TIPOSERVICIO = :p_tiposervicio
+			AND IMPUESTO = :p_impuesto
+    </sql-query>
+    
+    <sql-query name="servicioximpuesto.listardtofiltros">
+         select 
+			TIPOSERVICIO "tiposervicio"
+			,IMPUESTO "impuesto"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SERVICIOXIMPUESTO
+         where 
+				TIPOSERVICIO = ISNULL(:p_tiposervicio,TIPOSERVICIO)
+			AND IMPUESTO = ISNULL(:p_impuesto,IMPUESTO)
+    </sql-query>
+    
+    <sql-query name="servicioximpuesto.listardtoportiposervicio">
+         select 
+			TIPOSERVICIO "tiposervicio"
+			,IMPUESTO "impuesto"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SERVICIOXIMPUESTO
+         where 
+			TIPOSERVICIO = :p_tiposervicio
+    </sql-query>
+    
+    <sql-query name="servicioximpuesto.listardtoporimpuesto">
+         select 
+			TIPOSERVICIO "tiposervicio"
+			,IMPUESTO "impuesto"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+
+         from SERVICIOXIMPUESTO
+         where 
+			IMPUESTO = ISNULL(:p_impuesto,IMPUESTO)
+    </sql-query>
+    
+      <sql-query name="servicioximpuesto.obtenerServicioXImpuesto">
+      SELECT Impuestos.FactorPorcentaje factorporcentaje,   
+          CAST(Impuestos.Signo AS varchar) signo,   
+          CAST(Impuestos.Impuesto AS varchar)"impuesto",   
+          CAST(ServicioXImpuesto.TipoServicio AS varchar)  "tiposervicio"
+    FROM ServicioXImpuesto,   
+         Impuestos  
+   WHERE ( Impuestos.Impuesto = ServicioXImpuesto.Impuesto ) and  
+         ( ( ServicioXImpuesto.TipoServicio = :p_tiposervicio ) )   
+    </sql-query>
+    
+</hibernate-mapping>

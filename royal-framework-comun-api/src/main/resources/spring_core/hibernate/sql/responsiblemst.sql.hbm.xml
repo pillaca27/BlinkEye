@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="responsiblemst.listar">
+	    <![CDATA[
+	        select responsible as "codigo", localname as "nombre", status as "estadoId" 
+	        from RESPONSIBLEMST	        
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="responsiblemst.listarActivos">
+	    <![CDATA[
+	        select responsible as "codigo", localname as "nombre", status as "estadoId" 
+	        from RESPONSIBLEMST
+	        where status = 'A'
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="responsiblemst.obtenerTabla">
+	    <![CDATA[
+	        select responsible as "codigo", localname as "nombre", status as "estadoId" 
+	        from RESPONSIBLEMST
+			where responsible = :p_responsible
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="responsiblemst.listarfiltros">
+    	select responsible as "codigo", localname as "nombre"
+    			,status as "estadoId" 
+    	from RESPONSIBLEMST 
+    	where  responsible = ISNULL(:p_responsible,responsible)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))			
+		order by localname   	
+	</sql-query>
+	
+	<sql-query name="responsiblemst.obtenerDto">
+          select 
+			RESPONSIBLE "responsible"
+			,NEXTRESPONSIBLE "nextresponsible"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,VENDOR "vendor"
+			,RESPONSABILITYLEVEL "responsabilitylevel"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,AUTHORIZEDAMOUNT "authorizedamount"
+			,AMOUNTINVOICES "amountinvoices"
+			,AMOUNTREQUISITIONS "amountrequisitions"
+			,AMOUNTADVANCES "amountadvances"
+			,AMOUNTOTHERS01 "amountothers01"
+			,AMOUNTOTHERS02 "amountothers02"
+			,AMOUNTOTHERS03 "amountothers03"
+         from RESPONSIBLEMST
+         where 
+			RESPONSIBLE = :p_responsible
+    </sql-query>
+    
+    <sql-query name="responsiblemst.listardtofiltros">
+          select 
+			RESPONSIBLE "responsible"
+			,NEXTRESPONSIBLE "nextresponsible"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,VENDOR "vendor"
+			,RESPONSABILITYLEVEL "responsabilitylevel"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,AUTHORIZEDAMOUNT "authorizedamount"
+			,AMOUNTINVOICES "amountinvoices"
+			,AMOUNTREQUISITIONS "amountrequisitions"
+			,AMOUNTADVANCES "amountadvances"
+			,AMOUNTOTHERS01 "amountothers01"
+			,AMOUNTOTHERS02 "amountothers02"
+			,AMOUNTOTHERS03 "amountothers03"
+         from RESPONSIBLEMST
+         where 
+				RESPONSIBLE = ISNULL(:p_responsible,RESPONSIBLE)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and status = ISNULL(:p_status,status)
+		order by localname
+    </sql-query>
+    
+</hibernate-mapping>

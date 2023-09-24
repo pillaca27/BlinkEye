@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="infousuarioactual" pageWidth="288" pageHeight="842" columnWidth="288" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="ffe8e3b2-7fdd-4efb-82e7-f072405c23ef">
+	<property name="ireport.zoom" value="3.138428376721004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="p_usuario" class="java.lang.String">
+		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+	</parameter>
+	<queryString>
+		<![CDATA[select
+Usuario,
+Nombre,
+tp.Descripcion
+from
+usuario u join
+empleadomast e on codigousuario = usuario
+JOIN PR_TipoPlanilla tp on tp.TipoPlanilla = e.TipoPlanilla
+where usuario = $P{p_usuario}
+and e.estado = 'A']]>
+	</queryString>
+	<field name="Usuario" class="java.lang.String"/>
+	<field name="Nombre" class="java.lang.String"/>
+	<field name="Descripcion" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="63" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="66" height="20" uuid="43b1ef00-34f0-4066-9fac-27e332c79659"/>
+				<box leftPadding="4"/>
+				<text><![CDATA[Usuario]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="20" width="66" height="20" uuid="327442bc-7b3b-4b6b-bc4e-1b7b88e2410e"/>
+				<box leftPadding="4"/>
+				<text><![CDATA[Nombre]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="40" width="66" height="20" uuid="f6fab46c-68aa-4c88-99eb-e718404dead8"/>
+				<box leftPadding="4"/>
+				<text><![CDATA[Tipo Planilla]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="66" y="0" width="222" height="20" uuid="df5f1c84-0516-4359-8b26-d718c8014d4c"/>
+				<textFieldExpression><![CDATA[$F{Usuario}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="20" width="222" height="20" uuid="d442317c-b59b-4661-af48-ca40f145c13a"/>
+				<textFieldExpression><![CDATA[$F{Nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="66" y="40" width="222" height="20" uuid="962e3f33-036f-4690-8690-c388b246ff9b"/>
+				<textFieldExpression><![CDATA[$F{Descripcion}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+</jasperReport>

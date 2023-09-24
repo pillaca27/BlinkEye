@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+     <sql-query name="exchangerate.obtenerDto">
+         select 
+			PERIOD "period"
+			,RATE "rate"
+			,MONTHCLOSERATE "monthcloserate"
+			,MONTHBUYRATE "monthbuyrate"
+			,MONTHSALERATE "monthsalerate"
+			,GAINANDLOSSRATE "gainandlossrate"
+			,INFLATIONFACTOR "inflationfactor"
+			,INFLATIONFACTORACUMULATED "inflationfactoracumulated"
+			,SBSRATE "sbsrate"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,STATUS "status"
+         from EXCHANGERATE
+         where 
+			PERIOD = :p_period
+    </sql-query>    	  
+    
+    <sql-query name="exchangerate.listardtofiltros">
+         select 
+			PERIOD "period"
+			,RATE "rate"
+			,MONTHCLOSERATE "monthcloserate"
+			,MONTHBUYRATE "monthbuyrate"
+			,MONTHSALERATE "monthsalerate"
+			,GAINANDLOSSRATE "gainandlossrate"
+			,INFLATIONFACTOR "inflationfactor"
+			,INFLATIONFACTORACUMULATED "inflationfactoracumulated"
+			,SBSRATE "sbsrate"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,STATUS "status"
+         from EXCHANGERATE
+         where 
+			PERIOD = ISNULL(:p_period,PERIOD)
+			and STATUS = ISNULL(:p_status,STATUS)
+		 order by PERIOD
+    </sql-query>    	  
+    
+</hibernate-mapping>

@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.MaUnidadnegocio
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="maunidadnegocio.obtenerDto">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,DescripcionLocal "descripcionlocal"
+			,Direccion "direccion"
+			,Telefonos "telefonos"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CompaniaSocio "companiasocio"
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio = :p_unidadnegocio
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listarPaginadoContar">
+         select count(1)
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio >= :p_unidadnegocio
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listarPaginadoSentencia">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,DescripcionLocal "descripcionlocal"
+			,cast(Estado as varchar) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio >= :p_unidadnegocio
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listarDtoCore">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,Zona "zona"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,Direccion "direccion"
+			,Telefonos "telefonos"
+			,RegistroPatronalPlanilla "registropatronalplanilla"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CompaniaSocio "companiasocio"
+			,Ledger "ledger"
+			,RepresentanteDocumento "representantedocumento"
+			,Representante "representante"
+			,Persona "persona"
+
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio = ISNULL(:p_unidadnegocio, UnidadNegocio)
+			UnidadNegocio = ISNULL(:p_unidadnegocio, UnidadNegocio)
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+<!--     <sql-query name="maunidadnegocio.listarActivos"> -->
+<!--          select  -->
+<!--              'codigo' AS "codigo" -->
+<!--              ,'nombre' AS "nombre" -->
+<!--              ,'estadoid' AS "estadoId" -->
+<!--          from dual -->
+<!--     </sql-query> -->
+    
+    	<sql-query name="maunidadnegocio.listarActivos">
+    	select UnidadNegocio as "codigo", DescripcionLocal as "nombre"
+    			,CAST(Estado AS varchar) as "estadoId" 
+    	from MA_UnidadNegocio where Estado = 'A'
+    	order by DescripcionLocal
+	</sql-query>
+	
+    <sql-query name="maunidadnegocio.contarunidadnegocioporfiltro">
+	SELECT COUNT(*)
+	FROM MA_UNIDADNEGOCIO 
+	WHERE ( 
+		EXISTS (	SELECT * 
+					FROM HR_SEGURIDAD 
+					WHERE MA_UNIDADNEGOCIO.UNIDADNEGOCIO = HR_SEGURIDAD.VALORTEXTO 
+						AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUN' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario )
+	OR						
+	(	SELECT COUNT(1) 
+		FROM HR_SEGURIDAD 
+		WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDNEG' 
+			AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+	)
+	OR
+	(	SELECT COUNT(1) 
+		FROM SEGURIDADAUTORIZACIONES 
+		WHERE APLICACIONCODIGO = 'HR' 
+			AND GRUPO = 'SYSTEM' 
+			AND CONCEPTO = 'SYSADM'
+				AND USUARIO = :p_usuario ) > 0
+				
+	AND (ISNULL(:p_unidadnegocio, '-') = '-' OR MA_UNIDADNEGOCIO.UNIDADNEGOCIO = :p_unidadnegocio)
+	AND (ISNULL(:p_descripcionlocal, '-') = '-' OR MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL LIKE '%'+isnull(:p_descripcionlocal, MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL)+'%')			
+	 
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.listarunidadnegocioporfiltro">
+    SELECT  
+	CAST(MA_UNIDADNEGOCIO.UNIDADNEGOCIO AS VARCHAR) AS unidadnegocio, 
+	LTRIM(RTRIM(UPPER(MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL))) AS descripcionlocal ,
+	CAST(MA_UNIDADNEGOCIO.ESTADO AS VARCHAR) AS estado
+	FROM MA_UNIDADNEGOCIO 
+	WHERE ( 
+		EXISTS (	SELECT * 
+					FROM HR_SEGURIDAD 
+					WHERE MA_UNIDADNEGOCIO.UNIDADNEGOCIO = HR_SEGURIDAD.VALORTEXTO 
+						AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUN' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario )
+	OR						
+	(	SELECT COUNT(1) 
+		FROM HR_SEGURIDAD 
+		WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDNEG' 
+			AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+	)
+	OR
+	(	SELECT COUNT(1) 
+		FROM SEGURIDADAUTORIZACIONES 
+		WHERE APLICACIONCODIGO = 'HR' 
+			AND GRUPO = 'SYSTEM' 
+			AND CONCEPTO = 'SYSADM'
+				AND USUARIO = :p_usuario ) > 0
+				
+	AND (ISNULL(:p_unidadnegocio, '-') = '-' OR MA_UNIDADNEGOCIO.UNIDADNEGOCIO = :p_unidadnegocio)
+	AND (ISNULL(:p_descripcionlocal, '-') = '-' OR MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL LIKE '%'+isnull(:p_descripcionlocal, MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL)+'%')			
+	ORDER BY MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL
+	</sql-query>
+
+</hibernate-mapping>

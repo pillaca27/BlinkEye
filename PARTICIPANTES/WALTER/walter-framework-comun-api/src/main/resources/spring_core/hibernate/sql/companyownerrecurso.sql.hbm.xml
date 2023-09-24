@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : companyowner
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    
+    <sql-query name="companyownerrecurso.obtenerNombreCompania">
+	<![CDATA[
+	select  descripcioncorta as "descripcion"  from companiamast where CompaniaCodigo = :p_compania
+	]]>
+	</sql-query>
+	
+	
+</hibernate-mapping>

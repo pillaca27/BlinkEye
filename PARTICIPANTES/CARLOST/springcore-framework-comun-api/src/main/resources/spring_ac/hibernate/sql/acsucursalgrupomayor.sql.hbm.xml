@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : contabilidad.AcSucursalgrupomayor
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="acsucursalgrupomayor.obtenerDtoPorUuid">
+         select 
+			CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPOMAYOR a
+         where 
+			a.UUID = :p_uuid
+
+    </sql-query>
+    <sql-query name="acsucursalgrupomayor.obtenerDto">
+         select 
+			CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPOMAYOR a
+         where 
+			a.SucursalGrupoMayor = :p_sucursalgrupomayor
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listarPaginadoContar">
+         select count(1)
+         from AC_SUCURSALGRUPOMAYOR a
+         where 
+			a.SucursalGrupoMayor = ISNULL(:p_sucursalgrupomayor, a.SucursalGrupoMayor)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listarPaginadoSentencia">
+         select 
+			CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPOMAYOR a
+         where 
+			a.SucursalGrupoMayor = ISNULL(:p_sucursalgrupomayor, a.SucursalGrupoMayor)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listarDtoCore">
+         select 
+			CAST(a.SucursalGrupoMayor AS VARCHAR) "sucursalgrupomayor"
+			,CAST(a.DescripcionLocal AS VARCHAR) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR) "descripcioningles"
+			,CAST(a.Estado AS VARCHAR) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,a.UUID "uuid"
+         from AC_SUCURSALGRUPOMAYOR a
+         where 
+			a.SucursalGrupoMayor = ISNULL(:p_sucursalgrupomayor, a.SucursalGrupoMayor)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listar">
+ select 
+  cast(SucursalGrupoMayor as varchar) AS "codigo"
+  ,cast(DescripcionLocal as varchar) AS "nombre"
+ from AC_SucursalGrupoMayor
+ where Estado = 'A'
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listarActivos">
+ select 
+  cast(SucursalGrupoMayor as varchar) AS "codigo"
+  ,cast(DescripcionLocal as varchar) AS "nombre"
+ from AC_SucursalGrupoMayor
+ where Estado = 'A'
+    </sql-query>
+
+    <sql-query name="acsucursalgrupomayor.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

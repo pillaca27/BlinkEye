@@ -1,0 +1,8 @@
+package com.royal.dao;
+
+import org.springframework.stereotype.Repository;
+
+@Repository
+public class ParametrosmastDaoImpl extends GenericoDaoImpl<Parametrosmast, ParametrosmastPk>{
+
+}

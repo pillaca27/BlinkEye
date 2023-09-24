@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : snalertascomun
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="snalertascomun.listaractivos">
+		select 
+		 A.alerta_Id as "alertaid",
+            A.nombre   as "nombre",
+			A.link   as "link",
+			A.CREACION_FECHA as "fecha",
+			A.accion as "accion"
+		 from [sgworkflowsys].Wf_Transaccion_Alerta (nolock) A
+		 WHERE A.Estado = 'A' and
+			A.persona_Id = :p_persona
+        ORDER BY A.alerta_Id desc			   
+	</sql-query>
+	
+	
+	
+	<sql-query name="snalertascomun.actualizarRegistros">
+		<![CDATA[
+			update [sgworkflowsys].Wf_Transaccion_Alerta set estado = 'I'
+			From [sgworkflowsys].Wf_Transaccion_Alerta (nolock)
+			where alerta_Id <= :p_alertaId
+			--and codigoexternoid = :p_codigoexternoid
+			--and codigoprocesowf = :p_codigoprocesowf
+		]]>  			   
+	</sql-query>
+	
+	<sql-query name="snalertascomun.listarEstudioActivosPorProveedorConsultasBk">
+		<![CDATA[
+			SELECT top 5 'Estudio de Mercado : ' + e.CotizacionNumero as 'cargo'
+				,'whcotizacion' as 'procesoId'
+				,cast(e.Estado as varchar) as 'procesoEstado'
+				,e.CompaniaSocio as 'externoPk1'
+				,e.CotizacionSecuencia as 'externoId1'		
+			FROM WH_Cotizacion (nolock) e WHERE e.Proveedor = :p_proveedor 
+			order by e.CotizacionSecuencia desc
+		]]>  			   
+	</sql-query>
+	
+	
+	<sql-query name="snalertascomun.listarEstudioActivosPorProveedorConsultas">
+		<![CDATA[
+			SELECT top 5 
+				'Estudio de Mercado : ' + e.CotizacionNumero as 'cargo'
+				,'whcotizacion' as 'procesoId'
+				,cast(e.Estado as varchar) as 'procesoEstado'
+				,e.CompaniaSocio as 'externoPk1'
+				--,e.CotizacionSecuencia as 'externoId1'
+				,0 as 'externoId1'
+				,
+				
+				CAST(CASE WHEN (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+				WHERE EMISOR.TRANSACCION_ID = e.transaccion_id AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND 
+				(SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION RESPUESTA
+				WHERE RESPUESTA.TRANSACCION_ID = EMISOR.TRANSACCION_ID AND RESPUESTA.COMUNICACION_PADRE_ID = EMISOR.COMUNICACION_ID and RESPUESTA.ESTADO = 'REGI'
+				) > 0) > 0  THEN 'yellow' 	
+				WHEN ( SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+				WHERE EMISOR.TRANSACCION_ID = e.transaccion_id AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND EMISOR.ESTADO = 'GENR' ) > 0  THEN 'yellow'	
+				ELSE 'green' END AS VARCHAR(10)) AS "colorChatTransaccion"				
+				,e.transaccion_id as "transaccion"
+				
+			FROM WH_Cotizacion (nolock) e WHERE e.Proveedor = :p_proveedor
+			GROUP by e.CotizacionNumero, e.Estado, e.CotizacionNumero, e.CompaniaSocio, e.transaccion_id
+			order by e.CotizacionNumero desc
+		]]>  			   
+	</sql-query>	
+	
+	
+	
+	<sql-query name="snalertascomun.listarConvocatoriaActivosPorProveedorConsultas">
+		<![CDATA[
+			SELECT top 5 
+				'Convocatoria : ' + CAST(e.VtaBasesNro as VARCHAR(200)) + '-'+ RTRIM(e.NumeroProceso) + '- Numero Convocatoria: '+ CAST(e.NumeroConvocatoria as varchar(200)) as 'cargo'
+				,'whlicitacionvtaBases' as 'procesoId'
+				,cast(e.Estado as varchar) as 'procesoEstado'
+				,e.CompaniaSocio as 'externoPk1'
+				,0 as 'externoId1'
+				,				
+				CAST(CASE WHEN (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+				WHERE EMISOR.TRANSACCION_ID = e.transaccion_id AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND 
+				(SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION RESPUESTA
+				WHERE RESPUESTA.TRANSACCION_ID = EMISOR.TRANSACCION_ID AND RESPUESTA.COMUNICACION_PADRE_ID = EMISOR.COMUNICACION_ID and RESPUESTA.ESTADO = 'REGI'
+				) > 0) > 0  THEN 'yellow' 	
+				WHEN ( SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+				WHERE EMISOR.TRANSACCION_ID = e.transaccion_id AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND EMISOR.ESTADO = 'GENR' ) > 0  THEN 'yellow'	
+				ELSE 'green' END AS VARCHAR(10)) AS "colorChatTransaccion"				
+				,e.transaccion_id as "transaccion"
+				
+			FROM WH_LicitacionVtaBases (nolock) e WHERE e.Proveedor = :p_proveedor
+			GROUP by e.NumeroProceso,e.VtaBasesNro, e.Estado, e.NumeroProceso, e.CompaniaSocio, e.transaccion_id, e.NumeroConvocatoria
+			order by 6 desc, e.NumeroProceso, e.VtaBasesNro desc			
+		]]>  			   
+	</sql-query>
+	
+	
+	<sql-query name="snalertascomun.obtenerGestorCotizacion">
+		<![CDATA[
+			SELECT top 1 c.Comprador 'personaId'
+				,isnull(p.Busqueda,'CAJA CUSCO') as 'usuario'
+				,c.CompaniaSocio as 'externoPk6'
+				,c.RequisicionNumero as 'externoPk7'
+			FROM WH_Requisiciones (nolock) c 
+			inner join WH_RequisicionDetalle (nolock) d
+				on c.CompaniaSocio=d.CompaniaSocio and c.RequisicionNumero=d.RequisicionNumero
+			left join PersonaMast (nolock) p
+				on c.Comprador=p.Persona
+			WHERE d.CotizacionSecuencia = :p_cotizacionsecuencia 
+		]]>  			   
+	</sql-query>
+	
+	<sql-query name="snalertascomun.obtenerSubastasProveedorCantidad">
+	<![CDATA[
+		SELECT 
+			'' AS "codigo"
+			,(select COUNT(1)
+			from wh_subasta (nolock) s
+				inner join WH_SubastaProveedor p
+				on s.CompaniaSocio=p.CompaniaSocio and s.SubastaNumero=p.SubastaNumero
+			where	p.ProveedorId = :p_proveedor
+			and		p.Estado      = 'A'
+			and s.Estado in ('CU')) as "externoId1"
+			,(select COUNT(1)
+			from wh_subasta (nolock) s
+				inner join WH_SubastaProveedor (nolock) p
+				on s.CompaniaSocio=p.CompaniaSocio and s.SubastaNumero=p.SubastaNumero
+			where	p.ProveedorId = :p_proveedor
+			and		p.Estado      = 'A'
+			and s.Estado in ('TR')) as "externoId2"
+	]]>
+	</sql-query>
+	
+	<sql-query name="snalertascomun.obtenerCotizacionProveedorCantidad">
+	<![CDATA[
+		SELECT '' AS "codigo",(SELECT COUNT(DISTINCT NumeroOrden)
+                       FROM   wh_cotizacion (nolock) c
+                       	inner join sgworkflowsys.wf_transaccion (nolock) t
+			   				on c.transaccion_id=t.transaccion_id
+                       WHERE 1=1
+						  AND c.proveedor = :p_proveedor
+						  AND t.ESTADO not in ('A','R')
+                          AND t.nivel_estado_id IN ('IN','SB','CP','AP')) AS "externoId1",
+              (SELECT COUNT(DISTINCT NumeroOrden)
+               FROM wh_cotizacion (nolock) c
+               	inner join sgworkflowsys.wf_transaccion (nolock) t
+			   		on c.transaccion_id=t.transaccion_id
+              	WHERE 1=1
+              	AND c.proveedor = :p_proveedor
+				AND t.ESTADO not in ('A','R')
+              	AND t.nivel_estado_id NOT IN ('IN','SB','CP','AP') ) AS "externoId2"
+	]]>
+	</sql-query>
+	
+	<sql-query name="snalertascomun.obtenerGestionProveedorCantidad">
+	<![CDATA[
+			SELECT '' AS "codigo"
+			,(SELECT COUNT(1)
+			FROM GP_REGISTROPROVEEDOR (nolock) c
+				INNER JOIN sgworkflowsys.WF_TRANSACCION WFTRANSACCION
+				ON WFTRANSACCION.TRANSACCION_ID=c.TRANSACCION_ID
+			WHERE c.Proveedor = :p_proveedor
+			and WFTRANSACCION.NIVEL_ESTADO_ID in ('PR','AP')
+			AND WFTRANSACCION.ESTADO not in ('A','R')
+			) as "externoId1"
+			,(SELECT COUNT(1)
+			FROM GP_REGISTROPROVEEDOR (nolock) c
+			INNER JOIN sgworkflowsys.WF_TRANSACCION WFTRANSACCION
+				ON WFTRANSACCION.TRANSACCION_ID=c.TRANSACCION_ID
+			WHERE c.Proveedor = :p_proveedor
+			and WFTRANSACCION.NIVEL_ESTADO_ID not in ('PR','AP')
+			AND WFTRANSACCION.ESTADO not in ('A','R')
+			) as "externoId2"
+	]]>
+	</sql-query>
+	
+	<sql-query name="snalertascomun.obtenerGestionProveedorEstado">
+	<![CDATA[
+		select dbo.[FN_GP_REGISTROPROVEEDORESTADO](:p_proveedor) AS "codigo"
+	]]>
+	</sql-query>
+	
+	<sql-query name="snalertascomun.obtenerConvocatoriaProveedorCantidad">
+	<![CDATA[
+			select '' as "codigo",
+			(select count(1)
+			from wh_licitacionconv c
+				inner join sgworkflowsys.WF_TRANSACCION tc
+					on c.transaccion_id = tc.transaccion_id
+				inner join WH_LicitacionVtaBases b
+					on c.CompaniaSocio=b.CompaniaSocio and c.NumeroConvocatoria=b.NumeroConvocatoria
+				inner join sgworkflowsys.WF_TRANSACCION tp
+					on b.transaccion_id = tp.transaccion_id
+				where 1=1 and b.Proveedor = :p_proveedor
+				--- EN MANOS DEL PROVEEDOR
+				AND tc.ESTADO not in ('A','R')
+				--- EN MANOS DEL PROVEEDOR
+				AND tp.NIVEL_ESTADO_ID in ('IN','BP','CP')
+				AND tp.ESTADO not in ('A','R')
+			) as "externoId1",
+			(select count(1)
+			from wh_licitacionconv c
+				inner join sgworkflowsys.WF_TRANSACCION tc
+					on c.transaccion_id = tc.transaccion_id
+				inner join WH_LicitacionVtaBases b
+					on c.CompaniaSocio=b.CompaniaSocio and c.NumeroConvocatoria=b.NumeroConvocatoria
+				inner join sgworkflowsys.WF_TRANSACCION tp
+					on b.transaccion_id = tp.transaccion_id
+				where 1=1 and b.Proveedor = :p_proveedor
+				--- EN MANOS DEL PROVEEDOR
+				AND tc.ESTADO not in ('A','R')
+				--- EN MANOS DEL PROVEEDOR
+				AND tp.NIVEL_ESTADO_ID not in ('IN','BP','CP')
+				AND tp.ESTADO not in ('A','R')
+			) as "externoId2"
+	]]>
+	</sql-query>
+	
+	
+	<sql-query name="snalertascomun.obtenerCantidadMensajes">
+	<![CDATA[
+	DECLARE @pproveedor  INT
+	SET @pproveedor = :p_proveedor
+	
+		Select 
+		(SELECT COUNT(*) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+		WHERE EMISOR.TRANSACCION_ID in 
+			(
+				select TRANSACCION_ID From wh_licitacionvtabases  where Proveedor = @pproveedor
+				union all
+				select TRANSACCION_ID from WH_Cotizacion where Proveedor = @pproveedor
+			)
+		AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND 
+		(SELECT COUNT(*) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION RESPUESTA
+		WHERE RESPUESTA.TRANSACCION_ID = EMISOR.TRANSACCION_ID AND RESPUESTA.COMUNICACION_PADRE_ID = EMISOR.COMUNICACION_ID and RESPUESTA.ESTADO = 'REGI'
+		) > 0 )
+		+
+		(SELECT COUNT(*) FROM sgworkflowsys.WF_TRANSACCION_COMUNICACION EMISOR
+		WHERE EMISOR.TRANSACCION_ID in 	
+			(
+				select TRANSACCION_ID From wh_licitacionvtabases  where Proveedor = @pproveedor
+				union all
+				select TRANSACCION_ID from WH_Cotizacion where Proveedor = @pproveedor
+			)
+		AND EMISOR.COMUNICACION_PADRE_ID IS NULL AND EMISOR.ESTADO = 'GENR' ) as "id"
+	]]>
+	</sql-query>
+	
+	
+</hibernate-mapping>

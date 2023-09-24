@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Empleadomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+   <sql-query name="empleadomast.obtenerDto">
+    SELECT  EmpleadoMast.Empleado as "empleado", 
+          EmpleadoMast.UnidadNegocioAsignada  as "unidadnegocioasignada",
+         rtrim(EmpleadoMast.ResponsableEmpleado) as "responsableempleado",
+         EmpleadoMast.CompaniaSocio as "companiasocio",    
+       RTRIM(EmpleadoMast.DeptoOrganizacion) as "deptoorganizacion",
+           EmpleadoMast.CentroCostos as "centrocostos", 
+           cast(EmpleadoMast.Estado as varchar) as "estado" ,  
+           cast(EmpleadoMast.estadoempleado as varchar) as "estadoempleado" ,       
+      EmpleadoMast.CodigoUsuario     as "codigousuario"
+		, AC_Costcentermst.localname as "centrocostosDescri"
+		, cast(flageducacioncompletaiep as VARCHAR) as "flageducacioncompletaiep"
+         from EMPLEADOMAST
+          left join AC_Costcentermst on AC_Costcentermst.costcenter= EmpleadoMast.CentroCostos
+         where 
+			Empleado = :p_empleado
+
+    </sql-query>
+
+    <sql-query name="empleadomast.listarPaginadoContar">
+         select count(1)
+         from EMPLEADOMAST
+         where 
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+
+    </sql-query>
+
+    <sql-query name="empleadomast.listarPaginadoSentencia">
+         select 
+			Empleado "empleado"
+			,CompaniaSocio "companiasocio"
+			,TipoPago "tipopago"
+			,TipoTrabajador "tipotrabajador"
+			,TipoPlanilla "tipoplanilla"
+			,Raza "raza"
+			,Religion "religion"
+			,TipoVisa "tipovisa"
+			,VisaFechaInicio "visafechainicio"
+			,VisaFechaExpiracion "visafechaexpiracion"
+			,ServicioMilitarDesde "serviciomilitardesde"
+			,ServicioMilitarHasta "serviciomilitarhasta"
+			,NumeroArchivo "numeroarchivo"
+			,UnidadNegocioAsignada "unidadnegocioasignada"
+			,LocaciondePago "locaciondepago"
+			,CodigoUsuario "codigousuario"
+			,TipoAsistenciaSocial "tipoasistenciasocial"
+			,CentroAsistenciaSocial "centroasistenciasocial"
+			,TipoCarnetAsistenciaSocial "tipocarnetasistenciasocial"
+			,CarnetAsistenciaSocial "carnetasistenciasocial"
+			,TipoPension "tipopension"
+			,FechaInicioPension "fechainiciopension"
+			,FechaTerminoPension "fechaterminopension"
+			,CodigoAFP "codigoafp"
+			,NumeroAFP "numeroafp"
+			,BancoCTS "bancocts"
+			,TipoCuentaCTS "tipocuentacts"
+			,TipoMonedaCTS "tipomonedacts"
+			,NumeroCuentaCTS "numerocuentacts"
+			,EstadoEmpleado "estadoempleado"
+			,FechaIngreso "fechaingreso"
+			,FechaUltimaPlanilla "fechaultimaplanilla"
+			,TipoContrato "tipocontrato"
+			,FechaInicioContrato "fechainiciocontrato"
+			,FechaFinContrato "fechafincontrato"
+			,FechaCese "fechacese"
+			,RazonCese "razoncese"
+			,MotivoCese "motivocese"
+			,Contratista "contratista"
+			,CentroCostos "centrocostos"
+			,AFE "afe"
+			,DeptoOrganizacion "deptoorganizacion"
+			,DepartamentoOperacional "departamentooperacional"
+			,TipoHorario "tipohorario"
+			,GradoSalario "gradosalario"
+			,Cargo "cargo"
+			,NivelAcceso "nivelacceso"
+			,FlagIPSSVIDA "flagipssvida"
+			,FlagAccTrabajo "flagacctrabajo"
+			,CorreoInterno "correointerno"
+			,SueldoActualLocal "sueldoactuallocal"
+			,SueldoActualDolar "sueldoactualdolar"
+			,SueldoAnteriorLocal "sueldoanteriorlocal"
+			,SueldoAnteriorDolar "sueldoanteriordolar"
+			,MonedaPago "monedapago"
+			,Perfil "perfil"
+			,Foto "foto"
+			,FechaLiquidacion "fechaliquidacion"
+			,FechaReingreso "fechareingreso"
+			,UnidadReplicacion "unidadreplicacion"
+			,CodigoCargo "codigocargo"
+			,UltimaFechaPagoVacacion "ultimafechapagovacacion"
+			,Estado "estado"
+			,Sucursal "sucursal"
+			,RUCCentroAsistenciaSocial "ruccentroasistenciasocial"
+			,TarjetadeCredito "tarjetadecredito"
+			,PlantillaConcepto "plantillaconcepto"
+			,FlagSMF "flagsmf"
+			,FechaVacaciones "fechavacaciones"
+			,FlagTrabajadorPensionista "flagtrabajadorpensionista"
+			,FlagSCTRSalud "flagsctrsalud"
+			,FlagSCTRPension "flagsctrpension"
+			,FlagDiscapacidad "flagdiscapacidad"
+			,FlagSujetoControl "flagsujetocontrol"
+			,FlagSindicalizado "flagsindicalizado"
+			,FlagDomiciliado "flagdomiciliado"
+			,NivelEducativoRTPS "niveleducativortps"
+			,FlagRegimenAlternativo "flagregimenalternativo"
+			,FlagJornadaMaxima "flagjornadamaxima"
+			,FlagHorarioNocturno "flaghorarionocturno"
+			,FlagOtrosQuinta "flagotrosquinta"
+			,FlagQuintaExonerada "flagquintaexonerada"
+			,SituacionEspecial "situacionespecial"
+			,FlagMadreResponsabilidad "flagmadreresponsabilidad"
+			,FlagCentroFormacion "flagcentroformacion"
+			,TipoModalidadFormativa "tipomodalidadformativa"
+			,PrestadorServicio "prestadorservicio"
+			,FlagAseguraPension "flagasegurapension"
+			,CategoriaOcupacional "categoriaocupacional"
+			,FlagConvenioDobleTrib "flagconveniodobletrib"
+			,FirmaDigitalizada "firmadigitalizada"
+			,FlagDeConfianza "flagdeconfianza"
+			,FechaBajaEPS "fechabajaeps"
+			,CodigoUnidad "codigounidad"
+			,division "division"
+			,oficina "oficina"
+			,Responsableempleado "responsableempleado"
+			,Responsablejefe "responsablejefe"
+			,TipoComisionAFP "tipocomisionafp"
+			,LocacionAsignada "locacionasignada"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,Motivo "motivo"
+			,CostCenterDestination "costcenterdestination"
+			,UnidadTrabajo "unidadtrabajo"
+			,JefeResponsable "jeferesponsable"
+			,Orden_Organigrama "ordenOrganigrama"
+			,UnidadOperativa "unidadoperativa"
+			,EmpleadoRelacionado "empleadorelacionado"
+			,Posicion "posicion"
+			,GRUPOOCUPACIONAL "grupoocupacional"
+			,ESTADONIVELACION "estadonivelacion"
+			,APROBADORNIVELACION "aprobadornivelacion"
+			,SOLICITADORNIVELACION "solicitadornivelacion"
+			,FlagEducacionCompletaIEP "flageducacioncompletaiep"
+
+         from EMPLEADOMAST
+         where 
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+
+    </sql-query>
+
+    <sql-query name="empleadomast.listarDtoCore">
+         select 
+			Empleado "empleado"
+			,CompaniaSocio "companiasocio"
+			,TipoPago "tipopago"
+			,TipoTrabajador "tipotrabajador"
+			,TipoPlanilla "tipoplanilla"
+			,Raza "raza"
+			,Religion "religion"
+			,TipoVisa "tipovisa"
+			,VisaFechaInicio "visafechainicio"
+			,VisaFechaExpiracion "visafechaexpiracion"
+			,ServicioMilitarDesde "serviciomilitardesde"
+			,ServicioMilitarHasta "serviciomilitarhasta"
+			,NumeroArchivo "numeroarchivo"
+			,UnidadNegocioAsignada "unidadnegocioasignada"
+			,LocaciondePago "locaciondepago"
+			,CodigoUsuario "codigousuario"
+			,TipoAsistenciaSocial "tipoasistenciasocial"
+			,CentroAsistenciaSocial "centroasistenciasocial"
+			,TipoCarnetAsistenciaSocial "tipocarnetasistenciasocial"
+			,CarnetAsistenciaSocial "carnetasistenciasocial"
+			,TipoPension "tipopension"
+			,FechaInicioPension "fechainiciopension"
+			,FechaTerminoPension "fechaterminopension"
+			,CodigoAFP "codigoafp"
+			,NumeroAFP "numeroafp"
+			,BancoCTS "bancocts"
+			,TipoCuentaCTS "tipocuentacts"
+			,TipoMonedaCTS "tipomonedacts"
+			,NumeroCuentaCTS "numerocuentacts"
+			,EstadoEmpleado "estadoempleado"
+			,FechaIngreso "fechaingreso"
+			,FechaUltimaPlanilla "fechaultimaplanilla"
+			,TipoContrato "tipocontrato"
+			,FechaInicioContrato "fechainiciocontrato"
+			,FechaFinContrato "fechafincontrato"
+			,FechaCese "fechacese"
+			,RazonCese "razoncese"
+			,MotivoCese "motivocese"
+			,Contratista "contratista"
+			,CentroCostos "centrocostos"
+			,AFE "afe"
+			,DeptoOrganizacion "deptoorganizacion"
+			,DepartamentoOperacional "departamentooperacional"
+			,TipoHorario "tipohorario"
+			,GradoSalario "gradosalario"
+			,Cargo "cargo"
+			,NivelAcceso "nivelacceso"
+			,FlagIPSSVIDA "flagipssvida"
+			,FlagAccTrabajo "flagacctrabajo"
+			,CorreoInterno "correointerno"
+			,SueldoActualLocal "sueldoactuallocal"
+			,SueldoActualDolar "sueldoactualdolar"
+			,SueldoAnteriorLocal "sueldoanteriorlocal"
+			,SueldoAnteriorDolar "sueldoanteriordolar"
+			,MonedaPago "monedapago"
+			,Perfil "perfil"
+			,Foto "foto"
+			,FechaLiquidacion "fechaliquidacion"
+			,FechaReingreso "fechareingreso"
+			,UnidadReplicacion "unidadreplicacion"
+			,CodigoCargo "codigocargo"
+			,UltimaFechaPagoVacacion "ultimafechapagovacacion"
+			,Estado "estado"
+			,Sucursal "sucursal"
+			,RUCCentroAsistenciaSocial "ruccentroasistenciasocial"
+			,TarjetadeCredito "tarjetadecredito"
+			,PlantillaConcepto "plantillaconcepto"
+			,FlagSMF "flagsmf"
+			,FechaVacaciones "fechavacaciones"
+			,FlagTrabajadorPensionista "flagtrabajadorpensionista"
+			,FlagSCTRSalud "flagsctrsalud"
+			,FlagSCTRPension "flagsctrpension"
+			,FlagDiscapacidad "flagdiscapacidad"
+			,FlagSujetoControl "flagsujetocontrol"
+			,FlagSindicalizado "flagsindicalizado"
+			,FlagDomiciliado "flagdomiciliado"
+			,NivelEducativoRTPS "niveleducativortps"
+			,FlagRegimenAlternativo "flagregimenalternativo"
+			,FlagJornadaMaxima "flagjornadamaxima"
+			,FlagHorarioNocturno "flaghorarionocturno"
+			,FlagOtrosQuinta "flagotrosquinta"
+			,FlagQuintaExonerada "flagquintaexonerada"
+			,SituacionEspecial "situacionespecial"
+			,FlagMadreResponsabilidad "flagmadreresponsabilidad"
+			,FlagCentroFormacion "flagcentroformacion"
+			,TipoModalidadFormativa "tipomodalidadformativa"
+			,PrestadorServicio "prestadorservicio"
+			,FlagAseguraPension "flagasegurapension"
+			,CategoriaOcupacional "categoriaocupacional"
+			,FlagConvenioDobleTrib "flagconveniodobletrib"
+			,FirmaDigitalizada "firmadigitalizada"
+			,FlagDeConfianza "flagdeconfianza"
+			,FechaBajaEPS "fechabajaeps"
+			,CodigoUnidad "codigounidad"
+			,division "division"
+			,oficina "oficina"
+			,Responsableempleado "responsableempleado"
+			,Responsablejefe "responsablejefe"
+			,TipoComisionAFP "tipocomisionafp"
+			,LocacionAsignada "locacionasignada"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,Motivo "motivo"
+			,CostCenterDestination "costcenterdestination"
+			,UnidadTrabajo "unidadtrabajo"
+			,JefeResponsable "jeferesponsable"
+			,Orden_Organigrama "ordenOrganigrama"
+			,UnidadOperativa "unidadoperativa"
+			,EmpleadoRelacionado "empleadorelacionado"
+			,Posicion "posicion"
+			,GRUPOOCUPACIONAL "grupoocupacional"
+			,ESTADONIVELACION "estadonivelacion"
+			,APROBADORNIVELACION "aprobadornivelacion"
+			,SOLICITADORNIVELACION "solicitadornivelacion"
+			,FlagEducacionCompletaIEP "flageducacioncompletaiep"
+
+         from EMPLEADOMAST
+         where 
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+			Empleado = ISNULL(:p_empleado, Empleado)
+			AND CompaniaSocio = ISNULL(:p_companiasocio, CompaniaSocio)
+
+    </sql-query>
+
+    <sql-query name="empleadomast.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="empleadomast.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+    
+      <sql-query name="empleadomast.actualizarpersona">
+         update PersonaMast set EsEmpleado='N' where Persona=:p_empleado 
+    </sql-query>
+
+      <sql-query name="empleadomast.actualizarempleado">
+         update PersonaMast set EsEmpleado='S' where Persona=:p_empleado 
+    </sql-query>
+    
+        <sql-query name="empleadomast.obtenerDtoDetalleEliminar">
+         SELECT CompaniaSocio as "nombre" FROM PR_ConceptoPersonalEmpleado where Empleado = :p_empleado
+    </sql-query>
+    
+     <sql-query name="empleadomast.obtenerempleadopordtoapi">
+		<![CDATA[
+		SELECT p.persona                          AS "persona",
+               p.busqueda                         AS "busqueda",
+               p.nombrecompleto                   AS "nombrecompleto",
+               p.nombres                          AS "nombres",
+               p.apellidopaterno                  AS "apellidopaterno",
+               p.apellidomaterno                  AS "apellidomaterno",
+               CAST(p.sexo as varchar)                            AS "sexo",
+               CAST(p.tipodocumento as varchar)                    AS "tipodocumento",
+               CAST(p.tipopersona  as varchar)                     AS "tipopersona",
+               p.fechanacimiento                  AS "fechanacimiento",
+               CAST( p.escliente as varchar)                         AS "escliente",
+               CAST(p.esproveedor   as varchar)                     AS "esproveedor",
+               CAST(p.esempleado as varchar)                       AS "esempleado",
+               CAST( p.esotro  as varchar)                          AS "esotro",
+               CAST(p.documento as varchar)                        AS "documento",
+               CAST(p.documentofiscal  as varchar)                 AS "documentofiscal",
+               CAST(p.documentoidentidad  as varchar)              AS "documentoidentidad",
+               p.correoelectronico               AS "correoelectronico",
+               CAST(p.estado  as varchar(1))      AS "estado",
+               CASE WHEN p.estado = 'A' THEN 'Activo'
+                 ELSE 'Inactivo' END              AS "estadoNombre",
+               
+               empleadomast.empleado         	  AS "empleado",  
+               CAST(empleadomast.codigousuario as varchar)          AS "codigousuario",
+               CAST(empleadomast.estadoempleado as varchar)       AS "estadoEmpleado",
+               CAST(empleadomast.centrocostos as varchar)         AS "centrocostos",               
+               CAST(empleadomast.unidadnegocioasignada as varchar) AS "unidadnegocioasignada",
+               CAST(empleadomast.companiasocio as varchar)        AS "companiasocio",               
+               CAST(empleadomast.sucursal as varchar)             AS "sucursal",               
+               empleadomast.fechaingreso          AS "fechaingreso",
+               empleadomast.fechainiciocontrato   AS "fechainiciocontrato",
+               empleadomast.fechafincontrato      AS "fechafincontrato",
+               empleadomast.tipohorario            AS "tipohorario",
+               empleadomast.sueldoactuallocal     AS "sueldoactuallocal",
+               empleadomast.codigocargo           AS "codigocargo",               
+               CAST(empleadomast.tipocontrato as varchar)          AS "tipocontrato",               
+               CAST(empleadomast.tipoplanilla  as varchar)         AS "tipoplanilla",               
+               CAST(empleadomast.cargo   as varchar)               AS "cargo",               
+               empleadomast.deptoorganizacion     AS "deptoorganizacion",
+               empleadomast.correointerno     	  AS "correointerno",
+               
+               ma_unidadnegocio.descripcionlocal  AS "unidadnegocioasignadaNombre",
+               CAST(ac_costcentermst.localname  as varchar)         AS "centrocostosNombre",
+               COMP.description                   AS "companiasocioNombre",
+               ac_sucursal.descripcionlocal       AS "sucursalnombre",
+               pue.descripcion                    AS "codigocargoNombre",
+               tcn.descripcion                    AS "tipocontratoNombre",
+               tpl.descripcion                    AS "tipoplanillaNombre",
+               dep.description                    AS "deptoorganizacionNombre",
+               car.descripcionlocal               AS "cargoNombre"
+		FROM   personamast p
+		       join empleadomast
+		         ON empleadomast.empleado = p.persona
+		       left join ac_costcentermst
+		              ON ac_costcentermst.costcenter = empleadomast.centrocostos
+		       left join ma_unidadnegocio
+		              ON ma_unidadnegocio.unidadnegocio =
+		                 empleadomast.unidadnegocioasignada
+		       left join ac_sucursal
+		              ON ac_sucursal.sucursal = empleadomast.sucursal
+		       left join companyowner comp
+		              ON comp.companyowner = empleadomast.companiasocio
+		       left join hr_puestoempresa PUE
+		              ON empleadomast.codigocargo = PUE.codigopuesto
+		       left join hr_tipocontrato TCN
+		              ON empleadomast.tipocontrato = TCN.tipocontrato
+		       left join pr_tipoplanilla TPL
+		              ON empleadomast.tipoplanilla = TPL.tipoplanilla
+		       left join hr_cargosmast CAR
+		              ON empleadomast.cargo = CAR.cargo
+		       left join departmentmst DEP
+		              ON empleadomast.deptoorganizacion = DEP.department
+		WHERE  1 = 1
+		       AND empleadomast.empleado = :p_id_persona
+		       AND empleadomast.companiasocio = :p_id_compania 
+		]]>
+	</sql-query>
+    
+    
+    
+    
+    
+    
+    
+    
+   
+    
+    
+ <!-- copiado del comun , por desbloquear en base al o que se requiera-->
+   
+ <!--  
+  
+  	<sql-query name="empleadomast.obtenerEmpleadoPorDtoApiPersona">
+		<![CDATA[
+		SELECT   p.persona                          AS "persona",
+               p.busqueda                         AS "busqueda",
+               p.nombrecompleto                   AS "nombrecompleto",
+               p.nombres                          AS "nombres",
+               p.apellidopaterno                  AS "apellidopaterno",
+               p.apellidomaterno                  AS "apellidomaterno",
+               p.sexo                             AS "sexo",
+               p.tipodocumento                    AS "tipodocumento",
+               p.tipopersona                      AS "tipopersona",
+               p.fechanacimiento                  AS "fechanacimiento",
+               p.escliente                        AS "escliente",
+               p.esproveedor                      AS "esproveedor",
+               p.esempleado                       AS "esempleado",
+               p.esotro                           AS "esotro",
+               p.documento                        AS "documento",
+               p.documentofiscal                  AS "documentofiscal",
+               p.documentoidentidad               AS "documentoidentidad",
+               p.correoelectronico               AS "correoelectronico",
+               CAST(p.estado  as varchar(1))      AS "estado",
+               CASE WHEN p.estado = 'A' THEN 'Activo'
+                 ELSE 'Inactivo' END              AS "estadoNombre",
+               
+               empleadomast.empleado         	  AS "empleado",  
+               empleadomast.codigousuario         AS "codigousuario",
+               empleadomast.estadoempleado        AS "estadoEmpleado",
+               empleadomast.centrocostos          AS "centrocostos",               
+               empleadomast.unidadnegocioasignada AS "unidadnegocioasignada",
+               empleadomast.companiasocio         AS "companiasocio",               
+               empleadomast.sucursal              AS "sucursal",               
+               empleadomast.fechaingreso          AS "fechaingreso",
+               empleadomast.fechainiciocontrato   AS "fechainiciocontrato",
+               empleadomast.fechafincontrato      AS "fechafincontrato",
+               empleadomast.tipohorario           AS "tipohorario",
+               empleadomast.sueldoactuallocal     AS "sueldoactuallocal",
+               empleadomast.codigocargo           AS "codigocargo",               
+               empleadomast.tipocontrato          AS "tipocontrato",               
+               empleadomast.tipoplanilla          AS "tipoplanilla",               
+               empleadomast.cargo                 AS "cargo",               
+               empleadomast.deptoorganizacion     AS "deptoorganizacion",
+               empleadomast.correointerno     	  AS "correointerno",
+               
+               ma_unidadnegocio.descripcionlocal  AS "unidadnegocioasignadaNombre",
+               ac_costcentermst.localname         AS "centrocostosNombre",
+               COMP.description                   AS "companiasocioNombre",
+               ac_sucursal.descripcionlocal       AS "sucursalnombre",
+               pue.descripcion                    AS "codigocargoNombre",
+               tcn.descripcion                    AS "tipocontratoNombre",
+               tpl.descripcion                    AS "tipoplanillaNombre",
+               dep.description                    AS "deptoorganizacionNombre",
+               car.descripcionlocal               AS "cargoNombre"
+        FROM personamast p
+         JOIN empleadomast ON empleadomast.empleado=p.persona
+         LEFT JOIN AC_COSTCENTERMST ON AC_COSTCENTERMST.COSTCENTER=EMPLEADOMAST.CENTROCOSTOS
+         LEFT JOIN ma_unidadnegocio ON MA_UNIDADNEGOCIO.UNIDADNEGOCIO=EMPLEADOMAST.UNIDADNEGOCIOASIGNADA
+         LEFT JOIN AC_SUCURSAL ON  AC_SUCURSAL.SUCURSAL=EMPLEADOMAST.SUCURSAL          
+         LEFT JOIN companyowner comp ON comp.companyowner = empleadomast.companiasocio          
+         
+         LEFT JOIN HR_PUESTOEMPRESA PUE ON empleadomast.CodigoCargo = PUE.CodigoPuesto
+		 LEFT JOIN HR_TipoContrato TCN ON empleadomast.TipoContrato = TCN.TipoContrato
+		 LEFT JOIN PR_TipoPlanilla TPL ON empleadomast.TipoPlanilla = TPL.TipoPlanilla
+		 LEFT JOIN hr_cargosmast CAR ON empleadomast.cargo = CAR.cargo
+		 LEFT JOIN departmentmst DEP ON empleadomast.DeptoOrganizacion = DEP.department
+	    WHERE 1=1
+	    	AND empleadomast.empleado = :p_id_persona
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.listaRapidaCore">
+		<![CDATA[
+			SELECT * FROM (
+    		   SELECT p.persona                          AS "persona",
+               p.busqueda                         AS "busqueda",
+               p.nombrecompleto                   AS "nombrecompleto",
+               p.nombres                          AS "nombres",
+               p.apellidopaterno                  AS "apellidopaterno",
+               p.apellidomaterno                  AS "apellidomaterno",
+               p.sexo                             AS "sexo",
+               p.tipodocumento                    AS "tipodocumento",
+               p.tipopersona                      AS "tipopersona",
+               p.fechanacimiento                  AS "fechanacimiento",
+               p.escliente                        AS "escliente",
+               p.esproveedor                      AS "esproveedor",
+               p.esempleado                       AS "esempleado",
+               p.esotro                           AS "esotro",
+               p.documento                        AS "documento",
+               p.documentofiscal                  AS "documentofiscal",
+               p.documentoidentidad               AS "documentoidentidad",
+               p.correoelectronico               AS "correoelectronico",
+              CAST( p.estado as varchar(1))       AS "estado",
+               CASE WHEN p.estado = 'A' THEN 'Activo'
+                 ELSE 'Inactivo' END              AS "estadoNombre",
+               
+               empleadomast.empleado         	  AS "empleado",  
+               empleadomast.codigousuario         AS "codigousuario",
+               empleadomast.estadoempleado        AS "estadoEmpleado",
+               empleadomast.centrocostos          AS "centrocostos",               
+               empleadomast.unidadnegocioasignada AS "unidadnegocioasignada",
+               empleadomast.companiasocio         AS "companiasocio",               
+               empleadomast.sucursal              AS "sucursal",               
+               empleadomast.fechaingreso          AS "fechaingreso",
+               empleadomast.fechainiciocontrato   AS "fechainiciocontrato",
+               empleadomast.fechafincontrato      AS "fechafincontrato",
+               empleadomast.tipohorario           AS "tipohorario",
+               empleadomast.sueldoactuallocal     AS "sueldoactuallocal",
+               empleadomast.codigocargo           AS "codigocargo",               
+               empleadomast.tipocontrato          AS "tipocontrato",               
+               empleadomast.tipoplanilla          AS "tipoplanilla",               
+               empleadomast.cargo                 AS "cargo",               
+               empleadomast.deptoorganizacion     AS "deptoorganizacion",
+               empleadomast.correointerno     	  AS "correointerno"
+        FROM   personamast p
+               inner join empleadomast
+                 ON empleadomast.empleado = p.persona
+        WHERE  empleadomast.companiasocio = :p_companiasocio
+               AND empleadomast.estadoempleado = ISNULL(:p_estadoempleado,empleadomast.estadoempleado) 
+               AND p.busqueda like '%' || ISNULL(:p_busqueda,p.busqueda) || '%'               
+    ) WHERE rownum <= 30               
+    order by 2
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.contarcumpleanios">
+		<![CDATA[
+		select  
+		COUNT(1)
+		from 
+		PersonaMast PER INNER JOIN 
+		EmpleadoMast EMP ON PER.PERSONA=EMP.EMPLEADO LEFT JOIN 
+		ac_costcentermst cc ON emp.centrocostos = cc.costcenter 
+		where 
+		EMP.EstadoEmpleado='0' 
+		AND PER.Persona = ISNULL( :p_empleado ,PER.PERSONA)
+		AND per.FechaNacimiento IS NOT NULL
+		AND TRUNC(per.FechaNacimiento) BETWEEN TRUNC(ISNULL(:p_desde, per.FechaNacimiento)) AND TRUNC(ISNULL(:p_hasta, per.FechaNacimiento))
+		AND ISNULL(emp.centrocostos, 'X') = ISNULL(:p_cc, ISNULL(emp.centrocostos, 'X'))
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.listarcumpleanios">
+		<![CDATA[
+		select  
+		PER.Persona AS "empleado",
+		PER.NOMBRECOMPLETO AS "nombrecompleto",
+		CC.LocalName as "centrocostosdescripcion",
+		per.FechaNacimiento as "fechanacimiento",
+		PER.CorreoElectronico as "correointerno"
+		from 
+		PersonaMast PER INNER JOIN 
+		EmpleadoMast EMP ON PER.PERSONA=EMP.EMPLEADO LEFT JOIN 
+		ac_costcentermst cc ON emp.centrocostos = cc.costcenter 
+		where 
+		EMP.EstadoEmpleado='0' 
+		AND PER.Persona = ISNULL( :p_empleado ,PER.PERSONA)
+		AND per.FechaNacimiento IS NOT NULL
+		AND TRUNC(per.FechaNacimiento) BETWEEN TRUNC(ISNULL(:p_desde, per.FechaNacimiento)) AND TRUNC(ISNULL(:p_hasta, per.FechaNacimiento))
+		AND ISNULL(emp.centrocostos, 'X') = ISNULL(:p_cc, ISNULL(emp.centrocostos, 'X'))
+		ORDER BY PER.NOMBRECOMPLETO
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.contaraniversarios">
+		<![CDATA[
+		select  
+		COUNT(1)
+		from 
+		PersonaMast PER INNER JOIN 
+		EmpleadoMast EMP ON PER.PERSONA=EMP.EMPLEADO LEFT JOIN 
+		ac_costcentermst cc ON emp.centrocostos = cc.costcenter 
+		where 
+		EMP.EstadoEmpleado='0' 
+		AND PER.Persona = ISNULL( :p_empleado ,PER.PERSONA)
+		AND EMP.FECHAINGRESO IS NOT NULL
+		AND TRUNC(EMP.FECHAINGRESO) BETWEEN TRUNC(ISNULL(:p_desde, EMP.FECHAINGRESO)) AND TRUNC(ISNULL(:p_hasta, EMP.FECHAINGRESO))
+		AND ISNULL(emp.centrocostos, 'X') = ISNULL(:p_cc, ISNULL(emp.centrocostos, 'X'))
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.listaraniversarios">
+		<![CDATA[
+		select  
+		PER.Persona AS "empleado",
+		PER.NOMBRECOMPLETO AS "nombrecompleto",
+		CC.LocalName as "centrocostosdescripcion",
+		EMP.FECHAINGRESO as "fechaaniversario",
+		PER.CorreoElectronico as "correointerno"
+		from 
+		PersonaMast PER INNER JOIN 
+		EmpleadoMast EMP ON PER.PERSONA=EMP.EMPLEADO LEFT JOIN 
+		ac_costcentermst cc ON emp.centrocostos = cc.costcenter 
+		where 
+		EMP.EstadoEmpleado='0' 
+		AND PER.Persona = ISNULL( :p_empleado ,PER.PERSONA)
+		AND EMP.FECHAINGRESO IS NOT NULL
+		AND TRUNC(EMP.FECHAINGRESO) BETWEEN TRUNC(ISNULL(:p_desde, EMP.FECHAINGRESO)) AND TRUNC(ISNULL(:p_hasta, EMP.FECHAINGRESO))
+		AND ISNULL(emp.centrocostos, 'X') = ISNULL(:p_cc, ISNULL(emp.centrocostos, 'X'))
+		ORDER BY PER.NOMBRECOMPLETO
+		]]>
+	</sql-query>
+	
+	<sql-query name="empleadomast.obtenerdto">
+	SELECT
+       EMPLEADO "empleado"
+			,CAST(TIPOPAGO  as VARCHAR(2))"tipopago"
+			,CAST(TIPOTRABAJADOR  as VARCHAR(2)) "tipotrabajador"
+			,CAST(TIPOPLANILLA  as VARCHAR(2)) "tipoplanilla"
+			,CAST(RAZA  as VARCHAR(3)) "raza"
+			,CAST(RELIGION as VARCHAR(3)) "religion"
+			,CAST(TIPOVISA  as VARCHAR(3)) "tipovisa"
+			,VISAFECHAINICIO "visafechainicio"
+			,VISAFECHAEXPIRACION "visafechaexpiracion"
+			,SERVICIOMILITARDESDE "serviciomilitardesde"
+			,SERVICIOMILITARHASTA "serviciomilitarhasta"
+            ,CAST(NUMEROARCHIVO  as VARCHAR(10)) "numeroarchivo"
+			,CAST(UNIDADNEGOCIOASIGNADA  as VARCHAR(4)) "unidadnegocioasignada"
+			,CAST(LOCACIONDEPAGO   as VARCHAR(4)) "locaciondepago"
+			,RESPONSABLEEMPLEADO "responsableempleado"
+			,RESPONSABLEJEFE "responsablejefe"
+			,CAST(CODIGOUSUARIO   as VARCHAR(20)) "codigousuario"
+			,CAST(TIPOASISTENCIASOCIAL  as VARCHAR(3)) "tipoasistenciasocial"
+			,CAST(CENTROASISTENCIASOCIAL  as VARCHAR(6)) "centroasistenciasocial"
+			,CAST(TIPOCARNETASISTENCIASOCIAL  as VARCHAR(2))"tipocarnetasistenciasocial"
+			,CAST(CARNETASISTENCIASOCIAL  as VARCHAR (03)) "carnetasistenciasocial"
+			,CAST(TIPOPENSION  as VARCHAR(3)) "tipopension"
+			,FECHAINICIOPENSION "fechainiciopension"
+			,FECHATERMINOPENSION "fechaterminopension"
+            ,CAST(CODIGOAFP  as VARCHAR(3)) "codigoafp"
+			,CAST(NUMEROAFP  as VARCHAR(20)) "numeroafp"
+			,CAST(BANCOCTS   as VARCHAR(3)) "bancocts"
+			,CAST(TIPOCUENTACTS  as VARCHAR(3)) "tipocuentacts"
+			,CAST(TIPOMONEDACTS  as VARCHAR(2))"tipomonedacts"
+			,CAST(NUMEROCUENTACTS  as VARCHAR(25)) "numerocuentacts"
+			,CAST(ESTADOEMPLEADO  as VARCHAR(1)) "estadoempleado"
+			,FECHAINGRESO "fechaingreso"
+			,FECHAULTIMAPLANILLA "fechaultimaplanilla"
+            ,CAST(TIPOCONTRATO  as VARCHAR(2)) "tipocontrato"
+			,FECHAINICIOCONTRATO "fechainiciocontrato"
+			,FECHAFINCONTRATO "fechafincontrato"
+			,FECHACESE "fechacese"
+			,CAST(RAZONCESE  as VARCHAR(30)) "razoncese"
+            ,MOTIVOCESE "motivocese"
+			,CONTRATISTA "contratista"
+			,COMPANIASOCIO "companiasocio"
+            ,CAST(CENTROCOSTOS as VARCHAR(10)) "centrocostos"
+			,CAST(AFE as VARCHAR(15)) "afe"
+			,CAST(DEPTOORGANIZACION as VARCHAR(3)) "deptoorganizacion"
+			,CAST(DEPARTAMENTOOPERACIONAL as VARCHAR(10)) "departamentooperacional"
+			,TIPOHORARIO "tipohorario"
+            ,CAST(GRADOSALARIO as VARCHAR(3)) "gradosalario"
+			,CAST(CARGO as VARCHAR(3)) "cargo"
+			,CAST(POSICION as VARCHAR(6))  "posicion"
+			,CAST(NIVELACCESO as VARCHAR(3)) "nivelacceso"
+			,CAST(FLAGIPSSVIDA  as VARCHAR(1))"flagipssvida"
+			,CAST(FLAGACCTRABAJO as VARCHAR(1)) "flagacctrabajo"
+			,CORREOINTERNO "correointerno"
+			,SUELDOACTUALLOCAL "sueldoactuallocal"
+			,SUELDOACTUALDOLAR "sueldoactualdolar"
+			,SUELDOANTERIORLOCAL "sueldoanteriorlocal"
+			,SUELDOANTERIORDOLAR "sueldoanteriordolar"
+            ,CAST(MONEDAPAGO as VARCHAR(2)) "monedapago"
+			,PERFIL "perfil"
+			,CAST(FOTO as VARCHAR(30))"foto"
+			,FECHALIQUIDACION "fechaliquidacion"
+			,FECHAREINGRESO "fechareingreso"
+			,CAST(UNIDADREPLICACION as VARCHAR(10))"unidadreplicacion"
+			,CODIGOCARGO "codigocargo"
+			,ULTIMAFECHAPAGOVACACION "ultimafechapagovacacion"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CAST(ESTADO as VARCHAR(1)) "estado"
+			,LOCACIONASIGNADA "locacionasignada"
+			,EMPLEADORELACIONADO "empleadorelacionado"
+			,CAST(TARJETADECREDITO as VARCHAR(20))"tarjetadecredito"
+			,CAST(SUCURSAL as VARCHAR(4))"sucursal"
+			,CAST(RUCCENTROASISTENCIASOCIAL as VARCHAR(20)) "ruccentroasistenciasocial"
+			,PLANTILLACONCEPTO "plantillaconcepto"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(FLAGSMF as VARCHAR(1)) "flagsmf"
+			,FIRMADIGITALIZADA "firmadigitalizada"
+			,CAST(FLAGTRABAJADORPENSIONISTA as VARCHAR(1)) "flagtrabajadorpensionista"
+			,CAST(FLAGSCTRSALUD as VARCHAR(1)) "flagsctrsalud"
+			,CAST(FLAGSCTRPENSION as VARCHAR(1)) "flagsctrpension"
+			,CAST(FLAGDISCAPACIDAD as VARCHAR(1)) "flagdiscapacidad"
+			,CAST(FLAGSUJETOCONTROL as VARCHAR(1)) "flagsujetocontrol"
+			,CAST(FLAGSINDICALIZADO  as VARCHAR( 1))"flagsindicalizado"
+			,CAST(FLAGDOMICILIADO as VARCHAR(1)) "flagdomiciliado"
+			,CAST(FLAGDECONFIANZA as VARCHAR(1)) "flagdeconfianza"
+			,FECHABAJAEPS "fechabajaeps"
+            ,CAST(NIVELEDUCATIVORTPS  as VARCHAR( 2)) "niveleducativortps"
+			,GRUPOOCUPACIONAL "grupoocupacional"
+			,ESTADONIVELACION "estadonivelacion"
+			,CAST(FLAGREGIMENALTERNATIVO as VARCHAR(1)) "flagregimenalternativo"
+			,CAST(FLAGJORNADAMAXIMA  as VARCHAR(1)) "flagjornadamaxima"
+			,CAST(FLAGHORARIONOCTURNO as VARCHAR(1)) "flaghorarionocturno"
+			,CAST(FLAGOTROSQUINTA  as VARCHAR(1))  "flagotrosquinta"
+			,CAST(FLAGQUINTAEXONERADA  as VARCHAR(1))  "flagquintaexonerada"
+			,CAST(SITUACIONESPECIAL  as VARCHAR(1)) "situacionespecial"
+			,CAST(FLAGMADRERESPONSABILIDAD  as VARCHAR(1))  "flagmadreresponsabilidad"
+			,CAST(FLAGCENTROFORMACION  as VARCHAR(1))  "flagcentroformacion"
+			,CAST(TIPOMODALIDADFORMATIVA  as VARCHAR(2)) "tipomodalidadformativa"
+			,CAST(PRESTADORSERVICIO  as VARCHAR(1)) "prestadorservicio"
+			,FECHAVACACIONES "fechavacaciones"
+			,APROBADORNIVELACION "aprobadornivelacion"
+			,SOLICITADORNIVELACION "solicitadornivelacion"
+			,CAST(FLAGASEGURAPENSION  as VARCHAR(1))  "flagasegurapension"
+			,CAST(CATEGORIAOCUPACIONAL as VARCHAR(2))  "categoriaocupacional"
+			,CAST(FLAGCONVENIODOBLETRIB  as VARCHAR(1)) "flagconveniodobletrib"
+			,JEFERESPONSABLE "jeferesponsable"
+			,CAST(UNIDADOPERATIVA  as VARCHAR(4)) "unidadoperativa"
+			,CODIGOUNIDAD "codigounidad"
+			,CAST(DIVISION as VARCHAR(4))  "division"
+			,CAST(OFICINA as VARCHAR(10))  "oficina"
+			,CAST(UNIDADTRABAJO as VARCHAR(4))  "unidadtrabajo"
+			,ORDEN_ORGANIGRAMA "ordenOrganigrama"
+         from EMPLEADOMAST
+         where 
+			EMPLEADO = :p_empleado
+    </sql-query>
+	
+	<sql-query name="empleadomast.obtenerdtoporcodigousuario">
+        select 
+			EMPLEADO "empleado"
+			,CAST(TIPOPAGO  as VARCHAR(2))"tipopago"
+			,CAST(TIPOTRABAJADOR  as VARCHAR(2)) "tipotrabajador"
+			,CAST(TIPOPLANILLA  as VARCHAR(2)) "tipoplanilla"
+			,CAST(RAZA  as VARCHAR(3)) "raza"
+			,CAST(RELIGION as VARCHAR(3)) "religion"
+			,CAST(TIPOVISA  as VARCHAR(3)) "tipovisa"
+			,VISAFECHAINICIO "visafechainicio"
+			,VISAFECHAEXPIRACION "visafechaexpiracion"
+			,SERVICIOMILITARDESDE "serviciomilitardesde"
+			,SERVICIOMILITARHASTA "serviciomilitarhasta"
+            ,CAST(NUMEROARCHIVO  as VARCHAR(10)) "numeroarchivo"
+			,CAST(UNIDADNEGOCIOASIGNADA  as VARCHAR(4)) "unidadnegocioasignada"
+			,CAST(LOCACIONDEPAGO   as VARCHAR(4)) "locaciondepago"
+			,RESPONSABLEEMPLEADO "responsableempleado"
+			,RESPONSABLEJEFE "responsablejefe"
+			,CAST(CODIGOUSUARIO   as VARCHAR(20)) "codigousuario"
+			,CAST(TIPOASISTENCIASOCIAL  as VARCHAR(3)) "tipoasistenciasocial"
+			,CAST(CENTROASISTENCIASOCIAL  as VARCHAR(6)) "centroasistenciasocial"
+			,CAST(TIPOCARNETASISTENCIASOCIAL  as VARCHAR(2))"tipocarnetasistenciasocial"
+			,CAST(CARNETASISTENCIASOCIAL  as VARCHAR (03)) "carnetasistenciasocial"
+			,CAST(TIPOPENSION  as VARCHAR(3)) "tipopension"
+			,FECHAINICIOPENSION "fechainiciopension"
+			,FECHATERMINOPENSION "fechaterminopension"
+            ,CAST(CODIGOAFP  as VARCHAR(3)) "codigoafp"
+			,CAST(NUMEROAFP  as VARCHAR(20)) "numeroafp"
+			,CAST(BANCOCTS   as VARCHAR(3)) "bancocts"
+			,CAST(TIPOCUENTACTS  as VARCHAR(3)) "tipocuentacts"
+			,CAST(TIPOMONEDACTS  as VARCHAR(2))"tipomonedacts"
+			,CAST(NUMEROCUENTACTS  as VARCHAR(25)) "numerocuentacts"
+			,CAST(ESTADOEMPLEADO  as VARCHAR(1)) "estadoempleado"
+			,FECHAINGRESO "fechaingreso"
+			,FECHAULTIMAPLANILLA "fechaultimaplanilla"
+            ,CAST(TIPOCONTRATO  as VARCHAR(2)) "tipocontrato"
+			,FECHAINICIOCONTRATO "fechainiciocontrato"
+			,FECHAFINCONTRATO "fechafincontrato"
+			,FECHACESE "fechacese"
+			,CAST(RAZONCESE  as VARCHAR(30)) "razoncese"
+            ,MOTIVOCESE "motivocese"
+			,CONTRATISTA "contratista"
+			,COMPANIASOCIO "companiasocio"
+            ,CAST(CENTROCOSTOS as VARCHAR(10)) "centrocostos"
+			,CAST(AFE as VARCHAR(15)) "afe"
+			,CAST(DEPTOORGANIZACION as VARCHAR(3)) "deptoorganizacion"
+			,CAST(DEPARTAMENTOOPERACIONAL as VARCHAR(10)) "departamentooperacional"
+			,TIPOHORARIO "tipohorario"
+            ,CAST(GRADOSALARIO as VARCHAR(3)) "gradosalario"
+			,CAST(CARGO as VARCHAR(3)) "cargo"
+			,CAST(POSICION as VARCHAR(6))  "posicion"
+			,CAST(NIVELACCESO as VARCHAR(3)) "nivelacceso"
+			,CAST(FLAGIPSSVIDA  as VARCHAR(1))"flagipssvida"
+			,CAST(FLAGACCTRABAJO as VARCHAR(1)) "flagacctrabajo"
+			,CORREOINTERNO "correointerno"
+			,SUELDOACTUALLOCAL "sueldoactuallocal"
+			,SUELDOACTUALDOLAR "sueldoactualdolar"
+			,SUELDOANTERIORLOCAL "sueldoanteriorlocal"
+			,SUELDOANTERIORDOLAR "sueldoanteriordolar"
+            ,CAST(MONEDAPAGO as VARCHAR(2)) "monedapago"
+			,PERFIL "perfil"
+			,CAST(FOTO as VARCHAR(30))"foto"
+			,FECHALIQUIDACION "fechaliquidacion"
+			,FECHAREINGRESO "fechareingreso"
+			,CAST(UNIDADREPLICACION as VARCHAR(10))"unidadreplicacion"
+			,CODIGOCARGO "codigocargo"
+			,ULTIMAFECHAPAGOVACACION "ultimafechapagovacacion"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CAST(ESTADO as VARCHAR(1)) "estado"
+			,LOCACIONASIGNADA "locacionasignada"
+			,EMPLEADORELACIONADO "empleadorelacionado"
+			,CAST(TARJETADECREDITO as VARCHAR(20))"tarjetadecredito"
+			,CAST(SUCURSAL as VARCHAR(4))"sucursal"
+			,CAST(RUCCENTROASISTENCIASOCIAL as VARCHAR(20)) "ruccentroasistenciasocial"
+			,PLANTILLACONCEPTO "plantillaconcepto"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(FLAGSMF as VARCHAR(1)) "flagsmf"
+			,FIRMADIGITALIZADA "firmadigitalizada"
+			,CAST(FLAGTRABAJADORPENSIONISTA as VARCHAR(1)) "flagtrabajadorpensionista"
+			,CAST(FLAGSCTRSALUD as VARCHAR(1)) "flagsctrsalud"
+			,CAST(FLAGSCTRPENSION as VARCHAR(1)) "flagsctrpension"
+			,CAST(FLAGDISCAPACIDAD as VARCHAR(1)) "flagdiscapacidad"
+			,CAST(FLAGSUJETOCONTROL as VARCHAR(1)) "flagsujetocontrol"
+			,CAST(FLAGSINDICALIZADO  as VARCHAR( 1))"flagsindicalizado"
+			,CAST(FLAGDOMICILIADO as VARCHAR(1)) "flagdomiciliado"
+			,CAST(FLAGDECONFIANZA as VARCHAR(1)) "flagdeconfianza"
+			,FECHABAJAEPS "fechabajaeps"
+            ,CAST(NIVELEDUCATIVORTPS  as VARCHAR( 2)) "niveleducativortps"
+			,GRUPOOCUPACIONAL "grupoocupacional"
+			,ESTADONIVELACION "estadonivelacion"
+			,CAST(FLAGREGIMENALTERNATIVO as VARCHAR(1)) "flagregimenalternativo"
+			,CAST(FLAGJORNADAMAXIMA  as VARCHAR(1)) "flagjornadamaxima"
+			,CAST(FLAGHORARIONOCTURNO as VARCHAR(1)) "flaghorarionocturno"
+			,CAST(FLAGOTROSQUINTA  as VARCHAR(1))  "flagotrosquinta"
+			,CAST(FLAGQUINTAEXONERADA  as VARCHAR(1))  "flagquintaexonerada"
+			,CAST(SITUACIONESPECIAL  as VARCHAR(1)) "situacionespecial"
+			,CAST(FLAGMADRERESPONSABILIDAD  as VARCHAR(1))  "flagmadreresponsabilidad"
+			,CAST(FLAGCENTROFORMACION  as VARCHAR(1))  "flagcentroformacion"
+			,CAST(TIPOMODALIDADFORMATIVA  as VARCHAR(2)) "tipomodalidadformativa"
+			,CAST(PRESTADORSERVICIO  as VARCHAR(1)) "prestadorservicio"
+			,FECHAVACACIONES "fechavacaciones"
+			,APROBADORNIVELACION "aprobadornivelacion"
+			,SOLICITADORNIVELACION "solicitadornivelacion"
+			,CAST(FLAGASEGURAPENSION  as VARCHAR(1))  "flagasegurapension"
+			,CAST(CATEGORIAOCUPACIONAL as VARCHAR(2))  "categoriaocupacional"
+			,CAST(FLAGCONVENIODOBLETRIB  as VARCHAR(1)) "flagconveniodobletrib"
+			,JEFERESPONSABLE "jeferesponsable"
+			,CAST(UNIDADOPERATIVA  as VARCHAR(4)) "unidadoperativa"
+			,CODIGOUNIDAD "codigounidad"
+			,CAST(DIVISION as VARCHAR(4))  "division"
+			,CAST(OFICINA as VARCHAR(10))  "oficina"
+			,CAST(UNIDADTRABAJO as VARCHAR(4))  "unidadtrabajo"
+			,ORDEN_ORGANIGRAMA "ordenOrganigrama"
+         from EMPLEADOMAST
+         where 
+			codigousuario = :p_codigousuario
+    </sql-query>-->
+        
+</hibernate-mapping>

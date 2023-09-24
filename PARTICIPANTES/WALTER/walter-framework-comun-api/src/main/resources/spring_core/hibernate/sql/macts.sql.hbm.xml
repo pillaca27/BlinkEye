@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : companyowner
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="macts.listar">
+		SELECT NumeroCTS as "id"
+			,Descripcion as "nombre"
+			,Estado as "estadoId"
+		FROM MA_CTS
+		order by NumeroCTS desc
+	</sql-query>
+	
+	<sql-query name="macts.listaractivos">
+		SELECT NumeroCTS as "id"
+			,Descripcion as "nombre"
+			,Estado as "estadoId"
+		FROM MA_CTS
+		WHERE Estado='A'
+		order by NumeroCTS desc
+	</sql-query>
+	
+	<sql-query name="macts.obtenertabla">
+	<![CDATA[
+	select  NUMEROCTS as "id"
+			,descripcion as "nombre"  
+			,Estado as "estadoId"
+		from MA_CTS 
+		where NumeroCTS = :p_numerocts
+	]]>
+	</sql-query>
+	
+	<sql-query name="macts.obtenerdto">
+          select 
+			NUMEROCTS "numerocts"
+			,REGIMEN "regimen"
+			,DESCRIPCION "descripcion"
+			,FECHAINICIO "fechainicio"
+			,FECHAFIN "fechafin"
+			,FECHAPAGO "fechapago"
+			,ESTADO "estado"
+			,ESTADOCTS "estadocts"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,PERIODOPLANILLA "periodoplanilla"
+         from MA_CTS
+         where 
+			NUMEROCTS = :p_numerocts
+    </sql-query>
+    
+    <sql-query name="macts.listardtofiltros">
+         select 
+			NUMEROCTS "numerocts"
+			,REGIMEN "regimen"
+			,DESCRIPCION "descripcion"
+			,FECHAINICIO "fechainicio"
+			,FECHAFIN "fechafin"
+			,FECHAPAGO "fechapago"
+			,ESTADO "estado"
+			,ESTADOCTS "estadocts"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,PERIODOPLANILLA "periodoplanilla"
+         from MA_CTS
+         where 
+				NUMEROCTS = ISNULL(:p_numerocts,NUMEROCTS)
+			AND UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by NumeroCTS desc
+    </sql-query>
+    
+</hibernate-mapping>

@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping>
+
+<sql-query name="hrempleadocapacitacion.listarCompanias">
+		SELECT
+		companyowner.companyowner as"codigo",
+		companyowner.description as "nombre",
+		cast(isnull(CompaniaMast.TipoCompania, '') as varchar(1)) as "estadoId"
+		FROM
+		companyowner
+		INNER
+		JOIN CompaniaMast
+		ON (companyowner.company =
+		CompaniaMast.CompaniaCodigo)
+		INNER JOIN SY_SeguridadAutorizaciones
+		ON (companyowner.companyowner =
+		SY_SeguridadAutorizaciones.Concepto)
+		WHERE
+		( CompaniaMast.Estado = 'A' )
+		AND
+		( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND
+		(
+		SY_SeguridadAutorizaciones.Grupo = 'COMPANIASOCIO' ) AND
+		(
+		SY_SeguridadAutorizaciones.Estado = 'A' ) AND
+		(
+		LOWER(SY_SeguridadAutorizaciones.Usuario) = LOWER(:p_usuario))
+		ORDER
+		BY
+		companyowner.companyowner ASC
+	</sql-query>
+	
+	
+	<sql-query name="hrempleadocapacitacion.obtenerListaDto">
+		select 
+		e.CompanyOwner as "companyOwner",
+		e.Capacitacion as "capacitacion",
+		e.Empleado as "empleado",
+		e.UltimaFechaModif as "ultimaFechaModif",
+		e.UltimoUsuario as "ultimoUsuario",
+		p.NombreCompleto as "auxEmpleadoNombre"
+		from 
+		HR_EmpleadoCapacitacion e 
+		left join PersonaMast p on p.Persona = e.Empleado
+		where 
+		e.CompanyOwner = :p_compania and e.Capacitacion = :p_capacitacion
+	</sql-query>	
+	<sql-query name="hrempleadocapacitacion.listarParticipantes">
+		SP_HR_CAPACITACIONES_LISTAR_PARTICIPANTES :p_compania, :p_capacitacion 
+	</sql-query>	
+</hibernate-mapping>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : gth.HrReqetapa
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="hrreqetapa.obtenerDto">
+         select 
+			a.CompanyOwner "companyowner"
+			,a.Etapa "etapa"
+			,a.Descripcion "descripcion"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from HR_REQETAPA a
+         where 
+			a.CompanyOwner = :p_companyowner
+			AND a.Etapa = :p_etapa
+
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listarPaginadoContar">
+         select count(1)
+         from HR_REQETAPA a
+         where 
+			a.CompanyOwner = ISNULL(:p_companyowner, a.CompanyOwner)
+			AND a.Etapa = ISNULL(:p_etapa, a.Etapa)
+			AND a.Descripcion like '%' + ISNULL(:p_descripcion, a.Descripcion) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listarPaginadoSentencia">
+         select 
+			a.CompanyOwner "companyowner"
+			,a.Etapa "etapa"
+			,a.Descripcion "descripcion"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from HR_REQETAPA a
+         where 
+			a.CompanyOwner = ISNULL(:p_companyowner, a.CompanyOwner)
+			AND a.Etapa = ISNULL(:p_etapa, a.Etapa)
+			AND a.Descripcion like '%' + ISNULL(:p_descripcion, a.Descripcion) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listarDtoCore">
+         select 
+			a.CompanyOwner "companyowner"
+			,a.Etapa "etapa"
+			,a.Descripcion "descripcion"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from HR_REQETAPA a
+         where 
+			a.CompanyOwner = ISNULL(:p_companyowner, a.CompanyOwner)
+			AND a.Etapa = ISNULL(:p_etapa, a.Etapa)
+			AND a.Descripcion like '%' + ISNULL(:p_descripcion, a.Descripcion) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="hrreqetapa.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+    
+    <sql-query name="hrreqetapa.contaretapaevaluacionporfiltro">
+ SELECT 
+ count(*)
+FROM HR_REQETAPA A
+INNER JOIN COMPANYOWNER B ON A.COMPANYOWNER = B.COMPANYOWNER
+WHERE 1 = 1
+AND (ISNULL(:p_etapa, 0) = 0 OR A.Etapa = :p_etapa)
+AND (ISNULL(:p_companyowner, '-') = '-' OR A.COMPANYOWNER = :p_companyowner)
+AND (ISNULL(:p_descripcion, '-') = '-' OR A.DESCRIPCION LIKE '%'+isnull(:p_descripcion, A.DESCRIPCION)+'%')
+    </sql-query>
+    
+    <sql-query name="hrreqetapa.listaretapaevaluacionporfiltro">
+ SELECT 
+--'N' AS SELECCIONADO, 
+CAST(A.COMPANYOWNER AS VARCHAR) AS companyowner, 
+A.ETAPA AS etapa, 
+A.DESCRIPCION AS descripcion, 
+CAST(A.ESTADO AS VARCHAR) AS estado, 
+LTRIM(RTRIM(UPPER(B.DESCRIPTION))) AS companyownernombre 
+FROM HR_REQETAPA A
+INNER JOIN COMPANYOWNER B ON A.COMPANYOWNER = B.COMPANYOWNER
+WHERE 1 = 1
+AND (ISNULL(:p_etapa, 0) = 0 OR A.Etapa = :p_etapa)
+AND (ISNULL(:p_companyowner, '-') = '-' OR A.COMPANYOWNER = :p_companyowner)
+AND (ISNULL(:p_descripcion, '-') = '-' OR A.DESCRIPCION LIKE '%'+isnull(:p_descripcion, A.DESCRIPCION)+'%')
+    </sql-query>
+
+</hibernate-mapping>

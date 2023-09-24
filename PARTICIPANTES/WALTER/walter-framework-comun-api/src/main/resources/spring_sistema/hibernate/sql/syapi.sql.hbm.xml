@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN" "http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="syapi.listarApis">
+		<![CDATA[
+			SELECT ID_API as "id", nombre as "nombre" FROM SY_API
+		]]>
+	</sql-query>
+	<sql-query name="syapi.contarRutaPaginacion">
+		<![CDATA[
+			SELECT
+			COUNT(1)
+			FROM SY_APIPATH A 
+			WHERE UPPER(NOMBRE) LIKE UPPER('%'+ISNULL(:p_ruta, '')+'%')
+		]]>
+	</sql-query>
+	<sql-query name="syapi.listarRutaPaginacion">
+		<![CDATA[
+			SELECT
+			A.ID_API as "idApi",
+			A.ID_PATH as "idPath",
+			A.NOMBRE as "nombre",
+			b.nombre as "nombre2",
+			A.METODO as "metodo",
+			VG_FLG AS "vb"
+			FROM SY_APIPATH A
+			join sy_api b on a.ID_API = b.ID_API 
+			WHERE UPPER(a.NOMBRE) LIKE UPPER('%'+ISNULL(:p_ruta, '')+'%')
+			ORDER BY A.NOMBRE
+		]]>
+	</sql-query>
+</hibernate-mapping>
