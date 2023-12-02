@@ -1,0 +1,106 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Aplicación</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstAplicacion" [filter]="true" [(ngModel)]="filtro.aplicacioncodigo" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Código</label>
+                        <div class="p-col">
+                            <input #myDescripcion pInputText type="text" (keypress)="defaultBuscarPaginacion($event, dt)" [(ngModel)]="filtro.reportecodigo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-5">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Nombre</label>
+                        <div class="p-col">
+                            <input pInputText type="text" (keypress)="defaultBuscarPaginacion($event, dt)" [(ngModel)]="filtro.nombre" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-1"></div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo Reporte</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstTipoReporte" [(ngModel)]="filtro.tiporeporte" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstado" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table #dt [rows]="50" [paginator]="true" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [value]="filtro.paginacion.paginacionListaResultado" [responsive]="true" [style]="{width:'100%', height:'auto'}"
+        scrollWidth="100%" [resizableColumns]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Acción</th>
+                <th class="tablaHeaderCodigoGrandeX">Aplicación</th>
+                <th class="tablaHeaderCodigo">Código</th>
+                <th class="tablaHeaderIzquierda">Nombre</th>
+                <th class="tablaHeaderTipo">Tipo</th>
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(rowData)"></button>
+                </td>
+                <td class="tablaHeaderCodigoGrandeX">
+                    <span class="p-column-title">Aplicación</span> {{rowData.aplicacionDescripcion}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Código</span> {{rowData.reportecodigo}}
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Nombre</span> {{rowData.descripcionlocal}}
+                </td>
+                <td class="tablaColumnaTipo">
+                    <span class="p-column-title">Tipo</span> {{rowData.tiporeporte |labelFromItem:lstTipoReporte}}
+                </td>
+                <td class="tablaColumnaEstado"><span class="p-column-title">Estado</span>
+                    <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="rowData.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="6">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+        <button type="button" pButton icon="fad fa-times" label="No" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

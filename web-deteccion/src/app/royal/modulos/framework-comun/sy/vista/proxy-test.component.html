@@ -1,0 +1,71 @@
+<p-card>
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-field p-col-12 p-md-12">
+
+            <div class="p-field p-col-12 p-md-12">
+                <label>URL:</label>
+                <input pInputText type="text" [(ngModel)]="destino" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton label="Probar" icon="fa fa-save" type="button" class="ui-button"
+                    (click)='enviar()'></button>
+            </div>
+            <br>
+            <div class="p-field p-col-12 p-md-12">
+                <h3>Resultado</h3>
+                <textarea [rows]="10" style="width: 100%;" [disabled]="true" pInputTextarea autoResize="autoResize"
+                    [(ngModel)]="errores"></textarea>
+            </div>
+        </div>
+
+
+        <!-- <div class="p-field p-col-4 p-md-4">
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton label="Obtener Configuracion" icon="fa fa-save" type="button" class="ui-button"
+                    (click)='obtenerConfiguracion()'></button>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12">
+                <label>Tipo Configuracion:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.tipoConfiguracion" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Cuenta Email:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailCuenta" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Clave Email:</label>
+                <input type="password" pPassword placeholder="Password" placeholder="Clave"
+                    [(ngModel)]="emailConfig.emailClave" [feedback]="false" style="width: 100%;" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Es Correo Prueba:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.flgCorreoPrueba" style="width:100%"
+                    maxlength="1" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Correo De Prueba:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.correoPrueba" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Email Flag SSL:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailFlgSsl" style="width:100%" maxlength="1" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Host Email: </label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailServidor" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Puerto Email: </label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailPuerto" style="width:100%" />
+            </div>
+
+        </div> -->
+
+    </div>
+
+
+
+
+</p-card>

@@ -1,0 +1,106 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Fecha</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [locale]="es"
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [(ngModel)]="filtro.fecha"
+                        [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Tipo</label>
+                    <p-dropdown [options]="lstTipo" [(ngModel)]="filtro.tipo" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Por Fecha</label>
+                    <button pButton type="button" icon="pi pi-times" label="Eliminar" style="width: 100%;"
+                        class="p-button-info" (click)="eliminarPorFecha()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B">
+</app-botones-listado>
+
+<p-table #dt [rows]="10" [paginator]="true" [lazy]="true" (onLazyLoad)="cargar($event)"
+    [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+    [value]="filtro.paginacion.paginacionListaResultado" [responsive]="true" [style]="{width:'100%', height:'auto'}"
+    scrollWidth="100%" [resizableColumns]="true" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion2">Acción</th>
+            <th class="tablaHeaderIzquierda">Aplicación</th>
+            <th class="tablaColumnaFechaHora">Fecha</th>
+            <th class="tablaHeaderIzquierda">Mensaje</th>
+            <th class="tablaHeaderIzquierda">Tipo</th>
+            <th class="tablaHeaderUsuario">Usuario</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td class="tablaColumnaAccion2">
+                <span class="p-column-title">Acción</span>
+                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text"
+                    title="Editar" (click)="coreEliminar(rowData)"></button>
+                <button pButton pRipple type="button" icon="fad fa-eye" class="p-button-rounded p-button-text"
+                    title="Ver Trace" (click)="verTrace(rowData)"></button>
+            </td>
+            <td>
+                <span class="p-column-title">Aplicación</span>
+                {{rowData.aplicacion}}
+            </td>
+            <td class="tablaColumnaFechaHora">
+                <span class="p-column-title">Fecha</span>
+                {{rowData.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+            </td>
+            <td class="tablaColumnaIzquierda">
+                <span class="p-column-title">Mensaje</span>
+                {{rowData.mensaje}}
+            </td>
+            <td class="tablaColumnaIzquierda">
+                <span class="p-column-title">Tipo</span>
+                {{rowData.tipo |labelFromItem:lstTipo}}
+            </td>
+            <td class="tablaColumnaUsuario">
+                <span class="p-column-title">Usuario</span>
+                {{rowData.usuario}}
+            </td>
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="6">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog #c>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+        <button type="button" pButton icon="fad fa-times" label="No" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+
+<p-dialog header="Trace | Vista Previa" [(visible)]="verModalTrace" modal="modal" showEffect="fade" [blockScroll]="true"
+    hideEffect="size" [style]="{width: '700px'}">
+    <div class="p-fluid p-grid">
+        <div class="p-field p-col-12 p-md-12">
+            <textarea pInputTextarea rows="10" cols="30" style="width:100%;" [(ngModel)]="trace"></textarea>
+        </div>
+        <div class="p-field p-col-12 p-md-4">
+            <button pButton type="button" icon="pi pi-reply" label="Cancelar" style="width: 100%;"
+                (click)="verModalTrace = false"></button>
+        </div>
+    </div>
+</p-dialog>

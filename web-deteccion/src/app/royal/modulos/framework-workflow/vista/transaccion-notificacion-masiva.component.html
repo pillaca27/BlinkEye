@@ -1,0 +1,22 @@
+<p-dialog [header]="'Mensaje'" [(visible)]="!cargando" [modal]="true " [responsive]="true" [blockScroll]="true"
+    [style]="{'max-width':'700px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="dto.mensaje" maxlength="2000"
+                        style="width:100%"> </textarea>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar"
+                        icon="fad fa-undo" (click)="cargando=true"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-6"></div>
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check"
+                        (click)="enviarNotificacion()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

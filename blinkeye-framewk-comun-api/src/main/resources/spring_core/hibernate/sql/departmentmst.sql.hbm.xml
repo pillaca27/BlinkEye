@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="departmentmst.listar">
+	    <![CDATA[
+	        select department as "codigo", description as "nombre", CAST(status as VARCHAR) as "estadoId" 
+	        from departmentmst	        
+	        order by description
+	    ]]>
+	</sql-query>
+	
+    <sql-query name="departmentmst.listaractivos">
+	    <![CDATA[
+	        select department as "codigo", description as "nombre", CAST(status as VARCHAR) as "estadoId" 
+	        from departmentmst
+	        where status = 'A'
+	        order by description
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="departmentmst.obtenertabla">
+	    <![CDATA[
+	        select department as "codigo", description as "nombre", CAST(status as VARCHAR) as "estadoId" 
+	        from departmentmst
+			where department = :p_department
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="departmentmst.listarfiltros">
+    	select department as "codigo", description as "nombre"
+    			,CAST(status as VARCHAR) as "estadoId" 
+    	from departmentmst 
+    	where  department = ISNULL(:p_department,department)
+			and UPPER(ISNULL(description,'xxx')) like '%' || ISNULL(:p_description,UPPER(description)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))			
+		order by description	    	
+	</sql-query>
+	
+	<sql-query name="departmentmst.obtenerDto">
+           select 
+			DEPARTMENT "department"
+			,DESCRIPTION "description"
+			,ACCOUNTAVAILABLEFLAG "accountavailableflag"
+			,WAREHOUSEAVAILABLEFLAG "warehouseavailableflag"
+			,APPLICATION "application"
+			,CAST(status as VARCHAR) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,CODIGOSBS "codigosbs"
+			,CODIGOSBS_SUP "codigosbsSup"
+         from DEPARTMENTMST
+         where 
+			DEPARTMENT = :p_department
+    </sql-query>
+    
+    <sql-query name="departmentmst.listardtofiltros">
+           select 
+			DEPARTMENT "department"
+			,DESCRIPTION "description"
+			,ACCOUNTAVAILABLEFLAG "accountavailableflag"
+			,WAREHOUSEAVAILABLEFLAG "warehouseavailableflag"
+			,APPLICATION "application"
+			,CAST(status as VARCHAR) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,CODIGOSBS "codigosbs"
+			,CODIGOSBS_SUP "codigosbsSup"
+
+         from DEPARTMENTMST
+         where 
+				DEPARTMENT = ISNULL(:p_department,DEPARTMENT)			
+			and UPPER(ISNULL(description,'xxx')) like '%' || ISNULL(:p_description,UPPER(description)) || '%'
+			and status = ISNULL(:p_status,status)
+		order by description
+    </sql-query>
+    
+    <sql-query name="departmentmst.listardtowarehouse">
+           select 
+			DEPARTMENT "department"
+			,DESCRIPTION "description"
+			,CAST(ACCOUNTAVAILABLEFLAG as VARCHAR) "accountavailableflag"
+			,CAST(WAREHOUSEAVAILABLEFLAG as VARCHAR) "warehouseavailableflag"
+			,APPLICATION "application"
+			,CAST(status as VARCHAR) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			--,CODIGOSBS "codigosbs"
+			--,CODIGOSBS_SUP "codigosbsSup"
+
+         from DEPARTMENTMST
+         where 
+				warehouseavailableflag = 'Y'
+			and status = 'A'
+		order by description
+    </sql-query>
+    
+</hibernate-mapping>

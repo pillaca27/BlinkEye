@@ -1,0 +1,112 @@
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-card>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-3">
+                <label>Macro proceso</label>
+                <input  pInputText type="text" class="inputCodigo" style="width:100%;" [(ngModel)]="filtro.macroProcesoId" maxlength="4" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.macroProcesoId=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Proceso origen</label>
+                <input  pInputText type="text" class="inputCodigo" style="width:100%;" [(ngModel)]="filtro.procesoOrigenId" maxlength="4" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.procesoOrigenId=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Proceso destino</label>
+                <input  pInputText type="text" class="inputCodigo" style="width:100%;" [(ngModel)]="filtro.procesoDestinoId" maxlength="4" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.procesoDestinoId=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Orden</label>
+                <input  pInputText type="text" style="width:100%;" [(ngModel)]="filtro.orden" maxlength="4" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.orden=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Creación usuario</label>
+                <input  pInputText type="text" class="inputCodigo" style="width:100%;" [(ngModel)]="filtro.creacionUsuario" maxlength="25" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.creacionUsuario=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Creación fecha</label>
+                <input  pInputText type="text" style="width:100%;" [(ngModel)]="filtro.creacionFecha" maxlength="8" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.creacionFecha=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Modificación usuario</label>
+                <input  pInputText type="text" class="inputCodigo" style="width:100%;" [(ngModel)]="filtro.modificacionUsuario" maxlength="25" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.modificacionUsuario=$event.toUpperCase()"  />
+            </div>
+            <div class="p-field p-col-12 p-md-3">
+                <label>Modificación fecha</label>
+                <input  pInputText type="text" style="width:100%;" [(ngModel)]="filtro.modificacionFecha" maxlength="8" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.modificacionFecha=$event.toUpperCase()"  />
+            </div>
+
+        </div>
+    </div>
+</div>
+</p-card>
+
+<app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+</app-botones-listado>
+
+<p-table  [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true"
+    [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina"
+    [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" 
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion4">Acción</th>
+                <th class="tablaHeaderCodigo">Macro proceso</th>
+                <th class="tablaHeaderCodigo">Proceso origen</th>
+                <th class="tablaHeaderCodigo">Proceso destino</th>
+                <th class="tablaHeaderMonto">Orden</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)" ></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title= "Eliminar" *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Macro proceso</span>
+                    {{row.macroProcesoId}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Proceso origen</span>
+                    {{row.procesoOrigenId}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Proceso destino</span>
+                    {{row.procesoDestinoId}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Orden</span>
+                    {{row.orden| number:'1.0-0'}}
+                </td>
+
+            </tr>
+        </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="5">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+

@@ -1,0 +1,72 @@
+<div class="ui-fluid">
+    <p-dialog header="SELECTOR DE PROYECTOS" [(visible)]="verSelector"  modal="modal" showEffect="fade" hideEffect="size"
+    [style]="{'width':'700px'}">
+
+      
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-4">
+                <span>Proyecto</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.afe"
+                    (keypress)="preBuscar($event, dtProyectos)" />
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-8">
+                <span>Descripción</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.localname"
+                    (keypress)="preBuscar($event, dtProyectos)" />
+            </div>
+           <!--  <div class="p-col-12 p-md-3 p-lg-4">
+                <span>Tipo de Proyecto</span>
+                <p-dropdown [options]="lstEstado" [style]="{'width':'100%'}" [(ngModel)]="filtro.afetype"></p-dropdown>
+            </div> -->
+        </div>
+
+
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion" >
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtProyectos)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dtProyectos [rows]="registrosPorPagina" [value]="filtro.paginacion.paginacionListaResultado"
+            [paginator]="true" selectionMode="single" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+            (onLazyLoad)="loadCarsLazy0($event)" [lazy]="true" [(selection)]="registroSeleccionado" [responsive]="true"
+            [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acciones</th>
+                    <th class="tablaHeaderCodigoChico">Proyecto</th>
+                    <th class="tablaHeaderNombre">Descripción</th>
+                    <th class="tablaHeaderNombreMedio">Compañía</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text"
+                            title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaHeaderCodigoChico">{{row.afe}}</td>
+                    <td class="tablaColumnaNombre">{{row.localname}}</td>
+                    <td class="tablaColumnaNombreMedio">{{row.companyownernombre}}</td>
+
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="4">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

@@ -1,0 +1,579 @@
+<div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12 p-md-1">
+        <label>Código</label>
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <input pInputText disabled style="width:100%;" [(ngModel)]="bean.postulante" />
+    </div>
+    <div class="p-field p-col-12 p-md-5">
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+            *ngIf="moduloOrigen=='GTH'" class="p-button-outlined p-button-secondary" (click)="coreSalir()"></button>
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+            *ngIf="accion!=ACCIONES.VER" class="p-button-outlined" (click)="coreGuardar()"></button>
+    </div>
+
+
+    <div class="p-field p-col-12 p-md-3">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-12" style="text-align: center;">
+                <br>
+                <img style="width: 16em;height: 16em;" [src]="bean.auxFotoString">
+            </div>
+            <div class="p-field p-col-12 p-md-12" *ngIf="accion!=ACCIONES.VER">
+                <br>
+                <input #photoInputFoto type="file" class="form-control" style="display:none"
+                    (change)="cargarFoto(photoInputFoto)" id="upload">
+                <button pButton label="Foto ({{fotoMaxSizeMb}} mb)" icon="fa fa-plus" class="p-button-outlined"
+                    type="button" (click)="photoInputFoto.click()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="p-field p-col-12 p-md-9">
+        <div class="p-field p-col-12 p-md-12">
+            <br>
+            <p-fieldset legend="Documentos">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-4">
+                        <label class="importante">Tipo Documento</label>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="accion != ACCIONES.NUEVO"
+                            [(ngModel)]="bean.tipodocumento" [options]="lstTipoDocumento">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <label class="importante">Número</label>
+                        <input pInputText [disabled]="accion != ACCIONES.NUEVO" style="width:100%;"
+                            [(ngModel)]="bean.documento" maxlength="12" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <label>Documento Fiscal</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.documentofiscal" maxlength="11" />
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+        <div class="p-field p-col-12 p-md-12">
+            <br>
+            <p-fieldset legend="Datos Personales">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <label class="importante">Apellido Paterno</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.apellidopaterno" maxlength="30" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label class="importante">Apellido Materno</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.apellidomaterno" maxlength="30" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label class="importante">Nombres</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.nombres" maxlength="30" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Apellido Casada</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.apellidocasada" maxlength="40" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Sexo</label>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <p-radioButton label="Masculino" name="sexo" value="M"
+                                        [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.sexo">
+                                    </p-radioButton>
+                                </td>
+                                <td>
+                                    <p-radioButton label="Femenino" name="sexo" value="F"
+                                        [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.sexo">
+                                    </p-radioButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label class="importante">Correo Electrónico</label>
+                        <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                            [(ngModel)]="bean.correoelectronico" maxlength="50" />
+                    </div>
+                </div>
+            </p-fieldset>
+        </div>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Nacimiento">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>País</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.paisnacimiento" [options]="lstPais">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Nacionalidad</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.nacionalidad" [options]="lstNacionalidad">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Dpto-Prov-Dist</label>
+                    <div class="p-inputgroup">
+                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="bean.auxUbigeoNacimiento" />
+                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar"
+                            (click)="buscarUbigeoNacimiento()" [disabled]="!objetoTitulo.puedeEditar"
+                            [style]="{'flex': '1'}"></button>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante">Fecha</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" dateFormat="dd/mm/yy"
+                        firstDayOfWeek="1" [(ngModel)]="bean.fechanacimiento">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Edad</label>
+                    <input pInputText disabled="true" style="width:100%;"
+                        value="{{bean.fechanacimiento | edadCompleta}}" />
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Domicilio Local">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante">País</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.pais" [options]="lstPais">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante">Dirección</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.direccion" maxlength="80" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante">Dpto-Prov-Dist</label>
+                    <div class="p-inputgroup">
+                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="bean.auxUbigeoActual" />
+                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar"
+                            (click)="buscarUbigeoActual()" [disabled]="!objetoTitulo.puedeEditar"
+                            [style]="{'flex': '1'}"></button>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Referencia</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.direccionreferencia" maxlength="100" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante" *ngIf="!estaVacio(bean.telefono)">Código LDN</label>
+                    <label *ngIf="estaVacio(bean.telefono)">Código LDN</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.codigoldn" [options]="lstCodigoLDN">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante" *ngIf="!estaVacio(bean.codigoldn)">Teléfono</label>
+                    <label *ngIf="estaVacio(bean.codigoldn)">Teléfono</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.telefono" maxlength="40" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Celular</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.celular" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Fax</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [(ngModel)]="bean.fax"
+                        maxlength="15" />
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Domicilio Extranjero">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>País</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.paisextranjero" [options]="lstPais">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Dirección</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.direccionextranjera" maxlength="100" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Teléfono</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.telefonoextranjero" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Celular</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.celularextranjero" maxlength="15" />
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Datos Físicos">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Estatura</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="bean.talla" mode="decimal"
+                        [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" [style]="{'width':'100%'}"
+                        [maxFractionDigits]="2" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Peso</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="bean.peso" mode="decimal"
+                        [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" [style]="{'width':'100%'}"
+                        [maxFractionDigits]="2" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Impedimentos Físicos</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.impedimentos" maxlength="100" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Grupo Sanguíneo</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.gruposanguineo" [options]="lstGrupoSanguineo">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>¿Tiene Discapacidad?</label>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <p-radioButton label="Si" name="discapacidad" value="1"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagdiscapacidad">
+                                </p-radioButton>
+                            </td>
+                            <td>
+                                <p-radioButton label="No" name="discapacidad" value="0"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagdiscapacidad">
+                                </p-radioButton>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Código Discapacidad</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.codigodiscapacidad" maxlength="30" />
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Datos Personales">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Estado Civil</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.estadocivil" [options]="lstEstadoCivil">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Fecha Estado Civil</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [(ngModel)]="bean.fechaestadocivil" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Tipo de Vivienda</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.situaciondomicilio" [options]="lstTipoVivienda">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>¿Disponibilidad de trabajo fuera de la ciudad?</label>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <p-radioButton label="Si" name="trabajofuera" value="S"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagtrabajofuera">
+                                </p-radioButton>
+                            </td>
+                            <td>
+                                <p-radioButton label="No" name="trabajofuera" value="N"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagtrabajofuera">
+                                </p-radioButton>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>¿Es Donante?</label>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td>
+                                <p-radioButton label="Si" name="donante" value="S"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagdonante">
+                                </p-radioButton>
+                            </td>
+                            <td>
+                                <p-radioButton label="No" name="donante" value="N"
+                                    [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="bean.flagdonante">
+                                </p-radioButton>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Observaciones</label>
+                    <textarea pInputTextarea style="width:100%" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.observaciones" maxlength="4000"></textarea>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <br>
+        <p-fieldset legend="Contacto de Emergencia N° 1">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Nombre</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.nombreemergencia" />
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Dirección</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.direccionemergencia" maxlength="50" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Teléfono</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.telefonoemergencia" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Celular</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.celularemergencia" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Parentesco</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.parentescoemergencia" [options]="lstParentesco">
+                    </p-dropdown>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <br>
+        <p-fieldset legend="Contacto de Emergencia N° 2">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Nombre</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.nombreemergencia1" maxlength="50" />
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Dirección</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.direccionemergencia1" maxlength="60" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Teléfono</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.telefonoemergencia1" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Celular</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.celularemergencia1" maxlength="15" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Parentesco</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.parentescoemergencia1" [options]="lstParentesco">
+                    </p-dropdown>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Licencia Vehicular y Pasaporte">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Categoría Licencia</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.tipobrevete" [options]="lstCategoriaLicencia">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Licencia de Conducir</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" maxlength="18"
+                        [(ngModel)]="bean.brevete" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Vencimiento</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [(ngModel)]="bean.brevetevencimiento" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Fecha de Expedición</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [(ngModel)]="bean.licenciaconducirfecha" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Pasaporte</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.pasaporte" maxlength="18" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Cédula de Extranjería o ID</label>
+                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;"
+                        [(ngModel)]="bean.carnetextranjeria" maxlength="10" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Fecha de Vencimiento</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [(ngModel)]="bean.carnetextranjeriavencimiento" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-9">
+        <br>
+        <p-fieldset legend="VISA">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Tipo</label>
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar"
+                        [(ngModel)]="bean.tipovisa" [options]="lstTipoVisa">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Fecha de Inicio</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [(ngModel)]="bean.visafechainicio" [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true"
+                        dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Fecha de Expiración</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                        [(ngModel)]="bean.visafechavencimiento" [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true"
+                        dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                    </p-calendar>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-3">
+        <br>
+        <p-fieldset legend="Pretención Económica">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Monto</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="bean.pretensioneconomica" mode="decimal"
+                        [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" [style]="{'width':'100%'}"
+                        [maxFractionDigits]="2" [minFractionDigits]="2">
+                    </p-inputNumber>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-6">
+        <br>
+        <p-fieldset legend="Acceso">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <label class="importante">Clave</label>
+                    <p-password [(ngModel)]="bean.clave" [toggleMask]="true" [disabled]="!objetoTitulo.puedeEditar"
+                        [feedback]="false" maxlength="200">
+                    </p-password>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label class="importante">Confirmar Clave</label>
+                    <p-password [(ngModel)]="bean.claveConfirmacion" [toggleMask]="true"
+                        [disabled]="!objetoTitulo.puedeEditar" [feedback]="false" maxlength="200"></p-password>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <br>
+        <br>
+        <br>
+        <br>
+        <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+            *ngIf="moduloOrigen=='GTH'" class="p-button-outlined p-button-secondary" (click)="coreSalir()"></button>
+    </div>
+    <div class="p-field p-col-12 p-md-2">
+        <br>
+        <br>
+        <br>
+        <br>
+        <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+            *ngIf="accion!=ACCIONES.VER" class="p-button-outlined" (click)="coreGuardar()"></button>
+    </div>
+    <div class="p-field p-col-12 p-md-12">
+        <br>
+        <p-fieldset legend="Información Adicional">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Fecha de Registro</label>
+                    <input pInputText [disabled]="true" style="width:100%;"
+                        [(ngModel)]="bean.auxInfoAdicFechaRegistro" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Compañía</label>
+                    <input pInputText [disabled]="true" style="width:100%;" [(ngModel)]="bean.auxInfoAdicCompania" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Requerimiento</label>
+                    <input pInputText [disabled]="true" style="width:100%;"
+                        [(ngModel)]="bean.auxInfoAdicRequerimiento" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Estado del Postulante</label>
+                    <input pInputText [disabled]="true" style="width:100%;" [(ngModel)]="bean.auxInfoAdicEstado" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label>Última Modificación</label>
+                    <div class="p-inputgroup">
+                        <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="bean.ultimousuario" />
+                        <input pInputText disabled style="width:100%;flex: 1;"
+                            [ngModel]="f_datetime(bean.ultimafechamodif)" />
+                    </div>
+                </div>
+            </div>
+        </p-fieldset>
+    </div>
+</div>
+
+<app-selector-ubicaciongeografica-postulante></app-selector-ubicaciongeografica-postulante>

@@ -1,0 +1,75 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEmpleadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEmpleado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEmpleadoNombre=null;filtro.empleado=null;filtro.companiasocio=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Mes</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstMeses" [(ngModel)]="filtro.mes" [style]="{'width':'100%'}" (onChange)="cargarDias()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Dia</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstDias" [(ngModel)]="filtro.dia" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B"></app-botones-listado>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderNombre">Empleado</th>
+                <th class="tablaHeaderFecha">Fecha</th>
+                <th class="tablaHeaderNombre">Centro de Costos</th>
+                <th class="tablaHeaderNombre">Correo interno</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Empleado</span> {{rowData.empleado}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha</span> {{rowData.fecha}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Centro de Costos</span> {{rowData.centro}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Correo interno</span> {{rowData.correo}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="4">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<app-personacomun-selector></app-personacomun-selector>

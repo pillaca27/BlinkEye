@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : workflow.WfTransaccionMacro
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="wftransaccionmacro.obtenerDtoPorId">
+         select 
+			TRANSACCION_MACRO_ID "transaccionMacroId"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_TRANSACCION_MACRO
+         where 
+			TRANSACCION_MACRO_ID = :p_transaccionmacroid
+
+    </sql-query>
+
+    <sql-query name="wftransaccionmacro.listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_TRANSACCION_MACRO
+    </sql-query>
+
+    <sql-query name="wftransaccionmacro.listarPaginadoSentencia">
+         select 
+			TRANSACCION_MACRO_ID "transaccionMacroId"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_TRANSACCION_MACRO
+    </sql-query>
+
+</hibernate-mapping>

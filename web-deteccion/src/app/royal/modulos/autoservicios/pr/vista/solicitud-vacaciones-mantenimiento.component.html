@@ -1,0 +1,261 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+        </app-botones-mantenimiento>
+        <p-tabView>
+            <p-tabPanel header="Datos Generales">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-9">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Solicitante</label>
+                                    <div class="p-col">
+                                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEmpleadoNombre" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Cargo</label>
+                                    <div class="p-col">
+                                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.axuEmpleadoCargoNombre" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Fecha Ingreso</label>
+                                    <div class="p-col">
+                                        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200" firstDayOfWeek="1" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="dtoBean.axuEmpleadoFechaIngreso" disabled></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Fecha Registro</label>
+                                    <div class="p-col">
+                                        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200" firstDayOfWeek="1" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="dtoBean.fecharegistro" disabled></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Estado</label>
+                                    <div class="p-col">
+                                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEstadoNombre" />
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Tipo</label>
+                                    <div class="p-col">
+                                        <p-dropdown [options]="lstTipos" [(ngModel)]="dtoBean.utilizacion" [disabled]="!objetoTitulo.puedeEditar||aprobarEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Periodo a afectar</label>
+                                    <div class="p-col">
+                                        <p-dropdown [options]="lstPeriodos" [(ngModel)]="dtoBean.periodo" [disabled]="!objetoTitulo.puedeEditar||aprobarEditar" (onChange)="obtenerPeriodo()" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4"></div>
+
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Inicio</label>
+                                    <div class="p-col">
+                                        <p-calendar [monthNavigator]="true" [yearNavigator]="true" firstDayOfWeek="1" [minDate]="minDate" yearRange="1940:2200" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="dtoBean.fechainicio" (onSelect)="calcularDias()" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Fin</label>
+                                    <div class="p-col">
+                                        <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200" firstDayOfWeek="1" [showIcon]="true" [disabled]="!objetoTitulo.puedeEditar" [minDate]="minDate" (onSelect)="calcularDias()" dateFormat="dd/mm/yy" [(ngModel)]="dtoBean.fechafin">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Días Calendario</label>
+                                    <div class="p-col">
+                                        <p-inputNumber [(ngModel)]="dtoBean.dias" [min]="0" [max]="31" disabled></p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-8"></div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Días Hábiles</label>
+                                    <div class="p-col">
+                                        <p-inputNumber [(ngModel)]="dtoBean.diasutiles" [min]="0" [max]="31" disabled></p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-col-12 p-md-12">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Observaciones</label>
+                                    <div class="p-col">
+                                        <textarea id="float-comentario" rows="2" cols="105" style="width: 100%" maxlength="4000" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.comentario" pInputTextarea></textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-8"></div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <button pButton pRipple type="button" label="Consultar Historial" icon="fad fa-search" class="p-button-outlined" (click)="verHistorial()"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <span style="font-weight: bold;font-size: 12px;">Se muestra los días disponibles, donde ya está incluido el
+                                    descuento de los días solicitados</span>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-card>
+                                    <p-header style="font-size: 0px;"></p-header>
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-8 p-lg-8">
+                                            <h5>Disponibles</h5>
+                                            <label style="font-size: 15px;">{{diasDisponibles | number : '.2-2'}}</label>
+                                        </div>
+                                        <div class="p-col-12 p-md-4 p-lg-4">
+                                            <br><i class="fa fa-plane" style="font-size: 3em; color: #4bcf6c;"></i>
+                                        </div>
+                                    </div>
+                                </p-card>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-card>
+                                    <p-header style="font-size: 0px;"></p-header>
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-8 p-lg-8">
+                                            <h5>Causados</h5>
+                                            <label style="font-size: 15px;">{{diasPendientes | number : '.2-2'}}</label>
+                                        </div>
+                                        <div class="p-col-12 p-md-4 p-lg-4">
+                                            <br><i class="fa fa-calendar-check" style="font-size: 3em; color: #4b7ecf;"></i>
+                                        </div>
+                                    </div>
+                                </p-card>
+                            </div>
+                            <!-- <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-card>
+                                    <p-header style="font-size: 0px;"></p-header>
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-8 p-lg-8">
+                                            <h5>Truncos</h5>
+                                            <label style="font-size: 15px;">{{dtoBean.diasInfo.diasTruncos
+                                                | number : '.2-2'}}</label>
+                                        </div>
+                                        <div class="p-col-12 p-md-4 p-lg-4">
+                                            <br><i class="fa fa-calendar-plus" style="font-size: 3em; color: #4b7ecf;"></i>
+                                        </div>
+                                    </div>
+                                </p-card>
+                            </div>
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-card>
+                                    <p-header style="font-size: 0px;"></p-header>
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-8 p-lg-8">
+                                            <h5>En Proceso</h5>
+                                            <label style="font-size: 15px;">{{dtoBean.diasInfo.diasSolicitados
+                                                | number : '.2-2'}}</label>
+                                        </div>
+                                        <div class="p-col-12 p-md-4 p-lg-4">
+                                            <br><i class="fa fa-hourglass" style="font-size: 3em; color: #4b7ecf;"></i>
+                                        </div>
+                                    </div>
+                                </p-card>
+                            </div> -->
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Historico" [disabled]="dtoBean.historico.length === 0">
+                <div class="p-fluid p-formgrid p-grid">
+                    <p-table [responsive]="true" [value]="dtoBean.historico" [paginator]="true" [rows]="7" [style]="{ 'width':'100%' }">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderSecuencia">Secuencia</th>
+                                <th class="tablaHeaderCodigo">Periodo</th>
+                                <th class="tablaHeaderFecha">Fecha Inicio</th>
+                                <th class="tablaHeaderFecha">Fecha Fin</th>
+                                <th class="tablaHeaderNombreChico">Utilización</th>
+                                <th class="tablaHeaderCodigo">Calendario</th>
+                                <th class="tablaHeaderCodigo">Hábiles</th>
+                                <th class="tablaHeaderFecha">Última Fecha Modif.</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-row let-columns="columns">
+                            <tr>
+                                <td class="tablaColumnaSecuencia">
+                                    <span class="p-column-title">Secuencia</span> {{row.secuencia}}
+                                </td>
+                                <td class="tablaColumnaCodigo">
+                                    <span class="p-column-title">Periodo</span> {{row.periodo}}
+                                </td>
+                                <td class="tablaColumnaFecha">
+                                    <span class="p-column-title">Fecha Inicio</span> {{row.fechaInicio | date: 'dd/MM/yyyy'}}
+                                </td>
+                                <td class="tablaColumnaFecha">
+                                    <span class="p-column-title">Fecha Fin</span> {{row.fechaFin | date: 'dd/MM/yyyy'}}
+                                </td>
+                                <td class="tablaColumnaNombreChico">
+                                    <span class="p-column-title">Utilización</span> {{row.utilizacion}}
+                                </td>
+                                <td class="tablaColumnaCodigo">
+                                    <span class="p-column-title">Calendario</span> {{row.diasCalendario}}
+                                </td>
+                                <td class="tablaColumnaCodigo">
+                                    <span class="p-column-title">Hábiles</span> {{row.diasUtiles}}
+                                </td>
+                                <td class="tablaColumnaFecha">
+                                    <span class="p-column-title">Última Fecha Modif.</span> {{row.fechaUpdate | date: 'dd/MM/yyyy'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="8">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>
+<historial-vacaciones></historial-vacaciones>

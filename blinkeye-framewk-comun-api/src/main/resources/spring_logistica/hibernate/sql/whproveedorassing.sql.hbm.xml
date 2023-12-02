@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whproveedorassing.contarxitem">
+	    <![CDATA[
+	        SELECT 
+				COUNT(*)
+			FROM 
+			WH_ItemProveedor
+				LEFT JOIN PersonaMast  
+				ON (WH_ItemProveedor.Proveedor = PersonaMast.Persona)
+			WHERE 
+			( ( WH_ItemProveedor.Item = :p_item ) ) 
+	    ]]>
+	</sql-query>
+	<sql-query name="whproveedorassing.listarpaginadoxitem">
+	    <![CDATA[
+	    	SELECT 
+				CAST(WH_ItemProveedor.Proveedor as int) as "proveedor",
+				PersonaMast.Busqueda as "busqueda",
+				WH_ItemProveedor.PrecioUnitario as "preciounitario"
+			FROM 
+			WH_ItemProveedor
+				LEFT JOIN PersonaMast  
+				ON (WH_ItemProveedor.Proveedor = PersonaMast.Persona)
+			WHERE 
+			( ( WH_ItemProveedor.Item = :p_item ) )	       
+	    ]]>
+	</sql-query>
+	
+	
+	<sql-query name="whproveedorassing.contarxlinea">
+	    <![CDATA[
+	        SELECT 
+				COUNT(*)
+				FROM 
+				WH_ClaseFamiliaPersona
+					INNER JOIN PersonaMast  
+						ON (WH_ClaseFamiliaPersona.Persona = PersonaMast.Persona )
+				WHERE 
+				( WH_ClaseFamiliaPersona.Linea =  ( SELECT TOP(1) LTRIM(RTRIM(WH_ItemMast.Linea)) FROM WH_ItemMast WHERE WH_ItemMast.Item = :p_item ) ) AND    
+				( WH_ClaseFamiliaPersona.Familia = ( SELECT TOP(1) LTRIM(RTRIM(WH_ItemMast.Familia)) FROM WH_ItemMast WHERE WH_ItemMast.Item = :p_item ) ) AND
+				WH_ClaseFamiliaPersona.ProveedorCompradorFlag = 'P' 
+	    ]]>
+	</sql-query>
+	<sql-query name="whproveedorassing.listarpaginadoxlinea">
+	    <![CDATA[
+	        SELECT 
+				CAST(WH_ClaseFamiliaPersona.Persona as int) as "persona",
+				WH_ClaseFamiliaPersona.Linea as "linea",
+				WH_ClaseFamiliaPersona.Familia as "familia",
+				CAST(WH_ClaseFamiliaPersona.ProveedorCompradorFlag as varchar) as "proveedorcompradorflag",
+				CAST(WH_ClaseFamiliaPersona.Estado as varchar) as "estado",
+				WH_ClaseFamiliaPersona.UltimaFechaModif as "ultimafechamodif",
+				WH_ClaseFamiliaPersona.UltimoUsuario as "ultimousuario",
+				PersonaMast.Busqueda as "busqueda"
+				FROM 
+				WH_ClaseFamiliaPersona
+					INNER JOIN PersonaMast  
+						ON (WH_ClaseFamiliaPersona.Persona = PersonaMast.Persona )
+				WHERE 
+				( WH_ClaseFamiliaPersona.Linea =  ( SELECT TOP(1) LTRIM(RTRIM(WH_ItemMast.Linea)) FROM WH_ItemMast WHERE WH_ItemMast.Item = :p_item ) ) AND    
+				( WH_ClaseFamiliaPersona.Familia = ( SELECT TOP(1) LTRIM(RTRIM(WH_ItemMast.Familia)) FROM WH_ItemMast WHERE WH_ItemMast.Item = :p_item ) ) AND				 
+				WH_ClaseFamiliaPersona.ProveedorCompradorFlag = 'P' 
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whproveedorassing.contarxcommodity">
+	    <![CDATA[
+	        SELECT 
+				COUNT(*)
+				FROM 
+				WH_CommodityPersona
+					INNER JOIN PersonaMast  
+						ON (WH_CommodityPersona.Persona = PersonaMast.Persona)
+				WHERE 
+				( ( WH_CommodityPersona.Commodity = :p_commodity ) AND  
+				( WH_CommodityPersona.ProveedorCompradorFlag = 'P' ) ) 
+	    ]]>
+	</sql-query>
+	<sql-query name="whproveedorassing.listarpaginadoxcommodity">
+	    <![CDATA[
+	        SELECT 
+				CAST(WH_CommodityPersona.Persona as int) as "persona",
+				PersonaMast.Busqueda as "busqueda"
+				FROM 
+				WH_CommodityPersona
+					INNER JOIN PersonaMast  
+						ON (WH_CommodityPersona.Persona = PersonaMast.Persona)
+				WHERE 
+				( ( WH_CommodityPersona.Commodity = :p_commodity ) AND  
+				( WH_CommodityPersona.ProveedorCompradorFlag = 'P' ) ) 
+	    ]]>
+	</sql-query>	
+    
+</hibernate-mapping>

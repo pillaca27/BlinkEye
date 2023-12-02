@@ -1,0 +1,85 @@
+<div class="ui-fluid">
+
+    <p-dialog header="SELECTOR DE POSTULANTE" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        hideEffect="size" [style]="{'width':'700px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <span>Código</span>
+                <input pInputText type="number" style="width: 100%;" [(ngModel)]="filtro.postulante"
+                    (keypress)="preBuscar($event, dtPuesto)" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Descripción</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.nombre"
+                    (keypress)="preBuscar($event, dtPuesto)" />
+            </div>
+        </div>
+
+        <br>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion">
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtPuesto)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dtPuesto [rows]="registrosPorPagina" [lazy]="true" [scrollable]="true" scrollWidth="100%"
+            [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" selectionMode="single"
+            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPuesto($event)"
+            [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderCodigo">Código</th>
+                    <th class="tablaHeaderNombreMedio">Nombre</th>
+                    <th class="tablaHeaderCodigo">Tipo Documento</th>
+                    <th class="tablaHeaderCodigo">Documento</th>
+                    <th class="tablaHeaderCodigo">Estado</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text"
+                            title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Código</span>
+                        {{row.postulante}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Nombre</span>
+                        {{row.nombre}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Tipo Documento</span>
+                        {{row.tipoDocumentoNombre}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Documento</span>
+                        {{row.documento}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Estado</span>
+                        {{row.estadoNombre}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

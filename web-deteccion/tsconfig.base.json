@@ -1,0 +1,70 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "baseUrl": "./",
+    "paths": {
+      "@env/*": [
+        "src/environments/*"
+      ],
+      "@framework/*": [
+        "src/app/royal/framework/*" 
+      ],      
+      "@framework-seguridad/*": [
+        "src/app/royal/modulos/framework-seguridad/*"
+      ],
+      "@framework-workflow/*": [
+        "src/app/royal/modulos/framework-workflow/*"
+      ],
+      "@framework-comun/*": [
+        "src/app/royal/modulos/framework-comun/*"
+      ],      
+      "@erp-alertas/*": [
+        "src/app/royal/modulos/alertas/*"
+      ],
+      "@erp-asistencia/*": [
+        "src/app/royal/modulos/asistencia/*"
+      ],
+      "@erp-comercial/*": [
+        "src/app/royal/modulos/comercial/*"
+      ],
+      "@erp-ede/*": [
+        "src/app/royal/modulos/ede/*"
+      ],
+      "@erp-kpi/*": [
+        "src/app/royal/modulos/kpi/*"
+      ],
+      "@erp-logistica/*": [
+        "src/app/royal/modulos/logistica/*"
+      ],
+      "@erp-ocupacional/*": [
+        "src/app/royal/modulos/ocupacional/*"
+      ],
+      "@erp-planilla/*": [
+        "src/app/royal/modulos/planilla/*"
+      ],
+      "@erp-presupuesto/*": [
+        "src/app/royal/modulos/presupuesto/*"
+      ],
+      "@erp-rrhh/*": [
+        "src/app/royal/modulos/rrhh/*"
+      ],
+      "@erp-tesoreria/*": [
+        "src/app/royal/modulos/tesoreria/*"
+      ],
+    },
+    "outDir": "./dist/out-tsc",
+    "sourceMap": true,
+    "declaration": false,
+    "downlevelIteration": true,
+    "experimentalDecorators": true,
+    "moduleResolution": "node",
+    "importHelpers": true,
+    "target": "es5",
+    "module": "es2015",
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  }
+}

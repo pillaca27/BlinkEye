@@ -1,0 +1,193 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Número Persona</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.persona" style="width: 100%;" maxlength="1000" (keypress)="defaultBuscar($event)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Nombre Búsqueda</label>
+                        <div class="p-col">
+                            <input #myDescripcion pInputText type="text" [(ngModel)]="filtro.busqueda" style="width: 100%;" maxlength="200" (keypress)="defaultBuscar($event)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Documento</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.documento" style="width: 100%;" maxlength="20" pKeyFilter="blockSpecial" (keypress)="defaultBuscar($event)" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Maestro a Actualizar</label>
+                        <div class="p-col">
+                            <p-dropdown (onChange)="guardarFiltro()" [options]="lstMaestros" [style]="{'width':'100%'}" [(ngModel)]="filtro.maestroactualizar">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstados" [style]="{'width':'100%'}" [(ngModel)]="filtro.estado">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Documento Fiscal</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.documentofiscal" style="width: 100%;" maxlength="20" pKeyFilter="blockSpecial" (keypress)="defaultBuscar($event)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Documento Identidad</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.documentoidentidad" style="width: 100%;" maxlength="20" pKeyFilter="blockSpecial" (keypress)="defaultBuscar($event)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo Persona</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstPersonas" [style]="{'width':'100%'}" [(ngModel)]="filtro.tipodocumento">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [scrollable]="true" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)"
+        [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigoChico">Origen</th>
+                <th class="tablaHeaderCodigoChico">Persona</th>
+                <th class="tablaHeaderIzquierda2">Búsqueda</th>
+                <th class="tablaHeaderCheckBox1">Cli</th>
+                <th class="tablaHeaderCheckBox1">Prov</th>
+                <th class="tablaHeaderCheckBox1">Emp</th>
+                <!-- <th class="tablaHeaderCheckBox1">Otro</th> -->
+                <th class="tablaHeaderDocumento2">Documento</th>
+                <th class="tablaHeaderDocumento2">Doc Fiscal</th>
+                <th class="tablaHeaderDocumento">Doc Identidad</th>
+                <th class="tablaHeaderFecha">Fecha Inactivación</th>
+                <th class="tablaHeaderEstado">Estado</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button [disabled]="row.escliente != 'S' && row.esproveedor != 'S' && row.esempleado != 'S'" pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar(row)"></button>
+                            </th>
+                            <!--  <th>
+                                <button pButton pRipple type="button" icon="fa fa-thumbs-up"
+                                    class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Aprobar"
+                                    *ngIf="menuSeguridad.flgBorrar"  [disabled]="true"></button>
+                            </th> -->
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Origen</span> {{row.origen}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Persona</span> {{row.persona}}
+                </td>
+                <td class="tablaColumnaIzquierda2">
+                    <span class="p-column-title">Búsqueda</span> {{row.busqueda}}
+                </td>
+
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Cli</span>
+                    <p-checkbox *ngIf="row.escliente == 'S'" [(ngModel)]="row.escliente" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.escliente != 'S'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Prov</span>
+                    <p-checkbox *ngIf="row.esproveedor == 'S'" [(ngModel)]="row.esproveedor" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.esproveedor != 'S'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Emp</span>
+                    <p-checkbox *ngIf="row.esempleado == 'S'" [(ngModel)]="row.esempleado" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.esempleado != 'S'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+
+                </td>
+                <!--  <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Otro</span>
+                    <p-checkbox [(ngModel)]="row.esotro" disabled binary="true"></p-checkbox>
+
+                </td> -->
+                <td class="tablaColumnaDocumento2">
+                    <span class="p-column-title">Documento</span> {{row.documento}}
+                </td>
+                <td class="tablaColumnaDocumento2">
+                    <span class="p-column-title">Doc Fiscal</span> {{row.documentofiscal}}
+                </td>
+                <td class="tablaColumnaDocumento">
+                    <span class="p-column-title">Doc Identidad</span> {{row.documentoidentidad}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Inactivación</span> {{row.fechainactivacion}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.estado != 'A'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="11">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

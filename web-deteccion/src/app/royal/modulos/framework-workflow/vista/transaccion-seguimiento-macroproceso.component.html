@@ -1,0 +1,36 @@
+<p-card *ngIf="!cargando">
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Macro Proceso</b>
+        </div>
+    </p-divider>
+
+    <p-tree [value]="lstSeguimientoTree" layout="horizontal">
+        <ng-template let-node pTemplate="default">
+            <div title="" style="width: 200px;border-radius: 15px;cursor: pointer;padding: 15px;"
+                (click)="verSeguimiento(node.key)" [ngStyle]="{'background-color': estaViendoSeguimiento(node.key)}">
+                <label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[0]}}</label><br>
+                <label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[1]}}</label><br>
+                <label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[2]}}</label><br>
+                <label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[3]}}</label>
+                <!--<label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[4]}}</label><br>-->
+                <!--<label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[5]}}</label><br>-->
+                <!--<label style="cursor: pointer;">{{obtenerSeguimientoDatos(node.key)[6]}}</label><br>-->
+            </div>
+        </ng-template>
+    </p-tree>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <transaccion-seguimiento></transaccion-seguimiento>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+</p-card>

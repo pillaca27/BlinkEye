@@ -1,0 +1,645 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+        </app-botones-mantenimiento>
+        <p-tabView>
+            <p-tabPanel header="Requerimiento">
+                <p-fieldset legend="Datos del Requerimiento">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Compañía</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxCompaniaNombre" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Estado</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEstadoNombre" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Unidad de Negocio</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxUnidadNegocioDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Unidad de Organigrama</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxSolicitanteUnidadorganigramaDesc" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Solicitante</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxSolicitanteNombre" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Tiempo Reclutamiento</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxTiempoReclutamiento" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Requerimiento</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.requerimiento" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Vigencia(*)(**)</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.vigenciainicio" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" *ngIf="dtoBean.auxUIVigenciavencimiento=='S'" [(ngModel)]="dtoBean.vigenciafin" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true"
+                                            dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha de Solicitud</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechasolicitud" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Tiempo Transcurrido(**)</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxTiempoTranscurrido" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fec. Aprob.</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechaaprobacion" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha de Término</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechatermino" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo de Requerimiento</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxTipoRequerimientoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoRequerimiento()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">N° Vacantes</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [(ngModel)]="dtoBean.numerosolicitado" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Pendiente</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.numeropendiente" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Etapa de Evaluación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxEtapaEvaluacionDesc" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Motivo</label>
+                                <div class="p-col">
+                                    <div class="importante" class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxMotivoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarMotivo()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Personal Reclutam.</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxResponsableNombreCompleto" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Nombre del Puesto</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="dtoBean.auxUIHabilitarPuestoDescripcion!='S'||!objetoTitulo.puedeEditar" style="width:100%;" [(ngModel)]="dtoBean.puestodescripcion" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos del Puesto Solicitado">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Puesto</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxPuestoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="mostrarSelectorPuestoOrg()" *ngIf="dtoBean.auxUIHabilitarBtnPuesto=='S'&&objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Centro de Costo</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCentrocostoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Unidad de Organigrama</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxUnidadorganigramaDesc" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Categoría Funcional</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCategoriaFuncionalDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCategoria()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Unidad Operativa</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxUnidadOperativaDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadOperativa()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Nivel Salarial</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxNivelSalarialDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarNivelSalarial()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Jefe Inmediato</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxJefeInmediatoNombreCompleto" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Salario Mínimo</label>
+                                <div class="p-col">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.auxSalarioMinimo" mode="decimal" [min]="0" [max]="500" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos Adicionales">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo Trabajador</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxTipoTrabajadorDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoTrabajador()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo de Contrato (*)</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxTipoContratoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoContrato()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo de Planilla</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxTipoPlanillaDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Fecha del Contrato</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.iniciocontrato" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar||dtoBean.auxUIVigenciavencimiento!='S'" [(ngModel)]="dtoBean.fincontrato" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true"
+                                            dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Sucursal</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxSucursalDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <button pButton type="button" label="Accesos a Infraestructura" (click)="infraestructura()"></button>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Proyecto</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxAfeDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarProyecto()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Observaciones</label>
+                                <div class="p-col">
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.observaciones" [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Adjunto</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [ngModel]="dtoBean.rutadocumento" />
+                                        <input #photoInput type="file" class="form-control" style="display:none" (change)="cargarAdjunto(photoInput)">
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="photoInput.click()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                        <button pButton icon="fa fa-search" type="button" title="Ver" (click)="descargarAdjunto()" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Motivo de Rechazo</label>
+                                <div class="p-col">
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.motivoRechazo" disabled></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Última Modificación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="dtoBean.ultimousuario" />
+                                        <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="f_date(dtoBean.ultimafechamodif)" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-6">
+                            <label class="importante">(*) Información será validado por RRHH</label><br>
+                            <label class="importante">(**) Días hábiles</label>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos de la Convocatoria" *ngIf="false">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">N° Convocatoria</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [ngModel]="dtoBean.convocatorianumero" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">N° Acta</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [ngModel]="dtoBean.convocatorianumeroacta" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha Max. Postulación</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [ngModel]="dtoBean.convocatoriafechapostulacion" [showTime]="true" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha Max. Resultados</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [ngModel]="dtoBean.convocatoriafecharesultados" [showTime]="true" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha Max. Publicación</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [ngModel]="dtoBean.convocatoriafechapublicacion" [showTime]="true" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy"
+                                        firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha Max. MINTRA</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [ngModel]="dtoBean.convocatoriafechacartamintra" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+            </p-tabPanel>
+            <p-tabPanel header="Reemplazo" *ngIf="dtoBean.auxUIHabilitarReemplazo=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus" class="p-button-outlined" (click)="agregarReemplazo()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.lstReemplazos" [responsive]="true" [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion1" *ngIf="objetoTitulo.puedeEditar">Eliminar
+                                            </th>
+                                            <th class="tablaHeaderCodigo">Empleado</th>
+                                            <th class="tablaHeaderNombre">Nombre</th>
+                                            <th class="tablaHeaderNombre importante">Motivo Cese</th>
+                                            <th class="tablaHeaderEstadoGrande importante">Fecha Cese</th>
+                                            <th class="tablaHeaderNombre">Puesto</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion1" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Eliminar</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Eliminar" (click)="eliminarReemplazo(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Empleado</span> {{row.empleado}}
+                                            </td>
+                                            <td class="tablaColumnaNombre">
+                                                <span class="p-column-title">Nombre</span> {{row.auxEmpleadoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombre importante">
+                                                <span class="p-column-title">Motivo Cese</span>
+                                                <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [(ngModel)]="row.motivocese" [options]="lstMotivoCese" [disabled]="!objetoTitulo.puedeEditar">
+                                                </p-dropdown>
+                                            </td>
+                                            <td class="tablaColumnaEstadoGrande importante">
+                                                <span class="p-column-title">Fecha Cese</span>
+                                                <p-calendar [monthNavigator]="true" [yearNavigator]="true" appendTo="body" yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="row.fechacese" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                                </p-calendar>
+                                            </td>
+                                            <td class="tablaColumnaNombre">
+                                                <span class="p-column-title">Puesto</span> {{row.auxPuestoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span> {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span> {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>
+<app-selector-unidadnegocio></app-selector-unidadnegocio>
+<app-selector-miscelaneos></app-selector-miscelaneos>
+<app-selector-unidadoperativa></app-selector-unidadoperativa>
+<app-selector-categoria></app-selector-categoria>
+<app-selector-gradosalario></app-selector-gradosalario>
+<app-selector-tipotrabajador></app-selector-tipotrabajador>
+<app-selector-tipocontrato></app-selector-tipocontrato>
+<app-selector-tipoplanilla></app-selector-tipoplanilla>
+<app-sucursalselector></app-sucursalselector>
+<app-selector-afemstcomun></app-selector-afemstcomun>
+<app-personacomun-selector></app-personacomun-selector>
+<app-selector-organigrama></app-selector-organigrama>
+<app-centrocostos-selector></app-centrocostos-selector>
+
+<p-dialog header="Accesos e Infraestructura" [(visible)]="verModalInfra" [closeOnEscape]="false" [closable]="true" modal="modal" showEffect="fade" hideEffect="size" [style]="{'max-width':'600px', 'left':'15px', 'right':'15px'}">
+    <div class="p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12">
+            <label>Puesto</label>
+            <input pInputText type="text" style="width:100%" disabled class="hoverDisabled" [ngModel]="infPuestoNombre" />
+        </div>
+    </div>
+    <br>
+    <p-fieldset legend="Marque sólo aquellos con los que actualmente no cuenta el puesto">
+        <div class="p-grid">
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Oficina" [(ngModel)]="tieneAccesos[0]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Laptop" [(ngModel)]="tieneAccesos[1]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Internet" [(ngModel)]="tieneAccesos[2]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Impresora" [(ngModel)]="tieneAccesos[3]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Correo" [(ngModel)]="tieneAccesos[4]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Teléfono (Anexo)" [(ngModel)]="tieneAccesos[5]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="PC" [(ngModel)]="tieneAccesos[6]" [disabled]="!objetoTitulo.puedeEditar">
+                </p-checkbox>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-6">
+                <br>
+                <p-checkbox binary="true" label="Celular" [(ngModel)]="tieneAccesos[7]" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <p-checkbox binary="true" label="Otros" [(ngModel)]="tieneAccesos[8]" (onChange)="evaluarOtros()" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="infraCom1" [disabled]="!objetoTitulo.puedeEditar||!tieneAccesos[8]"></textarea>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <p-checkbox binary="true" label="Acceso al Spring (Indicar módulo)" [(ngModel)]="tieneAccesos[9]" (onChange)="evaluarSpring()" [disabled]="!objetoTitulo.puedeEditar"></p-checkbox>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="infraCom2" [disabled]="!objetoTitulo.puedeEditar||!tieneAccesos[9]"></textarea>
+            </div>
+        </div>
+    </p-fieldset>
+
+    <div class="p-grid">
+        <div class="p-col-12 p-md-3">
+            <br>
+            <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save" *ngIf="objetoTitulo.puedeEditar" class="p-button-outlined" (click)="guardarAccesos()"></button>
+        </div>
+        <div class="p-col-12 p-md-6"></div>
+        <div class="p-col-12 p-md-3">
+            <br>
+            <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply" class="p-button-outlined p-button-secondary" (click)="verModalInfra=false"></button>
+        </div>
+    </div>
+</p-dialog>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

@@ -1,0 +1,434 @@
+<p-tabView>
+    <p-tabPanel header="Información Transacción">
+
+        <p-card>
+            <!-- <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                    <i class="pi pi-bars p-mr-2"></i>
+                    <b>Información Transacción</b>
+                </div>
+            </p-divider> -->
+        
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Transacción Id</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.transaccionId" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Referencia</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.referencia" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Nivel Id</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.nivelId" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Nivvel Estado</span>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-4">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.nivelEstadoId" disabled />
+                                </div>
+                                <div class="p-field p-col-12 p-md-8">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.nivelEstadoNombre"
+                                        disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Flujo Id</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.flujoId" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Estado</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.estado" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Solicitante</span>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-3">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.solicitanteId" disabled />
+                                </div>
+                                <div class="p-field p-col-12 p-md-9">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.solicitanteNombre"
+                                        disabled />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Persona Referencia</span>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-3">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.personaReferenciaId"
+                                        disabled />
+                                </div>
+                                <div class="p-field p-col-12 p-md-9">
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="dto.personaReferenciaNombre"
+                                        disabled />
+                                </div>
+                            </div>
+                        </div>
+        
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Estado Siguiente</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.nivelEstadoSiguienteId"
+                                disabled />
+                        </div>
+        
+                        <div class="p-field p-col-12 p-md-3">
+                            <span>Nombre Estado Siguiente</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.nivelEstadoSiguienteNombre"
+                                disabled />
+                        </div>
+        
+                        <div class="p-field p-col-12 p-md-12">
+                            <span>Criterios</span>
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="dto.criterios" disabled />
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <span>Transaccion Aprobador</span>
+                            <p-table [responsive]="true" [value]="transaccionAprobador" [style]="{'width': '100%'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigoChico">Id</th>
+                                        <th>Nombre</th>
+                                        <th class="tablaHeaderCodigoChico">Nivel</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns">
+                                    <tr>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Id</span>
+                                            {{row.id}}
+                                        </td>
+                                        <td>
+                                            <span class="p-column-title">Nombre</span>
+                                            {{row.nombre}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Nivel</span>
+                                            {{row.codigo}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="3">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <span>Seguimiento</span>
+                            <p-table [responsive]="true" [value]="seguimiento" [style]="{'width': '100%'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigoChico">Seguimiento Id</th>
+                                        <th class="tablaHeaderCodigoChico">Nivel Id</th>
+                                        <th class="tablaHeaderUsuario">Usuario</th>
+                                        <th class="tablaHeaderIzquierda">Observación</th>
+                                        <th class="tablaHeaderCodigoChico">Estado Id</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns">
+                                    <tr>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Seguimiento Id</span>
+                                            {{row.seguimientoId}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Nivel Id</span>
+                                            {{row.nivelId}}
+                                        </td>
+                                        <td class="tablaColumnaUsuario">
+                                            <span class="p-column-title">Usuario</span>
+                                            {{row.usuario}}
+                                        </td>
+                                        <td class="tablaColumnaIzquierda">
+                                            <span class="p-column-title">Observación</span>
+                                            {{row.observacion}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Estado Id</span>
+                                            {{row.estadoId}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="5">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <span>Configuracion de Adjuntos</span>
+                            <p-table [responsive]="true" [value]="adjuntosConfig" [style]="{'width': '100%'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaColumnaAccion1">Nivel</th>
+                                        <th class="tablaColumnaAccion1">Rol</th>
+                                        <th class="tablaColumnaTexto">Rol Nombre</th>
+                                        <th class="tablaColumnaAccion1">Tipo Documento</th>
+                                        <th class="tablaColumnaTexto">Tipo Documento Nombre</th>
+                                        <th class="tablaColumnaAccion1">Estado</th>
+                                        <th class="tablaColumnaAccion1">Requerido</th>
+                                        <th class="tablaColumnaAccion1">Editable</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns">
+                                    <tr>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Nivel</span>
+                                            {{row.nivel}}
+                                        </td>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Rol</span>
+                                            {{row.tipoAprobador}}
+                                        </td>
+                                        <td class="tablaColumnaTexto">
+                                            <span class="p-column-title">Rol Nombre</span>
+                                            {{row.rolNombre}}
+                                        </td>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Tipo Documento</span>
+                                            {{row.tipoDocumento}}
+                                        </td>
+                                        <td class="tablaColumnaTexto">
+                                            <span class="p-column-title">Tipo Documento Nombre</span>
+                                            {{row.tipoDocumentoDescripcion}}
+                                        </td>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Estado</span>
+                                            {{row.estado}}
+                                        </td>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Requerido</span>
+                                            {{row.flgRequerido}}
+                                        </td>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Editable</span>
+                                            {{row.flgEditable}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="8">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <span>Adjuntos</span>
+                            <p-table [responsive]="true" [value]="adjuntos" [style]="{'width': '100%'}">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaColumnaAccion1">Acción</th>
+                                        <th class="tablaColumnaTexto">Documento</th>
+                                        <th class="tablaColumnaTexto">Tipo</th>
+                                        <th class="tablaColumnaFechaHora">Última Modificación</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns">
+                                    <tr>
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Acción</span>
+                                            <button pButton type="button" icon="fad fa-cloud-download"
+                                                class="p-button-rounded p-button-text" title="Descargar"
+                                                (click)="descargarDocumento(row.secuencia)"></button>
+                                        </td>
+                                        <td class="tablaColumnaTexto">
+                                            <span class="p-column-title">Documento</span>
+                                            {{row.archivonombre}}
+                                        </td>
+                                        <td class="tablaColumnaTexto">
+                                            <span class="p-column-title">Tipo</span>
+                                            {{row.tipodocumento | labelFromItem:lstTipoDocumento}}
+                                        </td>
+                                        <td class="tablaColumnaFechaHora">
+                                            <span class="p-column-title">Última Modificación</span>
+                                            {{row.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="4">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <transaccion-seguimiento></transaccion-seguimiento>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <transaccion-seguimiento-macroproceso></transaccion-seguimiento-macroproceso>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-2">
+                            <button pButton pRipple type="button" label="Salir" style="width: 100%;" class="p-button-outlined"
+                                (click)="salir()"></button>
+                        </div>
+        
+                        <div class="p-field p-col-12 p-md-6">
+        
+                        </div>
+                        <div class="p-field p-col-12 p-md-2">
+                            <button pButton pRipple type="button" label="Refrescar Ventana" style="width: 100%;" class="p-button-outlined"
+                                (click)="refrescarVentana()"></button>
+                        </div>
+                        <div class="p-field p-col-12 p-md-2">
+                            <button pButton pRipple type="button" label="Cambiar Nivel" style="width: 100%;" class="p-button-outlined"
+                                (click)="cambiarnivel()"></button>
+                        </div>
+        
+                    </div>
+                </div>
+            </div>
+        
+        </p-card>
+        
+        
+        
+        <p-dialog header="Cambiar Nivel" [(visible)]="verCambiarNivel" showEffect="fade" hideEffect="size"
+            [style]="{'max-width':'600px'}">
+            <div class="ui-fluid">
+                <div class="p-fluid p-grid formularioFila">
+                    <div class="p-col-12 p-md-12">
+                        <span class="p-column-title">Nivel:</span>
+                        <input pInputText type="number" style="width: 100%;" [(ngModel)]="cambioNivel" />
+                    </div>
+                </div>
+        
+                <div class="p-fluid p-grid formularioFila">
+                    <div class="p-col-12 p-md-12">
+                        <button pButton type="button" icon="fa fa-save" style="width:100%;font-size:12px;" label="Aceptar"
+                            class="ui-button-raised  ui-button-rounded ui-button-success"
+                            (click)="confirmarCambiarNivel()"></button>
+                    </div>
+                </div>
+            </div>
+        </p-dialog>
+
+    </p-tabPanel>
+    <p-tabPanel header="Correos Proceso">
+
+        <app-transaccion-listado-correos></app-transaccion-listado-correos>
+
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-2"></div>    
+                    <div class="p-field p-col-12 p-md-6"></div>                    
+                    <div class="p-field p-col-12 p-md-2"></div>
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Refrescar Ventana" style="width: 100%;" class="p-button-outlined"
+                            (click)="refrescarVentana()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </p-tabPanel>
+
+    <p-tabPanel header="Plantillas Relacionadas" leftIcon="fad fa-th-list">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <p-table [value]="lstPlantillasRelacionadas" [responsive]="true"
+                    [style]="{width:'100%', height:'auto'}">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion1">Acción</th>
+                            <th class="tablaHeaderCodigoGrande">Aplicación</th>
+                            <th class="tablaHeaderCodigo">Reporte</th>
+                            <th class="tablaHeaderCodigo">Compañía</th>
+                            <th class="tablaHeaderCodigo">Periodo</th>
+                            <th class="tablaHeaderCodigo">Versión</th>
+                            <th class="tablaHeaderEstado">Nombre</th>
+                            <th class="tablaHeaderEstado">Estado</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td class="tablaColumnaAccion1">
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                    class="p-button-rounded p-button-text" title="Editar"
+                                    (click)="editarReporte(rowData)"></button>
+                            </td>
+
+                            <td class="tablaColumnaCodigoGrande">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Aplicación</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.aplicacionDescripcion}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Reporte</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.reportecodigo}} - {{rowData.nombreReporte}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Compañía</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.companiasocio}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Periodo</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.periodo}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Versión</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.version}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span
+                                        class="p-column-title">Nombre</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.nombre}}</div>
+                            </td>
+                            <td class="tablaColumnaEstado">{{ rowData.estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="8">
+                                No existen registros para mostrar
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+    </p-tabPanel>
+
+</p-tabView>
+
+
+<!--<app-wf-popsyreportedetalle (cargarSeleccionEvent)="confirmarPlantilla($event)"></app-wf-popsyreportedetalle>-->

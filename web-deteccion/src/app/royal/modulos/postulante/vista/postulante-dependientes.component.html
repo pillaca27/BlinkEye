@@ -1,0 +1,479 @@
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2" *ngIf="accionPadre == ACCIONES.EDITAR">
+        <br>
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%"
+            [paginator]="true" [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion3">Acciones</th>
+                    <th class="tablaHeaderCodigo">Parentesco</th>
+                    <th class="tablaHeaderNombreMedio">Apellido Paterno</th>
+                    <th class="tablaHeaderNombreMedio">Apellido Materno</th>
+                    <th class="tablaHeaderNombreMedio">Nombres</th>
+                    <th class="tablaHeaderFecha">Fecha Nacimiento</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="tablaColumnaAccion3">
+                        <span class="p-column-title">Acciones</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                        (click)="editar(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                        (click)="ver(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                        title="Eliminar" (click)="eliminar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Parentesco</span>
+                        {{rowData.auxParentestoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Apellido Paterno</span>
+                        {{rowData.apellidopaterno}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Apellido Materno</span>
+                        {{rowData.apellidomaterno}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Nombres</span>
+                        {{rowData.nombres}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Fecha Nacimiento</span>
+                        {{rowData.fechanacimiento | date: 'dd/MM/yyyy'}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<div class="p-fluid">
+    <p-dialog [(visible)]="verMantenimiento" [modal]="true" [responsive]="true"
+        header="DEPENDIENTE : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+        [resizable]="false" [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size"
+        hideEffect="size" [style]="{'width':'800px', 'left':'15px', 'right':'15px'}">
+        <p-tabView [(activeIndex)]="index">
+            <p-tabPanel header="Datos Generales">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Parentesco</span>
+                        <p-dropdown appendTo="body" [style]="{'width': '100%'}" [disabled]="accion == ACCIONES.VER"
+                            (onChange)="cambiarSegunParentesco()" [(ngModel)]="dto.tipodependiente"
+                            [options]="parentescosSel"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Nombre</span>
+                        <input pInputText type="text" [(ngModel)]="dto.nombres" maxlength="25"
+                            [disabled]="accion == ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Apellido Paterno</span>
+                        <input pInputText type="text" [(ngModel)]="dto.apellidopaterno" maxlength="25"
+                            [disabled]="accion == ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Apellido Materno</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.apellidomaterno" maxlength="25" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Tipo Doc. Identidad</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.tipodocumentoidentidad" [options]="tipodocumento">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">N° Doc. Identidad</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.documentoidentidad" maxlength="15" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Fecha Nacimiento</span>
+                        <p-calendar appendTo="body" [monthNavigator]="true" [disabled]="accion == ACCIONES.VER"
+                            [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" firstDayOfWeek="1"
+                            dateFormat="dd/mm/yy" (onSelect)="transfromarFechaNacimiento()"
+                            (onBlur)="transfromarFechaNacimiento()" (onChange)="transfromarFechaNacimiento()"
+                            [(ngModel)]="dto.fechanacimiento"></p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Edad</span>
+                        <input pInputText type="text" disabled value="{{ edadFamiliar }}" maxlength="40" />
+                    </div>
+
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Sexo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.sexo" [options]="listaSexo"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Pais Emisor</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.paisemisor" [options]="paisemisor" filter="filter"
+                            [resetFilterOnHide]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Codigo Postal</span>
+                        <p-dropdown [style]="{ 'width': '100%'}" filter="filter" [resetFilterOnHide]="true"
+                            appendTo="body" [disabled]="accion == ACCIONES.VER" [options]="listaCodigoPostal"
+                            [(ngModel)]="dto.codigopostal">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Email</span>
+                        <input pInputText type="text" [(ngModel)]="dto.correoelectronico" maxlength="50"
+                            [disabled]="accion == ACCIONES.VER">
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span *ngIf="estaVacio(dto.codigopostal)">Teléfono</span>
+                        <span *ngIf="!estaVacio(dto.codigopostal)" class="importante">Teléfono</span>
+                        <input pInputText type="text" [(ngModel)]="dto.telefono" maxlength="15" pKeyFilter="int"
+                            [disabled]="accion == ACCIONES.VER">
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Grupo Sanguíneo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.tiposangre" [options]="gruposanguineo"></p-dropdown>
+                    </div>
+                    <!-- <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Centro EsSalud</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [options]="listaCentrosSalud" [(ngModel)]="dto.flagcentroasistencia">
+                        </p-dropdown>
+                    </div> -->
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span class="importante">Tipo Vínculo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.tipovinculo" [options]="tipovinculo"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span class="importante">Tipo Acredita</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER" appendTo="body"
+                            [options]="tipodocumentoacreditado" [(ngModel)]="dto.tipodocumentopaternidad">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>N° Docum. Acredita</span>
+                        <input pInputText type="text" [(ngModel)]="dto.nrodocumentopaternidad" maxlength="20"
+                            [disabled]="accion == ACCIONES.VER">
+                    </div>
+                    <!-- <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Concepción (aaaa-mm)</span>
+                        <p-inputMask [(ngModel)]="dto.mesconcepcion" mask="9999-99"
+                            [disabled]="accion == ACCIONES.VER||dto.tipodependiente!='G'">
+                        </p-inputMask>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Fecha Alta</span>
+                        <p-calendar appendTo="body" [monthNavigator]="true" [disabled]="accion == ACCIONES.VER"
+                            [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" firstDayOfWeek="1"
+                            dateFormat="dd/mm/yy" [(ngModel)]="dto.fechaalta"></p-calendar>
+                    </div> -->
+                </div>
+                <!-- <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Motivo de Baja</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER" appendTo="body"
+                            [options]="motivosbaja" [(ngModel)]="dto.motivobaja">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Fecha Baja</span>
+                        <p-calendar appendTo="body" [monthNavigator]="true" [disabled]="accion == ACCIONES.VER"
+                            [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" firstDayOfWeek="1"
+                            dateFormat="dd/mm/yy" [(ngModel)]="dto.fechabaja"></p-calendar>
+                    </div>
+                </div> -->
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagSmf" label="Afiliado al Seguro Médico Familiar"
+                            [disabled]="accion == ACCIONES.VER" binary="true"></p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagBeneficio" label="Con Beneficios Sociales"
+                            [disabled]="accion == ACCIONES.VER" binary="true"></p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagViveConEmpleado" label="Vive con el Empleado"
+                            [disabled]="accion == ACCIONES.VER" binary="true"></p-checkbox>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Datos Adicionales">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Ocupación</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER" [(ngModel)]="dto.ocupacion"
+                            maxlength="4000" />
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Grado Educación</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER" appendTo="body"
+                            [options]="grados" [(ngModel)]="dto.gradoeducacion">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Centro Educación</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.centroeducacion" maxlength="40" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagEscolaridad" label="Escolaridad"
+                            (onChange)="cambioSegunFlagEscolaridad()" [disabled]="accion == ACCIONES.VER" binary="true">
+                        </p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-dropdown [style]="{ 'width': '100%'} "
+                            [disabled]="accion == ACCIONES.VER||!dto.auxFlagEscolaridad" appendTo="body"
+                            [options]="escolaridades" [(ngModel)]="dto.tipoescolaridad">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Años Educación</span>
+                        <input pInputText type="number" [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.anoseducacion" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Tipo Asist. Social</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER" appendTo="body"
+                            [options]="tipoasis" [(ngModel)]="dto.tipocarnetasistenciasocial">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Carnet Asistencia</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER"
+                            [(ngModel)]="dto.carnetasistenciasocial" maxlength="20" />
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagTrabaja" label="Trabaja?"
+                            (onChange)="cambioSegunFlagTrabaja()" [disabled]="accion == ACCIONES.VER" binary="true">
+                        </p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <br>
+                        <p-checkbox [(ngModel)]="dto.auxFlagTrabajaDentro" label="Trabaja dentro de la Empresa?"
+                            [disabled]="accion == ACCIONES.VER" binary="true"></p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Empresa</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja"
+                            [(ngModel)]="dto.empresa" maxlength="40" />
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Dirección</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja"
+                            [(ngModel)]="dto.direccionempresa" maxlength="60" />
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Puesto</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja"
+                            [(ngModel)]="dto.puesto" maxlength="4000" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Tiempo Servicio en Años</span>
+                        <input pInputText type="number" [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja"
+                            [(ngModel)]="dto.tiemposervicio" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <label>Sueldo</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dto.sueldo" mode="decimal"
+                            [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja" [min]="0" [max]="1000000"
+                            [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span>Comentarios</span>
+                        <input pInputText type="text" [disabled]="accion == ACCIONES.VER||!dto.auxFlagTrabaja"
+                            [(ngModel)]="dto.comentarios" maxlength="4000" />
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Dirección">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus"
+                            [disabled]="accion==ACCIONES.VER||dto.lstDireccion.length>0" (click)="nuevoDir()"></button>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Eliminar" icon="fa fa-times"
+                            [disabled]="accion==ACCIONES.VER" (click)="eliminDir()"></button>
+                    </div>
+                </div>
+
+
+
+                <div class="p-grid" *ngIf="dto.lstDireccion.length>0">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span class="importante">Tipo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="accion==ACCIONES.VER"
+                            [(ngModel)]="dto.lstDireccion[0].pdttipocalle" [options]="tipovias"></p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-5 p-lg-5">
+                        <span class="importante">Dirección</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].direccion" maxlength="200"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>N°</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].numero" maxlength="5"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Interior</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].interior" maxlength="5"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                </div>
+                <div class="p-grid" *ngIf="dto.lstDireccion.length>0">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Departamento</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].numdep" maxlength="5"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Manzana</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].manzana" maxlength="5"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Lote</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].lote" maxlength="5"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Km.</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].kilometro" maxlength="4"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Sector / Block</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].sector" maxlength="4"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Etapa</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].etapa" maxlength="4"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                </div>
+                <div class="p-grid" *ngIf="dto.lstDireccion.length>0">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Tipo de Zona</span>
+                        <p-dropdown appendTo="body" [style]="{'width': '100%'}" [disabled]="accion==ACCIONES.VER"
+                            [(ngModel)]="dto.lstDireccion[0].pdttipozona" [options]="zonas"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span>Zona</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].pdtzona" maxlength="20"
+                            [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span>Referencia</span>
+                        <input pInputText type="text" [(ngModel)]="dto.lstDireccion[0].referenciasdireccion"
+                            maxlength="60" [disabled]="accion==ACCIONES.VER" />
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <label>Indicar para Centro Essalud</label>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <p-radioButton name="groupname" value="S"
+                                        [(ngModel)]="dto.lstDireccion[0].flagcentroessalud" label="Si"
+                                        [disabled]="accion==ACCIONES.VER"></p-radioButton>
+                                </td>
+                                <td>
+                                    <p-radioButton name="groupname" value="N"
+                                        [(ngModel)]="dto.lstDireccion[0].flagcentroessalud" label="No"
+                                        [disabled]="accion==ACCIONES.VER"></p-radioButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="p-grid" *ngIf="dto.lstDireccion.length>0">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span class="importante">Dpto-Prov-Dist</span>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled style="width:100%;flex: 5;"
+                                [ngModel]="dto.lstDireccion[0].auxUbigeoNombre" />
+                            <button pButton icon="fa fa-binoculars " [disabled]="accion==ACCIONES.VER" class="p-button"
+                                [style]="{'flex': '1'}" type="button " (click)="mostrarSelectorUbigeo() "
+                                title="Buscar "></button>
+                            <button pButton icon="fa fa-trash " [disabled]="accion==ACCIONES.VER" class="p-button"
+                                [style]="{'flex': '1'}" type="button " (click)="limpiarUbigeo()"
+                                title="Limpiar "></button>
+                        </div>
+                    </div>
+                </div>
+
+
+            </p-tabPanel>
+        </p-tabView>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="accion!=ACCIONES.VER" class="p-button-outlined" (click)="guardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verMantenimiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<app-selector-ubicaciongeografica-postulante></app-selector-ubicaciongeografica-postulante>

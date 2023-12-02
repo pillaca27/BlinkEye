@@ -1,0 +1,511 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Nombre</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.nombre" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Usuario</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="filtro.codigoUsuario" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo Usuario</label>
+                        <div class="p-col">
+                            <p-dropdown [disabled]="false" [options]="listarTipoRegistro" [style]="{'width':'100%'}" [(ngModel)]="filtro.usuarioPerfil" optionLabel="name" optionValue="code" [showClear]="true">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="listarstatus" (onChange)="filtro.estado = ($event.value !=null ? $event.value : null)" optionLabel="name" optionValue="code" [showClear]="true" [style]="{'width':'100%'}"> </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table #dtListadoUsuarios [rows]="50" [value]="filtro.paginacion.paginacionListaResultado" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [responsive]="true" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+        (onLazyLoad)="listar($event)" [lazy]="true" [paginator]="true" [responsive]="true" selectionMode="single">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion5">Acción</th>
+                <th class="tablaHeaderUsuario">Código</th>
+                <th class="tablaHeaderCodigo">Tipo Registro</th>
+                <th class="tablaHeaderIzquierda">Nombre</th>
+                <th class="tablaHeaderCodigo">Situación</th>
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td class="tablaColumnaAccion5">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="modificar(rowData, 'MODIFICAR')"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-lock-alt" class="p-button-rounded p-button-text botonGrilla" title="Asignar Perfiles" *ngIf="menuSeguridad.flgModificar" (click)="adicionarPerfiles(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Inactivar" *ngIf="rowData.estado == 'Activo' && menuSeguridad.flgBorrar" (click)="eliminar(rowData, 'MODIFICAR',dtListadoUsuarios)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-cog" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Generar Clave" *ngIf="menuSeguridad.flgBorrar" (click)="generarclave(rowData, 'MODIFICAR',dtListadoUsuarios)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-lock-open-alt" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Desbloquear Usuario" *ngIf="menuSeguridad.flgBorrar" (click)="Desbloquearusuario(rowData,dtListadoUsuarios)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaUsuario">
+                    <span class="p-column-title">Código</span> {{rowData.codigo}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Tipo Registro</span> {{rowData.tipoRegistro}}
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Nombre</span> {{rowData.nombre}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Situación</span> {{rowData.situacion}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <!--   <button pButton type="button" class="tablaBotonInactivo" *ngIf="rowData.estado ==  'Inactivo'"
+                    label="Inactivo"></button>
+                <button pButton type="button" class="tablaBotonActivo" *ngIf="rowData.estado == 'Activo'"
+                    label="Activo"></button> -->
+                    <label *ngIf="rowData.estado == 'Activo'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="rowData.estado == 'Inactivo'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="6">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-dialog header="{{accionlabel}} {{titulos}}" [modal]="true" [responsive]="true" [resizable]="false " [blockScroll]="true" [(visible)]="display" [style]="{width: '50vw'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <label>{{titulos}}</label>
+                    <input pInputText type="text" [disabled]="!modoOnlyGrupo" class="inputMayus" maxlength="20" [(ngModel)]="objRegistro.pk.usuario" style="width: 100%;" [pKeyFilter]="KeyAlfanumerico" />
+                    <input hidden pInputText type="text" disabled class="inputMayus" [(ngModel)]="objRegistro.personanumero" style="width: 100%;" minlength="6" [pKeyFilter]="KeyAlfanumerico" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Tipo de Usuario</label>
+                    <br>
+                    <div class="p-field-radiobutton">
+                        <div>
+                            <p-radioButton name="group3" value="US" label="Usuario" [(ngModel)]="tipoUsuario" inputId="preopt1" (click)="validaUsuario(tipoUsuario)" [disabled]="!disabledCheck">
+                            </p-radioButton>
+                            <p-radioButton name="group3" value="PV" label="Proveedor" [(ngModel)]="tipoUsuario" inputId="preopt1" (click)="validaUsuario(tipoUsuario)" [disabled]="!disabledCheck">
+                            </p-radioButton>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Nombre</label>
+                    <div class="p-inputgroup">
+                        <input pInputText type="text" class="inputMayus" [(ngModel)]="objRegistro.nombre" style="flex: 5;" style="width: 100%;" [disabled]="validaFormulario" [pKeyFilter]="KeyAlfanumerico" />
+                        <button *ngIf="validaFormulario" pButton type="button" icon="fa fa-binoculars" [style]="{'flex': '1'}" class="ui-button-warn" (click)="mostrarAgroPersona()" title="Buscar Proveedor"></button>
+                        <button *ngIf="validaFormulario" pButton type="button" icon="fa fa-trash" class="ui-button-warn" [style]="{'flex': '1'}" title="Buscar Usuarios" (click)="limpiarCampos()"></button>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Forzar Expiración de la Clave</label>
+                    <br>
+                    <p-checkbox binary="true" [(ngModel)]="checkexpiracionclave" (click)="onclickCheckexperiacionclave()"></p-checkbox>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <div *ngIf="validaFormulario">
+                        <label>Nueva Clave</label>
+                        <input pPassword maxlength="10" minlength="6" type="password" [(ngModel)]="objRegistro.clave" [feedback]="false" style="width: 100%;" />
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Fecha Expiración</label>
+                    <p-calendar [monthNavigator]="true" [(ngModel)]="fechaExpiracion" [style]="{'width':'100%'}" [disabled]="!checkexpiracionclave" [inputStyle]="{'width':'90%'}" [yearNavigator]="true" yearRange="1940:2200" [locale]="es" appendTo="body" [showIcon]="true"
+                        dateFormat="dd/mm/yy">
+                    </p-calendar>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Situación</label>
+                    <p-dropdown [(ngModel)]="objRegistro.situacion" [options]="listarSituacion"> </p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <div>
+                        <label>Usuario Red</label>
+                        <input pInputText type="text" maxlength="20" [(ngModel)]="objRegistro.usuariored" style="width: 100%;" />
+                    </div>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Fecha Modificación</label>
+                    <input pInputText type="text" [(ngModel)]="ultimaFechaModif" style="width: 100%;" disabled />
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Último Ingreso</label>
+                    <input pInputText type="text" [(ngModel)]="ultimoIngreso" style="width: 100%;" disabled />
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Ultimo Usuario</label>
+                    <input pInputText type="text" [(ngModel)]="objRegistro.ultimousuario" style="width: 100%;" (ngModelChange)="objRegistro.ultimousuario=$event.toUpperCase()" disabled />
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                    <label>Estado</label>
+                    <div class="ui-inputgroup">
+                        <p-radioButton name="group2" value="A" label="Activo" [(ngModel)]="estado" inputId="preopt11" [disabled]="disabledCheck"></p-radioButton>
+                        <p-radioButton name="group2" value="I" label="Inactivo" [(ngModel)]="estado" inputId="preopt22" [disabled]="disabledCheck"></p-radioButton>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <button type="button" pButton icon="fa fa-check" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="registar(dtListadoUsuarios)" label="Aceptar"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button type="button" pButton icon="fa fa-times" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="cancelar()" label="Cancelar"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Usuarios vs Perfiles" [modal]="true" [responsive]="true" [resizable]="false " [blockScroll]="true" [(visible)]="displayPerfil" [blockScroll]="true" [style]="{width: '60vw'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <label>{{labeelbutton}} Código</label>
+                    <input pInputText type="text" [(ngModel)]="perfilTemp" style="width: 100%;" disabled />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label>{{labeelbutton}} Nombre</label>
+                    <input pInputText type="text" [(ngModel)]="usuarioTemp" style="width: 100%;" disabled />
+                </div>
+            </div>
+        </div>
+
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <button type="button" pButton icon="fa fa-binoculars" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="ShowModalPerfiles(LstPerfiles)" label="Asignar {{labeelbutton}}"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-8"></div>
+            </div>
+        </div>
+    </div>
+
+    <p-table #dtListado [rows]="10" [value]="filtroSPerfilUsuario.paginacion.paginacionListaResultado" [scrollable]="true" [style]="{'width': '100%'}" [paginator]="true" [lazy]="true" (onLazyLoad)="listarPerfilUsuario($event)" [responsive]="true" [totalRecords]="filtroSPerfilUsuario.paginacion.paginacionRegistrosEncontrados">
+        <ng-template pTemplate="caption">
+            <div class="p-d-flex p-ai-center p-jc-between">
+                <h5 class="p-m-0">{{labeldescriptiontype}} Asignados</h5>
+            </div>
+        </ng-template>
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Acción</th>
+                <th class="tablaHeaderUsuario">{{labeelbutton}}</th>
+                <th class="tablaHeaderNombre">Nombre</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td class="tablaColumnaAccion1">
+                    <button pButton type="button" style="font-size: 12px;" class="ui-button-warning" icon="fa fa-power-off" style="height: 15px;" title="Desactivar Perfil" (click)="desactivarPerfil(rowData,dtListado)"></button>
+                </td>
+                <td class="tablaColumnaUsuario">
+                    <span class="p-column-title">{{labeelbutton}}</span> {{rowData.perfil}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">nombre</span> {{rowData.nombre}}
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <button type="button" pButton icon="fa fa-binoculars" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="cancelar()" label="Aceptar"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button type="button" pButton icon="fa fa-times" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="cancelar()" label="Cancelar"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--     <div class="ui-g">
+        <div class="ui-g espacioReducido ajustarEspacioEntreBordesPanel">
+            <div class="ui-g-12 ui-md-2 ui-lg-1 ancho15char">
+                {{labeelbutton}} Código
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-lg-2 espacioReducido espacioEntreControles">
+                <input pInputText type="text" [(ngModel)]="perfilTemp" style="width: 100%;" disabled />
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-lg-1 ancho15char">
+                {{labeelbutton}} Nombre
+            </div>
+            <div class="ui-g-12 ui-md-2 ui-lg-4 espacioReducido espacioEntreControles">
+                <input pInputText type="text" [(ngModel)]="usuarioTemp" style="width: 100%;" disabled />
+            </div>
+
+            <div class="ui-g-12 ui-md-2 ui-lg-1 ancho15char"></div>
+            <div class="ui-g-12 ui-md-2 ui-lg-3 espacioReducido espacioEntreControles">
+                <button type="button" pButton icon="fa fa-binoculars"
+                    class="ui-button-warning ui-button-rounded ui-button-raised"
+                    (click)="ShowModalPerfiles(LstPerfiles)" label="Asignar {{labeelbutton}}"></button>
+            </div>
+        </div>
+
+        <div class="ui-g-12 ui-md-6 ui-lg-12">
+            <h3>{{labeldescriptiontype}} Asignados</h3>
+            <p-table #dtListado [rows]="10" [value]="filtroSPerfilUsuario.paginacion.paginacionListaResultado"
+                [scrollable]="true" [style]="{'width': '100%'}" [paginator]="true" [lazy]="true"
+                (onLazyLoad)="listarPerfilUsuario($event)" [responsive]="true"
+                [totalRecords]="filtroSPerfilUsuario.paginacion.paginacionRegistrosEncontrados">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 20%;">{{labeelbutton}}</th>
+                        <th style="width: 60%; text-align: left;">Nombre</th>
+                        <th style="width: 20%; text-align: center;">Acción</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td style="width: 20%; text-align: center;">
+                            <span class="p-column-title">{{labeelbutton}}</span>
+                            {{rowData.perfil}}
+                        </td>
+                        <td style="width: 60%; text-align: left;">
+                            <span class="p-column-title">nombre</span>
+                            {{rowData.nombre}}
+                        </td>
+                        <td style="width: 20%; text-align: center;">
+                            <button pButton type="button" style="font-size: 12px;" class="ui-button-warning"
+                                icon="fa fa-power-off" style="height: 15px;" title="Desactivar Perfil"
+                                (click)="desactivarPerfil(rowData,dtListado)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="7">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g-12 ui-md-6 ui-lg-6">
+                    <button type="button" pButton icon="fa fa-binoculars"
+                        class="ui-button-warning ui-button-rounded ui-button-raised" (click)="cancelar()"
+                        label="Aceptar"></button>
+                </div>
+                <div class="ui-g-12 ui-md-6 ui-lg-6">
+                    <button type="button" pButton icon="fa fa-times"
+                        class="ui-button-warning ui-button-rounded ui-button-raised" (click)="cancelar()"
+                        label="Cancelar"></button>
+                </div>
+            </div>
+        </div>
+    </div> -->
+</p-dialog>
+
+<p-dialog header="Asignar {{labeelbutton}}" [modal]="true" [responsive]="true" [resizable]="false " [blockScroll]="true" [(visible)]="displayPerfilPopup" [style]="{width: '60vw'}">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="ui-g-12 ui-md-6 ui-lg-8">
+                <div class="ui-g-12 ui-md-2 ui-lg-1 ancho15char">
+                    Nombre {{labeelbutton}}
+                </div>
+                <div class="ui-g-12 ui-md-2 ui-lg-6">
+                    <input pInputText type="text" [(ngModel)]="filtroPerfil.nombre" style="width: 100%;" />
+                </div>
+                <div class="ui-g-12 ui-md-2 ui-lg-3">
+                    <button type="button" pButton icon="fa fa-binoculars" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="BuscarPerfiles(LstPerfiles)" label="Buscar"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="ui-g-12 ui-md-12 ui-lg-12">
+        <div class="ui-g-12 ui-md-6 ui-lg-12">
+            <p-table #LstPerfiles [rows]="7" [value]="filtroPerfil.paginacion.paginacionListaResultado" [totalRecords]="filtroPerfil.paginacion.paginacionRegistrosEncontrados" [style]="{'width': '100%'}" [lazy]="true" (onLazyLoad)="listarPerfiles($event)" [responsive]="true"
+                [paginator]="true">
+                <ng-template pTemplate="caption">
+                    Listado de {{labeldescriptiontype}}
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderAccion1">Acción</th>
+                        <th class="tablaHeaderUsuario">Código</th>
+                        <th class="tablaHeaderNombre">{{labeelbutton}}</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <td class="tablaColumnaAccion1">
+                            <button pButton type="button" icon="fa fa-plus-circle" class="tablaBotonIcono" title="Seleccionar" (click)="registrarPerfil(rowData,dtListado)"></button>
+                        </td>
+                        <td class="tablaColumnaUsuario">
+                            <span class="p-column-title">Perfil</span> {{rowData.codigo}}
+                        </td>
+                        <td class="tablaColumnaNombre">
+                            <span class="p-column-title">nombre</span> {{rowData.nombre}}
+                        </td>
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="3">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Persona" [blockScroll]="true" [modal]="true" [responsive]="true" [resizable]="false " [(visible)]="displayAgGePersona" [modal]="true" [style]="{width: '50vw'}" [baseZIndex]="10000" [draggable]="false" [resizable]="false">
+    <div class="ui-g">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g-12 ui-md-6 ui-lg-12">
+                    <span>Documento</span>
+                    <input pInputText type="text" [(ngModel)]="filtroAgGePersona.personaAgroDocumento" style="width: 100%;" />
+                </div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g-12 ui-md-6 ui-lg-12">
+                    <span>Nombre Persona</span>
+                    <input pInputText type="text" [(ngModel)]="filtroAgGePersona.personaAgroBusqueda" style="width: 100%;" />
+                </div>
+            </div>
+        </div>
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g-12 ui-md-6 ui-lg-12"></div>
+            </div>
+            <div class="ui-g-12 ui-md-6 ui-lg-6">
+                <div class="ui-g-12 ui-md-6 ui-lg-12">
+                    <button type="button" pButton icon="fa fa-binoculars" class="ui-button-warning ui-button-rounded ui-button-raised" (click)="buscarAgGePersona()" label="Buscar"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-table [value]="filtroAgGePersona.paginacion.paginacionListaResultado" [scrollable]="true" [scrollable]="true" scrollHeight="355px" [style]="{'width': '100%'}" [lazy]="true" (onLazyLoad)="listarAgGePersona($event)" [responsive]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th style="width: 30px;">Documento</th>
+                <th style="width: 70px; text-align: left;">Nombre Completo</th>
+                <th style="width: 10px; text-align: center;">Acción</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td style="width: 30px;">
+                    <span class="p-column-title">Documento</span> {{rowData.documentoNumero}}
+                </td>
+                <td style="width: 70px; text-align: left;">
+                    <span class="p-column-title">Nombre Completo</span> {{rowData.nombre}}
+                </td>
+                <!-- <td style="width:40px;  text-align: left;">
+                                <span class="p-column-title">Estado</span>
+                                {{rowData.estado}}
+                            </td> -->
+                <td style="width: 10px; text-align: center;">
+                    <span class="p-column-title">A</span>
+                    <div class="ui-g">
+                        <div class="ui-g-3 ui-md-3 ui-lg-3" style="cursor: pointer; height: 17px;" title="Seleccionar Persona">
+                            <button pButton type="button" icon="fa fa-plus-circle" class="tablaBotonIcono" style="height: 15px; margin-top: -5px;" (click)="obtenerAgGePersona(rowData)"></button>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="displayAgGePersona=false" label="Yes"></button>
+        <!-- <button type="button" pButton icon="pi pi-times" (click)="displayModal=false" label="No" class="ui-button-secondary"></button> -->
+    </p-footer>
+</p-dialog>
+
+<!-- <app-usuario-selector (cargarSeleccion)="cargarUsuarios($event)"></app-usuario-selector>
+<app-agropersonacomun-selector (cargarSeleccionPersonaEvent)="seleccionarCliente($event)">
+</app-agropersonacomun-selector>
+<app-tipoExportar-selector (cargarSeleccionEvent)="seleccionarExportarTipo($event)"></app-tipoExportar-selector>
+ -->
+
+<p-confirmDialog #c>
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="tablaBotonIcono" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="tablaBotonIcono" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<!-- LEONARDO INTERCAMBIANDO SELECTOR -->
+<app-personacomun-selector></app-personacomun-selector>

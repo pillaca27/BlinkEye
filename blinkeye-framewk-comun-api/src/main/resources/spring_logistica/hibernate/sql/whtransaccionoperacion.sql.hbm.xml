@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whtransaccionoperacion.listar">
+	    <![CDATA[
+	        select tipodocumento as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_TIPODOCUMENTO	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whtransaccionoperacion.listarActivos">
+	    <![CDATA[
+	        select tipodocumento as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_TIPODOCUMENTO
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whtransaccionoperacion.obtenerTabla">
+	    <![CDATA[
+	        select tipodocumento as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_TIPODOCUMENTO
+			where tipodocumento = :p_tipodocumento
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whtransaccionoperacion.listarfiltros">
+    	select tipodocumento as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from WH_TIPODOCUMENTO 
+    	where  tipodocumento = ISNULL(:p_tipodocumento,tipodocumento)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal	    	
+	</sql-query>
+	
+	<sql-query name="whtransaccionoperacion.obtenerDto">
+        select 
+			TIPODOCUMENTO "tipodocumento"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,ESFISCALFLAG "esfiscalflag"
+			,TRANSACCIONDELSISTEMAFLAG "transacciondelsistemaflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CODIGOFISCAL "codigofiscal"
+         from WH_TIPODOCUMENTO
+         where 
+			TIPODOCUMENTO = :p_tipodocumento
+    </sql-query>
+    
+    <sql-query name="whtransaccionoperacion.listardtofiltros">
+         select 
+			TIPODOCUMENTO "tipodocumento"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,ESFISCALFLAG "esfiscalflag"
+			,TRANSACCIONDELSISTEMAFLAG "transacciondelsistemaflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CODIGOFISCAL "codigofiscal"
+
+         from WH_TIPODOCUMENTO
+         where 
+				TIPODOCUMENTO = ISNULL(:p_tipodocumento,TIPODOCUMENTO)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="afemst.listar">
+	    <![CDATA[
+	        select CAST(afe AS VARCHAR) as "codigo", CAST(localname AS VARCHAR) as "nombre", CAST(status AS VARCHAR) as "estadoId" from afemst	        
+	    ]]>
+	</sql-query>
+	
+    <sql-query name="afemst.listarActivos">
+	    <![CDATA[
+	        select CAST(afe AS VARCHAR) as "codigo", 
+	        CAST(localname AS VARCHAR) as "nombre", 
+	        CAST(status AS VARCHAR) as "estadoId" 
+	        from afemst
+	        where status = 'A'
+	        order by LOCALNAME
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="afemst.obtenerDtoTablaPorId">
+	    <![CDATA[
+	        select CAST(afe AS VARCHAR) as "codigo", 
+	        CAST(localname AS VARCHAR) as "nombre", 
+	        CAST(status  AS VARCHAR) as "estadoId" 
+	        from afemst
+			where afe = :p_afe
+			order by LOCALNAME
+	    ]]>
+	</sql-query>
+	 
+	<sql-query name="afemst.obtenerdto">
+         select 
+			 CAST(AFE AS VARCHAR) "afe"
+			,CAST(COMPANYOWNER AS VARCHAR) "companyowner"
+			,CAST(LOCALNAME AS VARCHAR) "localname"
+			,CAST(ENGLISHNAME AS VARCHAR) "englishname"
+			,APPROVEDDATE "approveddate"
+			,STARTDATE "startdate"
+			,COMPLETEDDATE "completeddate"
+			,RESPONSIBLE "responsible"
+			,CAST(APPROPRIATIONAMOUNT as money) "appropriationamount"
+			,CAST(ACCOUNT AS VARCHAR) "account"
+			,CAST(ACCOUNTCLEARING AS VARCHAR) "accountclearing"
+			,CAST(AFETYPE AS VARCHAR) "afetype"
+			,CAST(AFEGROUP  AS VARCHAR) "afegroup"
+			,CAST(ELEMENTDEFAULT AS VARCHAR) "elementdefault"
+			,CAST(COSTCENTER AS VARCHAR) "costcenter"
+			,CAST(GROUP01 AS VARCHAR) "group01"
+			,CAST(GROUP02 AS VARCHAR) "group02"
+			,CAST(GROUP03 AS VARCHAR) "group03"
+			,CAST(GROUP04 AS VARCHAR) "group04"
+			,CAST(STATUS as varchar) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,APPROPRIATIONCURRENCY "appropriationcurrency"
+			,CAST(USERSTATUS AS VARCHAR) "userstatus"
+			,INTERNALNUMBER "internalnumber"
+         from AFEMST
+         where 
+			AFE = :p_afe
+    </sql-query>
+    
+    <sql-query name="afemst.listardtofiltros">
+         select 
+					 CAST(AFE AS VARCHAR) "afe"
+			,CAST(COMPANYOWNER AS VARCHAR) "companyowner"
+			,CAST(LOCALNAME AS VARCHAR) "localname"
+			,CAST(ENGLISHNAME AS VARCHAR) "englishname"
+			,APPROVEDDATE "approveddate"
+			,STARTDATE "startdate"
+			,COMPLETEDDATE "completeddate"
+			,RESPONSIBLE "responsible"
+			,CAST(APPROPRIATIONAMOUNT as money) "appropriationamount"
+			,CAST(ACCOUNT AS VARCHAR) "account"
+			,CAST(ACCOUNTCLEARING AS VARCHAR) "accountclearing"
+			,CAST(AFETYPE AS VARCHAR) "afetype"
+			,CAST(AFEGROUP  AS VARCHAR) "afegroup"
+			,CAST(ELEMENTDEFAULT AS VARCHAR) "elementdefault"
+			,CAST(COSTCENTER AS VARCHAR) "costcenter"
+			,CAST(GROUP01 AS VARCHAR) "group01"
+			,CAST(GROUP02 AS VARCHAR) "group02"
+			,CAST(GROUP03 AS VARCHAR) "group03"
+			,CAST(GROUP04 AS VARCHAR) "group04"
+			,CAST(STATUS as varchar) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,APPROPRIATIONCURRENCY "appropriationcurrency"
+			,CAST(USERSTATUS AS VARCHAR) "userstatus"
+			,INTERNALNUMBER "internalnumber"
+         from AFEMST
+         where 
+				AFE = ISNULL(:p_afe,afe)
+			and companyowner = ISNULL(:p_companyowner,companyowner)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and STATUS = ISNULL(:p_status,STATUS)
+		order by LOCALNAME
+    </sql-query>
+    
+	 <sql-query name="afemst.paginadoContar">
+	 <![CDATA[
+        SELECT  count(1)
+		    FROM afemst a
+		        left join AFETYPEMST t
+		        on a.afetype = t.afetype
+		   WHERE 1=1
+		  and  ( UPPER(ISNULL( A.AFE ,'xxx')) like '%' + ISNULL(:p_codigo,UPPER( A.AFE )) + '%')
+		   and A.COMPANYOWNER = isnull(:p_compania,A.COMPANYOWNER)
+		   --and A.LOCALNAME  LIKE '%' or isnull(:p_nombre,A.LOCALNAME) or '%'
+		    and  ( UPPER(ISNULL( A.LOCALNAME ,'xxx')) like '%' + ISNULL(:p_nombre,UPPER( A.LOCALNAME )) + '%')
+		   and ISNULL(A.afetype, '-') = isnull(:p_tipo,ISNULL(A.afetype, '-'))
+		   and A.status = isnull(:p_estado,A.status)
+		   ]]>
+    </sql-query>
+    
+    <sql-query name="afemst.paginadolistar">
+    <![CDATA[
+        SELECT   a.afe as "afe"
+		         ,a.localname as "localname"          
+		         ,a.afetype as "afetype"
+		         ,t.LOCALNAME as "afetypenombre"
+		         
+		    FROM afemst a
+		        left join AFETYPEMST t
+		        on a.afetype = t.afetype
+		   WHERE 1=1
+		   and  ( UPPER(ISNULL( A.AFE ,'xxx')) like '%' + ISNULL(:p_codigo,UPPER( A.AFE )) + '%')
+		   --A.AFE   LIKE '%' or isnull(:p_codigo,A.AFE) or '%'
+		   and A.COMPANYOWNER = isnull(:p_compania,A.COMPANYOWNER)
+		   --and UPPER(A.LOCALNAME)  LIKE '%' or UPPER(isnull(:p_nombre,A.LOCALNAME)) or '%'
+		   and   ( UPPER(ISNULL( A.LOCALNAME ,'xxx')) like '%' + ISNULL(:p_nombre,UPPER( A.LOCALNAME )) + '%')
+		   and ISNULL(A.afetype, '-') = isnull(:p_tipo,ISNULL(A.afetype, '-'))
+		   and A.status = isnull(:p_estado,A.status)
+		ORDER BY a.localname ASC 
+		]]>
+    </sql-query>
+    
+    
+	<sql-query name="afemst.contarproyectoporfiltro">
+    <![CDATA[
+    	SELECT
+		 COUNT(*)
+		FROM AFEMST
+		LEFT JOIN COMPANYOWNER ON COMPANYOWNER.COMPANYOWNER = AFEMST.COMPANYOWNER
+		AND (ISNULL(:p_afe, '-') = '-' OR AFEMST.AFE = :p_afe)
+		AND (ISNULL(:p_localname, '-') = '-' OR AFEMST.LOCALNAME LIKE '%'+isnull(:p_localname, AFEMST.LOCALNAME)+'%')	
+ 
+    ]]>
+	</sql-query>
+	<sql-query name="afemst.listarproyectoporfiltro">
+    <![CDATA[
+    	SELECT
+			LTRIM(RTRIM(UPPER(AFEMST.AFE))) AS afe, 
+			LTRIM(RTRIM(UPPER(AFEMST.LOCALNAME))) AS localname, 
+			CAST(AFEMST.COMPANYOWNER AS VARCHAR) AS companyowner, 
+			LTRIM(RTRIM(UPPER(COMPANYOWNER.DESCRIPTION))) AS companyownernombre, 
+			CAST(AFEMST.STATUS AS VARCHAR) AS estado 
+		FROM AFEMST
+		LEFT JOIN COMPANYOWNER ON COMPANYOWNER.COMPANYOWNER = AFEMST.COMPANYOWNER
+		AND (ISNULL(:p_afe, '-') = '-' OR AFEMST.AFE = :p_afe)
+		AND (ISNULL(:p_localname, '-') = '-' OR AFEMST.LOCALNAME LIKE '%'+isnull(:p_localname, AFEMST.LOCALNAME)+'%')	
+		ORDER BY AFEMST.LOCALNAME
+    ]]>
+	</sql-query>
+    	  
+</hibernate-mapping>

@@ -1,0 +1,171 @@
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Aplicación código</label>
+                    <!--                  <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.aplicacioncodigo"
+                        maxlength="2" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.aplicacioncodigo=$event.toUpperCase()" /> -->
+                    <p-dropdown [(ngModel)]="filtro.aplicacioncodigo" [filter]="true" [options]="lstAplicaciones"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Grupo</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.grupo" maxlength="20"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.grupo=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Descripción local</label>
+                    <input #myDescripcionlocal pInputText type="text" style="width:100%;"
+                        [(ngModel)]="filtro.descripcionlocal" maxlength="50" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.descripcionlocal=$event.toUpperCase()" />
+                </div>
+                <!--  <div class="p-field p-col-12 p-md-3">
+                    <label>Descripcióningles</label>
+                    <input pInputText type="text"  style="width:100%;"
+                        [(ngModel)]="filtro.descripcioningles" maxlength="50" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.descripcioningles=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Tipodetalle</label>
+                    <input pInputText type="text"  style="width:100%;"
+                        [(ngModel)]="filtro.tipodetalle" maxlength="2" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.tipodetalle=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Ordenpresentación</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.ordenpresentacion"
+                        maxlength="4" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ordenpresentacion=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Estado</label>
+                    <p-dropdown [(ngModel)]="filtro.estado" [options]="lstEstados" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimousuario</label>
+                    <input pInputText type="text"  style="width:100%;"
+                        [(ngModel)]="filtro.ultimousuario" maxlength="20" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimousuario=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimafechamodif</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.ultimafechamodif"
+                        maxlength="8" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimafechamodif=$event.toUpperCase()" />
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+</app-botones-listado>
+
+<p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true"
+    [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true"
+    (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion3">Acción</th>
+            <th class="tablaHeaderCodigo">Aplicación Código</th>
+            <th class="tablaHeaderTipoGrande">Grupo</th>
+            <th class="tablaHeaderNombre">Descripción Local</th>
+            <!-- <th class="tablaHeaderCodigo">Descripción Ingles</th>
+            <th class="tablaHeaderCodigo">Tipo Detalle</th>
+            <th class="tablaHeaderMonto">Orden Presentación</th> -->
+            <th class="tablaHeaderEstado">Estado</th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr>
+            <td class="tablaColumnaAccion3">
+                <span class="p-column-title">Acción</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar"
+                                (click)="coreEditar(row)"></button>
+                        </th>
+                        <!-- 
+                        <th *ngIf="row.grupo.trim()=='CENTROCOSTOS'">
+                            <button pButton pRipple type="button" icon="fad fa-layer-plus"
+                                class="p-button-rounded p-button-text" title="Editar Conceptos" *ngIf="menuSeguridad.flgModificar"
+                                (click)="coreEditarConceptos(row)"></button>
+                        </th> -->
+
+                        
+
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-search"
+                                class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar"
+                                (click)="coreVer(row)"></button>
+                        </th>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-times"
+                                class="p-button-rounded p-button-text p-button-warning" title="Anular"
+                                *ngIf="row.estado == 'A' && menuSeguridad.flgBorrar" (click)="coreAnular(row)"></button>
+                        </th>
+                        <!--  <th>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                class="p-button-rounded p-button-danger p-button-text" title="Eliminar"
+                                *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                        </th> -->
+                    </tr>
+                </table>
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Aplicación Código</span>
+                {{row.aplicacioncodigo}}
+            </td>
+            <td class="tablaColumnaTipoGrande">
+                <span class="p-column-title">Grupo</span>
+                {{row.grupo}}
+            </td>
+            <td class="tablaColumnaNombre">
+                <span class="p-column-title">Descripción Local</span>
+                {{row.descripcionlocal}}
+            </td>
+            <!-- <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Cescripción Ingles</span>
+                {{row.descripcioningles}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipo Detalle</span>
+                {{row.tipodetalle}}
+            </td>
+            <td class="tablaColumnaMonto">
+                <span class="p-column-title">Orden Presentación</span>
+                {{row.ordenpresentacion| number:'1.0-0'}}
+            </td> -->
+            <td class="tablaColumnaEstado">
+                <span class="p-column-title">Estado</span>
+                <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+            </td>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="5">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>

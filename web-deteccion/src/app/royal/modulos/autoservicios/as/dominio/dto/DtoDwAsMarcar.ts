@@ -1,0 +1,39 @@
+export class DtoDwAsMarcar {
+    carnetid: string;
+    fecha: Date;
+    secuencia: number;
+    empleado: number;
+    codigotransaccion: string;
+    clasificacion: string;
+    tipovalidacion: string;
+    carnetsupervisor: string;
+    empleadosupervisor: number;
+    hora: Date;
+    observacion: string;
+    unidadreplicacion: string;
+    ano: number;
+    mes: number;
+    dia: number;
+    ultimafechamodif: Date;
+    ultimousuario: string;
+    lugarrecoleccion: string;
+    lectora: string;
+    empleado_a: number;
+    fecha_a: Date;
+    conceptoacceso_a: string;
+    desde_a: Date;
+    terminal: number;
+    codigocarnet: string;
+    nombreEmpleado: string;
+    sysdate: Date;
+
+    indicador: string;
+    tipodia: number;
+    diadescanso: string;
+    diasemana: string;
+    horainicio: Date;
+    horafin: Date;
+    desde: Date;
+    hasta: Date;
+    flagpasaalotrodi: string;
+}

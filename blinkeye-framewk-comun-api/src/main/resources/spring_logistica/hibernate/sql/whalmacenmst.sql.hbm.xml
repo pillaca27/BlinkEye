@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : whalmacenmst
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="whalmacenmst.listar">
+    	<![CDATA[
+			select ALMACENCODIGO AS "codigo", descripcionlocal as "nombre" 
+					,CAST(estado as varchar) as "estadoId"
+			From wh_ALMACENMAST 
+			order by descripcionlocal
+		]]>
+	</sql-query>
+	<sql-query name="whalmacenmst.listaractivos">
+    	<![CDATA[
+			select ALMACENCODIGO AS "codigo", descripcionlocal as "nombre"
+					,CAST(estado as varchar) as "estadoId"
+			From wh_ALMACENMAST where ESTADO = 'A'
+			order by descripcionlocal
+		]]>
+	</sql-query>
+	
+	<sql-query name="whalmacenmst.obtenerTabla">
+	    <![CDATA[
+	        select ALMACENCODIGO AS "codigo", descripcionlocal as "nombre"
+					,CAST(estado  as varchar(1)) as "estadoId" 
+			From wh_ALMACENMAST where ALMACENCODIGO = :p_almacencodigo
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whalmacenmst.listarfiltros">
+    	select almacencodigo as "codigo", descripcionlocal as "nombre"
+    			,CAST(Estado  as varchar(1)) as "estadoId" 
+    	from wh_ALMACENMAST 
+    	where   almacencodigo = ISNULL(:p_almacencodigo,almacencodigo)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal
+	</sql-query>
+	
+	<sql-query name="whalmacenmst.obtenerDto">
+         select 
+			CAST(ALMACENCODIGO  as varchar) "almacencodigo"
+			,CAST(MULTICOMPANIAFLAG as varchar(1)) "multicompaniaflag"
+			,CAST(COMPANIASOCIO  as varchar)  "companiasocio"
+			,CAST(DESCRIPCIONLOCAL  as varchar)  "descripcionlocal"
+			,CAST(DESCRIPCIONINGLES  as varchar)  "descripcioningles"
+			,CAST(DIRECCION  as varchar)  "direccion"
+			,CAST(UNIDADNEGOCIO  as varchar) "unidadnegocio"
+			,CAST(TIPOALMACEN as varchar(1))  "tipoalmacen"
+			,ALMACENTRANSITOPRINCIPAL "almacentransitoprincipal"
+			,CAST(ALMACENVENTAFLAG as varchar(1)) "almacenventaflag"
+			,CAST(ALMACENPRODUCCIONFLAG as varchar(1)) "almacenproduccionflag"
+			,CAST(SUBALMACENFLAG as varchar(1)) "subalmacenflag"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NUMEROMESESSTOCK    "numeromesesstock"
+			,ENCARGADO "encargado"
+			,CAST(ESTADO as varchar(1)) "estado"
+			,CAST(ULTIMOUSUARIO  as varchar) "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(CUENTAGASTO  as varchar) "cuentagasto"
+			,CAST(ALMACENREGION  as varchar)"almacenregion"
+			,CAST(ALMACENCONSIGNACIONFLAG as varchar(1)) "almacenconsignacionflag"
+			,CAST(DISPONIBLEPLANPRODUCCIONFLAG as varchar(1)) "disponibleplanproduccionflag"
+			,CAST(ALMACENCOMMODITYFLAG as varchar(1)) "almacencommodityflag"
+			,CAST(ALMACENINTERMEDIOFLAG  as varchar(1))"almacenintermedioflag"
+			,COMERCIALCAJERO "comercialcajero"
+			,COMERCIALCOBRADOR "comercialcobrador"
+			,CAST(SUCURSAL  as varchar) "sucursal"
+			,CAST(ESTABLECIMIENTOFISCAL  as varchar) "establecimientofiscal"
+			,CAST(AlmacenGastoFlag  as varchar) "almacengastoflag"
+
+         from WH_ALMACENMAST
+         where 
+			ALMACENCODIGO = :p_almacencodigo
+    </sql-query>
+    
+    <sql-query name="whalmacenmst.listardtofiltros">
+          select 
+			ALMACENCODIGO "almacencodigo"
+			,CAST(MULTICOMPANIAFLAG as varchar(1)) "multicompaniaflag"
+			,COMPANIASOCIO "companiasocio"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DIRECCION "direccion"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,CAST(TIPOALMACEN as varchar(1))  "tipoalmacen"
+			,ALMACENTRANSITOPRINCIPAL "almacentransitoprincipal"
+			,CAST(ALMACENVENTAFLAG as varchar(1)) "almacenventaflag"
+			,CAST(ALMACENPRODUCCIONFLAG as varchar(1)) "almacenproduccionflag"
+			,CAST(SUBALMACENFLAG as varchar(1)) "subalmacenflag"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NUMEROMESESSTOCK "numeromesesstock"
+			,ENCARGADO "encargado"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTAGASTO "cuentagasto"
+			,ALMACENREGION "almacenregion"
+			,CAST(ALMACENCONSIGNACIONFLAG as varchar(1))"almacenconsignacionflag"
+			,CAST(DISPONIBLEPLANPRODUCCIONFLAG as varchar(1)) "disponibleplanproduccionflag"
+			,CAST(ALMACENCOMMODITYFLAG as varchar(1)) "almacencommodityflag"
+			,CAST(ALMACENINTERMEDIOFLAG  as varchar(1))"almacenintermedioflag"
+			,COMERCIALCAJERO "comercialcajero"
+			,COMERCIALCOBRADOR "comercialcobrador"
+			,SUCURSAL "sucursal"
+			,ESTABLECIMIENTOFISCAL "establecimientofiscal"
+
+         from WH_ALMACENMAST
+         where 
+				ALMACENCODIGO = ISNULL(:p_almacencodigo,ALMACENCODIGO)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+	
+	<sql-query name="whalmacenmst.listardtoporcompania">
+          select 
+			ALMACENCODIGO "almacencodigo"
+			,CAST(MULTICOMPANIAFLAG  as varchar(1)) "multicompaniaflag"
+			,COMPANIASOCIO "companiasocio"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DIRECCION "direccion"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,CAST(TIPOALMACEN as varchar(1))  "tipoalmacen"
+			,ALMACENTRANSITOPRINCIPAL "almacentransitoprincipal"
+			,CAST(ALMACENVENTAFLAG  as varchar(1)) "almacenventaflag"
+			,CAST(ALMACENPRODUCCIONFLAG  as varchar(1)) "almacenproduccionflag"
+			,CAST(SUBALMACENFLAG  as varchar(1)) "subalmacenflag"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NUMEROMESESSTOCK "numeromesesstock"
+			,ENCARGADO "encargado"
+			,CAST(ESTADO  as varchar(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTAGASTO "cuentagasto"
+			,ALMACENREGION "almacenregion"
+			,CAST(ALMACENCONSIGNACIONFLAG  as varchar(1)) "almacenconsignacionflag"
+			,CAST(DISPONIBLEPLANPRODUCCIONFLAG  as varchar(1)) "disponibleplanproduccionflag"
+			,CAST(ALMACENCOMMODITYFLAG  as varchar(1)) "almacencommodityflag"
+			,CAST(ALMACENINTERMEDIOFLAG   as varchar(1)) "almacenintermedioflag"
+			,COMERCIALCAJERO "comercialcajero"
+			,COMERCIALCOBRADOR "comercialcobrador"
+			,SUCURSAL "sucursal"
+			,ESTABLECIMIENTOFISCAL "establecimientofiscal"
+         from WH_ALMACENMAST
+         where 
+				companiasocio = :p_companiasocio
+		order by descripcionlocal
+    </sql-query>
+	
+	<sql-query name="whalmacenmst.listardtoactivoscommodityflagnporcompania">
+          select 
+			ALMACENCODIGO "almacencodigo"
+			,CAST(MULTICOMPANIAFLAG as varchar(1)) "multicompaniaflag"
+			,COMPANIASOCIO "companiasocio"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DIRECCION "direccion"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,CAST(TIPOALMACEN as varchar(1)) "tipoalmacen"
+			,ALMACENTRANSITOPRINCIPAL "almacentransitoprincipal"
+			,CAST(ALMACENVENTAFLAG as varchar(1)) "almacenventaflag"
+			,CAST(ALMACENPRODUCCIONFLAG as varchar(1)) "almacenproduccionflag"
+			,CAST(SUBALMACENFLAG as varchar(1)) "subalmacenflag"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NUMEROMESESSTOCK "numeromesesstock"
+			,ENCARGADO "encargado"
+			,CAST(ESTADO as varchar(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTAGASTO "cuentagasto"
+			,ALMACENREGION "almacenregion"
+			,CAST(ALMACENCONSIGNACIONFLAG as varchar(1)) "almacenconsignacionflag"
+			,CAST(DISPONIBLEPLANPRODUCCIONFLAG as varchar(1)) "disponibleplanproduccionflag"
+			,CAST(ALMACENCOMMODITYFLAG as varchar(1)) "almacencommodityflag"
+			,CAST(ALMACENINTERMEDIOFLAG as varchar(1)) "almacenintermedioflag"
+			,COMERCIALCAJERO "comercialcajero"
+			,COMERCIALCOBRADOR "comercialcobrador"
+			,SUCURSAL "sucursal"
+			,ESTABLECIMIENTOFISCAL "establecimientofiscal"
+         from WH_ALMACENMAST
+         where 
+         		ESTADO = 'A'
+            and TipoAlmacen = 'P'
+			and companiasocio = ISNULL(:p_companiasocio,companiasocio)
+		order by descripcionlocal
+    </sql-query>
+    
+    	<sql-query name="whalmacenmst.listaractivosporusuario">
+    	<![CDATA[
+			  SELECT WH_AlmacenMast.AlmacenCodigo as "codigo",
+         WH_AlmacenMast.DescripcionLocal as "nombre",
+          WH_AlmacenMast.Direccion as "descripcion" 
+    FROM WH_AlmacenMast,   
+         SY_SeguridadAutorizaciones  
+   WHERE ( WH_AlmacenMast.AlmacenCodigo = SY_SeguridadAutorizaciones.Concepto ) and  
+         ( ( WH_AlmacenMast.Estado = 'A' ) AND  
+         ( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND  
+         ( SY_SeguridadAutorizaciones.Grupo = 'ALMACEN' ) AND  
+         ( SY_SeguridadAutorizaciones.Estado = 'A' ) AND  
+         ( SY_SeguridadAutorizaciones.Usuario = :p_usuario ) )  
+		]]>
+	</sql-query>
+    	
+</hibernate-mapping>

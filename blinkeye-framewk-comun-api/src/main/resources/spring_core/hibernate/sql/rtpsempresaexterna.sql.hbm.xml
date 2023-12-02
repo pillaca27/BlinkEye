@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.RtpsEmpresaexterna
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="rtpsempresaexterna.obtenerDto">
+         select 
+			a.CodigoAutomatico "codigoautomatico"
+			,a.RUCEmpresa "rucempresa"
+			,a.RazonSocial "razonsocial"
+			,a.CodigoActividad "codigoactividad"
+			,a.TipoEmpresa "tipoempresa"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from RTPS_EMPRESAEXTERNA a
+         where 
+			a.CodigoAutomatico = :p_codigoautomatico
+
+    </sql-query>
+    
+    
+        <sql-query name="rtpsempresaexterna.obtenerestablecimiento">
+        
+        
+         select 
+			a.CodigoAutomatico "codigoautomatico"
+			,a.AutomaticoExterno "automaticoexterno"
+			,a.Codigo "codigo"
+			,a.Denominacion "denominacion"
+			,a.IndCentroRiesgo "indcentroriesgo"
+			,a.Tasa "tasa"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from RTPS_ESTABLECIMIENTOEXTERNO a
+         where 
+			a.AutomaticoExterno = ISNULL(:p_codigoautomatico, a.AutomaticoExterno)
+			AND a.Estado = ISNULL('A', a.Estado)
+        
+        
+        </sql-query>
+    
+    
+    
+
+    <sql-query name="rtpsempresaexterna.listarPaginadoContar">
+         select count(1)
+         from RTPS_EMPRESAEXTERNA a
+         where 
+			a.CodigoAutomatico = ISNULL(:p_codigoautomatico, a.CodigoAutomatico)
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="rtpsempresaexterna.listarPaginadoSentencia">
+         select 
+			a.CodigoAutomatico "codigoautomatico"
+			,a.RUCEmpresa "rucempresa"
+			,a.RazonSocial "razonsocial"
+			,a.CodigoActividad "codigoactividad"
+			,a.TipoEmpresa "tipoempresa"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from RTPS_EMPRESAEXTERNA a
+         where 
+			a.CodigoAutomatico = ISNULL(:p_codigoautomatico, a.CodigoAutomatico)
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="rtpsempresaexterna.listarDtoCore">
+         select 
+			a.CodigoAutomatico "codigoautomatico"
+			,a.RUCEmpresa "rucempresa"
+			,a.RazonSocial "razonsocial"
+			,a.CodigoActividad "codigoactividad"
+			,a.TipoEmpresa "tipoempresa"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from RTPS_EMPRESAEXTERNA a
+         where 
+			a.CodigoAutomatico = ISNULL(:p_codigoautomatico, a.CodigoAutomatico)
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="rtpsempresaexterna.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="rtpsempresaexterna.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="rtpsempresaexterna.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+         limit 15
+    </sql-query>
+
+</hibernate-mapping>

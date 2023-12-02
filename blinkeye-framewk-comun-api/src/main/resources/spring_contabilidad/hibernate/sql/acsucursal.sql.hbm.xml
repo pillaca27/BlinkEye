@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+
+	<sql-query name="acsucursal.listaractivos">
+    	SELECT suc.Sucursal as "codigo"
+			,suc.DescripcionLocal as "nombre"
+			,CAST(suc.Estado as VARCHAR(1)) "estadoId"
+		FROM AC_Sucursal suc
+		WHERE suc.Estado = 'A' 
+		order by DESCRIPCIONLOCAL
+  	</sql-query>
+    
+	<sql-query name="acsucursal.listar">
+    	SELECT suc.Sucursal as "codigo"
+			,suc.DescripcionLocal as "nombre"
+			,CAST(suc.Estado as VARCHAR(1)) "estadoId"
+		FROM AC_Sucursal suc
+		order by DESCRIPCIONLOCAL
+  	</sql-query>
+  	
+  	<sql-query name="acsucursal.obtenertabla">
+    	SELECT suc.Sucursal as "codigo"
+			,suc.DescripcionLocal as "nombre"
+			,CAST(suc.Estado as VARCHAR(1)) "estadoId"
+		FROM AC_Sucursal suc
+    	where SUCURSAL = :p_sucursal
+  	</sql-query>
+	
+ 
+    
+  	
+  	<sql-query name="acsucursal.listardtofiltros">
+    	select 
+			SUCURSAL "sucursal"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,SUCURSALGRUPO "sucursalgrupo"
+			,CAST(Estado as VARCHAR(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTACONTABLEDEFECTO "cuentacontabledefecto"
+         from AC_SUCURSAL
+		where 
+				SUCURSAL = ISNULL(:p_sucursal,SUCURSAL)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		order by DESCRIPCIONLOCAL
+  	</sql-query>
+  	
+  	<sql-query name="acsucursal.obtenerSucursalPorSucursalAndGrupo">
+         select 
+			SUCURSAL "sucursal"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,SUCURSALGRUPO "sucursalgrupo"
+			,CAST(Estado as VARCHAR(1)) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTACONTABLEDEFECTO "cuentacontabledefecto"
+         from AC_SUCURSAL
+         where 
+			SUCURSAL = :p_sucursal
+			and SUCURSALGRUPO = :p_gruposucursal
+    </sql-query>
+ 
+    
+<!--     MANTENIMIENTO -->
+
+<sql-query name="acsucursal.obtenerDtoPorUuid">
+         select 
+			Sucursal "sucursal"
+			,SucursalGrupo "sucursalgrupo"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,UUID "uuid"
+         from AC_SUCURSAL
+         where 
+			UUID = :p_uuid
+
+    </sql-query>
+<sql-query name="acsucursal.obtenerDto">
+         select 
+			Sucursal "sucursal"
+			,SucursalGrupo "sucursalgrupo"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,UUID "uuid"
+         from AC_SUCURSAL
+         where 
+			Sucursal = :p_sucursal
+
+    </sql-query>
+
+    <sql-query name="acsucursal.listarPaginadoContar">
+         select count(1)
+         from AC_SUCURSAL
+         left join AC_SucursalGrupo on AC_SucursalGrupo.SucursalGrupo = AC_SUCURSAL.SucursalGrupo
+WHERE AC_SUCURSAL.Sucursal >= ISNULL(:p_sucursal, Sucursal)
+AND (ISNULL(:p_descripcion, '-') = '-' OR AC_SUCURSAL.DescripcionLocal LIKE '%'+isnull(:p_descripcion, AC_SUCURSAL.DescripcionLocal)+'%')
+AND (ISNULL(:p_estado, '-') = '-' OR AC_SUCURSAL.Estado = :p_estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursal.listarPaginadoSentencia">
+         select 
+			AC_SUCURSAL.Sucursal "sucursal"
+			,AC_SUCURSAL.SucursalGrupo "sucursalgrupo"
+			,AC_SUCURSAL.DescripcionLocal "descripcionlocal"
+			,cast(AC_SUCURSAL.Estado as varchar) "estado"
+			,AC_SUCURSAL.UltimoUsuario "ultimousuario"
+			,AC_SUCURSAL.UltimaFechaModif "ultimafechamodif"
+			,case when cast(AC_SUCURSAL.Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,rtrim(AC_SucursalGrupo.DescripcionLocal) as "grupo"
+			,AC_SUCURSAL.UUID "uuid"
+         from AC_SUCURSAL
+          left join AC_SucursalGrupo on AC_SucursalGrupo.SucursalGrupo = AC_SUCURSAL.SucursalGrupo
+WHERE AC_SUCURSAL.Sucursal >= ISNULL(:p_sucursal, Sucursal)
+AND (ISNULL(:p_descripcion, '-') = '-' OR AC_SUCURSAL.DescripcionLocal LIKE '%'+isnull(:p_descripcion, AC_SUCURSAL.DescripcionLocal)+'%')
+AND (ISNULL(:p_estado, '-') = '-' OR AC_SUCURSAL.Estado = :p_estado)
+
+    </sql-query>
+
+    <sql-query name="acsucursal.listarDtoCore">
+         select 
+			Sucursal "sucursal"
+			,SucursalGrupo "sucursalgrupo"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CuentaContableDefecto "cuentacontabledefecto"
+			,AlmacenCodigo "almacencodigo"
+			,RacionPerfil "racionperfil"
+			,departamento "departamento"
+			,provincia "provincia"
+			,codigopostal "codigopostal"
+			,pais "pais"
+			,DIRECCION "direccion"
+			,RESPONSABLE "responsable"
+			,UUID "uuid"
+         from AC_SUCURSAL
+         where 
+			Sucursal = ISNULL(:p_sucursal, Sucursal)
+			--Sucursal = ISNULL(:p_sucursal, Sucursal)
+
+    </sql-query>
+
+    
+    
+</hibernate-mapping>

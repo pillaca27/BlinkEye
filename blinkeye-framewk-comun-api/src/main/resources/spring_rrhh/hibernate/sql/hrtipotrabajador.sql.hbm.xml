@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+    <sql-query name="hrtipotrabajador.listar">
+    	select TipoTrabajador as "codigo", DescripcionLocal as "nombre"
+    			,Estado as "estadoId" 
+    	from Hr_Tipotrabajador 
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hrtipotrabajador.listarActivos">
+    	select TipoTrabajador as "codigo", DescripcionLocal as "nombre"
+    			,Estado as "estadoId" 
+    	from Hr_Tipotrabajador where Estado = 'A'
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hrtipotrabajador.obtenertabla">
+    	select TipoTrabajador as "codigo", 
+    			DescripcionLocal as "nombre",
+    			Estado as "estadoId" 
+    			from Hr_Tipotrabajador
+    			where TipoTrabajador = :p_tipotrabajador 
+	</sql-query>
+	
+	<sql-query name="hrtipotrabajador.listarfiltros">
+    	select TipoTrabajador as "codigo", 
+    			DescripcionLocal as "nombre",
+    			Estado as "estadoId" 
+    			from Hr_Tipotrabajador
+    			where TipoTrabajador = ISNULL(:p_tipotrabajador,TipoTrabajador) 
+    				and UPPER(ISNULL(DescripcionLocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(DescripcionLocal)) || '%'
+					and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))		
+				order by DescripcionLocal					
+	</sql-query>
+	
+	<sql-query name="hrtipotrabajador.contartipotrabajadorporfiltro">
+        SELECT COUNT(1)
+		FROM HR_TIPOTRABAJADOR A
+		WHERE A.TIPOTRABAJADOR = ISNULL(:p_tipo, A.TIPOTRABAJADOR)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+    </sql-query>
+    
+    <sql-query name="hrtipotrabajador.listartipotrabajadorporfiltro">
+		SELECT A.TIPOTRABAJADOR AS "codigo", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCIONLOCAL))) AS "descripcion",
+			CAST(A.ESTADO AS VARCHAR) AS "estadoId"
+		FROM HR_TIPOTRABAJADOR A
+		WHERE A.TIPOTRABAJADOR = ISNULL(:p_tipo, A.TIPOTRABAJADOR)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+		ORDER BY A.DESCRIPCIONLOCAL
+    </sql-query>
+	
+</hibernate-mapping>

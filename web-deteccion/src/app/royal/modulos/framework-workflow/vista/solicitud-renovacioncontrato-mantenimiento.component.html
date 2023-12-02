@@ -1,0 +1,309 @@
+<div class="p-fluid">
+    <p-dialog header="Contrato - Solicitud de Renovación / No Renovación" [(visible)]="verModal" modal="modal"
+        showEffect="fade" hideEffect="size" [style]="{'width':'800px'}">
+        <p-fieldset legend="Datos del Empleado">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Empleado</label>
+                    <div class="p-inputgroup">
+                        <input pInputText style="flex: 1;" type="text" disabled [ngModel]="dtoHrContratos.empleado" />
+                        <input pInputText style="flex: 7;" type="text" disabled
+                            [ngModel]="dtoHrContratos.nombreCompleto" />
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Documento</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxDocumento" />
+                </div>
+
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Compañia</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.descripcionCompania" />
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Fecha Ingreso</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxFechaIngreso" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Unidad Operativa</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.descripcionUnidadOperativa" />
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Tiempo Indetermin.</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxTiempoIndeterminado" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Centro Costo</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.descripcionCentroCostos" />
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Acum. Contratos</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxAcumuladoContrato" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Puesto</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.descripcionPuesto" />
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Tiempo Pendiente</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxTiempoPendiente1" />
+                </div>
+            </div>
+        </p-fieldset>
+        <br>
+        <p-fieldset legend="Datos del Contrato Actual">
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Tipo Contrato</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.tipoContratoDescripcion" />
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Tiempo Máximo</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxTiempoMaximo" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Formato</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.nombreFormato" />
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Tiempo Acumulado</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxTiempoAcumulado" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-9 p-lg-9 controlEtiquetaDivTop">
+                    <label>Vigencia</label>
+
+                    <div class="p-inputgroup">
+                        <div style="flex: 1;">
+                            <p-calendar disabled='true' firstDayOfWeek="1" dateFormat="dd/mm/yy"
+                                [(ngModel)]="dtoHrContratos.fechaDesde"></p-calendar>
+                        </div>
+                        <div style="flex: 1;">
+                            <p-calendar disabled='true' firstDayOfWeek="1" dateFormat="dd/mm/yy"
+                                [(ngModel)]="dtoHrContratos.fechaHasta"></p-calendar>
+                        </div>
+                        <div style="flex: 1;text-align: center;">
+                            {{dtoHrContratos.diaVigencia}}
+                        </div>
+                        <div style="flex: 1;text-align: center;">
+                            <label>Dias</label>
+                        </div>
+                        <input pInputText style="flex: 1;" type="text" disabled
+                            [ngModel]="dtoHrContratos.cantidadDiasVigencia" />
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label>Tiempo Pendiente</label>
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.auxTiempoPendiente2" />
+                </div>
+            </div>
+        </p-fieldset>
+        <br>
+        <p-fieldset legend="Datos de la Solicitud">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>N° Solicitud</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.numeroSolicitud" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-1 controlEtiquetaDivTop">
+                    <label>Estado</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.nombreEstadoSolicitud" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2 controlEtiquetaDivTop">
+                    <label>Fecha Solicitud</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <p-calendar disabled='true' firstDayOfWeek="1" dateFormat="dd/mm/yy"
+                        [(ngModel)]="dtoHrContratos.fechaSolicitud"></p-calendar>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Solicitante</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-5">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.nombreSolicitante" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2 controlEtiquetaDivTop">
+                    <label>Nivel Aprobación</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.nivelAprobacion" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Aprobador</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-5">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.nombreAprobador" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2 controlEtiquetaDivTop">
+                    <label>Fecha Aprobación</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <p-calendar disabled='true' firstDayOfWeek="1" dateFormat="dd/mm/yy"
+                        [(ngModel)]="dtoHrContratos.fechaAprobacion"></p-calendar>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Tipo de Solicitud</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4">
+                    <div class="p-inputgroup" style="display: flex;">
+                        <div style="flex: 1;">
+                            <p-radioButton name="group2" value="S" label="Renovar" [disabled]="!puedeEditar"
+                                (onClick)="evaluarMotivos()" [(ngModel)]="dtoHrContratos.flagRenovar" inputId="preopt1">
+                            </p-radioButton>
+                        </div>
+                        <div style="flex: 1;">
+                            <p-radioButton name="group2" value="N" label="No Renovar" [disabled]="!puedeEditar"
+                                (onClick)="evaluarMotivos()" [(ngModel)]="dtoHrContratos.flagRenovar" inputId="preopt2">
+                            </p-radioButton>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Tipo de Contrato</label>
+                </div>
+                <div class="p-col-12 p-md-10 p-lg-9">
+                    <p-dropdown [options]="listaTipoContratos" [disabled]="!puedeEditar"
+                        (onChange)="cargarTiempoRenovacion()" [(ngModel)]="dtoHrContratos.solRenovacionTipocontrato">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Tiempo Renovación</label>
+                </div>
+                <div class="p-col-12 p-md-10 p-lg-9">
+                    <p-dropdown [options]="listaTiempoRenovacion" [disabled]="!puedeEditar"
+                        [(ngModel)]="dtoHrContratos.solRenovacionTiemporenovacion">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Motivo</label>
+                </div>
+                <div class="p-col-12 p-md-10 p-lg-9">
+                    <p-dropdown [options]="lstMotivos" [disabled]="!puedeEditar" [(ngModel)]="dtoHrContratos.idMotivo">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Observación</label>
+                </div>
+                <div class="p-col-12 p-md-10 p-lg-9">
+                    <input pInputText type="text" [disabled]="!puedeEditar" [(ngModel)]="dtoHrContratos.obs"
+                        maxlength="4000" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Sustento</label>
+                </div>
+                <div class="p-col-12 p-md-10 p-lg-9">
+                    <div class="p-inputgroup">
+                        <input pInputText type="text" disabled [(ngModel)]="dtoHrContratos.auxRutaSustento"
+                            style="flex: 15;" />
+
+                        <input #photoInput type="file" class="form-control" style="display:none"
+                            (change)="cargarFolio(photoInput)">
+
+                        <button pButton icon="fa fa-plus" class="p-button" type="button" style="flex: 1;"
+                            (click)="photoInput.click()" [disabled]="!puedeEditar"></button>
+
+                        <button pButton icon="fa fa-download" class="p-button" type="button" style="flex: 1;"
+                            (click)="descargarSustento()"></button>
+                    </div>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-3 controlEtiquetaDivTop">
+                    <label>Última modificación</label>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <input pInputText type="text" disabled [ngModel]="dtoHrContratos.ultimoUsuario" style="flex: 1;" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-3">
+                    <input pInputText type="text" disabled [ngModel]="f_datetime(dtoHrContratos.ultimaFechaModif)"
+                        style="flex: 1;" />
+                </div>
+            </div>
+        </p-fieldset>
+
+        <div class="ui-fluid">
+            <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()"
+                (cargarDataEvent)="coreSalir()">
+            </transaccion-botones>
+            <br>
+            <transaccion-seguimiento></transaccion-seguimiento>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2 p-lg-3">
+                <br>
+                <button pButton label="Aceptar" *ngIf="puedeEditar" icon="fa fa-check" (click)="coreGuardar()"
+                    type="button" class="p-button"></button>
+            </div>
+            <div class="p-col-12 p-md-2 p-lg-2"></div>
+            <div class="p-col-12 p-md-2 p-lg-3">
+                <br>
+                <button pButton label="Eliminar" *ngIf="habilitarEliminar" icon="fa fa-trash" (click)="coreEliminar()"
+                    type="button" class="p-button"></button>
+            </div>
+            <div class="p-col-12 p-md-2 p-lg-1"></div>
+            <div class="p-col-12 p-md-2 p-lg-3">
+                <br>
+                <button pButton label="Cancelar" icon="fa fa-history" (click)="verModal=false" type="button"
+                    class="p-button"></button>
+            </div>
+        </div>
+
+    </p-dialog>
+</div>
+
+
+<p-confirmDialog header="Confirmación" icon="fa fa-question-circle" width="300" #cd>
+    <p-footer>
+        <div class="p-grid">
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd.accept()"></button>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fas fa-times" label="No" (click)="cd.reject()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-confirmDialog>

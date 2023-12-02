@@ -1,0 +1,192 @@
+<p-card>
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="fad fa-filter p-mr-2"></i>
+            <b>Filtros</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="companias" [style]="{'width':'100%'}" [(ngModel)]="filtro.compania">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proceso</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="procesos" [(ngModel)]="filtro.proceso" [style]="{'width':'100%'}" (onChange)="cargarEstadosProceso()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstadoProceso" [style]="{'width':'100%'}" [(ngModel)]="filtro.estadoProceso">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha Preparación</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.desde">
+                                    </p-calendar>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.hasta">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Referencia</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="filtro.referencia" maxlength="20" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Transacción</label>
+                        <div class="p-col">
+                            <input pInputText type="number" style="width:100%" [(ngModel)]="filtro.transaccionId" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Solicitante</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText type="text" class="hoverDisabled" [(ngModel)]="filtro.nombreSolicitante" style="width:100%" disabled />
+                                <button pButton type="button" icon="fa fa-binoculars" class="ui-button-warn" (click)="mostrarSelectorEmpleadomast()" title="Buscar Empleado"></button>
+                                <button pButton type="button" icon="fa fa-binoculars" class="ui-button-warn" (click)="mostrarSelectorProveedor()" title="Buscar Proveedor"></button>
+                                <button pButton type="button" icon="fa fa-trash" class="ui-button-warn" (click)="limpiarEmpleado()" title="Limpiar"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table #dtPrestamo [rows]="30" [style]="{ width:'100%' }" [responsive]="true" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPrestamos($event)" [scrollable]="true" scrollHeight="300px"
+        [value]="filtro.paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigoChico">Transacción</th>
+                <th class="tablaHeaderNombre">Proceso</th>
+                <th class="tablaHeaderAccion5">Referencia</th>
+                <th class="tablaHeaderFecha">F. Preparación</th>
+                <th class="tablaHeaderEstadoGrande">Estado</th>
+                <th class="tablaHeaderNombre">Solicitante</th>
+                <th class="tablaHeaderCodigoChico">Nivel</th>
+                <th class="tablaHeaderMonto">Monto</th>
+                <th class="tablaHeaderNombre">Proveedor / Empleado / Cliente / Persona</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" (click)="coreVer(rowData)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-search-plus" class="p-button-rounded p-button-text" title="Mas Informacion" (click)="verMasInformacion(rowData)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-table" class="p-button-rounded p-button-text" title="Metadatos" (click)="verMetadatos(rowData)"></button>
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Id</span> {{rowData.transaccion}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Proceso</span> {{rowData.procesoFlujoDescripcion}}
+                </td>
+                <td class="tablaColumnaAccion5">
+                    <span class="p-column-title">Referencia</span> {{rowData.referencia}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Preparación</span> {{rowData.fechaRegistro | date: 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaEstadoGrande">
+                    <span class="p-column-title">Estado</span> {{rowData.estadoDescripcion}}
+                    <!--
+                <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Aprobado</label>
+                <label *ngIf="rowData.estado == 'S'">{{rowData.estadoDescripcion}}</label>
+                <label *ngIf="rowData.estado == 'R'" class="tablaEstadoInactivo">Rechazado</label>
+                -->
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Solicitante</span> {{rowData.solicitante}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Nivel</span> {{rowData.nivelActual}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Monto</span> {{rowData.monto | number:'.2-2'}}
+                </td>
+
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Proveedor / Empleado / Cliente / Persona</span> {{rowData.nombrepersonareferencia}}
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="10">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<!--<app-wf-personacomun-selector></app-wf-personacomun-selector>-->
+
+<p-dialog [header]="'Metadatos'" [(visible)]="verDlgMetadatos" [modal]="true " [responsive]="true" [resizable]="false " [blockScroll]="true" [style]="{'max-width':'900px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+    <p-table [paginator]="true" [rows]="200" [style]="{'width': '100%'}" [value]="metadatos" [responsive]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Código</th>
+                <th>Valor</th>
+            </tr>
+            <tr>
+                <th>
+                    <p-columnFilter type="text" matchMode="contains" field="codigo"></p-columnFilter>
+                </th>
+                <th>
+                    <p-columnFilter type="text" matchMode="contains" field="nombre"></p-columnFilter>
+                </th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td>{{rowData.codigo}}</td>
+                <td>{{rowData.nombre}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" label="Aceptar" (click)="verDlgMetadatos=false">
+        </p-button>
+    </ng-template>
+</p-dialog>

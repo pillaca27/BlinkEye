@@ -1,0 +1,106 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Centro de Costo</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="filtro.costcenter" [style]="{'width':'100%'}" [pKeyFilter]="blockSpecial" pInputText (ngModelChange)="filtro.costcenter = $event.toUpperCase()" type="text" maxlength="10" (keypress)="defaultBuscar($event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigoChico">Centro de Costo</th>
+                <th class="tablaHeaderIzquierda">Descripción</th>
+                <th class="tablaHeaderCheckBox1">Admin</th>
+                <th class="tablaHeaderCheckBox1">Finanzas</th>
+                <th class="tablaHeaderCheckBox1">Ventas</th>
+                <th class="tablaHeaderCheckBox1">Produc.</th>
+                <th class="tablaHeaderEstado">Estado</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" *ngIf="menuSeguridad.flgModificar" class="p-button-rounded p-button-text botonGrilla" title="Editar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" *ngIf="menuSeguridad.flgModificar" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" *ngIf="menuSeguridad.flgBorrar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Centro de Costo</span> {{row.costcenter}}
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Descripción Local</span> {{row.localname}}
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Admin</span>
+                    <p-checkbox *ngIf="row.expenseadministrativeflag == 'Y'" [(ngModel)]="row.expenseadministrativeflag" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.expenseadministrativeflag != 'Y'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Finanzas</span>
+                    <p-checkbox *ngIf="row.expensefinanceflag == 'Y'" [(ngModel)]="row.expensefinanceflag" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.expensefinanceflag != 'Y'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Ventas</span>
+                    <p-checkbox *ngIf="row.expensesalesflag == 'Y'" [(ngModel)]="row.expensesalesflag" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.expensesalesflag != 'Y'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+
+                </td>
+                <td class="tablaColumnaCheckBox1">
+                    <span class="p-column-title">Produc.</span>
+                    <p-checkbox *ngIf="row.expenseproductionflag == 'Y'" [(ngModel)]="row.expenseproductionflag" disabled binary="true"></p-checkbox>
+                    <p-checkbox *ngIf="row.expenseproductionflag != 'Y'" [(ngModel)]="checked" disabled binary="true"></p-checkbox>
+
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.status == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.status == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="8">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

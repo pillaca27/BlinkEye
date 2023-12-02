@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : apcajachica
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="apgastosdetallecomun.contar">
+	<![CDATA[
+         SELECT    
+			count(*)
+		FROM AP_GastosDetalle, AP_GastosHeader
+		WHERE (AP_GastosDetalle.CompaniaSocio = AP_GastosHeader.CompaniaSocio)
+			AND (AP_GastosDetalle.TipoGasto = AP_GastosHeader.TipoGasto)
+			AND (AP_GastosDetalle.NumeroLiquidacion = AP_GastosHeader.NumeroLiquidacion)
+			AND ((AP_GastosDetalle.CompaniaSocio = :p_companiaSocio)
+			AND (AP_GastosDetalle.TipoGasto = :p_tipogasto)
+			AND (AP_GastosHeader.Estado <> 'AN')
+            AND (AP_GastosHeader.Estado <> 'PR')
+            AND ((AP_GastosDetalle.TipoImpuestoFlag = 'I'
+            AND (AP_GastosDetalle.RetencionMonto <> 0))
+            OR (AP_GastosDetalle.TipoImpuestoFlag = 'R'
+            AND (AP_GastosDetalle.MontoImpuesto <> 0)))
+            AND (AP_GastosDetalle.RetencionPagoFlag = 'N'))
+		 ]]>
+    </sql-query>
+	
+	<sql-query name="apgastosdetallecomun.listarpaginado">
+	<![CDATA[
+         SELECT
+			  AP_GastosDetalle.CompaniaSocio as "companiasocio",
+			  AP_GastosDetalle.TipoGasto as "tipogasto",
+			  AP_GastosDetalle.NumeroLiquidacion as "numeroliquidacion",
+			  AP_GastosDetalle.Secuencia as "secuencia",
+			  AP_GastosDetalle.MontoMonedaPago as "montomonedapago",
+			  CAST(AP_GastosDetalle.TipoImpuestoFlag as  VARCHAR2(2)) as "tipoimpuestoflag",
+			  AP_GastosDetalle.DocumentoFiscal as "documentofiscal",
+			  AP_GastosDetalle.Proveedor as "proveedor",
+			  AP_GastosDetalle.ProveedorNombre as "proveedornombre",
+			  AP_GastosDetalle.TipoDocumento as "tipodocumento",
+			  AP_GastosDetalle.NumeroDocumento as "numerodocumento",
+			  AP_GastosDetalle.MonedaDocumento as "monedadocumento",
+			  AP_GastosDetalle.FechaDocumento as "fechadocumento",
+			  AP_GastosDetalle.TipoCambio as "tipocambio",
+			  AP_GastosDetalle.MontoImpuesto as "montoimpuesto",
+			  AP_GastosDetalle.CentroCosto as "centrocosto",
+			  AP_GastosDetalle.RetencionFlag as "retencionflag",
+			  AP_GastosDetalle.RetencionMonto as "retencionmonto",
+			  AP_GastosDetalle.PagoFlag as "pagoflag",
+			  AP_GastosDetalle.RetencionPagoFlag as "retencionpagoflag"
+		FROM AP_GastosDetalle, AP_GastosHeader
+		WHERE (AP_GastosDetalle.CompaniaSocio = AP_GastosHeader.CompaniaSocio)
+			AND (AP_GastosDetalle.TipoGasto = AP_GastosHeader.TipoGasto)
+			AND (AP_GastosDetalle.NumeroLiquidacion = AP_GastosHeader.NumeroLiquidacion)
+			AND ((AP_GastosDetalle.CompaniaSocio = :p_companiaSocio)
+			AND (AP_GastosDetalle.TipoGasto = :p_tipogasto)
+			AND (AP_GastosHeader.Estado <> 'AN')
+            AND (AP_GastosHeader.Estado <> 'PR')
+            AND ((AP_GastosDetalle.TipoImpuestoFlag = 'I'
+            AND (AP_GastosDetalle.RetencionMonto <> 0))
+            OR (AP_GastosDetalle.TipoImpuestoFlag = 'R'
+            AND (AP_GastosDetalle.MontoImpuesto <> 0)))
+            AND (AP_GastosDetalle.RetencionPagoFlag = 'N'))
+		 ]]>
+    </sql-query>
+    
+</hibernate-mapping>

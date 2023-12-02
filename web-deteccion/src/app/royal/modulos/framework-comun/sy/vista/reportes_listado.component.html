@@ -1,0 +1,97 @@
+<p-card>
+     <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">    
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Aplicación</label>
+                    <p-dropdown [options]="lstAplicacion" (onChange)="cambiarAplicacion()"  [filter]="true" [(ngModel)]="filtro.aplicacioncodigo" [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Tópico</label>   
+                    <p-dropdown [options]="lstTopicos" [filter]="true" [(ngModel)]="filtro.topico" [style]="{'width':'100%'}"></p-dropdown>                      
+                  
+                </div>
+                <div class="p-field p-col-12 p-md-1">
+                    <label>Reporte</label>                         
+                    <input #myDescripcion pInputText type="text" (keypress)="defaultBuscarPaginacion($event, dt)"  [(ngModel)]="filtro.reportecodigo" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Buscar Texto</label>                         
+                    <input #myDescripcion pInputText type="text" (keypress)="defaultBuscarPaginacion($event, dt)"  [(ngModel)]="filtro.nombre" />
+                </div>
+            </div>
+        </div>
+    </div> 
+</p-card>
+
+<app-botones-listado 
+[objTitulo]="objetoTitulo" 
+[tipo]="TIPOSBOTONES_LISTADO.BAS1B">
+</app-botones-listado>
+
+        <p-table #dt [rows]="20" [paginator]="true" [lazy]="true" (onLazyLoad)="cargar($event)"
+            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+            selectionMode="single" dataKey="reportecodigo"
+            [value]="filtro.paginacion.paginacionListaResultado" [responsive]="true"
+            [style]="{width:'100%', height:'auto'}" scrollWidth="100%" [resizableColumns]="true"
+            [showCurrentPageReport]="true" 
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"
+            >
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderCodigo">Nro</th>
+                    <th class="tablaHeaderIzquierda">Descripción del Reporte</th>
+                    <th class="tablaHeaderIzquierda">Comentario</th>
+                    <th class="tablaHeaderTipo">Tópico</th>
+                    <th class="tablaHeaderIzquierda">Ventana Objeto</th>
+                    <th class="tablaHeaderEstado">Standard</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr (dblclick)="onRowDblclick(rowData)">
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Nro</span>
+                        {{rowData.reportecodigo}}
+                    </td>
+
+                    <td class="tablaColumnaIzquierda">
+                        <span class="p-column-title">Descripción del Reporte</span>
+                        {{rowData.descripcionlocal}}
+                    </td>
+          
+                    <td class="tablaColumnaIzquierda">
+                        <span class="p-column-title">Comentario</span>
+                        {{rowData.comentarios}}
+                    </td>
+                    <td class="tablaColumnaTipo">
+                        <span class="p-column-title">Tópico</span>
+                        {{rowData.topico |labelFromItem:lstTopicos}}
+                    </td>     
+                    <td class="tablaColumnaIzquierda">
+                        <span class="p-column-title">Ventana Objeto</span>
+                        {{rowData.ventanaobjeto}}
+                    </td>
+                    <td class="tablaColumnaEstado">
+                        <span class="p-column-title">Standard</span>
+                        {{rowData.reportestandardflag=='S'?'Si':'No'}}
+                    </td>
+                </tr>
+            </ng-template>
+
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+
+
+    <p-confirmDialog #c>
+        <p-footer>
+            <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+            <button type="button" pButton icon="fad fa-times" label="No" (click)="c.reject()"></button>
+        </p-footer>
+    </p-confirmDialog>

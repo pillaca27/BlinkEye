@@ -1,0 +1,72 @@
+/*
+  This is a "Solution Style" tsconfig.json file, and is used by editors and TypeScript’s language server to improve development experience.
+  It is not intended to be used to perform a compilation.
+
+  To learn more about this file see: https://angular.io/config/solution-tsconfig.
+*/
+{
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.spec.json"
+    }
+  ],
+  "compilerOptions": {
+    "experimentalDecorators": true,
+    "allowJs": true,
+    "baseUrl": "./",
+    "paths": {
+      "@env/*": [
+        "src/environments/*"
+      ],
+      "@framework/*": [
+        "src/app/royal/framework/*"
+      ],
+      "@framework-seguridad/*": [
+        "src/app/royal/modulos/framework-seguridad/*"
+      ],
+      "@framework-workflow/*": [
+        "src/app/royal/modulos/framework-workflow/*"
+      ],
+      "@framework-comun/*": [
+        "src/app/royal/modulos/framework-comun/*"
+      ],
+      "@erp-alertas/*": [
+        "src/app/royal/modulos/alertas/*"
+      ],
+      "@erp-asistencia/*": [
+        "src/app/royal/modulos/asistencia/*"
+      ],
+      "@erp-comercial/*": [
+        "src/app/royal/modulos/comercial/*"
+      ],
+      "@erp-ede/*": [
+        "src/app/royal/modulos/ede/*"
+      ],
+      "@erp-kpi/*": [
+        "src/app/royal/modulos/kpi/*"
+      ],
+      "@erp-logistica/*": [
+        "src/app/royal/modulos/logistica/*"
+      ],
+      "@erp-ocupacional/*": [
+        "src/app/royal/modulos/ocupacional/*"
+      ],
+      "@erp-planilla/*": [
+        "src/app/royal/modulos/planilla/*"
+      ],
+      "@erp-presupuesto/*": [
+        "src/app/royal/modulos/presupuesto/*"
+      ],
+      "@erp-rrhh/*": [
+        "src/app/royal/modulos/rrhh/*"
+      ],
+      "@erp-tesoreria/*": [
+        "src/app/royal/modulos/tesoreria/*"
+      ],
+    },
+  }
+}

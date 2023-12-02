@@ -1,0 +1,94 @@
+<p-card>
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-field p-col-8 p-md-8">
+
+            <div class="p-field p-col-12 p-md-12">
+                <label>Destino:</label>
+                <input pInputText type="text" [(ngModel)]="destino" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Asunto:</label>
+                <input pInputText type="text" [(ngModel)]="asunto" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Mensaje:</label>
+                <input pInputText type="text" [(ngModel)]="mensaje" style="width:100%" />
+            </div>
+
+
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton label="Enviar Genérico" icon="fa fa-save" type="button" class="ui-button" (click)='enviar()'></button>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton label="Enviar por Alertas" icon="fa fa-save" type="button" class="ui-button" (click)='enviarAlertas()'></button>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12">
+                <label class="importante" for="funrpfuncionario">Archivo</label>
+                <div class="p-inputgroup">
+                    <input pInputText type="text" [(ngModel)]="archivo" disabled class="hoverDisabled" style="width:100%" />
+                    <input #fileUpload type="file" class="form-control" style="display:none" (change)="cargarArchivo(fileUpload)">
+                    <button pButton pRipple type="button" icon="fad fa-cloud-upload-alt" class="ui-button-rounded p-button-text" title="Subir Archivo" (click)="subirArchivo(fileUpload)"></button>
+                </div>
+            </div>
+
+            <br>
+
+            <div class="p-field p-col-12 p-md-12">
+                <h3>Resultado</h3>
+                <textarea [rows]="10" style="width: 100%;" [disabled]="true" pInputTextarea autoResize="autoResize" [(ngModel)]="errores"></textarea>
+            </div>
+        </div>
+
+
+        <div class="p-field p-col-4 p-md-4">
+            <div class="p-field p-col-12 p-md-12">
+                <button pButton label="Obtener Configuracion" icon="fa fa-save" type="button" class="ui-button" (click)='obtenerConfiguracion()'></button>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12">
+                <label>Tipo Configuracion:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.tipoConfiguracion" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Cuenta Email:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailCuenta" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Clave Email:</label>
+                <input type="password" pPassword placeholder="Password" placeholder="Clave" [(ngModel)]="emailConfig.emailClave" [feedback]="false" style="width: 100%;" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Es Correo Prueba:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.flgCorreoPrueba" style="width:100%" maxlength="1" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Correo De Prueba:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.correoPrueba" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Email Flag SSL:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailFlgSsl" style="width:100%" maxlength="1" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Host Email: </label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailServidor" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Puerto Email: </label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailPuerto" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>Versión TLS:</label>
+                <input pInputText type="text" [(ngModel)]="emailConfig.emailTlsVersion" style="width:100%" />
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <p-checkbox binary="true" label="Default Credenciales" [(ngModel)]="flagCredenciales"></p-checkbox>
+            </div>
+
+        </div>
+
+    </div>
+
+</p-card>

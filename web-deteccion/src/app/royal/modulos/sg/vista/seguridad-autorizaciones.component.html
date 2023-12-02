@@ -1,0 +1,505 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label *ngIf="modoOnlyCombo" class="p-col-fixed label">Aplicación</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="listaraplicacionsub" [style]="{'width':'100%'}" (onChange)="onchangeAplicacion()" [(ngModel)]="filtro.codigoAplicacion" *ngIf="modoOnlyCombo">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4" *ngIf="ocultarComboGrupo && ocultarComboGrupoReporte">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Grupo Funciones</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstgruposSY" [style]="{'width':'100%'}" [filter]="true" [(ngModel)]="filtro.grupo">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4" *ngIf="!ocultarComboGrupo && ocultarComboGrupoReporte">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Grupo Concepto</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstgruposSG" [style]="{'width':'100%'}" [filter]="true" [(ngModel)]="filtro.grupo">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-4" *ngIf="!ocultarComboGrupoReporte"></div>
+
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Usuario/Perfil</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText type="text" [(ngModel)]="filtro.usuario" disabled class="hoverDisabled" style="flex: 5;" style="width: 30% !important" />
+                                <input pInputText type="text" [(ngModel)]="filtro.usuariodescripcion" disabled style="flex: 5;" class="hoverDisabled" style="width: 70% !important" />
+                                <button pButton icon="fa fa-binoculars" type="button" (click)="mostrarusuarios()" [style]="{'flex': '1'}" title="Buscar Usuario"></button>
+                                <button pButton type="button" icon="fa fa-trash" class="ui-button-warn" (click)="limpiaruser()" [style]="{'flex': '1'}" title="Buscar Proveedor"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-col-12 p-md-2">
+            <button pButton pRipple type="button" label="Guardar" icon="fad fa-save" class="p-button-outlined" (click)="coreGuardar()"></button>
+        </div>
+        <div class="p-col-12 p-md-8"></div>
+        <div class="p-col-12 p-md-2">
+            <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" class="p-button-outlined" (click)="coreBuscar()"></button>
+        </div>
+    </div>
+
+    <p-tabView [activeIndex]="index" (onChange)="handleChange($event)">
+        <p-tabPanel header="Funciones">
+
+            <p-table #dtListado [rows]="500" dataKey="id" editMode="row" [lazy]="true" (onLazyLoad)="listar($event)" [scrollable]="true" [value]="filtro.paginacion.paginacionListaResultado" scrollHeight="350px" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+                [paginator]="true" [responsive]="true" selectionMode="single">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtro.seleccionar" (onChange)="toggleVisibility()" binary="true">
+                            </p-checkbox>
+                        </th>
+                        <th class="tablaHeaderTipo"></th>
+                        <th class="tablaHeaderTipo"></th>
+                        <th class="tablaHeaderNombre"></th>
+                        <th class="tablaHeaderNombreMedio"></th>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtro.flgAgregar" (onChange)="toggleVisibilitynuevo()" binary="true">
+                            </p-checkbox>
+                        </th>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtro.flgModificar" (onChange)="toggleVisibilitymodificar()" binary="true"></p-checkbox>
+                        </th>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtro.flgAprobar" (onChange)="toggleVisibilityaprobar()" binary="true"></p-checkbox>
+
+                        </th>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtro.flgBorrar" (onChange)="toggleVisibilityeliminar()" binary="true"></p-checkbox>
+
+                        </th>
+                        <th class="tablaHeaderUsuario"></th>
+                        <th class="tablaHeaderFecha"></th>
+                    </tr>
+                    <tr>
+                        <th class="tablaHeaderCheckBox1">Seleccionar</th>
+                        <th class="tablaHeaderTipo">Grupo</th>
+                        <th class="tablaHeaderTipo">Concepto</th>
+                        <th class="tablaHeaderNombre">Grupo Descripción</th>
+                        <th class="tablaHeaderNombreMedio">Objeto a Autorizar</th>
+                        <th class="tablaHeaderCheckBox1">Nuevo</th>
+                        <th class="tablaHeaderCheckBox1">Modificar</th>
+                        <th class="tablaHeaderCheckBox1">Aprobar</th>
+                        <th class="tablaHeaderCheckBox1">Eliminar</th>
+                        <th class="tablaHeaderUsuario">Último Usuario</th>
+                        <th class="tablaHeaderFecha">Última Fecha</th>
+                        <!-- <th style="width:200px">Último Usuario</th>
+                            <th style="width:100px">Última Fecha</th> -->
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-concepto let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="concepto">
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaTipo">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.grupo">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.grupo}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaTipo">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.concepto" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.concepto}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaNombre">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.grupoDescripcion" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.grupoDescripcion}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaNombreMedio">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.objetoAutorizar">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.objetoAutorizar }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgAgregar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgAgregar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgModificar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgModificar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgAprobar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgAprobar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgBorrar" binary="true"></p-checkbox>
+                                </span>
+
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.flgBorrar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaUsuario">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimoUsuario" [style]="{'width':'100%'}">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimoUsuario" [style]="{'width':'100%'}">
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+
+                        <td pEditableColumn class="tablaColumnaFecha">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimaFecha" [style]="{'width':'100%'}">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimaFecha" [style]="{'width':'100%'}">
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <!-- <td pEditableColumn style="width:200" class="izquierdaCentro">
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input disabled   pInputText type="text" [(ngModel)]="concepto.ultimoUsuario">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                        {{concepto.ultimoUsuario }}
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td>
+                            <td pEditableColumn style="width:200" class="izquierdaCentro" >
+                                <p-cellEditor>
+                                    <ng-template pTemplate="input">
+                                        <input disabled  pInputText type="text" [(ngModel)]="concepto.ultimafecha">
+                                    </ng-template>
+                                    <ng-template pTemplate="output">
+                                       
+                                        {{concepto.ultimaFecha | date:'dd/MM/yyyy'}}
+                                       
+                                    </ng-template>
+                                </p-cellEditor>
+                            </td> -->
+
+
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="11">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+
+        <p-tabPanel header="Conceptos">
+            <p-table #dtListadoConceptos [rows]="50" dataKey="id" editMode="row" [value]="lstAutoConceptos" [paginator]="true" [style]="{'width': '100%'}" [scrollable]="true" [lazy]="true" (onLazyLoad)="listarConceptos($event)" [responsive]="true" [totalRecords]="filtroConceptos.paginacion.paginacionRegistrosEncontrados"
+                selectionMode="single">
+                <ng-template pTemplate="caption">
+                    <div class="p-d-flex">
+                        <p-checkbox [(ngModel)]="filtro.seleccionar2" (onChange)="toggleVisibility2()" binary="true">
+                        </p-checkbox>
+                    </div>
+                    Listado de Autorizaciones
+                </ng-template>
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderCheckBox1">Seleccionar</th>
+                        <th class="tablaHeaderNombreMedio">Grupo</th>
+                        <th class="tablaHeaderNombreMedio">Concepto</th>
+                        <th class="tablaHeaderNombreMedio">Grupo Descripción</th>
+                        <th class="tablaHeaderNombre">Objeto a Autorizar</th>
+                        <th class="tablaHeaderUsuario">Último Usuario</th>
+                        <th class="tablaHeaderFecha">Última Fecha</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-concepto let-editing="editing" let-ri="rowIndex">
+                    <tr [pEditableRow]="concepto">
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <span>
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </span>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaNombreMedio">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.grupo">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.grupo}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaNombreMedio">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.concepto" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.concepto}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaNombreMedio">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.grupoDescripcion" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.grupoDescripcion}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaNombre">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.objetoAutorizar">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.objetoAutorizar }}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaUsuario">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimoUsuario" [style]="{'width':'100%'}">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <input disabled pInputText type="text" [(ngModel)]="concepto.ultimoUsuario" [style]="{'width':'100%'}">
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaFecha">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-calendar [monthNavigator]="true" [showIcon]="true" [yearNavigator]="true" yearRange="1940:2200" dateFormat="dd/mm/yy" [locale]="es" disabled [(ngModel)]="concepto.ultimaFecha" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}">
+                                    </p-calendar>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <p-calendar [monthNavigator]="true" [showIcon]="true" [yearNavigator]="true" yearRange="1940:2200" dateFormat="dd/mm/yy" [locale]="es" disabled [(ngModel)]="concepto.ultimaFecha" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}">
+                                    </p-calendar>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="16">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+
+        <p-tabPanel header="Reportes">
+
+            <p-table #dtListado [rows]="500" dataKey="id" editMode="row" [lazy]="true" (onLazyLoad)="listarreportes($event)" [scrollable]="true" [value]="filtroReporte.paginacion.paginacionListaResultado" [totalRecords]="filtroReporte.paginacion.paginacionRegistrosEncontrados"
+                [paginator]="true" [responsive]="true" selectionMode="single">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderCheckBox1">
+                            <p-checkbox [(ngModel)]="filtroReporte.seleccionar" (onChange)="toggleVisibilityreporte()" binary="true"></p-checkbox>
+                        </th>
+                        <th class="tablaHeaderTipo"></th>
+                        <th class="tablaHeaderNombre"></th>
+                        <th class="tablaHeaderUsuario"></th>
+                        <th class="tablaHeaderFecha"></th>
+                    </tr>
+                    <tr>
+                        <th class="tablaColumnaCheckBox1">Seleccionar</th>
+                        <th class="tablaColumnaTipo">Aplicación</th>
+                        <th class="tablaColumnaNombre">Reporte</th>
+                        <th class="tablaColumnaUsuario">Último Usuario</th>
+                        <th class="tablaColumnaFecha">Última Fecha</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-concepto let-editing="editing" let-ri="rowIndex">
+                    <tr *ngIf="rowGroupMetadata[concepto.topico].index === ri">
+                        <td class="tablaColumnaCheckBox1"></td>
+                        <td class="tablaColumnaTipo"></td>
+                        <td class="tablaColumnaNombre"><span class="p-text-bold p-ml-2">{{concepto.grupoDescripcion}}</span>
+                        </td>
+                        <td class="tablaColumnaUsuario"></td>
+                        <td class="tablaColumnaFecha"></td>
+                        <!-- <td colspan="5">
+                        <span class="p-text-bold p-ml-2">{{concepto.grupoDescripcion}}</span>
+                    </td> -->
+                    </tr>
+
+                    <tr [pEditableRow]="concepto">
+                        <td pEditableColumn class="tablaColumnaCheckBox1">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <p-checkbox [(ngModel)]="concepto.seleccionar" binary="true"></p-checkbox>
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaTipo">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.grupo">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.aplicacion}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaNombre">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.grupoDescripcion" required>
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    {{concepto.concepto}}
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaUsuario">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.ultimoUsuario">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.ultimoUsuario">
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                        <td pEditableColumn class="tablaColumnaFecha">
+                            <p-cellEditor>
+                                <ng-template pTemplate="input">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.ultimaFecha">
+                                </ng-template>
+                                <ng-template pTemplate="output">
+                                    <input disabled pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="concepto.ultimaFecha">
+                                </ng-template>
+                            </p-cellEditor>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="16">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </p-tabPanel>
+    </p-tabView>
+</p-card>
+
+<app-personacomun-selector></app-personacomun-selector>
+<app-selector-usuariocomun></app-selector-usuariocomun>
+
+<!-- <app-usuario-selector (cargarSeleccion)="cargarUsuarios($event)"></app-usuario-selector>
+
+<app-tipoExportar-selector (cargarSeleccionEvent)="seleccionarExportarTipo($event)"></app-tipoExportar-selector> -->

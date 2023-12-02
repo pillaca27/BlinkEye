@@ -1,0 +1,80 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Periodo</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstPeriodos" [(ngModel)]="filtro.periodoId" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B"></app-botones-listado>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Acciones</th>
+                <th class="tablaHeaderFecha">Fecha Inicio</th>
+                <th class="tablaHeaderFecha">Fecha Fin</th>
+                <th class="tablaHeaderMonto">Monto Local</th>
+                <th class="tablaHeaderMonto">Monto Dolar</th>
+                <th class="tablaHeaderMonto">Remuneración</th>
+                <th class="tablaHeaderNombreMedio">Banco</th>
+                <th class="tablaHeaderCodigoChico">Moneda</th>
+                <th class="tablaHeaderNombre">Cuenta CTS</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Acciones</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-print" class="p-button-rounded p-button-text botonGrilla" title="Imprimir" (click)="imprimir(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Inicio</span> {{rowData.fechaInicio}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Fin</span> {{rowData.fechaFin}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Monto Local</span> {{rowData.montoLocal | number:'1.2-2'}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Monto Dolar</span> {{rowData.montoDolar | number:'1.2-2'}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Remuneración</span> {{rowData.remuneracion | number:'1.2-2'}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Banco</span> {{rowData.banco}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Moneda</span> {{rowData.moneda}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Cuenta CTS</span> {{rowData.cuenta}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="9">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

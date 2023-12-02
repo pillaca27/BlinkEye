@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prtipoplanilla
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="prtipoplanilla.listar">
+    	select TipoPlanilla as "codigo", Descripcion as "nombre"
+    			,cast(estado as varchar) as "estadoId" 
+    	from PR_TipoPlanilla
+  	</sql-query>
+	
+	<sql-query name="prtipoplanilla.listarActivos">
+    	select TipoPlanilla as "codigo", Descripcion as "nombre"
+    		,cast(estado as varchar) as "estadoId" 
+    	from PR_TipoPlanilla where Estado = 'A'
+  	</sql-query>
+  	
+  	<sql-query name="prtipoplanilla.obtenerTabla">
+	    <![CDATA[
+	        select TipoPlanilla as "codigo", descripcion as "nombre", cast(estado as varchar) as "estadoId" 
+	        from PR_TipoPlanilla
+			where TipoPlanilla = :p_tipoplanilla
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="prtipoplanilla.listarfiltros">
+    	select TipoPlanilla as "codigo", 
+    	descripcion as "nombre",
+    	descripcion as "descripcion",
+    	cast(estado as varchar) as "estadoId" 
+    	from PR_TipoPlanilla 
+    	where  TipoPlanilla = ISNULL(:p_tipoplanilla,TipoPlanilla)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' + ISNULL(:p_descripcion,UPPER(descripcion)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	<sql-query name="prtipoplanilla.obtenerDto">
+           select 
+			TIPOPLANILLA "tipoplanilla"
+			,FUNCION "funcion"
+			,DESCRIPCION "descripcion"
+			,TITULODEBOLETA "titulodeboleta"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,TIPODECAMBIO "tipodecambio"
+			,CLASEPAGO "clasepago"
+			,cast(estado as varchar) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,MENSAJE "mensaje"
+			,PLANILLAPERFIL "planillaperfil"
+			,PERIODICIDAD "periodicidad"
+			,CATEGORIATRABAJADOR "categoriatrabajador"
+			,TIPOTRABAJADOR "tipotrabajador"
+			,CUENTACONTABLE "cuentacontable"
+			,FLUJOCAJA "flujocaja"
+			,cast(AFECTOUTILIDAD as varchar2(1)) "afectoutilidad"
+			,DIASVACACIONES "diasvacaciones"
+
+         from PR_TIPOPLANILLA
+         where 
+			TIPOPLANILLA = :p_tipoplanilla
+    </sql-query>
+    
+    <sql-query name="prtipoplanilla.listardtofiltros">
+          select 
+			TIPOPLANILLA "tipoplanilla"
+			,FUNCION "funcion"
+			,DESCRIPCION "descripcion"
+			,TITULODEBOLETA "titulodeboleta"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,TIPODECAMBIO "tipodecambio"
+			,CLASEPAGO "clasepago"
+			,cast(estado as varchar) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,MENSAJE "mensaje"
+			,PLANILLAPERFIL "planillaperfil"
+			,PERIODICIDAD "periodicidad"
+			,CATEGORIATRABAJADOR "categoriatrabajador"
+			,TIPOTRABAJADOR "tipotrabajador"
+			,CUENTACONTABLE "cuentacontable"
+			,FLUJOCAJA "flujocaja"
+			,cast(AFECTOUTILIDAD as varchar2(1)) "afectoutilidad"
+			,DIASVACACIONES "diasvacaciones"
+
+         from PR_TIPOPLANILLA
+         where 
+				TIPOPLANILLA = ISNULL(:p_tipoplanilla,TIPOPLANILLA)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+</hibernate-mapping>

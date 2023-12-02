@@ -1,0 +1,96 @@
+<p-card *ngIf="!cargando">
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center" [title]="tooltipWF">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Seguimiento</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid" *ngIf="verObservacion">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Observaciones:</span>
+                    <input pInputText type="text" [(ngModel)]="observacion" style="width: 100%;" disabled />
+                </div>                                
+            </div>
+        </div>
+    </div>
+
+
+    <p-tree [value]="lstSeguimientoTree" layout="horizontal" *ngIf="vistaArbol">
+        <ng-template let-node pTemplate="default">
+            <div title="{{obtenerSeguimientoDatos(node.key)[3]}}" style="width: 200px;">
+                <i [ngStyle]="{ 'margin-bottom':'15px;', 'font-size':'2rem', 'color': obtenerSeguimientoDatos(node.key)[6]}"
+                    class="{{obtenerSeguimientoDatos(node.key)[4]}}"></i>
+                <br>
+                <i [ngStyle]="{'font-size':'1.5rem', 'color': obtenerSeguimientoDatos(node.key)[6]}"
+                    class="{{obtenerSeguimientoDatos(node.key)[5]}}"></i>
+                <br>
+                <label
+                    [ngStyle]="{'font-weight':'bolder', 'color': obtenerSeguimientoDatos(node.key)[6]}">{{obtenerSeguimientoDatos(node.key)[8]}}</label>
+                <br>
+                <label
+                    [ngStyle]="{'font-weight':'bolder', 'color': obtenerSeguimientoDatos(node.key)[6]}">{{obtenerSeguimientoDatos(node.key)[7]}}</label>
+                <br>
+                <label
+                    [ngStyle]="{'font-weight':'bolder', 'color': obtenerSeguimientoDatos(node.key)[6]}">{{obtenerSeguimientoDatos(node.key)[0]}}</label>
+                <br>
+                <label *ngIf=" obtenerSeguimientoDatos(node.key)[1]!=null"
+                    [ngStyle]="{'font-weight':'bolder', 'color': obtenerSeguimientoDatos(node.key)[6]}">
+                    {{obtenerSeguimientoDatos(node.key)[1]| date: 'dd/MM/yyyy'}}</label>
+                <label style="color:rgba(255, 255, 255, 0)" *ngIf="obtenerSeguimientoDatos(node.key)[1]==null">-</label>
+                <br>
+                <label *ngIf="obtenerSeguimientoDatos(node.key)[1]!=null"
+                    [ngStyle]="{'font-weight':'bolder', 'color': obtenerSeguimientoDatos(node.key)[6]}">{{obtenerSeguimientoDatos(node.key)[1]|
+                    date: 'hh:mm:ss a'}}</label>
+                <label style="color:rgba(255, 255, 255, 0)" *ngIf="obtenerSeguimientoDatos(node.key)[1]==null">-</label>
+            </div>
+        </ng-template>
+    </p-tree>
+
+    <p-table [style]="{'width': '100%'}" [value]="lstSeguimiento" [responsive]="true" *ngIf="!vistaArbol">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Actividad</th>
+                <th>Estado</th>
+                <th>Usuario</th>
+                <th class="tablaHeaderFechaHora">Fecha</th>
+                <th>Observación</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [ngStyle]="{ 'color': obtenerSeguimientoDatos(rowData.secuencia)[6]}">
+                <td>
+                    <span class="p-column-title">Actividad</span>
+                    {{obtenerSeguimientoDatos(rowData.secuencia)[8]}}
+                </td>
+                <td>
+                    <span class="p-column-title">Estado</span>
+                    {{obtenerSeguimientoDatos(rowData.secuencia)[7]}}
+                </td>
+                <td>
+                    <span class="p-column-title">Usuario</span>
+                    {{obtenerSeguimientoDatos(rowData.secuencia)[0]}}
+                </td>
+                <td class="tablaColumnaFechaHora">
+                    <span class="p-column-title">Fecha</span>
+                    {{obtenerSeguimientoDatos(rowData.secuencia)[1] | date: 'dd/MM/yyyy - hh:mm:ss a'}}
+                </td>
+                <td>
+                    <span class="p-column-title">Observación</span>
+                    {{obtenerSeguimientoDatos(rowData.secuencia)[3]}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="5">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+</p-card>

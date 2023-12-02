@@ -1,0 +1,119 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Tipo de Servicio</label>
+                    <input pInputText [(ngModel)]="dto.tiposervicio" maxlength="6" type="text"
+                        (ngModelChange)="dto.tiposervicio = $event.toUpperCase()" [disabled]="accionnuevo"
+                        [pKeyFilter]="blockSpecial" />
+                </div>
+                <div class="p-field p-col-12 p-md-5">
+                    <label class="importante">Descripción</label>
+                    <input pInputText [(ngModel)]="dto.descripcion" maxlength="25" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label class="importante">Régimen Legal</label>
+                    <p-dropdown [(ngModel)]="dto.regimenfiscal" [options]="lstRegimen" (onChange)="cambioRegimen()"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+            </div>
+
+            <br>
+            <p-divider align="left" >
+                <div class="p-d-inline-flex p-ai-center">
+                    <i class="pi pi-bars p-mr-2"></i>
+                    <b>Impuestos Aplicables a este Servicio</b>&nbsp;&nbsp;
+                    <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                        <div class="p-col-12 p-md-12">
+                            <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar || dto.regimenfiscal =='N' || dto.regimenfiscal == null "
+                                type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined"
+                                (click)="agregarDetalle()"></button>
+                        </div>
+
+                    </div>
+                </div>
+            </p-divider>
+
+            <div class="p-fluid p-formgrid p-grid" >
+                <div class="p-col-12 p-md-6">
+                    <p-table [value]="dto.lstDetalle" [rows]="500" [responsive]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderAccion3">Acción</th>
+                                <th class="tablaHeaderIzquierda">Descripción</th>
+                                <th class="tablaHeaderCodigoChico">Código</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-ri="rowIndex">
+
+                            <tr [pEditableRow]="row" *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                <td class="tablaColumnaAccion1">
+                                    <span class="p-column-title">Acción</span>
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                                [disabled]="!objetoTitulo.puedeEditar"     class="p-button-rounded p-button-danger p-button-text botonGrilla"
+                                                    title="Eliminar" (click)="elminiarDetalle(row,ri)"></button>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td *ngIf="row.accion == 'A'" class="tablaColumnaIzquierda"><span
+                                        class="p-column-title">Descripción</span>
+                                    {{row.impuesto | labelFromItem:lstImpuestos2}}
+                                </td>
+                                <td *ngIf="row.accion == 'N'" class="tablaColumnaIzquierda"><span
+                                        class="p-column-title">Descripción</span>
+                                    <p-dropdown [(ngModel)]="row.impuesto" [options]="lstImpuestos"
+                                        (onChange)="changueImpuesto(row)" [disabled]="row.accion == 'A'"
+                                        [style]="{'width':'100%'}"></p-dropdown>
+                                </td>
+                                <td class="tablaColumnaCodigoChico"><span class="p-column-title">Código</span>
+                                    {{row.tipoimpuesto}}
+
+                                </td>
+
+
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="3">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+    [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

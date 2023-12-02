@@ -1,0 +1,102 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <!-- <div class="p-field p-col-12 p-md-2">
+                    <label>Compañía</label>
+                    <p-dropdown [options]="lstCompanias" [disabled]="prtCompania" [style]="{'width':'100%'}"
+                        [(ngModel)]="filtro."></p-dropdown>
+                </div> -->
+
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Aplicación</label>
+                    <p-dropdown [options]="lstAplicacion"  [filter]="true" [(ngModel)]="dto.filtro.aplicacioncodigo" [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Grupo</label>                         
+                    <input pInputText type="text" [(ngModel)]="dto.filtro.grupo" disabled/>
+                </div>
+
+                <!-- <div class="p-field p-col-12 p-md-2">
+                    <label>Descripción</label>                         
+                    <input pInputText type="text" [(ngModel)]="dto.filtro.descripcioningles" disabled/>
+                </div> -->
+
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton icon="fa fa-binoculars" label="Concepto" (click)="mostrarSelectorCentroCosto()" type="button" title="Buscar Concepto"></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+
+<div class="botonesSeccion">
+    <div class="p-fluid p-grid formularioFila ">
+        <div class="p-col-12 p-md-2">
+            <button pButton pRipple  type="button" label="Guardar" icon="fad fa-layer-save" class="p-button-outlined" (click)="coreGuardar()"></button>
+        </div>
+        <div class="p-col-12 p-md-8"></div>
+        <div class="p-col-12 p-md-2">
+            <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" class="p-button-outlined" (click)="coreBuscar()"></button>
+        </div>
+    </div>
+</div>
+
+
+<p-table #dtCotizacion [rows]="20" [scrollable]="true" [autoLayout]="true"
+    [value]="dto.listado" [paginator]="true" [responsive]="true"
+    [style]="{ width: '100%'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <!-- <th class="tablaHeaderAccion0">Acciones</th> -->
+            <!-- <th class="tablaHeaderCodigo">Secuencia</th> -->
+            <th class="tablaHeaderCodigoGrande">Concepto</th>
+            <th class="tablaHeaderNombre">Descripción</th>
+            <th class="tablaHeaderCodigo">Cod Interno</th>
+            <th class="tablaHeaderCodigo">Estado</th>
+            <th class="tablaHeaderCodigo">Último Usuario</th>
+            <th class="tablaHeaderFecha">Última Fecha</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr [ngStyle]="{'background-color': row.color}">
+            <!-- <td class="tablaColumnaAccion0">
+                <span class="p-column-title">Acciones</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                (click)="coreEditar(row)"></button>
+                        </th>                        
+                    </tr>
+                </table>
+            </td> -->
+            <!-- <td class="tablaColumnaCodigo"><span class="p-column-title">Secuencia</span> {{row.numeroorden}}</td> -->
+            <td class="tablaColumnaCodigoGrande"><span class="p-column-title">Concepto</span> {{row.concepto}}</td>
+            <td class="tablaColumnaNombre"><span class="p-column-title">Descripción</span> {{row.descripcionlocal}}</td>
+            <td class="tablaColumnaCodigo"><span class="p-column-title">Cod Interno</span> {{row.codigointerno}}</td>
+            <td class="tablaColumnaCodigo"><span class="p-column-title">Estado</span> 
+                <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo" >Activo</label>
+                <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo" >Inactivo</label>
+            </td>
+            <td class="tablaColumnaCodigo"><span class="p-column-title">Último Usuario</span> {{row.ultimousuario}}</td>
+            <td class="tablaColumnaFecha"><span class="p-column-title">Última Fecha</span> {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}</td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="11">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+
+<!-- <app-personacomun-selector></app-personacomun-selector>
+<transaccion-chat></transaccion-chat>
+<app-centrocostos-selector></app-centrocostos-selector> -->

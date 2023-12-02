@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whcommodityoperacion.listar">
+	    <![CDATA[
+	        select operacioncodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from WH_COMMODITYOPERACION	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whcommodityoperacion.listarActivos">
+	    <![CDATA[
+	        select operacioncodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from WH_COMMODITYOPERACION
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whcommodityoperacion.obtenerTabla">
+	    <![CDATA[
+	        select operacioncodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from WH_COMMODITYOPERACION
+			where operacioncodigo = :p_operacioncodigo
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whcommodityoperacion.listarfiltros">
+    	select operacioncodigo as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from WH_COMMODITYOPERACION 
+    	where  operacioncodigo = ISNULL(:p_operacioncodigo,operacioncodigo)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion   	
+	</sql-query>
+	
+	<sql-query name="whcommodityoperacion.obtenerDto">
+         select 
+			OPERACIONCODIGO "operacioncodigo"
+			,DESCRIPCION "descripcion"
+			,TIPOTRANSACCION "tipotransaccion"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMAFECHAREPLICACION "ultimafechareplicacion"
+
+         from WH_COMMODITYOPERACION
+         where 
+			OPERACIONCODIGO = :p_operacioncodigo
+    </sql-query>
+    
+    <sql-query name="whcommodityoperacion.listardtofiltros">
+          select 
+			OPERACIONCODIGO "operacioncodigo"
+			,DESCRIPCION "descripcion"
+			,TIPOTRANSACCION "tipotransaccion"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMAFECHAREPLICACION "ultimafechareplicacion"
+
+         from WH_COMMODITYOPERACION
+         where 
+				OPERACIONCODIGO = ISNULL(:p_operacioncodigo,OPERACIONCODIGO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcion
+    </sql-query>
+    
+    	<sql-query name="whcommodityoperacion.listarClasificacionCommodity">
+	    <![CDATA[
+	          SELECT WH_CommodityClasificacion.Clasificacion as "codigo",   
+         WH_CommodityClasificacion.DescripcionLocal  as "nombre"
+    FROM WH_CommodityClasificacion  
+   WHERE WH_CommodityClasificacion.Estado = 'A'   
+ORDER BY WH_CommodityClasificacion.Clasificacion ASC   
+
+	    ]]>
+	</sql-query>
+    
+</hibernate-mapping>

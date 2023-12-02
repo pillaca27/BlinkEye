@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : apcajachica
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="apgastoclasificacion.listar">
+		select Clasificacion "codigo"
+			,DescripcionLocal "nombre"
+			,Estado "estadoId"
+		from ap_gastoclasificacion
+	</sql-query>
+	
+	<sql-query name="apgastoclasificacion.listarActivos">
+		select Clasificacion "codigo"
+			,DescripcionLocal "nombre"
+			,Estado "estadoId"
+		from ap_gastoclasificacion
+		where Estado = 'A'
+	</sql-query>
+	
+    <sql-query name="apgastoclasificacion.listarporaplicacionflagc">
+		SELECT AP_GastoClasificacion.Clasificacion as "clasificacion",
+		AP_GastoClasificacion.AplicacionFlag as "aplicacionflag",
+		AP_GastoClasificacion.DescripcionLocal as "descripcionlocal",
+		AP_GastoClasificacion.ViajeFlag as "viajeflag"
+		FROM AP_GastoClasificacion
+		WHERE ( AP_GastoClasificacion.AplicacionFlag = 'C' ) 
+		AND	(AP_GastoClasificacion.Estado = 'A' )
+	</sql-query>
+	
+	<sql-query name="apgastoclasificacion.listarporaplicacionflagccentrocostosession">
+		SELECT AP_GastoClasificacion.Clasificacion as "clasificacion",
+		AP_GastoClasificacion.AplicacionFlag as "aplicacionflag",
+		AP_GastoClasificacion.DescripcionLocal as "descripcionlocal",
+		AP_GastoClasificacion.ViajeFlag as "viajeflag"
+		FROM AP_GastoClasificacion ,
+		SY_SeguridadUnidadNegocio
+		WHERE ( AP_GastoClasificacion.Clasificacion =
+		SY_SeguridadUnidadNegocio.Codigo )
+		and
+		( ( AP_GastoClasificacion.AplicacionFlag = 'C' ) and
+		( AP_GastoClasificacion.Estado = 'A' ) and
+		( SY_SeguridadUnidadNegocio.TipoMst = 'CL' ) and
+		( SY_SeguridadUnidadNegocio.UnidadNegocio = :p_cc ) )
+	</sql-query>
+	
+	<sql-query name="apgastoclasificacion.obtenerDto">
+         select 
+			CLASIFICACION "clasificacion"
+			,APLICACIONFLAG "aplicacionflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,VIAJEFLAG "viajeflag"
+			,IMPORTACIONFLAG "importacionflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REQUIEREADELANTOFLAG "requiereadelantoflag"
+			,VIAJETIPOPERSONAUSUARIO "viajetipopersonausuario"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+         from AP_GASTOCLASIFICACION
+         where 
+			CLASIFICACION = :p_clasificacion
+    </sql-query>
+    
+    <sql-query name="apgastoclasificacion.listardtofiltros">
+         select 
+			CLASIFICACION "clasificacion"
+			,APLICACIONFLAG "aplicacionflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,VIAJEFLAG "viajeflag"
+			,IMPORTACIONFLAG "importacionflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REQUIEREADELANTOFLAG "requiereadelantoflag"
+			,VIAJETIPOPERSONAUSUARIO "viajetipopersonausuario"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+         from AP_GASTOCLASIFICACION
+         where 
+				CLASIFICACION = ISNULL(:p_clasificacion,CLASIFICACION) 
+			and UPPER(ISNULL(DESCRIPCIONLOCAL,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(DESCRIPCIONLOCAL)) || '%'
+			and ESTADO = ISNULL(:p_estado,ESTADO)
+		 order by DESCRIPCIONLOCAL
+    </sql-query>
+	
+	<sql-query name="apgastoclasificacion.listardtoactivosaplicacionflagr">
+         select 
+			CLASIFICACION "clasificacion"
+			,APLICACIONFLAG "aplicacionflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,VIAJEFLAG "viajeflag"
+			,IMPORTACIONFLAG "importacionflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REQUIEREADELANTOFLAG "requiereadelantoflag"
+			,VIAJETIPOPERSONAUSUARIO "viajetipopersonausuario"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+         from AP_GASTOCLASIFICACION
+         where 
+				ESTADO = 'A'
+			AND aplicacionflag = 'R'
+		 ORDER BY descripcionlocal
+    </sql-query>
+    
+    <sql-query name="apgastoclasificacion.listardtoactivosporaplicacionflag">
+         select 
+			CLASIFICACION "clasificacion"
+			,APLICACIONFLAG "aplicacionflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,VIAJEFLAG "viajeflag"
+			,IMPORTACIONFLAG "importacionflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REQUIEREADELANTOFLAG "requiereadelantoflag"
+			,VIAJETIPOPERSONAUSUARIO "viajetipopersonausuario"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+         from AP_GASTOCLASIFICACION
+         where 
+				ESTADO = 'A'
+			AND aplicacionflag = ISNULL(:p_aplicacionflag,aplicacionflag)
+		 ORDER BY descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

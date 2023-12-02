@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : workflow.WfTransaccionMacroDetalle
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="wftransaccionmacrodetalle.obtenerDtoPorId">
+         select 
+			TRANSACCION_MACRO_ID "transaccionMacroId"
+			,TRANSACCION_MACRO_DETALLE_ID "transaccionMacroDetalleId"
+			,TRANSACCION_ORIGEN_ID "transaccionOrigenId"
+			,TRANSACCION_DESTINO_ID "transaccionDestinoId"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_TRANSACCION_MACRO_DETALLE
+         where 
+			TRANSACCION_MACRO_ID = :p_transaccionmacroid
+			AND TRANSACCION_MACRO_DETALLE_ID = :p_transaccionmacrodetalleid
+
+    </sql-query>
+
+    <sql-query name="wftransaccionmacrodetalle.listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_TRANSACCION_MACRO_DETALLE
+    </sql-query>
+
+    <sql-query name="wftransaccionmacrodetalle.listarPaginadoSentencia">
+         select 
+			TRANSACCION_MACRO_ID "transaccionMacroId"
+			,TRANSACCION_MACRO_DETALLE_ID "transaccionMacroDetalleId"
+			,TRANSACCION_ORIGEN_ID "transaccionOrigenId"
+			,TRANSACCION_DESTINO_ID "transaccionDestinoId"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_TRANSACCION_MACRO_DETALLE
+    </sql-query>
+
+</hibernate-mapping>

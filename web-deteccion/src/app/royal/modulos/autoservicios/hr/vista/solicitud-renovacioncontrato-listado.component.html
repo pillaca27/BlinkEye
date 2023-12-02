@@ -1,0 +1,217 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEmpleadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEmpleado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEmpleadoNombre=null;filtro.empleado=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado Contrato</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoContratoNombre" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado Solicitud</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoSolicitudNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEstadoSolicitud()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEstadoSolicitudNombre=null;filtro.estadoSolicitud=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo de Contrato</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxTipoContratoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoContrato()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxTipoContratoNombre=null;filtro.tipoContrato=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo Planilla</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxTipoPlanillaNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxTipoPlanillaNombre=null;filtro.tipoPlanilla=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Inicio / Fin Contrato</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.inicioContrato">
+                                </p-calendar>
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.finContrato">
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-grid formularioFila botonesSeccion">
+                <div class="p-col-12 p-md-2">
+                    <button pButton pRipple type="button" label="{{textoBotonSolicitud}}" icon="fad fa-folder-plus" *ngIf="verBotonSolicitud" class="p-button-outlined" [disabled]="!habilitarBotonSolicitud" (click)="verSolicitud()"></button>
+                </div>
+                <div class="p-col-12 p-md-8">
+                </div>
+                <div class="p-col-12 p-md-2">
+                    <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" class="p-button-outlined p-button-secondary" (click)="coreBuscar(null)"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [(selection)]="registroSeleccionado" selectionMode="single" (onRowSelect)="onRowSelect($event)">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderCodigoChico">Empleado</th>
+                <th class="tablaHeaderNombre">Nombre</th>
+                <th class="tablaHeaderNombre">Tipo de Contrato</th>
+                <th class="tablaHeaderFecha">Vigencia Hasta</th>
+
+                <th class="tablaHeaderCodigoChico">N° Sec.</th>
+                <th class="tablaHeaderEstado">Estado Contrato</th>
+                <th class="tablaHeaderCodigo" style="background-color: #c9f1f4;">N° Solicitud Renovación</th>
+                <th class="tablaHeaderEstado" style="background-color: #c9f1f4;">Tipo Solicitud Renovación</th>
+                <th class="tablaHeaderEstado" style="background-color: #c9f1f4;">Estado Solicitud Renovación</th>
+                <th class="tablaHeaderEstado" style="background-color: #c9f4ce;">Estado de la Renovación</th>
+                <th class="tablaHeaderFecha">Fecha Elaboración</th>
+                <th class="tablaHeaderFecha">Inicio de Contrato</th>
+
+                <th class="tablaHeaderCodigo">Tiempo Contrato</th>
+                <th class="tablaHeaderCodigo">Tiempo Venc. Contrato</th>
+                <th class="tablaHeaderCodigo">Tiempo de Servicio</th>
+
+                <th class="tablaHeaderNombre">Puesto</th>
+                <th class="tablaHeaderNombreMedio">Tipo Planilla</th>
+                <th class="tablaHeaderNombreMedio">Unidad de Negocio</th>
+                <th class="tablaHeaderNombreMedio">Sucursal</th>
+                <th class="tablaHeaderNombreMedio">Unidad Operativa</th>
+                <th class="tablaHeaderNombreMedio">Centro de Costo</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Empleado</span> {{rowData.empleado}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Nombre</span> {{rowData.nombreCompleto}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Tipo de Contrato</span> {{rowData.descripcionTipoContrato}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Vigencia Hasta</span> {{rowData.fechaHasta | date : 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">N° Sec.</span> {{rowData.secuencia}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado Contrato</span> {{rowData.nombreEstado}}
+                </td>
+                <td class="tablaColumnaCodigo" style="background-color: #e5fdff;">
+                    <span class="p-column-title">N° Solicitud Renovación</span> {{rowData.solicitud}}
+                </td>
+                <td class="tablaColumnaEstado" style="background-color: #e5fdff;">
+                    <span class="p-column-title">Tipo Solicitud Renovación</span> {{rowData.tipoSolicitudRenovar}}
+                </td>
+                <td class="tablaColumnaEstado" style="background-color: #e5fdff;">
+                    <span class="p-column-title">Estado Solicitud Renovación</span> {{rowData.nombreEstadoSolicitud}}
+                </td>
+                <td class="tablaColumnaEstado" style="background-color: #e7ffe5;">
+                    <span class="p-column-title">Estado de la Renovación</span> {{rowData.nombreEstadoRenovacion}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Elaboración</span> {{rowData.fechaelaboracion | date : 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Inicio de Contrato</span> {{rowData.fechaDesde | date : 'dd/MM/yyyy'}}
+                </td>
+
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Tiempo Contrato</span> {{rowData.tiempoContrato}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Tiempo Venc. Contrato</span> {{rowData.tiempoVencimiento}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Tiempo de Servicio</span> {{rowData.tiempoServicio}}
+                </td>
+
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Puesto</span> {{rowData.auxPuestoNombre}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Tipo Planilla</span> {{rowData.descripcionTipoPlanilla}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad de Negocio</span> {{rowData.auxUnidadNegocioNombre}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Sucursal</span> {{rowData.descripcionSucursal}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad Operativa</span> {{rowData.auxUnidadOperativaNombre}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Centro de Costo</span> {{rowData.descripcionCentroCostos}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="21">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-selector-miscelaneos></app-selector-miscelaneos>
+<app-selector-tipoplanilla></app-selector-tipoplanilla>
+<app-selector-tipocontrato></app-selector-tipocontrato>
+<app-personacomun-selector></app-personacomun-selector>
+<solicitud-renovacioncontrato-mantenimiento (volverABuscar)="coreBuscar(null)">
+</solicitud-renovacioncontrato-mantenimiento>

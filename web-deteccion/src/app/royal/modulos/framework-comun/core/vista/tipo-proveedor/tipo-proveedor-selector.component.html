@@ -1,0 +1,292 @@
+
+<p-dialog *ngIf="tipoFormulario == 'DEFAULT' " header="SELECTOR DE {{titulo}}" [(visible)]="verSelector" modal="modal" showEffect="fade" [blockScroll]="true"
+    hideEffect="size" [style]="{width: '1000px'}" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden',
+        'max-height': '85vh'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Código</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.persona" style="width: 100%;"
+                        (keypress)="preBuscar($event,dtempleados)" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Razón Social</span>
+                    <input #myDescripcion pInputText type="text" [(ngModel)]="filtro.busqueda" style="width: 100%;"
+                        (keypress)="preBuscar($event,dtempleados)" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Documento Fiscal</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.documentofiscal" style="width: 100%;"
+                        (keypress)="preBuscar($event,dtempleados)" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Documento</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.documento" style="width: 100%;"
+                        (keypress)="preBuscar($event,dtempleados)" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Tipo Proveedor</span>
+                    <p-dropdown appendTo="body" [options]="lstEstados" [style]="{'width':'10k0%'}" [(ngModel)]="filtro.estado">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Localidad</span>
+                    <p-dropdown [filter]="true" appendTo="body" [options]="lstLocalidad" [style]="{'width':'10k0%'}" [(ngModel)]="filtro.localidad">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span>Actividad Económica</span>
+                    <p-dropdown [filter]="true" appendTo="body" [options]="lstActividadEconomica" [style]="{'width':'10k0%'}"
+                     [(ngModel)]="filtro.actividadeconomica">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-1">
+                </div> 
+
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton label="Seleccionar" icon="fa fa-check" type="button" *ngIf="flagVerSeleccionar"
+                    (click)="coreSeleccionarMultiple()" style="margin-top: 15px;" 
+                    class="ui-button ui-button-rounded"></button>
+                </div> 
+                
+                <div class="p-field p-col-12 p-md-2"  >
+                    <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                    (click)="coreBuscar(dtempleados)" style="margin-top: 15px;" 
+                    class="ui-button ui-button-rounded"></button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-table  #dtempleados [rows]="registrosPorPagina" [style]="{width:'100%'}" [paginator]="true" [lazy]="true"
+        (onLazyLoad)="cargarEvent($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+        [responsive]="true"  [value]="filtro.paginacion.paginacionListaResultado" [showCurrentPageReport]="true" 
+        
+
+        dataKey="persona"
+        [(selection)]="seleccionProveedores"
+
+        currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th *ngIf="!flagVerSeleccionar" class="tablaHeaderKPIMes">Acción</th>
+
+                <th style="width: 2rem;text-align: center;" *ngIf="flagVerSeleccionar">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+
+                <th class="tablaHeaderKPIMes">Persona</th>
+                <th class="tablaColumnaNombreProceso">Razón Social</th>
+                <th class="tablaHeaderCodigoGrande">Documento</th>
+                <th class="tablaHeaderCodigoGrande">Doc Fiscal</th>
+                <th class="tablaHeaderCodigoGrande">Doc Identidad</th>
+               <!--  <th class="tablaHeaderCodigoGrande">Localidad</th>
+                <th class="tablaHeaderNombre">Actividad Económica</th> -->
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                
+                <td *ngIf="!flagVerSeleccionar" class="tablaHeaderKPIMes">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton icon="pi pi-check" type="button" class="p-button-rounded p-button-text botonGrilla"
+                        (click)="coreSeleccionar(rowData)"></button>
+                </td>
+                
+                <td style="width: 2rem;text-align: center;" *ngIf="flagVerSeleccionar">
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+
+                <td class="tablaHeaderKPIMes">
+                    <span class="p-column-title">Persona</span>
+                    {{rowData.persona}}
+                </td>   
+                <td class="tablaColumnaNombreProceso">
+                    <span class="p-column-title">Nombre Busqueda</span>
+                    <span>{{rowData.busqueda}}</span>
+                </td>
+                
+                <td class="tablaColumnaCodigoGrande">
+                    <span class="p-column-title">Documento</span>
+                    {{rowData.documento}}
+                </td>
+                <td class="tablaColumnaCodigoGrande">
+                    <span class="p-column-title">Doc Fiscal</span>
+                    {{rowData.documentofiscal}}
+                </td>
+                <td class="tablaColumnaCodigoGrande">
+                    <span class="p-column-title">Doc Identidad</span>
+                    {{rowData.documentoidentidad}}
+                </td>
+               <!--  <td class="tablaColumnaCodigoGrande">
+                    <span class="p-column-title">Localidad</span>
+                    {{rowData.localidad}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Actividad Económica</span>
+                    <span>{{rowData.actividad}}</span>
+                </td> -->
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="rowData.estado != 'A'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No Existen Registros para Mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+</p-dialog>
+
+<p-dialog *ngIf="tipoFormulario == 'COTIX' " header="SELECTOR DE {{titulo}}" [(visible)]="verSelector" modal="modal" showEffect="fade" [blockScroll]="true"
+    hideEffect="size" [style]="{width: '1000px'}" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden',
+        'max-height': '85vh'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Código</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.persona" style="width: 100%;"
+                        (keypress)="preBuscarCotix($event)" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Razón Social</span>
+                    <input #myDescripcion pInputText type="text" [(ngModel)]="filtro.busqueda" style="width: 100%;"
+                        (keypress)="preBuscarCotix($event)" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Documento Fiscal</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.documentofiscal" style="width: 100%;"
+                        (keypress)="preBuscarCotix($event)" />
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <span>Documento</span>
+                    <input pInputText type="text" [(ngModel)]="filtro.documento" style="width: 100%;"
+                        (keypress)="preBuscarCotix($event)" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Tipo Proveedor</span>
+                    <p-dropdown appendTo="body" [options]="lstEstados" [style]="{'width':'10k0%'}" [(ngModel)]="filtro.estado">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Localidad</span>
+                    <p-dropdown [filter]="true" appendTo="body" [options]="lstLocalidad" [style]="{'width':'10k0%'}" [(ngModel)]="filtro.localidad">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <span>Actividad Económica</span>
+                    <p-dropdown [filter]="true" appendTo="body" [options]="lstActividadEconomica" [style]="{'width':'10k0%'}"
+                     [(ngModel)]="filtro.actividadeconomica">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-1">
+                </div> 
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton label="Aceptar" icon="fas fa-check-circle" type="button"
+                        (click)="coreSeleccionarTodo()" style="margin-top: 15px;" 
+                        class="ui-button ui-button-rounded"></button>
+                </div> 
+                <div class="p-field p-col-12 p-md-2"  >
+                    <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                    (click)="coreBuscarCotix()" style="margin-top: 15px;" 
+                    class="ui-button ui-button-rounded"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <p-table  [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true"
+    [style]="{ width: '100%'}"  [rows]="25" scrollDirection="both"
+    [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [(selection)]="registroSeleccionado"
+    selectionMode="single"  [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros"> 
+    
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderKPIMes">
+                <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+            </th>
+           
+            <th class="tablaHeaderKPIMes">Persona</th>
+            <th class="tablaColumnaNombreProceso">Razón Social</th>
+            <th class="tablaHeaderCodigoGrande">Documento</th>
+            <th class="tablaHeaderCodigoGrande">Doc Fiscal</th>
+            <th class="tablaHeaderCodigoGrande">Doc Identidad</th>
+            <th class="tablaHeaderEstado">Estado</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr class="p-selectable-rowData">
+            <td class="tablaHeaderKPIMes">
+                <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+            </td>
+            <td class="tablaHeaderKPIMes">
+                <span class="p-column-title">Persona</span>
+                {{rowData.persona}}
+            </td>   
+            <td class="tablaColumnaNombreProceso">
+                <span class="p-column-title">Nombre Busqueda</span>
+                <span>{{rowData.busqueda}}</span>
+            </td>
+            
+            <td class="tablaColumnaCodigoGrande">
+                <span class="p-column-title">Documento</span>
+                {{rowData.documento}}
+            </td>
+            <td class="tablaColumnaCodigoGrande">
+                <span class="p-column-title">Doc Fiscal</span>
+                {{rowData.documentofiscal}}
+            </td>
+            <td class="tablaColumnaCodigoGrande">
+                <span class="p-column-title">Doc Identidad</span>
+                {{rowData.documentoidentidad}}
+            </td>
+            <td class="tablaColumnaEstado">
+                <span class="p-column-title">Estado</span>
+                <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                <label *ngIf="rowData.estado != 'A'" class="tablaEstadoInactivo">Inactivo</label>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="7">
+                No Existen Registros para Mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+</p-dialog>

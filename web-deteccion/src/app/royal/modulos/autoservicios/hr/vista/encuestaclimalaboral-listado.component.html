@@ -1,0 +1,126 @@
+<p-table [responsive]="true" [value]="lst">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion1">Ejecutar</th>
+            <th class="tablaHeaderCodigo">Periodo</th>
+            <th class="tablaHeaderCodigo">#</th>
+            <th class="tablaHeaderNombre">Descripción</th>
+            <th class="tablaHeaderFechaHora">Desde</th>
+            <th class="tablaHeaderFechaHora">Hasta</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td class="tablaColumnaAccion1">
+                <span class="p-column-title">Ejecutar</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-play"
+                                class="p-button-rounded p-button-text botonGrilla" title="Ejecutar"
+                                (click)="ejecutar(rowData)"></button>
+                        </th>
+                    </tr>
+                </table>
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Periodo</span>
+                {{rowData.periodoNombre}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">#</span>
+                {{rowData.encuesta}}
+            </td>
+            <td class="tablaColumnaNombre">
+                <span class="p-column-title">Descripción</span>
+                {{rowData.descripcion}}
+            </td>
+            <td class="tablaColumnaFechaHora">
+                <span class="p-column-title">Desde</span>
+                {{rowData.desde}}
+            </td>
+            <td class="tablaColumnaFechaHora">
+                <span class="p-column-title">Hasta</span>
+                {{rowData.hasta}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="6">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-times" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="modalEjecucion" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size"
+        [style]="{'width':'800px'}" [responsive]="true">
+
+        <p-header>
+            <div style="float: left;">
+                <i class="fa fa-check-square" style="font-size: 3em;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="float: left;">
+                <p style="font-size:16px;display:inline-block; margin-top: 10px;">{{dtoEncuesta.descripcion}}</p>
+            </div>
+        </p-header>
+
+        <p-card>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12" style="text-align: justify;">
+                    <label>{{dtoEncuesta.instrucciones}}</label>
+                </div>
+            </div>
+            <p-scrollPanel [style]="{width: '100%', height: '350px'}" styleClass="custombar1">
+                <div class="p-grid" *ngFor="let area of dtoEncuesta.areas">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <label style="color: rgb(211, 10, 110);font-size:15px;font-weight:bold;">{{area}}</label>
+                        <hr style="background: rgb(211, 10, 110);margin-bottom: 0px;">
+                    </div>
+                    <div class="p-field p-col-12 p-md-12" *ngFor="let det of dtoEncuesta.detalle">
+                        <div class="ui-g" *ngIf="area == det.areaDescripcion">
+                            <div class="p-field p-col-12 p-md-12">
+                                <label><strong>{{ det.descripcion }}</strong></label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-12" *ngIf="det.tipo == 'P'||det.tipo == 'A'">
+                                <div class="p-field p-col-12 p-md-12" *ngFor="let val of det.valores">
+                                    <p-radioButton name="{{ val.pregunta }}" value="{{ val.valor }}"
+                                        label="{{ val.descripcion }}" [(ngModel)]="det.valor"></p-radioButton>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-12 p-md-12" *ngIf="det.tipo == 'C'||det.tipo == 'A'">
+                                <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="det.observacion"
+                                    style="width: 100%" maxlength="250"></textarea>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-scrollPanel>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                        class="p-button-outlined" (click)="guardar()"></button>
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                        class="p-button-outlined p-button-secondary" (click)="modalEjecucion=false"></button>
+                </div>
+            </div>
+        </p-card>
+    </p-dialog>
+</div>

@@ -1,0 +1,143 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Fecha Inicio</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [locale]="es"
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [(ngModel)]="filtro.desde"
+                        [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Fecha Fin</label>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [locale]="es"
+                        [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [(ngModel)]="filtro.hasta"
+                        [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <label>Estado</label>
+                    <p-dropdown [options]="lstEstado" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<!--
+<app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B">
+</app-botones-listado>
+-->
+<div class="p-fluid margen-top">
+    <div class="p-field p-grid formularioFilaBotones">
+        
+        <div class="p-col-12 p-md-2">
+            <button pButton type="button" icon="fa fa-trash" label="Limpiar Informativos"
+                (click)="limpiarLista('INF')"></button>
+        </div>
+        <div class="p-col-12 p-md-2">
+            <button pButton type="button" icon="fa fa-trash" (click)="limpiarLista('INA')"
+                class="btn-inactivar"
+                label="Limpiar Inactivos"  ></button>
+        </div>
+        <div class="p-col-12 p-md-6"></div>
+        <div class="p-col-12 p-md-2">
+            <button pButton type="button" icon="fa fa-binoculars" label="Buscar" (click)="buscar1()"></button>
+        </div>
+    </div>
+</div>
+
+<p-table #dt [rows]="50" [paginator]="true" [lazy]="true" (onLazyLoad)="cargar($event)"
+    [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" scrollHeight="300px"
+    [value]="filtro.paginacion.paginacionListaResultado" [responsive]="true" [style]="{width:'100%', height:'auto'}"
+    scrollWidth="100%" [resizableColumns]="true" [showCurrentPageReport]="true"
+    currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion1">Acción</th>
+            <th class="tablaHeaderCodigo">Código Error</th>
+            <th class="tablaHeaderFechaHora">Fecha Creación</th>
+            <th class="tablaHeaderNombre">Nombre Clase</th>
+            <th class="tablaHeaderNombreSuperGrande">Mensaje Usuario</th>
+            <th class="tablaHeaderNombre">Objeto BD</th>
+            <th class="tablaHeaderEstado">Estado</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td class="tablaColumnaAccion1">
+                <span class="p-column-title">Acción</span>
+                <button pButton pRipple type="button" icon="fad fa-eye" class="p-button-rounded p-button-text"
+                    title="Ver Trace" (click)="verTrace(rowData)"></button>
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Código Error</span>
+                {{rowData.idError}}
+            </td>
+            <td class="tablaColumnaFechaHora">
+                <span class="p-column-title">Fecha Creación</span>
+                {{rowData.creacionFecha | date: 'dd/MM/yyyy HH:mm:ss-SS'}}
+            </td>
+            <td class="tablaColumnaNombre">  
+                <span class="p-column-title">Nombre Clase</span>
+                {{rowData.className}}
+            </td>
+            <td class="tablaColumnaNombreSuperGrande">
+                <span class="p-column-title">Mensaje Usuario</span>
+                {{rowData.dominioMensajeUsuario}}
+            </td>
+            <td class="tablaColumnaNombre">
+                <span class="p-column-title">Objeto BD</span>
+                {{rowData.objetoBasedatos}}
+            </td>
+            <td class="tablaColumnaEstado">
+                <span class="p-column-title">Estado</span>
+                <label *ngIf="rowData.estado ==  'ACT'" class="tablaEstadoActivo">Activo</label>
+                <label *ngIf="rowData.estado ==  'INA'" class="tablaEstadoInactivo">Inactivo</label>
+                <label *ngIf="rowData.estado ==  'INF'" class="tablaEstadoInformativo">Inactivo</label>
+                <label *ngIf="rowData.estado ==  'ELI'" class="tablaEstadoEliminados">Inactivo</label>
+
+
+
+            <!--     <button pButton type="button" class="tablaBotonInactivo" *ngIf="rowData.estado ==  'INA'"
+                    label="Inactivo"></button>
+                <button pButton type="button" class="tablaBotonActivo" *ngIf="rowData.estado ==  'ACT'"
+                    label="Activo"></button>
+                <button pButton type="button" class="btn-informativos" *ngIf="rowData.estado ==  'INF'"
+                    label="Informativo"></button>
+                <button pButton type="button" class="btn-eliminados" *ngIf="rowData.estado ==  'ELI'"
+                    label="Eliminados"></button> -->
+        </tr>
+    </ng-template>
+
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="7">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog #c>
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+        <button type="button" pButton icon="fad fa-times" label="No" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-dialog header="Trace | Vista Previa" [(visible)]="verModalTrace" modal="modal" showEffect="fade" [blockScroll]="true"
+    hideEffect="size" [style]="{width: '1100px'}">
+    <div class="p-fluid p-grid">
+        <div class="p-field p-col-12 p-md-12">
+            <textarea pInputTextarea rows="30" cols="70" style="width:100%;" [(ngModel)]="trace"></textarea>
+        </div>
+        <div class="p-field p-col-12 p-md-9">
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <button pButton type="button" icon="pi pi-reply" label="Cancelar" style="width: 100%;"
+                (click)="verModalTrace = false"></button>
+        </div>
+    </div>
+</p-dialog>

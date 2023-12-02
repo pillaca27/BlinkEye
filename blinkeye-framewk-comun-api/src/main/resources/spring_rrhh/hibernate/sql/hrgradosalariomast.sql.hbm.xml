@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrgradosalariomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="hrgradosalariomast.listar">
+    	select GradoSalario as "codigo", DescripcionLocal as "nombre" 
+    			,estado as "estadoId"
+    	from Hr_Gradosalariomast
+    	order by descripcionlocal
+  	</sql-query>
+    
+    <sql-query name="hrgradosalariomast.listarActivos">
+    	select GradoSalario as "codigo", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from Hr_Gradosalariomast 
+    	where Estado = 'A'
+    	order by descripcionlocal
+  	</sql-query>
+  	
+  	<sql-query name="hrgradosalariomast.obtenertabla">
+  		select GradoSalario as "codigo", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from Hr_Gradosalariomast 
+    	where GradoSalario = :p_gradosalario
+	</sql-query>
+	
+	<sql-query name="hrgradosalariomast.obtenerdto">
+    	 select 
+			GRADOSALARIO "gradosalario"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,SALARIOMINIMO "salariominimo"
+			,SALARIOMAXIMO "salariomaximo"
+			,SALARIOPROMEDIO "salariopromedio"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CARGO "cargo"
+
+         from HR_GRADOSALARIOMAST
+         where 
+			GRADOSALARIO = :p_gradosalario 
+	</sql-query>
+	
+	<sql-query name="hrgradosalariomast.listardtofiltros">
+    	 select 
+			GRADOSALARIO "gradosalario"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,SALARIOMINIMO "salariominimo"
+			,SALARIOMAXIMO "salariomaximo"
+			,SALARIOPROMEDIO "salariopromedio"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CARGO "cargo"
+
+         from HR_GRADOSALARIOMAST
+         where 
+			GRADOSALARIO = ISNULL(:p_gradosalario,GRADOSALARIO)
+    	
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal	    	
+	</sql-query>
+	
+	<sql-query name="hrgradosalariomast.contargradosalarioporfiltro">
+       SELECT COUNT(1)
+		FROM HR_GRADOSALARIOMAST A
+		LEFT JOIN HR_CARGOSMAST C ON A.CARGO = C.CARGO
+		WHERE A.GRADOSALARIO = ISNULL(:p_gradosalario, A.GRADOSALARIO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcionlocal, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+			AND ISNULL(A.CARGO, '-') = ISNULL(:p_cargo, ISNULL(A.CARGO, '-'))
+    </sql-query>
+    
+    <sql-query name="hrgradosalariomast.listargradosalarioporfiltro">
+		SELECT A.GRADOSALARIO AS "gradosalario", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCIONLOCAL))) AS "descripcionlocal",
+			C.CARGO AS "cargo", 
+			LTRIM(RTRIM(UPPER(C.DESCRIPCIONLOCAL))) AS "cargonombre",
+			CAST(A.ESTADO AS VARCHAR) AS "estado"
+		FROM HR_GRADOSALARIOMAST A
+		LEFT JOIN HR_CARGOSMAST C ON A.CARGO = C.CARGO
+		WHERE A.GRADOSALARIO = ISNULL(:p_gradosalario, A.GRADOSALARIO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcionlocal, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+			AND ISNULL(A.CARGO, '-') = ISNULL(:p_cargo, ISNULL(A.CARGO, '-'))
+		ORDER BY A.DESCRIPCIONLOCAL
+    </sql-query>
+	
+</hibernate-mapping>

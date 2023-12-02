@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Microsuenos
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="microsuenos.obtenerDto">
+         select 
+			a.ID_Microsueno "idMicrosueno"
+			,a.ID_Alumno "idAlumno"
+			,a.ID_Clase "idClase"
+			,a.Fecha_Hora "fechaHora"
+			,a.Duración "duracion"
+
+         from MICROSUENOS a
+         where 
+			a.ID_Microsueno = :p_idmicrosueno
+
+    </sql-query>
+
+    <sql-query name="microsuenos.listarPaginadoContar">
+         select count(1)
+         from MICROSUENOS a
+         where 
+			a.ID_Microsueno = ISNULL(:p_idmicrosueno, a.ID_Microsueno)
+
+    </sql-query>
+
+    <sql-query name="microsuenos.listarPaginadoSentencia">
+         select 
+			a.ID_Microsueno "idMicrosueno"
+			,a.ID_Alumno "idAlumno"
+			,a.ID_Clase "idClase"
+			,a.Fecha_Hora "fechaHora"
+			,a.Duración "duracion"
+
+         from MICROSUENOS a
+         where 
+			a.ID_Microsueno = ISNULL(:p_idmicrosueno, a.ID_Microsueno)
+
+    </sql-query>
+
+    <sql-query name="microsuenos.listarDtoCore">
+         select 
+			a.ID_Microsueno "idMicrosueno"
+			,a.ID_Alumno "idAlumno"
+			,a.ID_Clase "idClase"
+			,a.Fecha_Hora "fechaHora"
+			,a.Duración "duracion"
+
+         from MICROSUENOS a
+         where 
+			a.ID_Microsueno = ISNULL(:p_idmicrosueno, a.ID_Microsueno)
+
+    </sql-query>
+
+    <sql-query name="microsuenos.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="microsuenos.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="microsuenos.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

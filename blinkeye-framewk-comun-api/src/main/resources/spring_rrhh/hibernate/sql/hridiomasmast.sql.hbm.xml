@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="hridiomasmast.listar">
+    	select idioma as "codigo", DescripcionLocal as "nombre"
+    		,Estado as "estadoId" 
+    	from hr_idiomasmast 
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hridiomasmast.listarActivos">
+    	select idioma as "codigo", DescripcionLocal as "nombre"
+    		,Estado as "estadoId" 
+    	from hr_idiomasmast where Estado = 'A'
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hridiomasmast.obtenertabla">
+    	select idioma as "codigo", 
+    			DescripcionLocal as "nombre",
+    			Estado as "estadoId" 
+    			from hr_idiomasmast
+    			where idioma = :p_idioma 
+	</sql-query>
+	
+	
+	<sql-query name="hridiomasmast.listarfiltros">
+    	select idioma as "codigo", 
+    			DescripcionLocal as "nombre",
+    			Estado as "estadoId" 
+    			from hr_idiomasmast
+		where  idioma = ISNULL(:p_idioma,idioma)
+			and UPPER(ISNULL(DescripcionLocal,'xxx')) like '%' || ISNULL(:p_descripcionLocal,UPPER(DescripcionLocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))	  
+		order by DescripcionLocal			  				
+	</sql-query>
+	
+</hibernate-mapping>

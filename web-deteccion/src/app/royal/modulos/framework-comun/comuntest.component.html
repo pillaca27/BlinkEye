@@ -1,0 +1,137 @@
+<app-titulo-listado [bloquear]="blocked" [objTitulo]="objetoTitulo"></app-titulo-listado>
+
+<p-card>
+    <div class="p-fluid p-grid  formularioFila">
+        <div class="p-field p-col-12 p-md-3">
+            <label>Ubigeo</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreUbigeo" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorUbigeo()" type="button"
+                    title="Buscar Ubigeo"></button>
+            </div>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label>Pais</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombrePais" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorPais()" type="button"
+                    title="Buscar Pais"></button>
+            </div>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label>Curso</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreCurso" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorCurso()" type="button"
+                    title="Buscar Curso"></button>
+            </div>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <label>Centro Estudios</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreCentroEstudio" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorCentroEstudios()" type="button"
+                    title="Buscar Curso"></button>
+            </div>
+        </div>
+        
+        <div class="p-field p-col-12 p-md-3">
+            <label>Centro Costos</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreCentroCosto" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorCentroCostos()" type="button"
+                    title="Buscar Curso"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Compañía</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreCompania" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorCompania()" type="button"
+                    title="Buscar Compañía"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Unidad Negocio</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreUnidadnegocio" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorUnidadNegocio()" type="button"
+                    title="Buscar Unidad Negocio"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Sucursal</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreSucursal" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorSucursal()" type="button"
+                    title="Buscar Sucursal"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Proyecto</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreProyecto" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorProyecto()" type="button"
+                    title="Buscar Proyecto"></button>
+            </div>
+        </div>
+         
+        <div class="p-field p-col-12 p-md-3">
+            <label>Unidad Operativa</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreUnidadOperativa" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorUnidadOperativa()" type="button"
+                    title="Buscar Unidad Operativa"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Puesto</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombrePuesto" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorPuesto()" type="button"
+                    title="Buscar Puesto"></button>
+            </div>
+        </div>
+
+        <div class="p-field p-col-12 p-md-3">
+            <label>Etapa de Evaluación</label>
+            <div class="p-inputgroup">
+                <input pInputText type="text" [(ngModel)]="nombreEtapaEvaluacion" disabled class="hoverDisabled"
+                    style="width:100%" />
+                <button pButton icon="fa fa-binoculars" (click)="mostrarSelectorEtapaEvaluacion()" type="button"
+                    title="Buscar Etapa de Evaluación"></button>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+
+
+<app-selector-ubicaciongeografica></app-selector-ubicaciongeografica>
+<app-selector-pais></app-selector-pais>
+<app-selector-curso></app-selector-curso>
+<app-centro-estudios-selector></app-centro-estudios-selector>
+<app-centrocostos-selector></app-centrocostos-selector>
+<app-selector-compania></app-selector-compania>
+<app-selector-unidadnegocio></app-selector-unidadnegocio>
+<app-sucursalselector></app-sucursalselector>
+<app-selector-afemstcomun></app-selector-afemstcomun>
+<app-selector-unidadoperativa></app-selector-unidadoperativa>
+<app-selector-puesto></app-selector-puesto>
+<app-selector-etapaevaluacion></app-selector-etapaevaluacion>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Alumnos
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="alumnos.obtenerDto">
+         select 
+			a.ID_Alumno "idAlumno"
+			,a.Nombre "nombre"
+			,a.Apellido "apellido"
+			,a.Email "email"
+
+         from ALUMNOS a
+         where 
+			a.ID_Alumno = :p_idalumno
+
+    </sql-query>
+
+    <sql-query name="alumnos.listarPaginadoContar">
+         select count(1)
+         from ALUMNOS a
+         where 
+			a.ID_Alumno = ISNULL(:p_idalumno, a.ID_Alumno)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="alumnos.listarPaginadoSentencia">
+         select 
+			a.ID_Alumno "idAlumno"
+			,a.Nombre "nombre"
+			,a.Apellido "apellido"
+			,a.Email "email"
+
+         from ALUMNOS a
+         where 
+			a.ID_Alumno = ISNULL(:p_idalumno, a.ID_Alumno)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="alumnos.listarDtoCore">
+         select 
+			a.ID_Alumno "idAlumno"
+			,a.Nombre "nombre"
+			,a.Apellido "apellido"
+			,a.Email "email"
+
+         from ALUMNOS a
+         where 
+			a.ID_Alumno = ISNULL(:p_idalumno, a.ID_Alumno)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="alumnos.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="alumnos.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="alumnos.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

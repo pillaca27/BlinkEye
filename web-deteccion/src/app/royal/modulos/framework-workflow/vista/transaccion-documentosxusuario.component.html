@@ -1,0 +1,78 @@
+<p-card *ngIf="!cargando">
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Documentos a presentar</b>
+        </div>
+    </p-divider>
+    <p-table [scrollable]="true" [style]="{'width': '100%'}" [value]="adjuntos" [responsive]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Ver</th>
+                <th class="tablaHeaderAccion1">Nivel</th>
+                <th class="tablaColumnaNombre">Actual</th>
+                <th class="tablaColumnaNombre">Tipo</th>
+                <th class="tablaHeaderAccion1">Plantilla</th>
+                <th class="tablaHeaderFechaHora">Fecha</th>
+                <th class="tablaHeaderUsuario">Usuario</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Ver</span>
+                    <button pButton pRipple type="button" icon="fad fa-cloud-download" *ngIf="rowData.secuencia!=null"
+                        title="Descargar" class="p-button-rounded p-button-text"
+                        (click)="descargarDocumento(rowData.secuencia) "></button>
+                </td>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Nivel</span>
+                    {{rowData.nivel}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Actual</span>
+                    {{rowData.archivonombre}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Tipo</span>
+                    <span *ngIf="rowData.auxRequerido=='S'&&!tieneLink(rowData.tipodocumento)"
+                        style="color: brown;font-weight: bold;">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido=='S'&&tieneLink(rowData.tipodocumento)"
+                        style="color: brown;font-weight: bold;text-decoration: underline;cursor: pointer;"
+                        (click)="irLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido!='S'&&!tieneLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido!='S'&&tieneLink(rowData.tipodocumento)"
+                        style="text-decoration: underline;cursor: pointer;" (click)="irLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                </td>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Plantilla</span>
+                    <button pButton pRipple type="button" icon="fad fa-file" class="p-button-rounded p-button-text" *ngIf="rowData.plantilla" 
+                        title="Plantilla" (click)="verPlantilla(rowData.plantilla)"></button>
+                </td>
+                <td class="tablaHeaderFechaHora">
+                    <span class="p-column-title">Fecha</span>
+                    {{rowData.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+                </td>
+                <td class="tablaHeaderUsuario">
+                    <span class="p-column-title">Usuario</span>
+                    {{rowData.usuario}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

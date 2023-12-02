@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrprofesion
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+  <sql-query name="hrprofesion.listar">
+    select Profesion as "codigo", Descripcion as "nombre" 
+    		,estado as "estadoId"
+    from HR_Profesion  
+    order by Descripcion
+  </sql-query>
+  
+  <sql-query name="hrprofesion.listaractivos">
+    select Profesion as "codigo", Descripcion as "nombre"
+    		,estado as "estadoId" 
+    from HR_Profesion
+    	where estado = 'A'
+    order by Descripcion
+  </sql-query>
+  
+  <sql-query name="hrprofesion.obtenertabla">
+    	select Profesion as "codigo", 
+    			Descripcion as "nombre",
+    			Estado as "estadoId" 
+    			from HR_Profesion
+    			where Profesion = :p_profesion
+	</sql-query>
+  
+    <sql-query name="hrprofesion.obtenerdto">
+         select 
+			PROFESION "profesion"
+			,AREA "area"
+			,DESCRIPCION "descripcion"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+			,ABREVIATURA "abreviatura"
+         from HR_PROFESION
+         where Profesion = :p_profesion
+    </sql-query>
+    
+    <sql-query name="hrprofesion.listardtofiltros">
+         select 
+			PROFESION "profesion"
+			,AREA "area"
+			,DESCRIPCION "descripcion"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+         from HR_PROFESION
+         where  Profesion = ISNULL(:p_profesion,Profesion)
+			and UPPER(ISNULL(DESCRIPCION,'xxx')) like '%' + ISNULL(:p_descripcion,UPPER(DESCRIPCION)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))	
+		order by Descripcion
+    </sql-query>
+  
+	<sql-query name="hrprofesion.listartablaporarea">
+	    select Profesion as "codigo", Descripcion as "nombre" 
+	    	,estado as "estadoId" 
+	    from HR_Profesion
+	    where Area = :p_area
+	    order by Descripcion
+	</sql-query>
+	  
+	<sql-query name="hrprofesion.listarPaginadoContar">
+	    SELECT COUNT(1)
+		FROM HR_PROFESION 
+		WHERE HR_PROFESION.PROFESION = ISNULL(:p_profesion, HR_PROFESION.PROFESION)
+		AND HR_PROFESION.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, HR_PROFESION.DESCRIPCION) + '%'
+    </sql-query>
+  
+    <sql-query name="hrprofesion.listarPaginadoSentencia">
+	    SELECT HR_PROFESION.PROFESION AS "profesion", 
+			LTRIM(RTRIM(UPPER(HR_PROFESION.DESCRIPCION))) AS "descripcion",
+			CAST(HR_PROFESION.ESTADO AS VARCHAR) AS "estado"
+		FROM HR_PROFESION 
+		WHERE HR_PROFESION.PROFESION = ISNULL(:p_profesion, HR_PROFESION.PROFESION)
+		AND HR_PROFESION.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, HR_PROFESION.DESCRIPCION) + '%'
+		ORDER BY HR_PROFESION.DESCRIPCION
+    </sql-query>
+  
+</hibernate-mapping>

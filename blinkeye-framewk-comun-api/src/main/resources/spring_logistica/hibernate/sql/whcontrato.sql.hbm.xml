@@ -1,0 +1,648 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : apcajachica -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="whcontrato.contar">
+	<![CDATA[
+		SELECT 
+        	count(*)
+    	FROM WH_Contrato 
+   		WHERE 	( WH_Contrato.CompaniaSocio = :p_compania ) AND
+         		( WH_Contrato.Estado = 'AP' ) AND
+         		( WH_Contrato.GastosAdicionalesFlag = 'S' )
+		 ]]>
+	</sql-query>
+
+	<sql-query name="whcontrato.listarpaginado">
+	<![CDATA[
+        SELECT 
+        	WH_Contrato.NumeroContrato as "numerocontrato",
+        	WH_Contrato.NumeroContrato as "carpetanumero",
+         	WH_Contrato.Descripcion as "descripcion", 
+         	WH_Contrato.MonedaDocumento as "monedadocumento",  
+         	WH_Contrato.MontoTotal as "montototal",  
+         	WH_Contrato.Proveedor as "proveedor", 
+         	WH_Contrato.FechaAprobacion as "fechaaprobacion" ,   
+         	WH_Contrato.ContratoResponsable as "contratoresponsable"
+    	FROM WH_Contrato 
+   		WHERE 	( WH_Contrato.CompaniaSocio = :p_compania ) AND
+         		( WH_Contrato.Estado = 'AP' ) AND
+         		( WH_Contrato.GastosAdicionalesFlag = 'S' )  
+		ORDER BY WH_Contrato.NumeroContrato ASC
+	]]>
+	</sql-query>
+
+
+
+	<sql-query name="whcontrato.contarContratoProveedor">
+	<![CDATA[
+		SELECT 
+        	count(*)
+      from WH_Contrato contr
+		 inner join WH_ContratoRequisicion re
+		 on re.numerocontrato=contr.numerocontrato
+		 and re.Companiasocio=contr.companiasocio
+		 inner join WH_Requisiciones requisiciones
+		 on
+		 requisiciones.requisicionnumero=re.requisicionnumero
+		 and requisiciones.Companiasocio=re.Companiasocio
+		 inner join PersonaMast perso
+		 on perso.Persona=contr.Proveedor
+		 inner join companyowner compa
+		 on compa.companyowner=contr.CompaniaSocio
+		 inner join WH_ContratoTipo contrtipo
+		 on contrtipo.ContratoTipo=contr.ContratoTipo
+		where
+		  ( contr.CompaniaSocio like ISNULL(:p_companiasocio,contr.CompaniaSocio))
+		  AND  
+          ( rtrim(contr.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(contr.NumeroContrato)) +'%' ) 
+		  AND 
+		  (-1 = :p_proveedor OR contr.Proveedor = ISNULL(:p_proveedor, contr.Proveedor ))
+		  AND
+		( requisiciones.DefaultPrime = ISNULL(:p_usuariocomprador,requisiciones.DefaultPrime))
+		group by
+		contr.CompaniaSocio ,
+		RTRIM(contr.NumeroContrato) ,
+		contr.Proveedor ,
+		contr.Descripcion,
+		contr.FechaValidezDesde ,
+		contr.FechaValidezHasta ,
+		contr.Estado ,
+		perso.NombreCompleto ,
+		perso.Documento ,
+		compa.description ,
+		contrtipo.DescripcionLocal,
+		re.Secuencia
+		 ]]>
+	</sql-query>
+
+	<sql-query
+		name="whcontrato.contarobtenerDtoContratoProveedor">
+	<![CDATA[
+	
+		SELECT 
+        	count(*)
+     from WH_Contrato contr
+		 inner join WH_ContratoRequisicion re
+		 on re.numerocontrato=contr.numerocontrato
+		 and re.Companiasocio=contr.companiasocio
+		 inner join WH_Requisiciones requisiciones
+		 on
+		 requisiciones.requisicionnumero=re.requisicionnumero
+		 and requisiciones.Companiasocio=re.Companiasocio
+		 inner join PersonaMast perso
+		 on perso.Persona=contr.Proveedor
+		 inner join companyowner compa
+		 on compa.companyowner=contr.CompaniaSocio
+		 inner join WH_ContratoTipo contrtipo
+		 on contrtipo.ContratoTipo=contr.ContratoTipo
+		where
+		  ( contr.CompaniaSocio like ISNULL(:p_companiasocio,contr.CompaniaSocio))
+		  AND  
+          ( rtrim(contr.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(contr.NumeroContrato)) +'%' ) 
+		  AND 
+		  (-1 = :p_proveedor OR contr.Proveedor = ISNULL(:p_proveedor, contr.Proveedor ))
+		 ]]>
+	</sql-query>
+
+
+
+
+	<sql-query name="whcontrato.listarpaginadoContratoProveedor">
+	<![CDATA[
+      
+       select 
+		 contr.CompaniaSocio as "compania",
+         RTRIM(contr.NumeroContrato) as "numerocontrato",
+         contr.Proveedor as "proveedor",
+         contr.Descripcion as "descripcion",
+         contr.FechaValidezDesde as "fechadesde",
+         contr.FechaValidezHasta as "fechahasta",
+         contr.Estado as "estado",
+		 perso.NombreCompleto as "proveedornombre",
+         perso.Documento as "documento",
+		 compa.description as "companianombre",
+         contrtipo.DescripcionLocal  as "tiponombre"
+		  from WH_Contrato contr
+		 inner join WH_ContratoRequisicion re
+		 on re.numerocontrato=contr.numerocontrato
+		 and re.Companiasocio=contr.companiasocio
+		 inner join WH_Requisiciones requisiciones
+		 on
+		 requisiciones.requisicionnumero=re.requisicionnumero
+		 and requisiciones.Companiasocio=re.Companiasocio
+		 inner join PersonaMast perso
+		 on perso.Persona=contr.Proveedor
+		 inner join companyowner compa
+		 on compa.companyowner=contr.CompaniaSocio
+		 inner join WH_ContratoTipo contrtipo
+		 on contrtipo.ContratoTipo=contr.ContratoTipo
+		where
+		  ( contr.CompaniaSocio like ISNULL(:p_companiasocio,contr.CompaniaSocio))
+		  AND  
+          ( rtrim(contr.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(contr.NumeroContrato)) +'%' ) 
+		  AND 
+		  (-1 = :p_proveedor OR contr.Proveedor = ISNULL(:p_proveedor, contr.Proveedor ))
+		  AND
+		( requisiciones.DefaultPrime = ISNULL(:p_usuariocomprador,requisiciones.DefaultPrime))
+		
+		group by
+		contr.CompaniaSocio ,
+		RTRIM(contr.NumeroContrato) ,
+		contr.Proveedor ,
+		contr.Descripcion,
+		contr.FechaValidezDesde ,
+		contr.FechaValidezHasta ,
+		contr.Estado ,
+		perso.NombreCompleto ,
+		perso.Documento ,
+		compa.description ,
+		contrtipo.DescripcionLocal
+	   -- ,re.Secuencia
+	   
+	]]>
+	</sql-query>
+
+
+	<sql-query name="whcontrato.obtenerDtoContratoProveedor">
+	<![CDATA[
+      
+       select 
+		 contr.CompaniaSocio as "compania",
+         RTRIM(contr.NumeroContrato) as "numerocontrato",
+         contr.Proveedor as "proveedor",
+         contr.Descripcion as "descripcion",
+         contr.FechaValidezDesde as "fechadesde",
+         contr.FechaValidezHasta as "fechahasta",
+         contr.Estado as "estado",
+		 perso.NombreCompleto as "proveedornombre",
+         perso.Documento as "documento",
+		 compa.description as "companianombre",
+         contrtipo.DescripcionLocal  as "tiponombre"
+		  from WH_Contrato contr
+		 inner join WH_ContratoRequisicion re
+		 on re.numerocontrato=contr.numerocontrato
+		 and re.Companiasocio=contr.companiasocio
+		 inner join WH_Requisiciones requisiciones
+		 on
+		 requisiciones.requisicionnumero=re.requisicionnumero
+		 and requisiciones.Companiasocio=re.Companiasocio
+		 inner join PersonaMast perso
+		 on perso.Persona=contr.Proveedor
+		 inner join companyowner compa
+		 on compa.companyowner=contr.CompaniaSocio
+		 inner join WH_ContratoTipo contrtipo
+		 on contrtipo.ContratoTipo=contr.ContratoTipo
+		where
+		  ( contr.CompaniaSocio like ISNULL(:p_companiasocio,contr.CompaniaSocio))
+		  AND  
+          ( rtrim(contr.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(contr.NumeroContrato)) +'%' ) 
+		  AND 
+		  (-1 = :p_proveedor OR contr.Proveedor = ISNULL(:p_proveedor, contr.Proveedor ))
+	]]>
+	</sql-query>
+
+
+	<sql-query
+		name="whcontrato.contarEvaluacionContratoProveedor">
+	<![CDATA[
+	
+	
+		SELECT 
+        	count(*)
+    FROM WH_Contrato,   
+         PersonaMast,   
+         companyowner,   
+         WH_ContratoTipo,
+		 GP_EVALUACION
+   WHERE ( WH_Contrato.Proveedor = PersonaMast.Persona ) and  
+         ( WH_Contrato.CompaniaSocio = companyowner.companyowner ) and  
+         ( WH_ContratoTipo.ContratoTipo = WH_Contrato.ContratoTipo ) and 
+		 ( WH_Contrato.numerocontrato = GP_EVALUACION.numerocontrato ) and 
+         ( ( WH_Contrato.Estado = 'AP' )  AND  
+         ( WH_Contrato.CompaniaSocio like ISNULL(:p_companiasocio,WH_Contrato.CompaniaSocio ) ) AND  
+                ( rtrim(WH_Contrato.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(WH_Contrato.NumeroContrato)) +'%' ) AND 
+         (-1 = :p_proveedor OR WH_Contrato.Proveedor = ISNULL(:p_proveedor, WH_Contrato.Proveedor )) )
+	
+		]]>
+	</sql-query>
+
+
+	<sql-query name="whcontrato.contarlstEvaluacionContratoProve">
+	<![CDATA[
+	
+	SELECT 
+        	count(*)
+    FROM WH_Contrato
+	inner  join GP_EVALUACION 
+	on GP_EVALUACION.numerocontrato=WH_Contrato.numerocontrato
+	inner join GP_EVATABLA
+	on GP_EVATABLA.evtevatablaid= GP_EVALUACION.evtevatablaid
+	where 
+	 ( GP_EVALUACION.NUMEROCONTRATO = :p_numerocontrato )
+	 and (GP_EVALUACION.TIPOEVALUACION='01')
+	
+	]]>
+	</sql-query>
+
+	<sql-query
+		name="whcontrato.listarpaginadolstEvaluacionContratoProve">
+	<![CDATA[
+	
+	
+		 
+		 
+		    SELECT WH_Contrato.CompaniaSocio as "compania", --s  
+         RTRIM(WH_Contrato.NumeroContrato) as "numerocontrato", --s
+         WH_Contrato.Proveedor as "proveedor",  --bd
+         WH_Contrato.Descripcion as "descripcion", --s 
+         WH_Contrato.FechaValidezDesde as "fechadesde", --d
+         WH_Contrato.FechaValidezHasta as "fechahasta",   --d
+         WH_Contrato.Estado as "estado",   --s
+        -- PersonaMast.NombreCompleto as "proveedornombre",   --s
+		-- PersonaMast.Documento as "documento",   --s
+         --companyowner.description as "companianombre",   --s
+        -- WH_ContratoTipo.DescripcionLocal  as "tiponombre", --s
+         GP_EVALUACION.evtevatablaid as "evtevatablaid",
+		 GP_EVALUACION.evapuntajefinal as "evapuntajefinal",
+		 GP_EVALUACION.evacalificacionfinaldesc as "evacalificacionfinaldesc",
+		 GP_EVALUACION.nivelclasificacion as "nivelclasificacion",
+		 GP_EVALUACION.EVAFECHAEVALUACION as "fechaevaluacion",
+		 GP_EVALUACION.EVAUSUARIOCREACION as "evausuariocreacion",
+		 GP_EVATABLA.evtdescripcionlocal as "evtdescripcionlocal"
+    FROM WH_Contrato
+	inner  join GP_EVALUACION 
+	on GP_EVALUACION.numerocontrato=WH_Contrato.numerocontrato
+	inner join GP_EVATABLA
+	on GP_EVATABLA.evtevatablaid= GP_EVALUACION.evtevatablaid
+	where 
+	 ( GP_EVALUACION.NUMEROCONTRATO = :p_numerocontrato )
+	 and (GP_EVALUACION.TIPOEVALUACION='01')
+	
+	
+	]]>
+	</sql-query>
+
+
+	<sql-query
+		name="whcontrato.listarpaginadoEvaluacionContratoProveedor">
+	<![CDATA[
+	
+	 SELECT WH_Contrato.CompaniaSocio as "compania", --s  
+         RTRIM(WH_Contrato.NumeroContrato) as "numerocontrato", --s
+         WH_Contrato.Proveedor as "proveedor",  --bd
+         WH_Contrato.Descripcion as "descripcion", --s 
+         WH_Contrato.FechaValidezDesde as "fechadesde", --d
+         WH_Contrato.FechaValidezHasta as "fechahasta",   --d
+         WH_Contrato.Estado as "estado",   --s
+         PersonaMast.NombreCompleto as "proveedornombre",   --s
+		 PersonaMast.Documento as "documento",   --s
+         companyowner.description as "companianombre",   --s
+         WH_ContratoTipo.DescripcionLocal  as "tiponombre", --s
+         GP_EVALUACION.evtevatablaid as "evtevatablaid",
+		 GP_EVALUACION.evapuntajefinal as "evapuntajefinal",
+		 GP_EVALUACION.evacalificacionfinaldesc as "evacalificacionfinaldesc",
+		 GP_EVALUACION.nivelclasificacion as "nivelclasificacion",
+		 GP_EVALUACION.EVAFECHAEVALUACION as "fechaevaluacion",
+		 GP_EVALUACION.EVAUSUARIOCREACION as "evausuariocreacion",
+		 GP_EVATABLA.evtdescripcionlocal as "evtdescripcionlocal"
+    FROM WH_Contrato,   
+         PersonaMast,   
+         companyowner,   
+         WH_ContratoTipo,
+		 GP_EVALUACION,
+		 GP_EVATABLA
+   WHERE ( WH_Contrato.Proveedor = PersonaMast.Persona ) and  
+         ( WH_Contrato.CompaniaSocio = companyowner.companyowner ) and  
+         ( WH_ContratoTipo.ContratoTipo = WH_Contrato.ContratoTipo ) and 
+		 ( WH_Contrato.numerocontrato = GP_EVALUACION.numerocontrato ) and 
+		  ( GP_EVATABLA.evtevatablaid = GP_EVALUACION.evtevatablaid ) and 
+         ( ( WH_Contrato.Estado = 'AP' )  AND  
+         ( WH_Contrato.CompaniaSocio like ISNULL(:p_companiasocio,WH_Contrato.CompaniaSocio ) ) AND  
+         ( rtrim(WH_Contrato.NumeroContrato)  LIKE '%' + ISNULL( :p_numerocontrato, rtrim(WH_Contrato.NumeroContrato)) +'%' ) AND  
+         (-1 = :p_proveedor OR WH_Contrato.Proveedor = ISNULL(:p_proveedor, WH_Contrato.Proveedor ))
+          and (GP_EVALUACION.TIPOEVALUACION='01')
+          )
+	
+		]]>
+	</sql-query>
+
+
+	<sql-query
+		name="whcontrato.contarlistarpaginadoOrdenCompraServiProveedor">
+	<![CDATA[
+	
+	  SELECT
+			  count(*)
+		FROM WH_OrdenCompra,   
+         PersonaMast,   
+         companyowner,
+         WH_Contrato,
+         WH_ContratoTipo
+   WHERE ( WH_OrdenCompra.Proveedor = PersonaMast.Persona ) and  
+         ( WH_OrdenCompra.CompaniaSocio = companyowner.companyowner ) and
+         (  ( WH_OrdenCompra.Estado IN ('AP','CO','CE') )AND 
+           (WH_OrdenCompra.NUMEROCONTRATO=WH_Contrato.NUMEROCONTRATO) AND
+           ( WH_ContratoTipo.ContratoTipo = WH_Contrato.ContratoTipo ) and  
+      ( WH_OrdenCompra.CompaniaSocio like ISNULL(:p_companiasocio,WH_OrdenCompra.CompaniaSocio ) ) AND  
+         ( rtrim(WH_OrdenCompra.numeroorden)  LIKE '%' + ISNULL( :p_numeroorden, rtrim(WH_OrdenCompra.numeroorden)) +'%' ) AND  
+         (-1 = :p_proveedor OR WH_OrdenCompra.Proveedor = ISNULL(:p_proveedor, WH_OrdenCompra.Proveedor )) )
+	
+	
+		]]>
+	</sql-query>
+
+	<sql-query
+		name="whcontrato.listarpaginadolistarpaginadoOrdenCompraServiProveedor">
+	<![CDATA[
+	
+	  SELECT WH_OrdenCompra.CompaniaSocio as "compania", --s  
+        RTRIM(WH_OrdenCompra.NumeroContrato) as "numerocontrato", --s
+          RTRIM(WH_OrdenCompra.numeroorden) as "numeroorden", --s
+         WH_OrdenCompra.Proveedor as "proveedor",  --bd
+         WH_OrdenCompra.Observaciones as "observaciones", --s 
+          WH_OrdenCompra.Observaciones as "descripcion", --s
+         WH_OrdenCompra.fechaprometida as "fechaprometida", --d
+         WH_OrdenCompra.fechapreparacion as "fechapreparacion",   --d
+         WH_OrdenCompra.Estado as "estado",   --s
+         PersonaMast.NombreCompleto as "proveedornombre",   --s
+         companyowner.description as "companianombre",
+         WH_ContratoTipo.DescripcionLocal  as "tiponombre", --s
+         WH_Contrato.FechaValidezDesde as "fechadesde", --d
+         WH_Contrato.FechaValidezHasta as "fechahasta"   --d
+    FROM WH_OrdenCompra,   
+         PersonaMast,   
+         companyowner,
+         WH_Contrato,
+         WH_ContratoTipo
+   WHERE ( WH_OrdenCompra.Proveedor = PersonaMast.Persona ) and  
+         ( WH_OrdenCompra.CompaniaSocio = companyowner.companyowner ) and 
+         (  ( WH_OrdenCompra.Estado IN ('AP','CO','CE') )AND 
+          (WH_OrdenCompra.NUMEROCONTRATO=WH_Contrato.NUMEROCONTRATO) AND
+              ( WH_ContratoTipo.ContratoTipo = WH_Contrato.ContratoTipo ) and  
+      ( WH_OrdenCompra.CompaniaSocio like ISNULL(:p_companiasocio,WH_OrdenCompra.CompaniaSocio ) ) AND  
+         ( rtrim(WH_OrdenCompra.numeroorden)  LIKE '%' + ISNULL( :p_numeroorden, rtrim(WH_OrdenCompra.numeroorden)) +'%' ) AND  
+         (-1 = :p_proveedor OR WH_OrdenCompra.Proveedor = ISNULL(:p_proveedor, WH_OrdenCompra.Proveedor )) )
+	
+	
+	]]>
+	</sql-query>
+
+<sql-query name="whcontrato.wmawhcontratoselectListarAdenda">
+	<![CDATA[
+	
+	 SELECT
+	 record.Clasificacion,
+     record.numerocontrato,
+     record.numeroInterno,
+	 record.descripcion,
+	 record.fechadesde,
+	 record.fechahasta,
+	 record.montoTotal,
+	 record.montoPagado,
+	 record.moneda,
+	 record.contratoVencido,
+	 record.compania,
+	 record.requisicioncomentario,
+	 record.requisicionmodalidadcontratacion,
+	 record.requisiciontipolicitacion, 
+	 record.centrocosto,
+	 record.plazoentrega
+  
+  FROM(
+  SELECT
+      WH_Contrato.Clasificacion,
+	  WH_Contrato.NumeroContrato as "numerocontrato",
+	  WH_Contrato.DocumentoInterno as "numeroInterno",
+	  WH_Contrato.Descripcion as "descripcion",
+	  WH_Contrato.FechaValidezDesde as "fechadesde",
+	  WH_Contrato.FechaValidezHasta as "fechahasta",
+	  WH_Contrato.MontoTotal as "montoTotal",
+	  WH_Contrato.MontoPagado as "montoPagado",
+	  WH_Contrato.MonedaDocumento as "moneda",
+	  cast(WH_Contrato.VerContratoVencidoFlag as varchar(1)) as "contratoVencido",
+	  WH_Contrato.CompaniaSocio as "compania",
+	  
+	  LTRIM(RTRIM(requisicionComentario)) requisicioncomentario,
+	  LTRIM(RTRIM(requisicionModalidadContratacion)) requisicionmodalidadcontratacion,
+	  LTRIM(RTRIM(requisicionTipoLicitacion)) requisiciontipolicitacion, 
+	  (Select top 1 CentroCosto From WH_ContratoDetalle where NumeroContrato=WH_Contrato.NumeroContrato AND
+	  CompaniaSocio=WH_Contrato.CompaniaSocio) as centrocosto,
+	    WH_Contrato.plazoentrega plazoentrega
+	    
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+   WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+	AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+	AND (WH_Contrato.Proveedor = :p_proveedor)
+	AND (WH_Contrato.Estado = 'AP')
+	AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	
+	 AND (WH_Contrato.NumeroContrato = ISNULL(:p_numeroContrato,WH_Contrato.NumeroContrato ))
+	 AND (WH_Contrato.FechaValidezDesde >= ISNULL(:p_fechadesde,WH_Contrato.FechaValidezDesde)
+	 AND WH_Contrato.FechaValidezHasta<=ISNULL(:p_fechahasta,WH_Contrato.FechaValidezHasta))
+	 )
+
+	 UNION ALL 
+
+	   SELECT
+	    WH_Contrato.Clasificacion,
+	  WH_Contrato.NumeroContrato as "numerocontrato",
+	  WH_Contrato.DocumentoInterno as "numeroInterno",
+	  WH_Contrato.Descripcion as "descripcion",
+	  WH_Contrato.FechaValidezDesde as "fechadesde",
+	  WH_Contrato.FechaValidezHasta as "fechahasta",
+	  WH_Contrato.MontoTotal as "montoTotal",
+	  WH_Contrato.MontoPagado as "montoPagado",
+	  WH_Contrato.MonedaDocumento as "moneda",
+	  cast(WH_Contrato.VerContratoVencidoFlag as varchar(1)) as "contratoVencido",
+	  WH_Contrato.CompaniaSocio as "compania",
+	  
+	  LTRIM(RTRIM(requisicionComentario)) requisicioncomentario,
+	  LTRIM(RTRIM(requisicionModalidadContratacion)) requisicionmodalidadcontratacion,
+	  LTRIM(RTRIM(requisicionTipoLicitacion)) requisiciontipolicitacion, 
+	  (Select top 1 CentroCosto From WH_ContratoDetalle where NumeroContrato=WH_Contrato.NumeroContrato AND
+	  CompaniaSocio=WH_Contrato.CompaniaSocio) as centrocosto,
+	    WH_Contrato.plazoentrega plazoentrega
+	    
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+	     
+	     WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+			AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+			AND (WH_Contrato.Proveedor = :p_proveedor)
+			AND (WH_Contrato.Estado = 'CE')
+			AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	
+			 AND (WH_Contrato.NumeroContrato = ISNULL(:p_numeroContrato,WH_Contrato.NumeroContrato ))
+			 AND (WH_Contrato.FechaValidezDesde >= ISNULL(:p_fechadesde,WH_Contrato.FechaValidezDesde)
+			 and  datediff(day,  WH_Contrato.FechaValidezHasta,getdate()) <=:p_diascontratovencido)
+	 )
+	 )as record
+	
+	
+	
+	]]>
+	</sql-query>
+	
+	<sql-query name="whcontrato.wmawhcontratoselectContarAdenda">
+	<![CDATA[
+	
+  SELECT
+     COUNT(1)
+  FROM(
+  SELECT
+	  WH_Contrato.NumeroContrato as "numerocontrato",
+	  WH_Contrato.DocumentoInterno as "numeroInterno",
+	  WH_Contrato.Descripcion as "descripcion",
+	  WH_Contrato.FechaValidezDesde as "fechadesde",
+	  WH_Contrato.FechaValidezHasta as "fechahasta",
+	  WH_Contrato.MontoTotal as "montoTotal",
+	  WH_Contrato.MontoPagado as "montoPagado",
+	  WH_Contrato.MonedaDocumento as "moneda",
+	  cast(WH_Contrato.VerContratoVencidoFlag as varchar(1)) as "contratoVencido",
+	  WH_Contrato.CompaniaSocio as "compania",
+	  
+	  LTRIM(RTRIM(requisicionComentario)) requisicioncomentario,
+	  LTRIM(RTRIM(requisicionModalidadContratacion)) requisicionmodalidadcontratacion,
+	  LTRIM(RTRIM(requisicionTipoLicitacion)) requisiciontipolicitacion, 
+	  (Select top 1 CentroCosto From WH_ContratoDetalle where NumeroContrato=WH_Contrato.NumeroContrato AND
+	  CompaniaSocio=WH_Contrato.CompaniaSocio) as centrocosto,
+	    WH_Contrato.plazoentrega plazoentrega
+	    
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+   WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+	AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+	AND (WH_Contrato.Proveedor = :p_proveedor)
+	AND (WH_Contrato.Estado = 'AP')
+	AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	
+	 AND (WH_Contrato.NumeroContrato = ISNULL(:p_numeroContrato,WH_Contrato.NumeroContrato ))
+	 AND (WH_Contrato.FechaValidezDesde >= ISNULL(:p_fechadesde,WH_Contrato.FechaValidezDesde)
+	 AND WH_Contrato.FechaValidezHasta<=ISNULL(:p_fechahasta,WH_Contrato.FechaValidezHasta))
+	 )
+
+	 UNION ALL 
+
+	   SELECT
+	  WH_Contrato.NumeroContrato as "numerocontrato",
+	  WH_Contrato.DocumentoInterno as "numeroInterno",
+	  WH_Contrato.Descripcion as "descripcion",
+	  WH_Contrato.FechaValidezDesde as "fechadesde",
+	  WH_Contrato.FechaValidezHasta as "fechahasta",
+	  WH_Contrato.MontoTotal as "montoTotal",
+	  WH_Contrato.MontoPagado as "montoPagado",
+	  WH_Contrato.MonedaDocumento as "moneda",
+	  cast(WH_Contrato.VerContratoVencidoFlag as varchar(1)) as "contratoVencido",
+	  WH_Contrato.CompaniaSocio as "compania",
+	  
+	  LTRIM(RTRIM(requisicionComentario)) requisicioncomentario,
+	  LTRIM(RTRIM(requisicionModalidadContratacion)) requisicionmodalidadcontratacion,
+	  LTRIM(RTRIM(requisicionTipoLicitacion)) requisiciontipolicitacion, 
+	  (Select top 1 CentroCosto From WH_ContratoDetalle where NumeroContrato=WH_Contrato.NumeroContrato AND
+	  CompaniaSocio=WH_Contrato.CompaniaSocio) as centrocosto,
+	    WH_Contrato.plazoentrega plazoentrega
+	    
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+	     
+	     WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+			AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+			AND (WH_Contrato.Proveedor = :p_proveedor)
+			AND (WH_Contrato.Estado = 'CE')
+			AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	
+			 AND (WH_Contrato.NumeroContrato = ISNULL(:p_numeroContrato,WH_Contrato.NumeroContrato ))
+			 AND (WH_Contrato.FechaValidezDesde >= ISNULL(:p_fechadesde,WH_Contrato.FechaValidezDesde)
+			 and  datediff(day,  WH_Contrato.FechaValidezHasta,getdate()) <=30)
+	 )
+	 )as record
+	]]>
+	</sql-query>
+
+
+
+	<sql-query name="whcontrato.wmawhcontratoselectListar">
+	<![CDATA[
+      SELECT
+	  WH_Contrato.NumeroContrato as "numerocontrato",
+	  WH_Contrato.DocumentoInterno as "numeroInterno",
+	  WH_Contrato.Descripcion as "descripcion",
+	  WH_Contrato.FechaValidezDesde as "fechadesde",
+	  WH_Contrato.FechaValidezHasta as "fechahasta",
+	  WH_Contrato.MontoTotal as "montoTotal",
+	  WH_Contrato.MontoPagado as "montoPagado",
+	  WH_Contrato.MonedaDocumento as "moneda",
+	  cast(WH_Contrato.VerContratoVencidoFlag as varchar(1)) as "contratoVencido",
+	  WH_Contrato.CompaniaSocio as "compania",
+	  
+	  LTRIM(RTRIM(requisicionComentario)) requisicioncomentario,
+	  LTRIM(RTRIM(requisicionModalidadContratacion)) requisicionmodalidadcontratacion,
+	  LTRIM(RTRIM(requisicionTipoLicitacion)) requisiciontipolicitacion, 
+	  (Select top 1 CentroCosto From WH_ContratoDetalle where NumeroContrato=WH_Contrato.NumeroContrato AND
+	  CompaniaSocio=WH_Contrato.CompaniaSocio) as centrocosto,
+	    WH_Contrato.plazoentrega plazoentrega
+	    
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+	WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+	AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+	AND (WH_Contrato.Proveedor = :p_proveedor)
+	AND (WH_Contrato.Estado = 'AP')
+	AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	--AND (WH_ContratoResponsableDetail.Persona = :p_responsable)
+	AND (WH_Contrato.FechaValidezHasta >= :p_hasta OR (VerContratoVencidoFlag = 'S')))
+	]]>
+	</sql-query>
+
+	<sql-query name="whcontrato.wmawhcontratoselectContar">
+	<![CDATA[
+      SELECT
+	  count(1)
+	FROM WH_Contrato,
+	     WH_ContratoResponsableDetail
+	WHERE (WH_Contrato.ContratoResponsable = WH_ContratoResponsableDetail.ContratoResponsable)
+	AND ((WH_Contrato.CompaniaSocio = :p_companiasocio)
+	AND (WH_Contrato.Proveedor = :p_proveedor)
+	AND (WH_Contrato.Estado = 'AP')
+	AND (WH_Contrato.ContratoVentaFlag IN (:p_tipo01, :p_tipo02))
+	--AND (WH_ContratoResponsableDetail.Persona = :p_responsable)
+	AND (WH_Contrato.FechaValidezHasta >= :p_hasta OR (VerContratoVencidoFlag = 'S')))
+	]]>
+	</sql-query>
+
+	<sql-query name="whcontrato.wmawhcontratodetailselect">
+	<![CDATA[
+  SELECT WH_ContratoDetalle.Secuencia as "secuencia",   
+         WH_ContratoDetalle.Descripcion as "descripcion",   
+         WH_ContratoDetalle.Cantidad as "cantidad",   
+         WH_ContratoDetalle.PrecioUnitario as "precioUnitario",   
+         WH_ContratoDetalle.MontoTotal as "montoTotal",   
+         WH_ContratoDetalle.Commodity as "commodity",   
+         WH_ContratoDetalle.Comentario as "comentario",    
+         WH_ContratoDetalle.Item as "item",   
+         WH_ContratoDetalle.UnidadCodigo as "und",
+         WH_ContratoDetalle.CentroCosto as "centroCosto",
+         WH_ContratoDetalle.Sucursal as "sucursal",
+         
+          WH_ContratoDetalle.Cantidad - (
+			Select  ISNULL(sum (b.CantidadPedida),0) From WH_Requisiciones a , WH_RequisicionDetalle b
+				Where a.CompaniaSocio = b.CompaniaSocio
+				And a.RequisicionNumero = b.RequisicionNumero
+				And a.ProveedorDocumentoReferencia=WH_ContratoDetalle.NumeroContrato
+				and b.Item =WH_ContratoDetalle.Item
+		 ) "saldo"
+		 
+    FROM WH_ContratoDetalle
+	LEFT JOIN BU_SAC  
+			ON WH_ContratoDetalle.CompaniaSocio = BU_SAC.CompaniaSocio
+		  AND WH_ContratoDetalle.Proyecto = BU_SAC.SACNumero
+   WHERE ( ( WH_ContratoDetalle.CompaniaSocio = :p_companiasocio ) AND  
+         ( WH_ContratoDetalle.NumeroContrato = :p_contrato ) )    
+	]]>
+	</sql-query>
+
+</hibernate-mapping>

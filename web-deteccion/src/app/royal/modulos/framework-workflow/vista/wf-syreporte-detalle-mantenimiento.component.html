@@ -1,0 +1,109 @@
+<div class="ui-fluid">
+    <p-dialog [header]="accionModal" [(visible)]="verSelector" modal="modal" width="100%">
+        <br>
+
+        <p-tabView>
+            <p-tabPanel header="Reporte">
+                <div class="p-fluid">
+                    <div class="p-fluid p-grid  formularioFila">
+                        <div class="p-field p-col-4 p-md-4">
+                            <div class="p-fluid p-grid  formularioFila">
+                                <div class="p-field p-col-12 p-md-12" *ngIf="verAsuntoGeneral">
+                                    <label>Asunto Principal</label>
+                                    <input pInputText type="text" [(ngModel)]="syReporteArchivo.asuntoPrincipal"
+                                        style="width:100%" maxlength="500" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label>Código</label>
+                                    <input pInputText type="text" disabled [(ngModel)]="syReporteArchivo.reportecodigo"
+                                        style="width:100%" maxlength="10" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label>Aplicación</label>
+                                    <p-dropdown [style]="{'width':'100%'}" [options]="lstAplicacion" disabled
+                                        [(ngModel)]="syReporteArchivo.aplicacioncodigo"></p-dropdown>
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label class="importante">Periodo</label>
+                                    <input pInputText type="text" [disabled]="accion==ACCIONES.EDITAR"
+                                        [(ngModel)]="syReporteArchivo.periodo" style="width:100%" maxlength="6" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label class="importante">Compañía</label>
+                                    <p-dropdown [style]="{'width':'100%'}" [disabled]="accion==ACCIONES.EDITAR"
+                                        [options]="lstCompania" [(ngModel)]="syReporteArchivo.companiasocio"></p-dropdown>
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label class="importante">Versión</label>
+                                    <input pInputText type="text" [disabled]="accion==ACCIONES.EDITAR"
+                                        [(ngModel)]="syReporteArchivo.version" style="width:100%" maxlength="6" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label>Nombre</label>
+                                    <input pInputText type="text" [(ngModel)]="syReporteArchivo.nombre" style="width:100%"
+                                        maxlength="500" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <app-botones-mantenimiento [objTitulo]="objetoTitulo"
+                                        [tipo]="TIPOSBOTONES_MANTENIMIENTO.CH2B">
+                                    </app-botones-mantenimiento>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-6" *ngIf="accion != ACCIONES.VER">
+                                    <input #fileUpload type="file" class="form-control" style="display:none" (change)="cargarArchivoDet(fileUpload)" accept="text/html">
+                                    <button pButton pRipple type="button" label="Cargar" icon="fa fa-upload" class="ui-button-rounded" title="Subir Archivo"  (click)="subirArchivoDet(syReporteArchivo, fileUpload)"></button>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6" *ngIf="accion != ACCIONES.VER">  
+                                    <button pButton pRipple type="button" label="Descargar" icon="fa fa-download" class="ui-button-rounded" title="Descargar" (click)="guardarDet(syReporteArchivo)"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                        <div class="p-field p-col-8 p-md-8">
+                            <div class="p-fluid p-grid  formularioFila">
+                                <div class="p-field p-col-12 p-md-12" *ngIf="!verAsuntoGeneral">
+                                    <label>Asunto {{nombreSubAsunto}}</label>
+                                    <input pInputText type="text" [(ngModel)]="syReporteArchivo.asunto" style="width:100%"
+                                        maxlength="500" />
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <angular-editor [(ngModel)]="syReporteArchivo.auxString" [config]="config"></angular-editor>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                </div>
+            </p-tabPanel>
+                
+
+            <p-tabPanel header="Metadatos" *ngIf="verDlgMetadatos">
+                <p-table [paginator]="true" [rows]="200" [style]="{'width': '100%'}" [value]="metadatos" [responsive]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Código</th>
+                            <th>Valor</th>
+                        </tr>
+                        <tr>
+                            <th><p-columnFilter type="text" matchMode="contains" field="codigo"></p-columnFilter>
+                            </th>
+                            <th><p-columnFilter type="text" matchMode="contains" field="nombre"></p-columnFilter>
+                            </th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td>{{rowData.codigo}}</td>
+                            <td>{{rowData.nombre}}</td>
+                        </tr>
+                    </ng-template>
+                    </p-table>
+                
+            </p-tabPanel>
+        
+        
+        </p-tabView>
+
+
+    </p-dialog>
+</div>

@@ -1,0 +1,197 @@
+
+<p-card>
+
+    <div class="p-fluid p-grid  formularioFila">
+        <div class="p-field p-col-12 p-md-2">
+            <br>
+            <button pButton icon="fa fa-plus" (click)="agregar()" *ngIf="dtoCabecera.flgVer != 'S'" type="button" label="Agregar"
+             ></button>
+        </div>
+        <div class="p-field p-col-12 p-md-8"></div>
+        <div class="p-field p-col-12 p-md-2">
+        </div>
+    </div>
+    
+
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-12 p-lg-12">
+
+            <p-table #dtadj [rows]="20" [scrollable]="true" [autoLayout]="true" [value]="lstdto"
+                [responsive]="true" [style]="{ width: '100%'}" [(selection)]="lstDocumentosSeleccionado"  dataKey="secuencia" >
+                <ng-template pTemplate="header">
+                    <tr>                        
+                        <th style="width: 2rem;text-align: center;" *ngIf="dtoCabecera.flagVerSeleccionar">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th class="tablaHeaderAccion2">Acciones</th>
+                        <th class="tablaHeaderCodigoChico">#</th>
+                        <th class="tablaHeaderNombre">Título</th>
+                        <th class="tablaHeaderAccion1" *ngIf="dtoCabecera.flgVerColumnaPlantilla == 'S'">Plantilla</th>
+                        <th class="tablaHeaderNombre">Comentario</th>                        
+                        <th class="tablaHeaderNombre">Nombre Adjunto</th>
+                        <th class="tablaHeaderFecha">Fecha</th>
+                        <th *ngIf="dtoCabecera.flgVerAuditoria == 'S'" class="tablaHeaderUsuario">Ult. Usuario</th>
+                        <th *ngIf="dtoCabecera.flgVerAuditoria == 'S'" class="tablaHeaderFecha">Fecha Modif.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-row>
+                    <tr *ngIf="row.auxFlgEliminar != 'S'">
+                        <td style="width: 2rem;text-align: center;" *ngIf="dtoCabecera.flagVerSeleccionar">
+                            <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                        </td>
+                        <td class="tablaColumnaAccion2">
+                            <span class="p-column-title">Acción</span>
+                            <table>
+                                <tr>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                            class="p-button-rounded p-button-danger p-button-text botonGrilla"
+                                            title="Eliminar"
+                                            (click)="elminiarAdjunto(row)" *ngIf="dtoCabecera.flgVer != 'S' && row.auxFlgAdjuntoObligatorio != 'S'"></button>
+                                    </th>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" *ngIf="dtoCabecera.flgVer != 'S'"
+                                        title="Editar" (click)="editarAd(row)"></button>
+                                    </th>                                    
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-cloud-download"
+                                            class="p-button-rounded p-button-danger p-button-text botonGrilla"
+                                            title="Ver Adjunto" *ngIf="row.archivo!=null"
+                                            (click)="bajarArchivo(row)"></button>
+                                            <!-- *ngIf="objetoTitulo.puedeEditar" -->
+                                    </th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="tablaColumnaCodigoChico">
+                            <span class="p-column-title">Secuencia</span>
+                            {{row.secuencia}}
+                        </td>
+                        <td class="tablaColumnaNombre"><span  class="p-column-title">Título</span>                            
+                            <label [innerHTML]="row.descripcion"></label>
+                        <td class="tablaColumnaAccion1" *ngIf="dtoCabecera.flgVerColumnaPlantilla == 'S'" ><span class="p-column-title">Plantilla</span> 
+                            <table>
+                                <tr>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-print" *ngIf="row.auxRutaPlantilla != null && row.auxRutaPlantilla != ''"
+                                            class="p-button-rounded p-button-danger p-button-text botonGrilla"
+                                            title="Descargar Plantilla"
+                                            (click)="descargarPlantilla(row)"></button>                                            
+                                    </th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="tablaColumnaNombre"><span class="p-column-title">Comentario</span>
+                            {{row.comentario}}
+                        </td>
+                        <td class="tablaColumnaNombre"> <span class="p-column-title">Nombre Adjunto</span>
+                            {{row.archivo}}
+                        </td>
+                        <td class="tablaColumnaFecha"><span class="p-column-title">Fecha</span>
+                            {{row.fecha | date: 'dd/MM/yyyy'}}
+                        </td>
+                        <td *ngIf="dtoCabecera.flgVerAuditoria == 'S'" class="tablaColumnaUsuario"> <span class="p-column-title">Ult. Usuario</span>
+                            {{row.ultimousuario}}
+                        </td>
+                        <td *ngIf="dtoCabecera.flgVerAuditoria == 'S'" class="tablaColumnaFecha"> <span class="p-column-title">Fecha Modif.</span>
+                            {{row.ultimafechamodif | date: 'dd/MM/yyyy'}} </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="6">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>    
+
+
+    <p-dialog [(visible)]="verSelectorMantenimiento" [resizable]="false" modal="modal" showEffect="fade" hideEffect="size" [draggable]="false"
+     [style]="{'max-width':'800px'}">
+
+        <p-header>
+            <p style="font-size:16px;display:inline-block; margin-top: 10px;">ADJUNTAR ARCHIVOS</p>
+        </p-header>
+
+        <div class="p-grid" style="margin-top:10px">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <div class="p-grid">
+
+
+                    <div class="p-field p-col-12">
+                        <label for="funrpfuncionario" class="importante">Título</label>                        
+                        <input pInputText type="text" [(ngModel)]="dto.descripcion" [disabled]="dtoCabecera.flgTituloEditable == 'N' && dto.auxflgTituloEditable != 'S'"  class="hoverDisabled" style="width:100%" maxlength="250"/>
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label for="funrpfuncionario">Comentario</label>                        
+                        <input pInputText type="text" [(ngModel)]="dto.comentario" class="hoverDisabled" maxlength="300" style="width:100%" />
+                    </div>                    
+
+                    <div class="p-field p-col-12">
+                        <label class="importante" for="funrpfuncionario">Archivo</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" [(ngModel)]="dto.archivo" disabled class="hoverDisabled" style="width:100%" />                            
+                            <input #fileUpload type="file" class="form-control" style="display:none" (change)="cargarArchivo(fileUpload)" accept="{{acceptextensions}}"> <!--text/html--->    
+                            <button pButton pRipple type="button" icon="fad fa-cloud-upload-alt" class="ui-button-rounded p-button-text" title="Subir Archivo"  (click)="subirArchivo(dto, fileUpload)"></button>
+                            <!-- <button pButton pRipple type="button" icon="fa fa-download" class="ui-button-rounded  p-button-text" title="Descargar" (click)="bajarArchivo(dto)"></button> -->
+                        </div>
+                    </div>
+
+
+                    <div class="p-field p-col-12">
+                        <label for="funrpfuncionario">Fecha</label>
+                        <div class="p-inputgroup">                            
+                            <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" style="width: 100%;"
+                                [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true"
+                                dateFormat="dd/mm/yy" [(ngModel)]="dto.fecha" [disabled]="dtoCabecera.flgFechaEditable == 'N'" >
+                            </p-calendar>
+                        </div>    
+                    </div>
+
+
+                    <!-- <div class="p-field p-col-12">
+                        <label for="funrpfuncionario">Fecha Modificación</label>
+                        <div class="p-inputgroup">                            
+                            <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" style="width: 100%;"
+                                [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true"
+                                dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="dto.ultimafechamodif">
+                            </p-calendar>
+                        </div>    
+                    </div>
+                    
+
+                    <div class="p-field p-col-12">                                     
+                        <label for="funrpfuncionario">Último Usuario</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="dto.ultimousuario" class="hoverDisabled" style="width:100%" />
+                        </div>    
+                    </div> -->
+
+                    <div class="p-col-12 p-md-6 p-lg-2">
+                        <button pButton label="Adjuntar" style="font-size: 14px;" icon="fad fa-cloud-upload-alt" type="button" (click)="coreGuardar()" class="ui-button ui-button-rounded"></button>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-8"></div>
+                    <div class="p-col-12 p-md-6 p-lg-2">
+                        <!-- <button pButton label="Salir" style="font-size: 14px;" icon="fad fa-times" class="ui-button-warning ui-button-rounded" type="button" (click)="salirAd()"></button> -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+
+
+</p-card>
+
+<app-personacomun-selector></app-personacomun-selector>
+
+<p-confirmDialog #cd header="Confirmation" icon="pi pi-exclamation-triangle" key="adjuntos">
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="pi pi-times" label="No" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

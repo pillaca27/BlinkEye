@@ -1,0 +1,288 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : companyowner
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="maunidadnegocio.listar">
+    	select UnidadNegocio as "codigo", DescripcionLocal as "nombre"
+    			,CAST(Estado AS varchar) as "estadoId" 
+    	from MA_UnidadNegocio 
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.listarActivos">
+    	select UnidadNegocio as "codigo", DescripcionLocal as "nombre"
+    			,CAST(Estado AS varchar) as "estadoId" 
+    	from MA_UnidadNegocio where Estado = 'A'
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.obtenertabla">
+    	select UnidadNegocio as "codigo", 
+    			DescripcionLocal as "nombre",
+    			CAST(Estado AS varchar) as "estadoId" 
+    			from MA_UnidadNegocio
+    			where unidadnegocio = :p_unidadnegocio 
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.obtenerDtoPorUuid">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,DescripcionLocal "descripcionlocal"
+			,Direccion "direccion"
+			,Telefonos "telefonos"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CompaniaSocio "companiasocio"
+			,UUID "uuid"
+         from MA_UNIDADNEGOCIO
+         where 
+			 UUID = :p_uuid
+    </sql-query>
+    
+    <sql-query name="maunidadnegocio.obtenerDto">
+        select 
+			UnidadNegocio "unidadnegocio"
+			,DescripcionLocal "descripcionlocal"
+			,Direccion "direccion"
+			,Telefonos "telefonos"
+			,cast(Estado as varchar) "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CompaniaSocio "companiasocio"
+			,UUID "uuid"
+        from MA_UNIDADNEGOCIO
+        where 
+		UnidadNegocio = :p_unidadnegocio
+    </sql-query>
+	
+	
+<!-- 	<sql-query name="maunidadnegocio.obtenerdto"> -->
+<!--           select  -->
+<!-- 			UNIDADNEGOCIO "unidadnegocio" -->
+<!-- 			,ZONA "zona" -->
+<!-- 			,DESCRIPCIONLOCAL "descripcionlocal" -->
+<!-- 			,DESCRIPCIONINGLES "descripcioningles" -->
+<!-- 			,DIRECCION "direccion" -->
+<!-- 			,TELEFONOS "telefonos" -->
+<!-- 			,REGISTROPATRONALPLANILLA "registropatronalplanilla" -->
+<!-- 			,CAST(ESTADO AS varchar) "estado" -->
+<!-- 			,ULTIMOUSUARIO "ultimousuario" -->
+<!-- 			,ULTIMAFECHAMODIF "ultimafechamodif" -->
+<!-- 			,REPRESENTANTE "representante" -->
+<!-- 			,REPRESENTANTEDOCUMENTO "representantedocumento" -->
+<!-- 			,REPRESENTANTECARGO "representantecargo" -->
+<!-- 			,REPRESENTANTE2 "representante2" -->
+<!-- 			,REPRESENTANTEDOCUMENTO2 "representantedocumento2" -->
+<!-- 			,REPRESENTANTECARGO2 "representantecargo2" -->
+<!-- 			,REPRESENTANTE3 "representante3" -->
+<!-- 			,REPRESENTANTEDOCUMENTO3 "representantedocumento3" -->
+<!-- 			,REPRESENTANTECARGO3 "representantecargo3" -->
+<!-- 			,COMPANIASOCIO "companiasocio" -->
+<!--          from MA_UNIDADNEGOCIO -->
+<!--          where  -->
+<!-- 			UNIDADNEGOCIO = :p_unidadnegocio -->
+<!--     </sql-query> -->
+    
+    <sql-query name="maunidadnegocio.listardtofiltros">
+         select 
+			UNIDADNEGOCIO "unidadnegocio"
+			,ZONA "zona"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DIRECCION "direccion"
+			,TELEFONOS "telefonos"
+			,REGISTROPATRONALPLANILLA "registropatronalplanilla"
+			,CAST(ESTADO AS varchar) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REPRESENTANTE "representante"
+			,REPRESENTANTEDOCUMENTO "representantedocumento"
+			,REPRESENTANTECARGO "representantecargo"
+			,REPRESENTANTE2 "representante2"
+			,REPRESENTANTEDOCUMENTO2 "representantedocumento2"
+			,REPRESENTANTECARGO2 "representantecargo2"
+			,REPRESENTANTE3 "representante3"
+			,REPRESENTANTEDOCUMENTO3 "representantedocumento3"
+			,REPRESENTANTECARGO3 "representantecargo3"
+			,COMPANIASOCIO "companiasocio"
+			,UUID "uuid"
+         from MA_UNIDADNEGOCIO
+         where 
+				UNIDADNEGOCIO = ISNULL(:p_unidadnegocio,UNIDADNEGOCIO)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by DescripcionLocal
+    </sql-query>
+    
+	<sql-query name="maunidadnegocio.listaractivosporcompania">
+		select UnidadNegocio as "codigo", DescripcionLocal as "nombre"
+		from MA_UnidadNegocio where estado = 'A'
+		and CompaniaSocio = :p_compania
+		order by DescripcionLocal
+	</sql-query>
+	
+	
+	<sql-query name="maunidadnegocio.listarporseguridad">
+		SELECT MA_UnidadNegocio.UnidadNegocio as "unidadnegocio",    
+         MA_UnidadNegocio.Zona as "zona",    
+         MA_UnidadNegocio.DescripcionLocal   as "descripcionlocal"
+    FROM MA_UnidadNegocio,    
+         SY_SeguridadAutorizaciones   
+   WHERE ( MA_UnidadNegocio.UnidadNegocio = SY_SeguridadAutorizaciones.Concepto ) and   
+         ( ( MA_UnidadNegocio.Estado = 'A' ) AND   
+         ( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND   
+         ( SY_SeguridadAutorizaciones.Grupo = 'UNIDADNEGOCIO' ) AND   
+         ( SY_SeguridadAutorizaciones.Usuario =  :p_usuario ) )
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.listardtoporusuarioactual">
+		select 
+            un.UNIDADNEGOCIO "unidadnegocio"
+            ,un.ZONA "zona"
+            ,un.DESCRIPCIONLOCAL "descripcionlocal"
+            ,un.DESCRIPCIONINGLES "descripcioningles"
+            ,un.DIRECCION "direccion"
+            ,un.TELEFONOS "telefonos"
+            ,un.REGISTROPATRONALPLANILLA "registropatronalplanilla"
+            ,CAST(un.ESTADO AS varchar) "estado"
+            ,un.ULTIMOUSUARIO "ultimousuario"
+            ,un.ULTIMAFECHAMODIF "ultimafechamodif"
+            ,un.REPRESENTANTE "representante"
+            ,un.REPRESENTANTEDOCUMENTO "representantedocumento"
+            ,un.REPRESENTANTECARGO "representantecargo"
+            ,un.REPRESENTANTE2 "representante2"
+            ,un.REPRESENTANTEDOCUMENTO2 "representantedocumento2"
+            ,un.REPRESENTANTECARGO2 "representantecargo2"
+            ,un.REPRESENTANTE3 "representante3"
+            ,un.REPRESENTANTEDOCUMENTO3 "representantedocumento3"
+            ,un.REPRESENTANTECARGO3 "representantecargo3"
+            ,un.COMPANIASOCIO "companiasocio"
+         from MA_UNIDADNEGOCIO un
+            inner join SY_SeguridadAutorizaciones A
+            ON       A.AplicacionCodigo = 'SY' 
+                AND A.Grupo = 'UNIDADNEGOCIO'
+                AND A.Concepto = un.UnidadNegocio
+                AND A.Usuario = :p_usuario 
+        where un.estado = ISNULL(:p_estado,un.estado)
+        AND A.estado = ISNULL(:p_estado,A.estado)
+        order by DescripcionLocal 
+	</sql-query>
+	
+	
+	
+	  <sql-query name="maunidadnegocio.listarPaginadoContar">
+         select count(1)
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio >= :p_unidadnegocio
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listarPaginadoSentencia">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,DescripcionLocal "descripcionlocal"
+			,cast(Estado as varchar) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+			,UUID "uuid"
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio >= :p_unidadnegocio
+
+    </sql-query>
+
+    <sql-query name="maunidadnegocio.listarDtoCore">
+         select 
+			UnidadNegocio "unidadnegocio"
+			,Zona "zona"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,Direccion "direccion"
+			,Telefonos "telefonos"
+			,RegistroPatronalPlanilla "registropatronalplanilla"
+			,Estado "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,CompaniaSocio "companiasocio"
+			,Ledger "ledger"
+			,RepresentanteDocumento "representantedocumento"
+			,Representante "representante"
+			,Persona "persona"
+
+         from MA_UNIDADNEGOCIO
+         where 
+			UnidadNegocio = ISNULL(:p_unidadnegocio, UnidadNegocio)
+			UnidadNegocio = ISNULL(:p_unidadnegocio, UnidadNegocio)
+
+    </sql-query>
+ 
+ 
+     
+	
+    <sql-query name="maunidadnegocio.contarunidadnegocioporfiltro">
+	SELECT COUNT(*)
+	FROM MA_UNIDADNEGOCIO 
+	WHERE ( 
+		EXISTS (	SELECT * 
+					FROM HR_SEGURIDAD 
+					WHERE MA_UNIDADNEGOCIO.UNIDADNEGOCIO = HR_SEGURIDAD.VALORTEXTO 
+						AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUN' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario )
+	OR						
+	(	SELECT COUNT(1) 
+		FROM HR_SEGURIDAD 
+		WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDNEG' 
+			AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+	)
+	OR
+	(	SELECT COUNT(1) 
+		FROM SEGURIDADAUTORIZACIONES 
+		WHERE APLICACIONCODIGO = 'HR' 
+			AND GRUPO = 'SYSTEM' 
+			AND CONCEPTO = 'SYSADM'
+				AND USUARIO = :p_usuario ) > 0
+				
+	AND (ISNULL(:p_unidadnegocio, '-') = '-' OR MA_UNIDADNEGOCIO.UNIDADNEGOCIO = :p_unidadnegocio)
+	AND (ISNULL(:p_descripcionlocal, '-') = '-' OR MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL LIKE '%'+isnull(:p_descripcionlocal, MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL)+'%')			
+	 
+	</sql-query>
+	
+	<sql-query name="maunidadnegocio.listarunidadnegocioporfiltro">
+    SELECT  
+	CAST(MA_UNIDADNEGOCIO.UNIDADNEGOCIO AS VARCHAR) AS unidadnegocio, 
+	LTRIM(RTRIM(UPPER(MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL))) AS descripcionlocal ,
+	CAST(MA_UNIDADNEGOCIO.ESTADO AS VARCHAR) AS estado
+	FROM MA_UNIDADNEGOCIO 
+	WHERE ( 
+		EXISTS (	SELECT * 
+					FROM HR_SEGURIDAD 
+					WHERE MA_UNIDADNEGOCIO.UNIDADNEGOCIO = HR_SEGURIDAD.VALORTEXTO 
+						AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUN' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario )
+	OR						
+	(	SELECT COUNT(1) 
+		FROM HR_SEGURIDAD 
+		WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDNEG' 
+			AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+	)
+	OR
+	(	SELECT COUNT(1) 
+		FROM SEGURIDADAUTORIZACIONES 
+		WHERE APLICACIONCODIGO = 'HR' 
+			AND GRUPO = 'SYSTEM' 
+			AND CONCEPTO = 'SYSADM'
+				AND USUARIO = :p_usuario ) > 0
+				
+	AND (ISNULL(:p_unidadnegocio, '-') = '-' OR MA_UNIDADNEGOCIO.UNIDADNEGOCIO = :p_unidadnegocio)
+	AND (ISNULL(:p_descripcionlocal, '-') = '-' OR MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL LIKE '%'+isnull(:p_descripcionlocal, MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL)+'%')			
+	ORDER BY MA_UNIDADNEGOCIO.DESCRIPCIONLOCAL
+	</sql-query>
+</hibernate-mapping>

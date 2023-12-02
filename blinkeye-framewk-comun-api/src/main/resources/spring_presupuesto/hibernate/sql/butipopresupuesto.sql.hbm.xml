@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="butipopresupuesto.listar">
+	    <![CDATA[
+	        select tipopresupuesto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from BU_TIPOPRESUPUESTO	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="butipopresupuesto.listarActivos">
+	    <![CDATA[
+	        select tipopresupuesto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from BU_TIPOPRESUPUESTO
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="butipopresupuesto.obtenerTabla">
+	    <![CDATA[
+	        select tipopresupuesto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from BU_TIPOPRESUPUESTO
+			where tipopresupuesto = :p_tipopresupuesto
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="butipopresupuesto.listarfiltros">
+    	select tipopresupuesto as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from BU_TIPOPRESUPUESTO 
+    	where  tipopresupuesto = ISNULL(:p_tipopresupuesto,tipopresupuesto)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal   	
+	</sql-query>
+	
+	<sql-query name="butipopresupuesto.obtenerDto">
+         select 
+			TIPOPRESUPUESTO "tipopresupuesto"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,MONTOUNIDADFLAG "montounidadflag"
+			,CUENTACONTABLEFLAG "cuentacontableflag"
+			,CENTROCOSTOFLAG "centrocostoflag"
+			,ELEMENTOGASTOFLAG "elementogastoflag"
+			,PROYECTOFLAG "proyectoflag"
+			,SUCURSALFLAG "sucursalflag"
+			,REFERENCIA01FLAG "referencia01flag"
+			,REFERENCIA02FLAG "referencia02flag"
+			,CUENTACONTABLEBUDGETFLAG "cuentacontablebudgetflag"
+			,CENTROCOSTOBUDGETFLAG "centrocostobudgetflag"
+			,ELEMENTOGASTOBUDGETFLAG "elementogastobudgetflag"
+			,PROYECTOBUDGETFLAG "proyectobudgetflag"
+			,SUCURSALBUDGETFLAG "sucursalbudgetflag"
+			,REFERENCIA01BUDGETFLAG "referencia01budgetflag"
+			,REFERENCIA02BUDGETFLAG "referencia02budgetflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CLIENTEAREAFLAG "clienteareaflag"
+			,CLIENTEFLAG "clienteflag"
+			,CLIENTEAREABUDGETFLAG "clienteareabudgetflag"
+			,CLIENTEBUDGETFLAG "clientebudgetflag"
+			,CUENTACONTABLEDIGITS "cuentacontabledigits"
+
+         from BU_TIPOPRESUPUESTO
+         where 
+			TIPOPRESUPUESTO = :p_tipopresupuesto
+    </sql-query>
+    
+    <sql-query name="butipopresupuesto.listardtofiltros">
+         select 
+			TIPOPRESUPUESTO "tipopresupuesto"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,MONTOUNIDADFLAG "montounidadflag"
+			,CUENTACONTABLEFLAG "cuentacontableflag"
+			,CENTROCOSTOFLAG "centrocostoflag"
+			,ELEMENTOGASTOFLAG "elementogastoflag"
+			,PROYECTOFLAG "proyectoflag"
+			,SUCURSALFLAG "sucursalflag"
+			,REFERENCIA01FLAG "referencia01flag"
+			,REFERENCIA02FLAG "referencia02flag"
+			,CUENTACONTABLEBUDGETFLAG "cuentacontablebudgetflag"
+			,CENTROCOSTOBUDGETFLAG "centrocostobudgetflag"
+			,ELEMENTOGASTOBUDGETFLAG "elementogastobudgetflag"
+			,PROYECTOBUDGETFLAG "proyectobudgetflag"
+			,SUCURSALBUDGETFLAG "sucursalbudgetflag"
+			,REFERENCIA01BUDGETFLAG "referencia01budgetflag"
+			,REFERENCIA02BUDGETFLAG "referencia02budgetflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CLIENTEAREAFLAG "clienteareaflag"
+			,CLIENTEFLAG "clienteflag"
+			,CLIENTEAREABUDGETFLAG "clienteareabudgetflag"
+			,CLIENTEBUDGETFLAG "clientebudgetflag"
+			,CUENTACONTABLEDIGITS "cuentacontabledigits"
+
+         from BU_TIPOPRESUPUESTO
+         where 
+				TIPOPRESUPUESTO = ISNULL(:p_tipopresupuesto,TIPOPRESUPUESTO)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+    </sql-query>
+    
+</hibernate-mapping>

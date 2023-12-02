@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : astipohorario 
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="asconceptoacceso.listar">
+    	select conceptoacceso as "codigo" 
+    			,descripcionlocal as "nombre"
+    			,estado as "estadoId"
+    	from as_conceptoacceso
+    	order by descripcionlocal	
+  	</sql-query>
+	
+	<sql-query name="asconceptoacceso.listarActivos">
+    	select conceptoacceso as "codigo"
+    		,descripcionlocal as "nombre"
+    		,estado as "estadoId" 
+    	from as_conceptoacceso 
+    	where Estado = 'A'
+    	order by descripcionlocal	
+  	</sql-query>
+  	
+  	<sql-query name="asconceptoacceso.obtenertabla">
+    	select conceptoacceso as "codigo"
+    			,descripcionlocal as "nombre"
+    			,estado as "estadoId" 
+    	from as_conceptoacceso
+    	where conceptoacceso = :p_conceptoacceso
+  	</sql-query>
+	
+	<sql-query name="asconceptoacceso.obtenerdto">
+    	SELECT CONCEPTOACCESO "conceptoacceso"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,CONCEPTOACCESOSISTEMA "conceptoaccesosistema"
+			,TIPOCONCEPTOACCESO "tipoconceptoacceso"
+			,CONCEPTOPLANILLA "conceptoplanilla"
+			,EXPRESADOEN "expresadoen"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGPARASUSTITUCION "flagparasustitucion"
+			,MANDATORIO "mandatorio"
+			,PAGARREFRIGERIO "pagarrefrigerio"
+			,FLAGCOMPENSA "flagcompensa"
+			,FLAGOTROSPERMISOS "flagotrospermisos"
+			,flagweb as "flagweb"
+		FROM   as_conceptoacceso
+		where conceptoacceso = :p_conceptoacceso
+  	</sql-query>
+  	
+  	<sql-query name="asconceptoacceso.listardtofiltros">
+    	SELECT CONCEPTOACCESO "conceptoacceso"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONEXTRANJERA "descripcionextranjera"
+			,CONCEPTOACCESOSISTEMA "conceptoaccesosistema"
+			,TIPOCONCEPTOACCESO "tipoconceptoacceso"
+			,CONCEPTOPLANILLA "conceptoplanilla"
+			,EXPRESADOEN "expresadoen"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGPARASUSTITUCION "flagparasustitucion"
+			,MANDATORIO "mandatorio"
+			,PAGARREFRIGERIO "pagarrefrigerio"
+			,FLAGCOMPENSA "flagcompensa"
+			,FLAGOTROSPERMISOS "flagotrospermisos"
+			,flagweb as "flagweb"
+		FROM   as_conceptoacceso A
+		 where 
+			conceptoacceso = ISNULL(:p_conceptoacceso,conceptoacceso)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		 order by descripcionlocal	
+  	</sql-query>
+  	
+  	
+</hibernate-mapping>

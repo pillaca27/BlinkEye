@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	    <sql-query name="hrcarta.obtenerdto">
+         select 
+			CARTA "carta"
+			,PLANTILLA "plantilla"
+			,ARCHIVO "archivo"
+			,ULTIMOUSUARIO "ultimousuario"
+			,DOCUMENTO "documento"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGCONSTANCIA "flagconstancia"
+			,PROCESO "proceso"
+         from HR_CARTA
+         where 
+			CARTA = :p_carta
+    </sql-query>
+    
+	<sql-query name="hrcarta.obtenertabla">
+    	select carta as "codigo", 
+    			documento as "nombre"
+    			from hr_carta
+    			where carta = :p_carta    			 
+	</sql-query>
+	
+    <sql-query name="hrcarta.listar">
+    	select carta as "codigo", documento as "nombre"
+    	from hr_carta 
+    	ORDER BY documento
+	</sql-query>
+		
+	<sql-query name="hrcarta.listarfiltros">
+    	select CARTA "carta"
+			,PLANTILLA "plantilla"
+			,ARCHIVO "archivo"
+			,ULTIMOUSUARIO "ultimousuario"
+			,DOCUMENTO "documento"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGCONSTANCIA "flagconstancia"
+			,PROCESO "proceso"
+    	from hr_carta 
+    	where  carta = ISNULL(:p_carta,carta)
+			and UPPER(ISNULL(documento,'xxx')) like '%' || ISNULL(:p_documento,UPPER(documento)) || '%'
+		
+		order by documento	    	
+	</sql-query>
+	
+</hibernate-mapping>

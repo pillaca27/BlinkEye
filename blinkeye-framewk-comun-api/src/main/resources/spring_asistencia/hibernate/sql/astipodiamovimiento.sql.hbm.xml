@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : astipodiamovimiento
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<sql-query name="astipodiamovimiento.obtenerdto">
+    	 select 
+			TIPODIA "tipodia"
+			,INTERVALOACCESO "intervaloacceso"
+			,SECUENCIA "secuencia"
+			,HORAINICIO "horainicio"
+			,HORAFIN "horafin"
+			,ESTADO "estado"
+			,FLAGRESTRICCION "flagrestriccion"
+			,CONCEPTOACCESORESTRINGIDO "conceptoaccesorestringido"
+			,CONCEPTOACCESOCOMPLEMENTO "conceptoaccesocomplemento"
+			,TIEMPORESTRINGIDO "tiemporestringido"
+			,FLAGDIAANT "flagdiaant"
+         from AS_TIPODIAMOVIMIENTO
+         where 
+				TIPODIA = :p_tipodia
+			AND INTERVALOACCESO = :p_intervaloacceso
+			AND SECUENCIA = :p_secuencia
+  	</sql-query>
+  	
+  	<sql-query name="astipodiamovimiento.listardtofiltros">
+    	select 
+			TIPODIA "tipodia"
+			,INTERVALOACCESO "intervaloacceso"
+			,SECUENCIA "secuencia"
+			,HORAINICIO "horainicio"
+			,HORAFIN "horafin"
+			,ESTADO "estado"
+			,FLAGRESTRICCION "flagrestriccion"
+			,CONCEPTOACCESORESTRINGIDO "conceptoaccesorestringido"
+			,CONCEPTOACCESOCOMPLEMENTO "conceptoaccesocomplemento"
+			,TIEMPORESTRINGIDO "tiemporestringido"
+			,FLAGDIAANT "flagdiaant"
+
+         from AS_TIPODIAMOVIMIENTO
+         where 
+				TIPODIA = ISNULL(:p_tipodia,TIPODIA)
+			AND INTERVALOACCESO = ISNULL(:p_intervaloacceso,INTERVALOACCESO)
+			AND SECUENCIA = ISNULL(:p_secuencia,SECUENCIA)
+			and ESTADO = ISNULL(:p_estado,ESTADO)		
+  	</sql-query>
+  	
+	<sql-query name="astipodiamovimiento.obtenerDtoInterAccesoMax">
+    	 select 
+			Max(intervaloacceso) AS "intervaloacceso"
+         from AS_TIPODIAMOVIMIENTO
+         where TIPODIA = :p_tipodia
+  	</sql-query>
+  	
+  	<sql-query name="astipodiamovimiento.obtenerDtoHoraInicioFinMaxMin">
+    	 select 
+			Min(horainicio) as "horainicio"
+			,max(horafin) as "horafin"
+         from AS_TIPODIAMOVIMIENTO
+         where TIPODIA = :p_tipodia
+  	</sql-query>
+  	
+</hibernate-mapping>

@@ -1,0 +1,174 @@
+<p-card>
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="fad fa-filter p-mr-2"></i>
+            <b>Filtros</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <p-autoComplete [(ngModel)]="empleadoBuscadorC" [suggestions]="sugerenciasEmpleadoC" (completeMethod)="filtroSugerenciaEmpleadoC($event)" field="nombre" [size]="30" [minLength]="3">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Reemplazo</label>
+                        <div class="p-col">
+                            <p-autoComplete [(ngModel)]="empleadoBuscadorD" [suggestions]="sugerenciasEmpleadoD" (completeMethod)="filtroSugerenciaEmpleadoD($event)" field="nombre" [size]="30" [minLength]="3">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstados" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table #dtPrestamo [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPrestamos($event)" [value]="paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderNombreMedio">Empleado</th>
+                <th class="tablaHeaderNombreMedio">Reemplazado Por</th>
+                <th class="tablaHeaderFecha">Fec. Inicio</th>
+                <th class="tablaHeaderFecha">Fec. Fin</th>
+                <th class="tablaHeaderAccion1">Tipo</th>
+                <th class="tablaHeaderIzquierda">Observación</th>
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar&&rowData.estado == 'Activo'&&rowData.tipo == 'T'" (click)="coreEditar(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Anular" *ngIf="menuSeguridad.flgBorrar&&rowData.estado == 'Activo'&&rowData.tipo == 'T'" (click)="coreAnular(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Empleado</span> {{rowData.antiguoNombre}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Reemplazado Por</span> {{rowData.nuevoNombre}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fec. Inicio</span> {{rowData.desde | date: 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fec. Fin</span> {{rowData.hasta | date: 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Tipo</span>
+                    <label *ngIf="rowData.tipo == 'T'">Temporal</label>
+                    <label *ngIf="rowData.tipo == 'D'">Definitivo</label>
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Observación</span> {{rowData.observacion}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="rowData.estado == 'Activo'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="rowData.estado != 'Activo'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="8">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-dialog [header]="accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Edición':accion == ACCIONES.VER?'Vista Previa':''" [(visible)]="verModal" [modal]="true " [responsive]="true" [resizable]="false " [blockScroll]="true" [style]="{width:'570px'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <span>Tipo</span>
+                    <p-dropdown [options]="lstTipos" [style]="{'width':'100%'}" [(ngModel)]="reemplazo.tipo" [disabled]="accion == ACCIONES.VER" appendTo="body"></p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <span>Estado</span>
+                    <p-dropdown [options]="lstEstados" [style]="{'width':'100%'}" [(ngModel)]="reemplazo.estado" [disabled]="accion == ACCIONES.VER" appendTo="body">
+                    </p-dropdown>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Empleado</span>
+                    <p-autoComplete [(ngModel)]="empleadoBuscadorA" [suggestions]="sugerenciasEmpleadoA" [disabled]="accion == ACCIONES.VER" (completeMethod)="filtroSugerenciaEmpleadoA($event)" field="nombre" [size]="30" appendTo="body" [style]="{'width':'100%'}" [minLength]="3">
+                    </p-autoComplete>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Reemplazado Por</span>
+                    <p-autoComplete [(ngModel)]="empleadoBuscadorB" [suggestions]="sugerenciasEmpleadoB" [disabled]="accion == ACCIONES.VER" (completeMethod)="filtroSugerenciaEmpleadoB($event)" field="nombre" [size]="30" appendTo="body" [style]="{'width':'100%'}" [minLength]="3">
+                    </p-autoComplete>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6" *ngIf="reemplazo.tipo=='T'">
+                    <span>Inicio</span>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" [disabled]="accion == ACCIONES.VER" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="reemplazo.desde">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-6" *ngIf="reemplazo.tipo=='T'">
+                    <span>Fin</span>
+                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" [disabled]="accion == ACCIONES.VER" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="reemplazo.hasta">
+                    </p-calendar>
+                </div>
+
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Observación</span>
+                    <textarea pInputTextarea style="width:100%" [(ngModel)]="reemplazo.observacion" [disabled]="accion == ACCIONES.VER" maxlength="3000"></textarea>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton pRipple type="button" label="Guardar" icon="fad fa-save" class="p-button-outlined" *ngIf="accion != ACCIONES.VER" (click)="guardar()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4"></div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton pRipple type="button" label="Salir" icon="fad fa-reply" class="p-button-outlined p-button-secondary" (click)="salir()"></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

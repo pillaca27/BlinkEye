@@ -1,0 +1,69 @@
+/* To learn more about this file see: https://angular.io/config/tsconfig. */
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "outDir": "./out-tsc/app",
+    "baseUrl": "./",
+    "types": [],
+    "paths": {
+      "@env/*": [
+        "src/environments/*" 
+      ],
+      "@framework/*": [
+        "src/app/royal/framework/*"
+      ],      
+      "@framework-seguridad/*": [
+        "src/app/royal/modulos/framework-seguridad/*"
+      ],
+      "@framework-workflow/*": [
+        "src/app/royal/modulos/framework-workflow/*"
+      ],
+      "@framework-comun/*": [
+        "src/app/royal/modulos/framework-comun/*"
+      ],      
+      "@erp-alertas/*": [
+        "src/app/royal/modulos/alertas/*"
+      ],
+      "@erp-asistencia/*": [
+        "src/app/royal/modulos/asistencia/*"
+      ],
+      "@erp-comercial/*": [
+        "src/app/royal/modulos/comercial/*"
+      ],
+      "@erp-ede/*": [
+        "src/app/royal/modulos/ede/*"
+      ],
+      "@erp-kpi/*": [
+        "src/app/royal/modulos/kpi/*"
+      ],
+      "@erp-logistica/*": [
+        "src/app/royal/modulos/logistica/*"
+      ],
+      "@erp-ocupacional/*": [
+        "src/app/royal/modulos/ocupacional/*"
+      ],
+      "@erp-planilla/*": [
+        "src/app/royal/modulos/planilla/*"
+      ],
+      "@erp-presupuesto/*": [
+        "src/app/royal/modulos/presupuesto/*"
+      ],
+      "@erp-rrhh/*": [
+        "src/app/royal/modulos/rrhh/*"
+      ],
+      "@erp-tesoreria/*": [
+        "src/app/royal/modulos/tesoreria/*"
+      ],
+    }
+  },
+  "files": [
+    "src/main.ts",
+    "src/polyfills.ts"
+  ],
+  "include": [
+    "src/**/*.d.ts"
+  ],
+  "angularCompilerOptions": {
+    "enableIvy": false
+  }
+}

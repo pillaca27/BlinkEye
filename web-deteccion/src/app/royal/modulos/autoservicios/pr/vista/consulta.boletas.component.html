@@ -1,0 +1,200 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <input pInputText disabled [(ngModel)]="filtro.empleadoNombre" style="width:100%" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Periodo</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstPeriodos" [(ngModel)]="filtro.periodoId" [style]="{'width':'100%'}" (onChange)="limpiarResultados()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B"></app-botones-listado>
+
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-field p-col-12 p-md-12">
+            <p-table [scrollable]="true" [style]="{ width:'100%' }" [value]="lstPlanilla" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderAccion2">Acciones</th>
+                        <th class="tablaColumnaNombreMedio">Tipo de Planilla</th>
+                        <th class="tablaColumnaNombreMedio">Proceso</th>
+                        <th class="tablaHeaderPeriodo">Periodo</th>
+                        <th class="tablaHeaderMonto">Ingresos</th>
+                        <th class="tablaHeaderMonto">Egresos</th>
+                        <th class="tablaHeaderMonto">Patronales</th>
+                        <th class="tablaHeaderMonto">Total Neto</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td class="tablaColumnaAccion2">
+                            <span class="p-column-title">Acciones</span>
+                            <table>
+                                <tr>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-print" class="p-button-rounded p-button-text botonGrilla" title="Imprimir" (click)="imprimir(rowData)"></button>
+                                    </th>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="cargarDetalle(rowData)"></button>
+                                    </th>
+                                </tr>
+                            </table>
+                        </td>
+                        <td class="tablaColumnaNombreMedio">
+                            <span class="p-column-title">Tipo de Planilla</span> {{rowData.tipoPlanillaNombre}}
+                        </td>
+                        <td class="tablaColumnaNombreMedio">
+                            <span class="p-column-title">Proceso</span> {{rowData.tipoProcesoNombre}}
+                        </td>
+
+                        <td class="tablaColumnaPeriodo">
+                            <span class="p-column-title">Periodo</span> {{rowData.periodoNombre}}
+                        </td>
+                        <td class="tablaColumnaMonto">
+                            <span class="p-column-title">Ingresos</span> {{rowData.totalIngresos == null?'':rowData.totalIngresos.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td class="tablaColumnaMonto">
+                            <span class="p-column-title">Egresos</span> {{rowData.totalEgresos == null?'':rowData.totalEgresos.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td class="tablaColumnaMonto">
+                            <span class="p-column-title">Patronales</span> {{rowData.totalPatronales == null?'':rowData.totalPatronales.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td class="tablaColumnaMonto">
+                            <span class="p-column-title">Total Neto</span> {{rowData.totalNeto == null?'':rowData.totalNeto.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="8">
+                            No existen registros para mostrar
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+            <h5 style="text-decoration: underline;text-align: center;">Ingresos</h5>
+            <p-table [value]="lstBoletaIn" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 15%">Código</th>
+                        <th>Concepto</th>
+                        <th style="width: 18%">Cantidad</th>
+                        <th style="width: 18%">Monto</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Código</span> {{rowData.conceptoIdIn}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Concepto</span> {{rowData.conceptoNombreIn}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Cantidad</span> {{rowData.conceptoCantidadIn == null?'':rowData.conceptoCantidadIn.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Monto</span> {{rowData.conceptoMontoIn == null?'':rowData.conceptoMontoIn.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="4">
+                            No Existen Registros para Mostrar
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+            <h5 style="text-decoration: underline;text-align: center;">Descuentos</h5>
+            <p-table [value]="lstBoletaDe" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 15%">Código</th>
+                        <th>Concepto</th>
+                        <th style="width: 18%">Cantidad</th>
+                        <th style="width: 18%">Monto</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Código</span> {{rowData.conceptoIdDe}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Concepto</span> {{rowData.conceptoNombreDe}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Cantidad</span> {{rowData.conceptoCantidadDe == null?'':rowData.conceptoCantidadDe.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Monto</span> {{rowData.conceptoMontoDe == null?'':rowData.conceptoMontoDe.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="4">
+                            No Existen Registros para Mostrar
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <!-- <div class="p-field p-col-12 p-md-4">
+            <h5 style="text-decoration: underline;text-align: center;">Patronales</h5>
+            <p-table [value]="lstBoletaPa" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th style="width: 15%">Código</th>
+                        <th>Concepto</th>
+                        <th style="width: 18%">Cantidad</th>
+                        <th style="width: 18%">Monto</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>
+                            <span class="p-column-title">Código</span> {{rowData.conceptoIdPa}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Concepto</span> {{rowData.conceptoNombrePa}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Cantidad</span> {{rowData.conceptoCantidadPa == null?'':rowData.conceptoCantidadPa.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                        <td>
+                            <span class="p-column-title">Monto</span> {{rowData.conceptoMontoPa == null?'':rowData.conceptoMontoPa.toLocaleString('th-TH',{minimumFractionDigits: 2, maximumFractionDigits: 2})}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="4">
+                            No Existen Registros para Mostrar
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div> -->
+    </div>
+</p-card>

@@ -1,0 +1,90 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Aplicación Código</label>
+                        <div class="p-col">
+                            <p-dropdown #myAplicacioncodigo title="Aplicación Código" [(ngModel)]="dto.aplicacioncodigo" [filter]="true" [options]="lstAplicaciones" [disabled]="!objetoTitulo.puedeEditarPk" (onChange)="onChangeAplicacion()" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Grupo</label>
+                        <div class="p-col">
+                            <p-dropdown #myGrupo title="Grupo" [(ngModel)]="dto.grupo" [filter]="true" [options]="lstGrupos" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditarPk"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Concepto</label>
+                        <div class="p-col">
+                            <input #myConcepto title="Concepto" pInputText [(ngModel)]="dto.concepto" maxlength="6" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.concepto=$event.toUpperCase()" required />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-8">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input #myDescripcion title="Descripción" class="inputDescripcion" pInputText [(ngModel)]="dto.descripcion" maxlength="200" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4"></div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Web Flag</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.webflag" maxlength="1" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.webflag=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Web Flag</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.webflag" maxlength="1" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.webflag=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Web Page</label>
+                        <div class="p-col">
+                            <input class="inputDescripcion" pInputText [(ngModel)]="dto.webpage" maxlength="500" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.webpage=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Orden</label>
+                        <div class="p-col">
+                            <p-inputNumber [(ngModel)]="dto.orden" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="0" [disabled]="!objetoTitulo.puedeEditar"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Imagen</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.imagen" maxlength="50" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.imagen=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>

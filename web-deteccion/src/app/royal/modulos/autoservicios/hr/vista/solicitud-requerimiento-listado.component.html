@@ -1,0 +1,337 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCompaniaNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxCompaniaNombre=null;filtro.compania=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Centro Costo</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCentroCostoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxCentroCostoNombre=null;filtro.centroCosto=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Motivo</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxMotivoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarMotivo()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxMotivoNombre=null;filtro.motivo=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Sucursal</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxSucursalNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxSucursalNombre=null;filtro.sucursal=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Puesto</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCodigoCargoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPuesto()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxCodigoCargoNombre=null;filtro.codigoCargo=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Postulante</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxPostulanteNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPostulante()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxPostulanteNombre=null;filtro.postulante=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEstado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEstadoNombre=null;filtro.estado=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha Solicitud</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.fechaRegistroDesde">
+                                </p-calendar>
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.fechaRegistroHasta">
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Postulante Estado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoPostulanteNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEstadoPostulante()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEstadoPostulanteNombre=null;filtro.estadoPostulante=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">N° Requerimiento</label>
+                        <div class="p-col">
+                            <input pInputText style="width:100%;" [(ngModel)]="filtro.requerimiento" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [(selection)]="registroSeleccionado" selectionMode="single">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acciones</th>
+                <th class="tablaHeaderNombreMedio">Compañía</th>
+                <th class="tablaHeaderCodigo">N° Requerimiento</th>
+                <th class="tablaHeaderCodigo">N° Convocatoria</th>
+                <th class="tablaHeaderEstadoGrande">Estado</th>
+                <th class="tablaHeaderCodigo">Tipo Requerimiento</th>
+                <th class="tablaHeaderFecha">Fecha Solicitud</th>
+                <th class="tablaHeaderFecha">Tiempo Transcurrido</th>
+                <th class="tablaHeaderFecha">Fecha Aprobación</th>
+                <th class="tablaHeaderFecha">Fecha Término</th>
+                <th class="tablaHeaderNombre">Puesto Solicitado</th>
+                <th class="tablaHeaderCodigo">N° Vacantes Disponibles</th>
+                <th class="tablaHeaderNombreMedio">Unidad Organigrama Solicitado</th>
+                <th class="tablaHeaderNombreMedio">Unidad Negocio</th>
+                <th class="tablaHeaderNombreMedio">Unidad Operativa</th>
+                <th class="tablaHeaderNombreMedio">Sucursal</th>
+                <!-- <th class="tablaHeaderCodigoSuperChico">N° Sol.</th>
+            <th class="tablaHeaderCodigoSuperChico">N° Pend.</th> -->
+                <th class="tablaHeaderFecha">Inicio Vigencia</th>
+                <th class="tablaHeaderFecha">Fin Vigencia</th>
+                <!-- <th class="tablaHeaderFecha">Fecha Carta MINTRA</th> -->
+                <!-- <th class="tablaHeaderFecha">Fecha Contrato</th> -->
+                <!-- <th class="tablaHeaderCodigo">Nivel Aprob.</th> -->
+                <th class="tablaHeaderNombreMedio">Motivo</th>
+                <th class="tablaHeaderCodigo">N° Postulantes</th>
+                <th class="tablaHeaderCodigo">Postulantes En Proceso</th>
+                <th class="tablaHeaderCodigo">Postulantes No Calificados</th>
+                <th class="tablaHeaderCodigo">Postulantes Calificados</th>
+                <th class="tablaHeaderCodigo">Postulantes Contratados</th>
+                <th class="tablaHeaderCodigo">Postulantes Desestimados</th>
+                <th class="tablaHeaderNombre">Empleado Responsable</th>
+                <th class="tablaHeaderNombreMedio">Unidad Organigrama Solicitante</th>
+                <th class="tablaHeaderNombre">Solicitante</th>
+                <th class="tablaHeaderNombreMedio">Motivo de Suspensión</th>
+                <th class="tablaHeaderNombreMedio">Motivo Reversión Suspensión</th>
+                <th class="tablaHeaderNombreMedio">Motivo Desierto</th>
+                <th class="tablaHeaderNombreMedio">Motivo Anulado</th>
+                <th class="tablaHeaderNombreMedio">Motivo Terminado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acciones</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar&&rowData.estado=='EN PREPARACIÓN'" (click)="coreEditar(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="coreVer(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Anular" *ngIf="menuSeguridad.flgBorrar&&rowData.estado=='EN PREPARACIÓN'" (click)="coreAnular(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Compañía</span> {{rowData.compania}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">N° Requerimiento</span> {{rowData.requerimiento}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">N° Convocatoria</span> {{rowData.nroConvocatoria}}
+                </td>
+                <td class="tablaColumnaEstadoGrande">
+                    <span class="p-column-title">Estado</span> {{rowData.estado}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Tipo Requerimiento</span> {{rowData.tipoRequerimiento}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Solicitud</span> {{rowData.fechaSolicitud}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Tiempo Transcurrido</span> {{rowData.tiempoTranscurrido}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Aprobación</span> {{rowData.fechaAprobacion}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha Término</span> {{rowData.fechaTermino}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Puesto Solicitado</span> {{rowData.puestoSolicitado}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">N° Vacantes Disponibles</span> {{rowData.nroVacantesDisponibles}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad Organigrama Solicitado</span> {{rowData.unidadOrganigramaSolicitado}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad Negocio</span> {{rowData.unidadNegocio}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad Operativa</span> {{rowData.unidadOperativa}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Sucursal</span> {{rowData.sucursal}}
+                </td>
+                <!-- <td class="tablaColumnaCodigoSuperChico">
+                <span class="p-column-title">N° Sol.</span>
+                {{rowData.nroSolicitado}}
+            </td>
+            <td class="tablaColumnaCodigoSuperChico">
+                <span class="p-column-title">N° Pend.</span>
+                {{rowData.nroPendiente}}
+            </td> -->
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Inicio Vigencia</span> {{rowData.inicioVigencia}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fin Vigencia</span> {{rowData.finVigencia}}
+                </td>
+                <!-- <td class="tablaColumnaFecha">
+                <span class="p-column-title">Fecha Carta MINTRA</span>
+                {{rowData.fechaCartaMintra}}
+            </td>
+            <td class="tablaColumnaFecha">
+                <span class="p-column-title">Fecha Contrato</span>
+                {{rowData.fechaContrato}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Nivel Aprob.</span>
+                {{rowData.nivelAprobacion}}
+            </td> -->
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo</span> {{rowData.motivo}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">N° Postulantes</span> {{rowData.nroPostulantes}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Postulantes En Proceso</span> {{rowData.nroPostulantesProceso}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Postulantes No Calificados</span> {{rowData.nroPostulantesCalificados}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Postulantes Calificados</span> {{rowData.nroPostulantesNoCalificados}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Postulantes Contratados</span> {{rowData.nroPostulantesContratados}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Postulantes Desestimados</span> {{rowData.nroPostulantesDesestimados}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Empleado Responsable</span> {{rowData.empleadoResponsable}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Unidad Organigrama Solicitante</span> {{rowData.unidadOrganigramaSolicitante}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Solicitante</span> {{rowData.solicitante}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo de Suspensión</span> {{rowData.motivoSuspension}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo Reversión Suspensión</span> {{rowData.motivoReversionSuspension}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo Desierto</span> {{rowData.motivoDesierto}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo Anulado</span> {{rowData.motivoAnulado}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Motivo Terminado</span> {{rowData.motivoTerminado}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="33">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-selector-compania></app-selector-compania>
+<app-centrocostos-selector></app-centrocostos-selector>
+<app-selector-miscelaneos></app-selector-miscelaneos>
+<app-selector-unidadnegocio></app-selector-unidadnegocio>
+<app-selector-puesto></app-selector-puesto>
+<app-sucursalselector></app-sucursalselector>
+<app-selector-unidadoperativa></app-selector-unidadoperativa>
+<app-selector-tipoplanilla></app-selector-tipoplanilla>
+<app-selector-postulante></app-selector-postulante>
+<app-selector-personalreclutamiento></app-selector-personalreclutamiento>

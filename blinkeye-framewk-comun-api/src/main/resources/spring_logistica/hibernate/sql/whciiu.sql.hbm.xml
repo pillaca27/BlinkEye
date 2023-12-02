@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whciiu.listar">
+	    <![CDATA[
+	        select ciiu as "codigo", descripcion as "nombre", cast(Estado as varchar2(1)) as "estadoId" 
+	        from wh_ciiu	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whciiu.listarActivos">
+	    <![CDATA[
+	        select ciiu as "codigo", descripcion as "nombre", cast(Estado as varchar2(1)) as "estadoId" 
+	        from wh_ciiu
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whciiu.obtenerTabla">
+	    <![CDATA[
+	        select ciiu as "codigo", descripcion as "nombre", cast(Estado as varchar2(1)) as "estadoId" 
+	        from wh_ciiu
+			where ciiu = :p_ciiu
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whciiu.listarfiltros">
+    	select ciiu as "codigo", descripcion as "nombre"
+    			,cast(Estado as varchar2(1)) as "estadoId" 
+    	from wh_ciiu 
+    	where  ciiu = ISNULL(:p_ciiu,ciiu)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	
+    <sql-query name="whciiu.pagindoCiiuContar">
+  <![CDATA[
+        SELECT count(1)
+	    FROM WH_Ciiu p
+	    WHERE
+	    ISNULL(p.Ciiu,'qqq') LIKE '%' + ISNULL(:p_codigo, ISNULL(p.Ciiu,'qqq') ) + '%'
+	    AND upper(ISNULL(p.Descripcion,'xxx')) LIKE upper('%' + ISNULL(:p_descripcion,ISNULL(p.Descripcion,'ISNULL') ) + '%')
+	    AND p.estado = 'A'
+	    ]]>
+    </sql-query>   
+    
+        <sql-query name="whciiu.paginadoCiiuListar">
+  	<![CDATA[
+  	 select p.ciiu as "ciiu"
+         ,p.descripcion as "descripcion"
+         ,CAST(p.estado as VARCHAR) as "estado"
+         FROM WH_Ciiu p
+      WHERE
+	    ISNULL(p.Ciiu,'qqq') LIKE '%' + ISNULL(:p_codigo, ISNULL(p.Ciiu,'qqq') ) + '%'
+	    AND upper(ISNULL(p.Descripcion,'xxx')) LIKE upper('%' + ISNULL(:p_descripcion,ISNULL(p.Descripcion,'ISNULL') ) + '%')
+	    AND p.estado = 'A'
+      ]]>
+    </sql-query>   
+    
+</hibernate-mapping>

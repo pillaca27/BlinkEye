@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipocontrato
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="hrtipocontrato.listar">
+    <![CDATA[   
+        select TipoContrato as "codigo", Descripcion as "nombre" , estado as "estadoId"
+        from HR_TipoContrato
+        order by Descripcion
+    ]]>
+  </sql-query>
+  <sql-query name="hrtipocontrato.listarActivos">
+    <![CDATA[   
+        select TipoContrato as "codigo", Descripcion as "nombre"
+        , estado as "estadoId"
+        from HR_TipoContrato
+        where Estado = 'A'
+        order by Descripcion
+    ]]>
+  </sql-query>
+  
+  <sql-query name="hrtipocontrato.obtenertabla">
+    	select TipoContrato as "codigo", 
+    			Descripcion as "nombre",
+    			Estado as "estadoId" 
+    			from HR_TipoContrato
+    			where TipoContrato = :p_tipocontrato 
+	</sql-query>
+	
+	<sql-query name="hrtipocontrato.listarfiltros">
+    	select TipoContrato as "codigo", Descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from HR_TipoContrato 
+    	where  TipoContrato = ISNULL(:p_tipocontrato,TipoContrato)
+			and UPPER(ISNULL(Descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(Descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by Descripcion	    	
+	</sql-query>
+	
+	    <sql-query name="hrtipocontrato.obtenerdto">
+         select 
+			TIPOCONTRATO "tipocontrato"
+			,DESCRIPCION "descripcion"
+			,FLAGPLANILLAS "flagplanillas"
+			,FLAGFECHAVENCIMIENTO "flagfechavencimiento"
+			,FLAGSERVICE "flagservice"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGPRACTICAS "flagpracticas"
+			,TIEMPOVENCIMIENTO "tiempovencimiento"
+			,CARTA "carta"
+			,TIPOCONTRATORTPS "tipocontratortps"
+			,cast(TIENEPERIODOPRUEBA as varchar2(10)) "tieneperiodoprueba"
+            ,cast(FLAGINDETERMINADO as varchar2(10)) "flagindeterminado"
+			,CODIGOAUXILIAR "codigoauxiliar"
+			,FLAGTIEMPOPARCIAL "flagtiempoparcial"
+         from HR_TIPOCONTRATO
+         where 
+			TIPOCONTRATO = :p_tipocontrato
+    </sql-query>
+    
+    <sql-query name="hrtipocontrato.listardtofiltros">
+         select 
+			TIPOCONTRATO "tipocontrato"
+			,DESCRIPCION "descripcion"
+			,FLAGPLANILLAS "flagplanillas"
+			,FLAGFECHAVENCIMIENTO "flagfechavencimiento"
+			,FLAGSERVICE "flagservice"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGPRACTICAS "flagpracticas"
+			,TIEMPOVENCIMIENTO "tiempovencimiento"
+			,CARTA "carta"
+			,TIPOCONTRATORTPS "tipocontratortps"
+			,cast(TIENEPERIODOPRUEBA as varchar2(10)) "tieneperiodoprueba"
+            ,cast(FLAGINDETERMINADO as varchar2(10)) "flagindeterminado"
+			,CODIGOAUXILIAR "codigoauxiliar"
+			,FLAGTIEMPOPARCIAL "flagtiempoparcial"
+         from HR_TIPOCONTRATO
+         where 
+			TIPOCONTRATO = ISNULL(:p_tipocontrato,TIPOCONTRATO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		  order by Descripcion	   		
+    </sql-query>
+    
+    <sql-query name="hrtipocontrato.listarPaginadoContar">
+    <![CDATA[   
+        SELECT COUNT(1)
+		FROM HR_TIPOCONTRATO A 
+		LEFT JOIN HR_CARTA B ON A.CARTA = B.CARTA
+		WHERE 1 = 1
+		AND A.TIPOCONTRATO = ISNULL(:p_tipocontr, A.TIPOCONTRATO)
+		AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+    ]]>
+  </sql-query>
+  
+  <sql-query name="hrtipocontrato.listarPaginadoSentencia">
+    <![CDATA[   
+        SELECT A.TIPOCONTRATO AS "tipocontrato", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCION))) AS "descripcion", 
+			CAST(A.ESTADO AS VARCHAR) AS "estado", 
+			A.CARTA AS "carta", 
+			LTRIM(RTRIM(UPPER(B.DOCUMENTO))) AS "cartanombre",
+			CAST(ISNULL(A.FLAGFECHAVENCIMIENTO, 'N') as VARCHAR) as "flagfechavencimiento" 
+		FROM HR_TIPOCONTRATO A 
+		LEFT JOIN HR_CARTA B ON A.CARTA = B.CARTA
+		WHERE 1 = 1
+		AND A.TIPOCONTRATO = ISNULL(:p_tipocontr, A.TIPOCONTRATO)
+		AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		ORDER BY A.DESCRIPCION
+    ]]>
+  </sql-query>
+    
+</hibernate-mapping>

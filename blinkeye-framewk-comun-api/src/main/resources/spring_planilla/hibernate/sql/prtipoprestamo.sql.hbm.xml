@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prtipoprestamo
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="prtipoprestamo.listar">
+    	select tipoprestamo as "codigo", Descripcion as "nombre"
+    			,estado as "estadoId" 
+    	from PR_TIPOPRESTAMO
+  	</sql-query>
+	
+	<sql-query name="prtipoprestamo.listarActivos">
+    	select tipoprestamo as "codigo", Descripcion as "nombre"
+    		,estado as "estadoId" 
+    	from PR_TIPOPRESTAMO where Estado = 'A'
+  	</sql-query>
+  	
+  	<sql-query name="prtipoprestamo.obtenerTabla">
+	    <![CDATA[
+	        select tipoprestamo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from PR_TIPOPRESTAMO
+			where tipoprestamo = :p_tipoprestamo
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="prtipoprestamo.listarfiltros">
+    	select tipoprestamo as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from PR_TIPOPRESTAMO 
+    	where  tipoprestamo = ISNULL(:p_tipoprestamo,tipoprestamo)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	<sql-query name="prtipoprestamo.obtenerDto">
+		select 
+			TIPOPRESTAMO "tipoprestamo"
+			,CONCEPTO "concepto"
+			,DESCRIPCION "descripcion"
+			,MINIMOANO "minimoano"
+			,MINIMOSUELDO "minimosueldo"
+			,MONEDASUELDO "monedasueldo"
+			,TASAINTERES "tasainteres"
+			,FLAGVACACIONAL "flagvacacional"
+			,ESTADO "estado"
+			,ORDEN "orden"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGREQUIEREAPROBACION "flagrequiereaprobacion"
+			,CUENTADEBE "cuentadebe"
+			,CUENTAHABER "cuentahaber"
+			,FLAGTIPOPROCESO "flagtipoproceso"
+			,TIPOPROCESO "tipoproceso"
+			,CONCEPTOINTERES "conceptointeres"
+			,CONCEPTOAMORTIZACION "conceptoamortizacion"
+			,FLAGCXP "flagcxp"
+			,FLAGDESEMBOLSABLE "flagdesembolsable"
+			,CUENTAOBLIGACION "cuentaobligacion"
+			,PROVEEDOR "proveedor"
+         from PR_TIPOPRESTAMO
+         where 
+			TIPOPRESTAMO = :p_tipoprestamo
+    </sql-query>
+    
+    <sql-query name="prtipoprestamo.listardtofiltros">
+         select 
+			TIPOPRESTAMO "tipoprestamo"
+			,CONCEPTO "concepto"
+			,DESCRIPCION "descripcion"
+			,MINIMOANO "minimoano"
+			,MINIMOSUELDO "minimosueldo"
+			,MONEDASUELDO "monedasueldo"
+			,TASAINTERES "tasainteres"
+			,FLAGVACACIONAL "flagvacacional"
+			,ESTADO "estado"
+			,ORDEN "orden"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGREQUIEREAPROBACION "flagrequiereaprobacion"
+			,CUENTADEBE "cuentadebe"
+			,CUENTAHABER "cuentahaber"
+			,FLAGTIPOPROCESO "flagtipoproceso"
+			,TIPOPROCESO "tipoproceso"
+			,CONCEPTOINTERES "conceptointeres"
+			,CONCEPTOAMORTIZACION "conceptoamortizacion"
+			,FLAGCXP "flagcxp"
+			,FLAGDESEMBOLSABLE "flagdesembolsable"
+			,CUENTAOBLIGACION "cuentaobligacion"
+			,PROVEEDOR "proveedor"
+         from PR_TIPOPRESTAMO
+         where 
+				TIPOPRESTAMO = ISNULL(:p_tipoprestamo,TIPOPRESTAMO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+</hibernate-mapping>

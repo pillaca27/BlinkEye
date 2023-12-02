@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Usuarios
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="usuarios.obtenerDto">
+         select 
+			a.ID_Usuario "idUsuario"
+			,a.Nombre_Usuario "nombreUsuario"
+			,a.Contraseña "contrasena"
+			,a.Rol "rol"
+			,a.ID_Persona "idPersona"
+
+         from USUARIOS a
+         where 
+			a.ID_Usuario = :p_idusuario
+
+    </sql-query>
+
+    <sql-query name="usuarios.listarPaginadoContar">
+         select count(1)
+         from USUARIOS a
+         where 
+			a.ID_Usuario = ISNULL(:p_idusuario, a.ID_Usuario)
+			AND a.Nombre_Usuario like '%' + ISNULL(:p_nombreusuario, a.Nombre_Usuario) + '%' 
+
+    </sql-query>
+
+    <sql-query name="usuarios.listarPaginadoSentencia">
+         select 
+			a.ID_Usuario "idUsuario"
+			,a.Nombre_Usuario "nombreUsuario"
+			,a.Contraseña "contrasena"
+			,a.Rol "rol"
+			,a.ID_Persona "idPersona"
+
+         from USUARIOS a
+         where 
+			a.ID_Usuario = ISNULL(:p_idusuario, a.ID_Usuario)
+			AND a.Nombre_Usuario like '%' + ISNULL(:p_nombreusuario, a.Nombre_Usuario) + '%' 
+
+    </sql-query>
+
+    <sql-query name="usuarios.listarDtoCore">
+         select 
+			a.ID_Usuario "idUsuario"
+			,a.Nombre_Usuario "nombreUsuario"
+			,a.Contraseña "contrasena"
+			,a.Rol "rol"
+			,a.ID_Persona "idPersona"
+
+         from USUARIOS a
+         where 
+			a.ID_Usuario = ISNULL(:p_idusuario, a.ID_Usuario)
+			AND a.Nombre_Usuario like '%' + ISNULL(:p_nombreusuario, a.Nombre_Usuario) + '%' 
+
+    </sql-query>
+
+    <sql-query name="usuarios.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="usuarios.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="usuarios.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE xml>
+<Configuration monitorInterval="60">
+    <Properties>
+        <Property name="log-path">logs</Property>
+        <Property name="log-pattern">[%-6p] %d{yy-MM-dd HH:mm:ss.SSS} (%F:%L).%M - %m%n</Property>
+        <Property name="log-pattern-console">[%-6p] %d{yy-MM-dd HH:mm:ss.SSS} (%F:%L).%M - %m%n</Property>
+    </Properties>
+    <Appenders>
+        <Console name="Consola" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>${log-pattern-console}</pattern>
+            </PatternLayout>
+        </Console>
+        <RollingFile name="Rolling-Appender"
+            fileName="${log-path}/springcore-framework-seguridad-api.log"
+            filePattern="${log-path}/springcore-framework-seguridad-api-%d{yyyy-MM-dd}-%i.log">
+            <PatternLayout pattern="${log-pattern}" />
+            <Policies>
+            	<!--  <SizeBasedTriggeringPolicy size="10MB" />	-->
+                <TimeBasedTriggeringPolicy interval="1" />
+            </Policies>
+            <DefaultRolloverStrategy max="30" />
+        </RollingFile>
+        <Async name="Async">
+	      	<AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+	    </Async>
+    </Appenders>
+    <Loggers>
+        <Logger name="org.springframework.web" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="org.springframework.aop" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="org.hibernate" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="com.microsoft" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="com.microsoft.sqlserver.jdbc" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="springfox.documentation.spring" level="error" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>
+        <Logger name="net.royal" level="debug" additivity="false">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Logger>        
+        <Root level="info">
+            <AppenderRef ref="Rolling-Appender"/>
+            <AppenderRef ref="Consola"/>
+        </Root>
+    </Loggers>
+</Configuration>

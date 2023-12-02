@@ -1,0 +1,232 @@
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2" *ngIf="accionPadre == ACCIONES.EDITAR">
+        <br>
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%"
+            [paginator]="true" [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion3">Acciones</th>
+                    <th class="tablaHeaderNombreMedio">Empresa</th>
+                    <th class="tablaHeaderNombreMedio">Cargo</th>
+                    <th class="tablaHeaderFecha">Inicio</th>
+                    <th class="tablaHeaderFecha">Término</th>
+                    <th class="tablaHeaderNombreMedio">Tipo de Contrato</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="tablaColumnaAccion3">
+                        <span class="p-column-title">Acciones</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                        (click)="editar(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                        (click)="ver(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                        title="Eliminar" (click)="eliminar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Empresa</span>
+                        {{rowData.empresa}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Cargo</span>
+                        {{rowData.cargo}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Inicio</span>
+                        {{rowData.fechadesde | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Término</span>
+                        {{rowData.fechahasta | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Tipo de Contrato</span>
+                        {{rowData.auxContratoNombre}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="p-fluid">
+    <p-dialog [(visible)]="verMantenimiento" [modal]="true" [responsive]="true"
+        header="EXPERIENCIA LABORAL : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+        [resizable]="false" [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size"
+        hideEffect="size" [style]="{'width':'750px', 'left':'15px', 'right':'15px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span class="importante">Empresa</span>
+                <input type="text" pInputText maxlength="500" [(ngModel)]="dto.empresa"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <span class="importante">Inicio</span>
+                <p-calendar appendTo="body" (onBlur)="calcular()" (onSelect)="calcular()" [yearNavigator]="true"
+                    firstDayOfWeek="1" [monthNavigator]="true" [disabled]="accion == ACCIONES.VER" yearRange="1990:2500"
+                    [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="dto.fechadesde" readonlyInput="readonlyInput ">
+                </p-calendar>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <span class="importante">Término</span>
+                <p-calendar appendTo="body" (onBlur)="calcular()" (onSelect)="calcular()" [yearNavigator]="true"
+                    firstDayOfWeek="1" [disabled]="accion == ACCIONES.VER" [monthNavigator]="true" yearRange="1990:2500"
+                    [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="dto.fechahasta" readonlyInput="readonlyInput ">
+                </p-calendar>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <span>Años de Experiencia</span>
+                <input pInputText type="text" [(ngModel)]="dto.ano" disabled>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Tipo Contrato</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="dto.tipocontrato"
+                    [options]="tipoContratos" [disabled]="accion == ACCIONES.VER">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Motivo de Cese</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="dto.motivocese"
+                    [options]="motivoretiro" [disabled]="accion == ACCIONES.VER">
+                </p-dropdown>
+            </div>
+        </div>
+        <div class="p-grid">
+
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <span>Sueldo</span>
+                <input #d pInputText type="number" [disabled]="accion == ACCIONES.VER" maxlength="8"
+                    (blur)="validaSueldo(d)" [(ngModel)]="dto.sueldo" min="0" max="999999" />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <span>Moneda</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="accion == ACCIONES.VER"
+                    [(ngModel)]="dto.moneda" [options]="monedas">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <br>
+                <label>¿Trabaja Actualmente?&nbsp;&nbsp;({{dto.auxflagtrabaja?'Si':'No'}})&nbsp;&nbsp;
+                </label>
+                <p-checkbox name="group1" [disabled]="accion==ACCIONES.VER" binary="true"
+                    [(ngModel)]="dto.auxflagtrabaja"></p-checkbox>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Giro de la Empresa</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.giroempresa"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Área de Exp.</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="dto.areaexperiencia"
+                    [options]="areasdeexperiencia" [disabled]="accion == ACCIONES.VER"></p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span class="importante">Tipo Experiencia</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="dto.tipoexperiencia"
+                    [options]="tiposdeexperiencia" [disabled]="accion == ACCIONES.VER"></p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Tipo Entidad</span>
+                <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [(ngModel)]="dto.tipoentidad"
+                    [options]="tiposdeentidad" [disabled]="accion == ACCIONES.VER">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Cargo Ocupado</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.cargo"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Funciones</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.funciones"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Puesto Similar en la Empresa</span>
+                <div class="p-inputgroup">
+                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dto.auxPuestoNombre" />
+                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPuesto()"
+                        [style]="{'flex': '1'}"></button>
+                    <button pButton icon="fa fa-trash" type="button" title="Limpiar"
+                        (click)="dto.auxPuestoNombre=null;dto.puestosimilar=null;" [style]="{'flex': '1'}"></button>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Competencias y/o Habilidades</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.competencias"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Puntos de Mejora</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.puntosmejora"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Observaciones</span>
+                <input pInputText type="text" maxlength="500" [(ngModel)]="dto.observaciones"
+                    [disabled]="accion == ACCIONES.VER" />
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="accion != ACCIONES.VER" class="p-button-outlined" (click)="guardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verMantenimiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<app-selector-puesto></app-selector-puesto>

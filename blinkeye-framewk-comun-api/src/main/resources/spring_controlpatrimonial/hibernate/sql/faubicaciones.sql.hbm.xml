@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : controlpatrimonial.FaActivo
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="faubicaciones.obtenerDto">
+         select 
+			UBICACION "ubicacion"
+			,GRUPO01 "grupo01"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,NUMERODIGITOS "numerodigitos"
+			,CENTROCOSTOS "centrocostos"
+			,SITUACIONACTIVO "situacionactivo"
+			,FINANCIADOFLAG "financiadoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,DEPARTAMENTO "departamento"
+			,PROVINCIA "provincia"
+			,CODIGOPOSTAL "codigopostal"
+			,UBIGEO "ubigeo"
+         from FA_UBICACIONES
+         where 
+			UBICACION = :p_ubicacion
+    </sql-query>
+    
+    <sql-query name="faubicaciones.listardtofiltros">
+         select 
+			UBICACION "ubicacion"
+			,GRUPO01 "grupo01"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,NUMERODIGITOS "numerodigitos"
+			,CENTROCOSTOS "centrocostos"
+			,SITUACIONACTIVO "situacionactivo"
+			,FINANCIADOFLAG "financiadoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADNEGOCIO "unidadnegocio"
+			,DEPARTAMENTO "departamento"
+			,PROVINCIA "provincia"
+			,CODIGOPOSTAL "codigopostal"
+			,UBIGEO "ubigeo"
+         from FA_UBICACIONES
+         where 
+			UBICACION = ISNULL(:p_ubicacion,UBICACION)
+			AND ISNULL(DESCRIPCIONLOCAL,'xxx') LIKE '%' || ISNULL(:p_descripcionlocal,ISNULL(DESCRIPCIONLOCAL,'xxx') ) || '%' 
+         	AND estado = ISNULL(:p_estado,estado)
+         order by UBICACION
+    </sql-query>
+    
+    <sql-query name="faubicaciones.listac001">
+         select 
+			u.UBICACION "ubicacion"
+			,u.GRUPO01 "grupo01"
+			,u.DESCRIPCIONLOCAL "descripcionlocal"
+			,u.DESCRIPCIONINGLES "descripcioningles"
+			,u.NUMERODIGITOS "numerodigitos"
+			,u.CENTROCOSTOS "centrocostos"
+			,u.SITUACIONACTIVO "situacionactivo"
+			,u.FINANCIADOFLAG "financiadoflag"
+			,u.ESTADO "estado"
+			,u.ULTIMOUSUARIO "ultimousuario"
+			,u.ULTIMAFECHAMODIF "ultimafechamodif"
+			,u.UNIDADNEGOCIO "unidadnegocio"
+			,u.DEPARTAMENTO "departamento"
+			,u.PROVINCIA "provincia"
+			,u.CODIGOPOSTAL "codigopostal"
+			,u.UBIGEO "ubigeo"
+			,:p_hijosnumerodigitos "auxNumerodigitosHijos"
+			,( SELECT count(1) FROM fa_ubicaciones h
+			   where 1=1
+			   and h.estado = ISNULL(:p_estado,h.estado)
+			   and h.numerodigitos=:p_hijosnumerodigitos
+			   and substr(h.ubicacion,0,:p_numerodigitos) = u.ubicacion
+			  ) as "auxCantidadHijos"
+         from FA_UBICACIONES u
+         where 1=1
+			and u.numerodigitos = :p_numerodigitos
+			and u.estado = ISNULL(:p_estado,u.estado)
+		 order by u.UBICACION
+    </sql-query>
+    
+    <sql-query name="faubicaciones.listac001hijos">
+         select 
+			u.UBICACION "ubicacion"
+			,u.GRUPO01 "grupo01"
+			,u.DESCRIPCIONLOCAL "descripcionlocal"
+			,u.DESCRIPCIONINGLES "descripcioningles"
+			,u.NUMERODIGITOS "numerodigitos"
+			,u.CENTROCOSTOS "centrocostos"
+			,u.SITUACIONACTIVO "situacionactivo"
+			,u.FINANCIADOFLAG "financiadoflag"
+			,u.ESTADO "estado"
+			,u.ULTIMOUSUARIO "ultimousuario"
+			,u.ULTIMAFECHAMODIF "ultimafechamodif"
+			,u.UNIDADNEGOCIO "unidadnegocio"
+			,u.DEPARTAMENTO "departamento"
+			,u.PROVINCIA "provincia"
+			,u.CODIGOPOSTAL "codigopostal"
+			,u.UBIGEO "ubigeo"
+			,:p_hijosnumerodigitos "auxNumerodigitosHijos"
+			,( SELECT count(1) FROM fa_ubicaciones h
+			   where 1=1
+			   and h.estado = ISNULL(:p_estado,h.estado)
+			   and h.numerodigitos=:p_hijosnumerodigitos
+			   and substr(h.ubicacion,0,:p_numerodigitos) = u.ubicacion
+			  ) as "auxCantidadHijos"
+         from FA_UBICACIONES u
+         where 1=1
+			and u.numerodigitos = :p_numerodigitos
+			and u.estado = ISNULL(:p_estado,u.estado)
+			and substr(u.ubicacion,0,:p_anteriornumerodigitos) = :p_ubicacion
+		 order by u.UBICACION
+    </sql-query>
+    
+</hibernate-mapping>

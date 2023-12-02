@@ -1,0 +1,56 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Aplicación código</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input #myAplicacioncodigo title="Aplicación código" pInputText type="text" style="width:100%;" [(ngModel)]="dto.aplicacioncodigo" maxlength="2" style="flex: 1;" [disabled]="!objetoTitulo.puedeEditarPk" />
+                                <input pInputText type="text" style="width:100%;" [(ngModel)]="dto.descripcioncorta" maxlength="100" style="flex: 5;" [disabled]="!objetoTitulo.puedeEditarPk" />
+                                <button pButton icon="fa fa-binoculars" (click)="mostrarselectoraplicaciones()" type="button" title="Buscar Proveedor" [style]="{'flex': '1'}" [disabled]="!objetoTitulo.puedeEditarPk"></button>
+                                <button pButton icon="fa fa-trash" (click)="limpiarselectoraplicaciones()" type="button" title="Limpiar Proveedor" [style]="{'flex': '1'}" [disabled]="!objetoTitulo.puedeEditarPk"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6"></div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Proceso código</label>
+                        <div class="p-col">
+                            <input #myProcesocodigo title="Proceso Código" pInputText [(ngModel)]="dto.procesocodigo" class="inputCodigo" maxlength="10" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.procesocodigo=$event.toUpperCase()"
+                                required />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input #myDescripcion title="Descripción" pInputText [(ngModel)]="dto.descripcion" maxlength="100" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.descripcion=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6"></div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+<app-selector-aplicaciones-mast></app-selector-aplicaciones-mast>

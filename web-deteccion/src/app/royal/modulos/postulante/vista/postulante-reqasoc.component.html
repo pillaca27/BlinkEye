@@ -1,0 +1,129 @@
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2" *ngIf="accionPadre == ACCIONES.EDITAR">
+        <br>
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%"
+            [paginator]="true" [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion3">Acciones</th>
+                    <th class="tablaHeaderNombreMedio">Compañía</th>
+                    <th class="tablaHeaderCodigo">Requerimiento</th>
+                    <th class="tablaHeaderNombreMedio">Puesto</th>
+                    <th class="tablaHeaderNombreMedio">Comentario</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="tablaColumnaAccion3">
+                        <span class="p-column-title">Acciones</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                        (click)="editar(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                        (click)="ver(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                        *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                        title="Eliminar" (click)="eliminar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Compañía</span>
+                        {{rowData.auxCompaniaNombre}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Requerimiento</span>
+                        {{rowData.requerimiento}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Puesto</span>
+                        {{rowData.auxPuestoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Comentario</span>
+                        {{rowData.comentario}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="5">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="p-fluid">
+    <p-dialog [(visible)]="verMantenimiento" [modal]="true" [responsive]="true" [resizable]="false"
+        header="REQUERIMIENTO ASOCIADO : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+        [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size" hideEffect="size"
+        [style]="{'width':'500px'}">
+        <div class=" p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span class="importante">Requerimiento</span>
+                <div class="p-inputgroup">
+                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dto.requerimiento" />
+                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarRequerimiento()"
+                        *ngIf="accion != ACCIONES.VER" [style]="{'flex': '1'}"></button>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span class="importante">Compañía</span>
+                <input pInputText type="text" [(ngModel)]="dto.auxCompaniaNombre" disabled />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span class="importante">Puesto</span>
+                <input pInputText type="text" [(ngModel)]="dto.auxPuestoNombre" disabled />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <span>Comentario</span>
+                <textarea [(ngModel)]="dto.comentario" maxlength="1000" style="width:100%"
+                    [disabled]="accion == ACCIONES.VER"></textarea>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="accion != ACCIONES.VER" class="p-button-outlined" (click)="guardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-6"></div>
+            <div class="p-col-12 p-md-3">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verMantenimiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<postulante-requerimientoaprobado-selector></postulante-requerimientoaprobado-selector>

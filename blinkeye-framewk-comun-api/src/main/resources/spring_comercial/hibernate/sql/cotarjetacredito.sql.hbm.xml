@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="cotarjetacredito.listar">
+	    <![CDATA[
+	        select tarjetacreditocodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CO_TarjetaCredito	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="cotarjetacredito.listarActivos">
+	    <![CDATA[
+	        select tarjetacreditocodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CO_TarjetaCredito
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="cotarjetacredito.obtenerTabla">
+	    <![CDATA[
+	        select tarjetacreditocodigo as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from CO_TarjetaCredito
+			where tarjetacreditocodigo = :p_tarjetacreditocodigo
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="cotarjetacredito.listarfiltros">
+    	select tarjetacreditocodigo as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from CO_TarjetaCredito 
+    	where  tarjetacreditocodigo = ISNULL(:p_tarjetacreditocodigo,tarjetacreditocodigo)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+    
+</hibernate-mapping>

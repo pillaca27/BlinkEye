@@ -1,0 +1,456 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <p-tabView>
+            <p-tabPanel header="Pago">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Compañía</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPago.auxCompaniaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania1()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPago.auxCompaniaNombre=null;filtroPago.compania=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Tipo de Planilla</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPago.auxTipoPlanillaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla1()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPago.auxTipoPlanillaNombre=null;filtroPago.tipoPlanilla=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar1()"></button>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Año / Mes</label>
+                            <div class="p-col">
+                                <p-calendar [(ngModel)]="filtroPago.periodo" view="month" dateFormat="yy-mm" [yearNavigator]="true" yearRange="1980:2090" [readonlyInput]="true"></p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Unidad Negocio</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPago.auxUnidadNegocioNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio1()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPago.auxUnidadNegocioNombre=null;filtroPago.unidadNegocio=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Centro de Costo</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPago.auxCentroCostoNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto1()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPago.auxCentroCostoNombre=null;filtroPago.centroCosto=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Sucursal</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPago.auxSucursalNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal1()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPago.auxSucursalNombre=null;filtroPago.sucursal=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-12" style="height: 480px;">
+                        <ng2-pdfjs-viewer #vPago>
+                        </ng2-pdfjs-viewer>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Utilización">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Compañía</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroUtilizacion.auxCompaniaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania2()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroUtilizacion.auxCompaniaNombre=null;filtroUtilizacion.compania=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Tipo de Planilla</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroUtilizacion.auxTipoPlanillaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla2()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroUtilizacion.auxTipoPlanillaNombre=null;filtroUtilizacion.tipoPlanilla=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar2()"></button>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Desde / Hasta</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtroUtilizacion.desde">
+                                    </p-calendar>
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtroUtilizacion.hasta">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Año / Mes</label>
+                            <div class="p-col">
+                                <input pInputText type="text" style="width:100%" disabled class="hoverDisabled" value="{{utilizacionCalcularPeriodo()}}" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Centro de Costo</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroUtilizacion.auxCentroCostoNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto2()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroUtilizacion.auxCentroCostoNombre=null;filtroUtilizacion.centroCosto=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Sucursal</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroUtilizacion.auxSucursalNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal2()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroUtilizacion.auxSucursalNombre=null;filtroUtilizacion.sucursal=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Unidad Negocio</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroUtilizacion.auxUnidadNegocioNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio2()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroUtilizacion.auxUnidadNegocioNombre=null;filtroUtilizacion.unidadNegocio=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-12" style="height: 380px;">
+                        <br>
+                        <ng2-pdfjs-viewer #vUtilizacion>
+                        </ng2-pdfjs-viewer>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Resumen">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Compañía</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroResumen.auxCompaniaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania3()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroResumen.auxCompaniaNombre=null;filtroResumen.compania=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Tipo de Planilla</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroResumen.auxTipoPlanillaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla3()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroResumen.auxTipoPlanillaNombre=null;filtroResumen.tipoPlanilla=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar3()"></button>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Centro de Costo</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroResumen.auxCentroCostoNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto3()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroResumen.auxCentroCostoNombre=null;filtroResumen.centroCosto=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Sucursal</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroResumen.auxSucursalNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal3()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroResumen.auxSucursalNombre=null;filtroResumen.sucursal=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Unidad Negocio</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroResumen.auxUnidadNegocioNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio3()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroResumen.auxUnidadNegocioNombre=null;filtroResumen.unidadNegocio=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-12">
+                        <br>
+                        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" scrollWidth="100%" [paginator]="true" [totalRecords]="filtroResumen.reporte.length" [value]="filtroResumen.reporte" [(selection)]="registroSeleccionadoResumen" [showCurrentPageReport]="true"
+                            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderCodigo">Código</th>
+                                    <th class="tablaHeaderNombre">Trabajador</th>
+                                    <th class="tablaHeaderFecha">Fecha Ingreso</th>
+                                    <th class="tablaHeaderDerecha">Días Derecho</th>
+                                    <th class="tablaHeaderDerecha">Días Gozados</th>
+                                    <th class="tablaHeaderDerecha">Días Trabajados</th>
+                                    <th class="tablaHeaderDerecha">Días Perdidos</th>
+                                    <th class="tablaHeaderDerecha">Días Utilizados</th>
+                                    <th class="tablaHeaderDerecha" style="font-weight: bolder">Días Pendientes</th>
+                                    <th class="tablaHeaderDerecha">Pendientes (per. anterior)</th>
+                                    <th class="tablaHeaderDerecha">Días Truncos</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Código</span> {{rowData.codigo}}
+                                    </td>
+                                    <td class="tablaColumnaNombre">
+                                        <span class="p-column-title">Trabajador</span> {{rowData.trabajador}}
+                                    </td>
+                                    <td class="tablaColumnaFecha">
+                                        <span class="p-column-title">Fecha Ingreso</span> {{rowData.fechaingreso}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Derecho</span> {{rowData.derecho | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Gozados</span> {{rowData.gozados | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Trabajados</span> {{rowData.trabajados | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Perdidos</span> {{rowData.perdidos | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Utilizados</span> {{rowData.utilizados | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha" style="font-weight: bolder">
+                                        <span class="p-column-title">Días Pendientes</span> {{rowData.pendientes | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Pendientes (per. anterior)</span> {{rowData.anterior | number:'1.2-2'}}
+                                    </td>
+                                    <td class="tablaColumnaDerecha">
+                                        <span class="p-column-title">Días Truncos</span> {{rowData.truncos | number:'1.2-2'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="11">
+                                        No existen registros para mostrar
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Pendientes de Goce">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Compañía</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPendientes.auxCompaniaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania4()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPendientes.auxCompaniaNombre=null;filtroPendientes.compania=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Tipo de Planilla</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPendientes.auxTipoPlanillaNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla4()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPendientes.auxTipoPlanillaNombre=null;filtroPendientes.tipoPlanilla=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar4()"></button>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Centro de Costo</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPendientes.auxCentroCostoNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto4()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPendientes.auxCentroCostoNombre=null;filtroPendientes.centroCosto=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Sucursal</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPendientes.auxSucursalNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal4()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPendientes.auxSucursalNombre=null;filtroPendientes.sucursal=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Unidad Negocio</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtroPendientes.auxUnidadNegocioNombre" />
+                                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio4()" [style]="{'flex': '1'}"></button>
+                                    <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtroPendientes.auxUnidadNegocioNombre=null;filtroPendientes.unidadNegocio=null;" [style]="{'flex': '1'}"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-12">
+                        <br>
+                        <p-scrollPanel [style]="{width: '100%', height: '300px'}" styleClass="custombar1">
+                            <p-table [responsive]="true" [totalRecords]="filtroPendientes.reporte.datos.length" [value]="filtroPendientes.reporte.datos" [(selection)]="registroSeleccionadoPendientesGoce" selectionMode="single">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigoChico">Código</th>
+                                        <th class="tablaHeaderNombre">Nombre</th>
+                                        <th class="tablaHeaderFecha">Fecha Ingreso</th>
+                                        <th class="tablaHeaderCodigo">Cód. Manual</th>
+                                        <ng-template ngFor let-anio [ngForOf]="filtroPendientes.reporte.anios">
+                                            <th class="tablaHeaderMontoPequeno">{{anio}}</th>
+                                        </ng-template>
+                                        <th class="tablaHeaderMonto">Total</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                    <tr [pSelectableRow]="rowData" [style.font-weight]="rowData.flagFilaTotales=='S'?'bolder':''">
+                                        <td class="tablaColumnaCodigoChico" [attr.rowspan]="rowData.rowSpanCodigoNombre" *ngIf="rowData.flagMostrarCodigoNombre=='S'">
+                                            <span class="p-column-title">Código</span>
+                                            <label>{{rowData.codigo}}</label>
+                                        </td>
+                                        <td class="tablaColumnaNombre" [attr.rowspan]="rowData.rowSpanCodigoNombre" *ngIf="rowData.flagMostrarCodigoNombre=='S'">
+                                            <span class="p-column-title">Nombre</span>
+                                            <label>{{rowData.nombre}}</label>
+                                        </td>
+                                        <td class="tablaColumnaFecha">
+                                            <span class="p-column-title">Fecha Ingreso</span>
+                                            <label>{{rowData.fechaIngreso}}</label>
+                                        </td>
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Cód. Manual</span>
+                                            <label>{{rowData.codmanual}}</label>
+                                        </td>
+                                        <ng-template ngFor let-d [ngForOf]="rowData.pendientesPorAnio">
+                                            <td class="tablaColumnaMontoPequeno">
+                                                <label>{{d | number:'1.2-2'}}</label>
+                                            </td>
+                                        </ng-template>
+                                        <td class="tablaColumnaMonto" style="padding-right: 25px !important;">
+                                            <span class="p-column-title">Total</span>
+                                            <label>{{rowData.total | number:'1.2-2'}}</label>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </p-scrollPanel>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<app-selector-compania></app-selector-compania>
+<app-selector-tipoplanilla></app-selector-tipoplanilla>
+<app-sucursalselector></app-sucursalselector>
+<app-centrocostos-selector></app-centrocostos-selector>
+<app-selector-unidadnegocio></app-selector-unidadnegocio>

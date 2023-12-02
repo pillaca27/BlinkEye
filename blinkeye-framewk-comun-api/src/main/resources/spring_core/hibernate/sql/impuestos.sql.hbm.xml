@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="impuestos.listar">
+	    <![CDATA[
+	        select impuesto as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from IMPUESTOS	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="impuestos.listarActivos">
+	    <![CDATA[
+	        select impuesto as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from IMPUESTOS
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="impuestos.obtenerTabla">
+	    <![CDATA[
+	        select impuesto as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from IMPUESTOS
+			where impuesto = :p_impuesto
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="impuestos.listarfiltros">
+    	select impuesto as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from IMPUESTOS 
+    	where  impuesto = ISNULL(:p_impuesto,impuesto)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	<sql-query name="impuestos.obtenerDto">
+          select 
+			IMPUESTO "impuesto"
+			,DESCRIPCION "descripcion"
+			,CAST(TIPOIMPUESTO AS VARCHAR) "tipoimpuesto"
+			,FACTORPORCENTAJE "factorporcentaje"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+			,CAST(SIGNO AS VARCHAR) "signo"
+			,CAST(EXPORTABLEFLAG AS VARCHAR) "exportableflag"
+			,CAST(EXPORTABLETIPODECAMBIO AS VARCHAR) "exportabletipodecambio"
+			,CAST(CERTIFICADORENTAFLAG AS VARCHAR) "certificadorentaflag"
+			,CAST(ESTADO AS VARCHAR) "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CAST(MONTONOAFECTOFLAG AS VARCHAR) "montonoafectoflag"
+			--,CUENTACONTABLEREVLOCAL "cuentacontablerevlocal"
+			--,CUENTACONTABLEREVDOLARES "cuentacontablerevdolares"
+			,CAST(VOUCHERPROVISIONFLAG AS VARCHAR) "voucherprovisionflag"
+			,CAST(MONTOIMPONIBLEFLAG AS VARCHAR) "montoimponibleflag"
+			,MONTOEXONERADO "montoexonerado"
+         from IMPUESTOS
+         where 
+			IMPUESTO = :p_impuesto
+    </sql-query>
+    
+    <sql-query name="impuestos.listardtofiltros">
+         select 
+			IMPUESTO "impuesto"
+			,DESCRIPCION "descripcion"
+			,TIPOIMPUESTO "tipoimpuesto"
+			,FACTORPORCENTAJE "factorporcentaje"
+			,CUENTACONTABLELOCAL "cuentacontablelocal"
+			,CUENTACONTABLEDOLARES "cuentacontabledolares"
+			,SIGNO "signo"
+			,EXPORTABLEFLAG "exportableflag"
+			,EXPORTABLETIPODECAMBIO "exportabletipodecambio"
+			,CERTIFICADORENTAFLAG "certificadorentaflag"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+			,MONTONOAFECTOFLAG "montonoafectoflag"
+			,CUENTACONTABLEREVLOCAL "cuentacontablerevlocal"
+			,CUENTACONTABLEREVDOLARES "cuentacontablerevdolares"
+			,VOUCHERPROVISIONFLAG "voucherprovisionflag"
+			,MONTOIMPONIBLEFLAG "montoimponibleflag"
+			,MONTOEXONERADO "montoexonerado"
+
+         from IMPUESTOS
+         where 
+				IMPUESTO = ISNULL(:p_impuesto,IMPUESTO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and tipoimpuesto = ISNULL(:p_tipoimpuesto,tipoimpuesto)
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+</hibernate-mapping>

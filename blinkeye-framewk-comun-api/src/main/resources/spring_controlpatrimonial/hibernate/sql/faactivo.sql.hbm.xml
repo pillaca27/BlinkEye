@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : controlpatrimonial.FaActivo
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="faactivo.paginadoContar">
+        SELECT  count(1)    
+        FROM FA_ACTIVO a
+            left join fa_ubicaciones u
+            on a.ubicacion = u.UBICACION left join personamast per on (per.persona = a.EMPLEADOACARGO)
+            AND u.GRUPO01=a.companiasocio
+          left join Ac_CostCentermst ac on (ac.costcenter = a.CENTROCOSTOS)
+          left join companyowner co on (co.companyowner = a.companiasocio)
+          left join AC_SUCURSAL su on (su.sucursal = a.sucursal)
+          left join Ma_Unidadnegocio ma on (ma.unidadnegocio = a.unidadnegocio)
+       WHERE 1=1
+         and a.companiasocio like :p_compania +'%'         
+         AND ISNULL(a.ACTIVO,'xxx') LIKE '%' + ISNULL(:p_codigo,ISNULL(a.ACTIVO,'ISNULL') ) + '%'
+         AND ISNULL(a.BUSQUEDALOCAL,'xxx') LIKE '%' + ISNULL(:p_nombre,ISNULL(a.BUSQUEDALOCAL,'ISNULL') ) + '%' 
+         AND a.estado = ISNULL(:p_estado,a.estado)
+
+    </sql-query>
+    
+    <sql-query name="faactivo.paginadoListar">
+    SELECT   CAST(a.ACTIVO as VARCHAR) as "activo" 
+             ,CAST(a.BUSQUEDALOCAL as VARCHAR) as "busquedalocal"
+             ,CAST(a.CODIGOINTERNO as VARCHAR) as "codigointerno"
+             ,CAST(a.UBICACION as VARCHAR) as "ubicacion"             
+             ,CAST(a.NUMEROPLACA as VARCHAR) as "numeroplaca" 
+             ,a.EMPLEADOACARGO as "empleadoacargo"
+            ,CAST(a.CENTROCOSTOS as VARCHAR) as "centrocostos"
+            ,CAST(a.companiasocio as VARCHAR) as "companiasocio"
+            ,CAST(a.sucursal as VARCHAR) as "sucursal"
+            ,CAST(a.unidadnegocio as VARCHAR) as "unidadnegocio"
+            
+            ,CAST(u.DESCRIPCIONLOCAL as VARCHAR) as "ubicacionNombre"
+            ,CAST(per.nombrecompleto as VARCHAR) as "empleadoacargoNombre"
+            ,CAST(ac.localname as VARCHAR) as "centrocostosNombre"
+            ,CAST(co.description as VARCHAR) as "companiasocioNombre"
+            ,CAST(su.descripcionlocal as VARCHAR) as "sucursalNombre"            
+            ,CAST(ma.descripcionlocal as VARCHAR) as "unidadnegocioNombre"
+            
+        FROM FA_ACTIVO a
+            left join fa_ubicaciones u
+            on a.ubicacion = u.UBICACION left join personamast per on (per.persona = a.EMPLEADOACARGO)
+            AND u.GRUPO01=a.companiasocio
+          left join Ac_CostCentermst ac on (ac.costcenter = a.CENTROCOSTOS)
+          left join companyowner co on (co.companyowner = a.companiasocio)
+          left join AC_SUCURSAL su on (su.sucursal = a.sucursal)
+          left join Ma_Unidadnegocio ma on (ma.unidadnegocio = a.unidadnegocio)
+       WHERE 1=1         
+         and a.companiasocio like :p_compania +'%'         
+         AND ISNULL(a.ACTIVO,'xxx') LIKE '%' + ISNULL(:p_codigo,ISNULL(a.ACTIVO,'ISNULL') ) + '%'
+         AND ISNULL(a.BUSQUEDALOCAL,'xxx') LIKE '%' + ISNULL(:p_nombre,ISNULL(a.BUSQUEDALOCAL,'xxx') ) + '%' 
+         AND a.estado = ISNULL(:p_estado,a.estado)
+    ORDER BY a.BUSQUEDALOCAL  
+    </sql-query>
+    
+</hibernate-mapping>

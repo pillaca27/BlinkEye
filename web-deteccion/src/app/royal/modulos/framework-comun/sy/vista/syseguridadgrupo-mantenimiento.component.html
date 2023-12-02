@@ -1,0 +1,181 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Aplicacióncódigo</label>
+                    <!--  <input #myAplicacioncodigo title="Aplicacióncódigo" pInputText [(ngModel)]="dto.aplicacioncodigo"
+                        maxlength="2" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.aplicacioncodigo=$event.toUpperCase()" required /> -->
+                    <p-dropdown [(ngModel)]="dto.aplicacioncodigo" [filter]="true" [options]="lstAplicaciones"
+                        [style]="{'width':'100%'}"></p-dropdown>
+
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Grupo</label>
+                    <input #myGrupo title="Grupo" pInputText [(ngModel)]="dto.grupo" maxlength="20" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.grupo=$event.toUpperCase()" required />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Descripción Local</label>
+                    <input pInputText [(ngModel)]="dto.descripcionlocal" maxlength="50" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.descripcionlocal=$event.toUpperCase()" />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Descripción Ingles</label>
+                    <input pInputText [(ngModel)]="dto.descripcioningles" maxlength="50" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.descripcioningles=$event.toUpperCase()" />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Tipo Detalle</label>
+                    <!--  <input pInputText [(ngModel)]="dto.tipodetalle" maxlength="2" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.tipodetalle=$event.toUpperCase()" /> -->
+                    <p-dropdown [(ngModel)]="dto.tipodetalle" [filter]="true" [options]="lstTipoDetalle"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Orden Presentación</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.ordenpresentacion" inputId="locale-us" mode="decimal" locale="en-US"
+                        [minFractionDigits]="0" [disabled]="!objetoTitulo.puedeEditarPk">
+                    </p-inputNumber>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditarPk"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-2" *ngIf="grupo.trim() =='CENTROCOSTOS'">
+                    <button pButton icon="fa fa-binoculars" label="Concepto" (click)="mostrarSelectorCentroCosto()" type="button" title="Buscar Concepto"></button>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined"
+            (click)="nuevoseguridadconcepto()"></button>
+    </div>
+    <div class="p-col-12 p-md-10"></div>
+</div>
+
+<p-table [value]="dto.seguridadconcepto" [responsive]="true" [style]="{ width: '100%'}">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion1">Acción</th>
+            <!--     <th class="tablaHeaderCodigo">Aplicación código</th>
+            <th class="tablaHeaderCodigo">Grupo</th> -->
+            <th class="tablaHeaderCodigo">Concepto</th>
+            <!--        <th class="tablaHeaderMonto">Orden presentación</th> -->
+            <th class="tablaHeaderNombre">Descripción local</th>
+            <!--      <th class="tablaHeaderCodigo">Descripción ingles</th> -->
+            <th class="tablaHeaderCodigo">Código interno</th>
+            <th class="tablaHeaderEstado">Estado</th>
+            <th class="tablaHeaderUsuario">Último Usuario</th>
+            <th class="tablaHeaderFecha">Última Fecha</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row let-ri="rowIndex">
+        <tr [ngStyle]="{'background-color': row.color}">
+            <td class="tablaColumnaAccion1">
+                <span class="p-column-title">Acción</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                class="p-button-rounded p-button-danger p-button-text" title="Eliminar"
+                                *ngIf="menuSeguridad.flgBorrar" (click)="eliminarSeguridadConcepto(row,ri)"></button>
+                        </th>
+                    </tr>
+                </table>
+            </td>
+            <!--   <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Aplicacióncódigo</span>
+                {{row.aplicacioncodigo}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Grupo</span>
+                {{row.grupo}}
+            </td> -->
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Concepto</span>
+
+                <input pInputText [(ngModel)]="row.concepto" maxlength="20" type="text"
+                    [disabled]="!objetoTitulo.puedeEditar" style="width: 100% !important;" />
+            </td>
+            <!--  <td class="tablaColumnaMonto">
+                <span class="p-column-title">Orden presentación</span>
+                {{row.ordenpresentacion| number:'1.0-0'}}
+            </td> -->
+            <td class="tablaColumnaNombre">
+                <span class="p-column-title">Descripción local</span>
+
+                <input pInputText [(ngModel)]="row.descripcionlocal" maxlength="50" type="text"
+                    [disabled]="!objetoTitulo.puedeEditar" style="width: 100% !important;" />
+            </td>
+            <!--  <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Descripción ingles</span>
+                {{row.descripcioningles}}
+            </td> -->
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Código interno</span>
+
+                <input pInputText [(ngModel)]="row.codigointerno" maxlength="10" type="text"
+                    [disabled]="!objetoTitulo.puedeEditar" style="width: 100% !important;" />
+            </td>
+            <td class="tablaColumnaEstado">
+                <span class="p-column-title">Estado</span>
+                <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar"
+                    [style]="{'width':'100%'}"></p-dropdown>
+            </td>
+            <td class="tablaColumnaUsuario">
+                <span class="p-column-title">Último Usuario</span>
+                {{row.ultimousuario}}
+            </td>
+            <td class="tablaColumnaFecha">
+                <span class="p-column-title">Última Fecha</span>
+                {{row.ultimafechamodif | date:'dd/MM/yyyy'}}
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="9">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+    [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+
+
+<app-centrocostos-selector></app-centrocostos-selector>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	 <sql-query name="acreferenciafiscal.obtenerDto">
+         select 
+			ANO "ano"
+			,TIPOREFERENCIAFISCAL "tiporeferenciafiscal"
+			,NIVEL "nivel"
+			,REFERENCIAFISCAL "referenciafiscal"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,REFERENCIAFISCALRELACIONADA "referenciafiscalrelacionada"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,REFERENCIAFISCALANTERIOR "referenciafiscalanterior"
+			,UNIDADMEDIDA "unidadmedida"
+			,TIPOGASTO "tipogasto"
+
+         from AC_REFERENCIAFISCAL
+         where 
+			ANO = :p_ano
+			AND TIPOREFERENCIAFISCAL = :p_tiporeferenciafiscal
+			AND NIVEL = :p_nivel
+			AND REFERENCIAFISCAL = :p_referenciafiscal
+
+    </sql-query>
+    
+	<sql-query name="acreferenciafiscal.listarReferenciaFiscalActual">
+    	SELECT	REFERENCIAFISCAL as "codigo",DESCRIPCIONLOCAL as "nombre"
+		FROM     AC_REFERENCIAFISCAL 
+		WHERE   ANO = extract(year from sysdate)					
+					AND TIPOREFERENCIAFISCAL = :p_referenciafiscal 
+					AND NIVEL = :p_nivel
+  	</sql-query>
+    
+	<sql-query name="acreferenciafiscal.listarDtoPorAnioTipoNivel">
+    	SELECT ac_referenciafiscal.nivel as "nivel", 
+		       ac_referenciafiscal.referenciafiscal as "referenciafiscal",
+		       ac_referenciafiscal.descripcionlocal as "descripcionlocal",
+		       ac_referenciafiscal.tipogasto as "tipogasto"
+		FROM   ac_referenciafiscal
+		WHERE  ( ac_referenciafiscal.ano = :p_ano )
+		       AND ( ac_referenciafiscal.tiporeferenciafiscal = :p_tiporeferenciafiscal )
+		       AND ( ac_referenciafiscal.nivel = :p_nivel )
+		       AND ( ac_referenciafiscal.estado = 'A' ) 
+  	</sql-query>
+  	
+  	<sql-query name="acreferenciafiscal.listarDtoPorSeguridadAnioTipoNivel">
+    	  SELECT DISTINCT
+               ac_referenciafiscal.nivel as "nivel",               
+               ac_referenciafiscal.referenciafiscal as "referenciafiscal",
+               ac_referenciafiscal.descripcionlocal as "descripcionlocal",
+               ac_referenciafiscal.tipogasto as "tipogasto"
+        FROM   ac_referenciafiscal inner join
+               sy_seguridadautorizaciones on ac_referenciafiscal.referenciafiscal = sy_seguridadautorizaciones.concepto
+		WHERE  		 ac_referenciafiscal.ano = :p_ano
+		       AND    ac_referenciafiscal.tiporeferenciafiscal = :p_tiporeferenciafiscal
+		       AND    ac_referenciafiscal.nivel = :p_nivel
+		       AND    ac_referenciafiscal.estado = 'A' 
+		       AND    sy_seguridadautorizaciones.aplicacioncodigo = 'SY' 
+		       ORDER BY ac_referenciafiscal.referenciafiscal
+  	</sql-query>
+  	
+</hibernate-mapping>

@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : workflow.WfMacroProceso
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="wfmacroproceso.obtenerDtoPorId">
+         select 
+			MACRO_PROCESO_ID "macroProcesoId"
+			,NOMBRE "nombre"
+			,ESTADO "estado"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO
+         where 
+			MACRO_PROCESO_ID = :p_macroprocesoid
+
+    </sql-query>
+
+    <sql-query name="wfmacroproceso.listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_MACRO_PROCESO
+    </sql-query>
+
+    <sql-query name="wfmacroproceso.listarPaginadoSentencia">
+         select 
+			MACRO_PROCESO_ID "macroProcesoId"
+			,NOMBRE "nombre"
+			,ESTADO "estado"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO
+    </sql-query>
+    
+        <sql-query name="wfmacroproceso.obtenerDto">
+         select 
+			a.MACRO_PROCESO_ID "macroProcesoId"
+			,a.NOMBRE "nombre"
+			,a.ESTADO "estado"
+			,a.CREACION_USUARIO "creacionUsuario"
+			,a.CREACION_FECHA "creacionFecha"
+			,a.MODIFICACION_USUARIO "modificacionUsuario"
+			,a.MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO a
+         where 
+			a.MACRO_PROCESO_ID = :p_macroprocesoid
+
+    </sql-query>
+    
+     <sql-query name="wfmacroproceso.L_listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_MACRO_PROCESO a
+         where 
+			a.MACRO_PROCESO_ID = ISNULL(:p_macroprocesoid, a.MACRO_PROCESO_ID)
+			AND a.NOMBRE like '%' + ISNULL(:p_nombre, a.NOMBRE) + '%' 
+			AND a.ESTADO = ISNULL(:p_estado, a.ESTADO)
+
+    </sql-query>
+
+    <sql-query name="wfmacroproceso.L_listarPaginadoSentencia">
+         select 
+			a.MACRO_PROCESO_ID "macroProcesoId"
+			,a.NOMBRE "nombre"
+			,a.ESTADO "estado"
+			,a.CREACION_USUARIO "creacionUsuario"
+			,a.CREACION_FECHA "creacionFecha"
+			,a.MODIFICACION_USUARIO "modificacionUsuario"
+			,a.MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO a
+         where 
+			a.MACRO_PROCESO_ID = ISNULL(:p_macroprocesoid, a.MACRO_PROCESO_ID)
+			AND a.NOMBRE like '%' + ISNULL(:p_nombre, a.NOMBRE) + '%' 
+			AND a.ESTADO = ISNULL(:p_estado, a.ESTADO)
+
+    </sql-query>
+    
+       <sql-query name="wfmacroproceso.obtenerdetalle"> 
+     select 
+			MACRO_PROCESO_ID "macroProcesoId"
+			,PROCESO_ORIGEN_ID "procesoOrigenId"
+			,PROCESO_DESTINO_ID "procesoDestinoId"
+			,ORDEN "orden"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+			,'ACTUALIZAR' "flgactualizar"
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE
+         WHERE MACRO_PROCESO_ID = :p_macroprocesoid
+    </sql-query>
+</hibernate-mapping>

@@ -1,0 +1,38 @@
+<p-card>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4">
+                <label class="importante">Macro proceso</label>
+                <input #myMacroProcesoId  title="Macro proceso"  class="inputCodigo" pInputText [(ngModel)]="dto.macroProcesoId" maxlength ="4" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.macroProcesoId=$event.toUpperCase()"  required />
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-4">
+                <label class="importante">Proceso origen</label>
+                <input #myProcesoOrigenId  title="Proceso origen"  class="inputCodigo" pInputText [(ngModel)]="dto.procesoOrigenId" maxlength ="4" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.procesoOrigenId=$event.toUpperCase()"  required />
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-4">
+                <label class="importante">Proceso destino</label>
+                <input #myProcesoDestinoId  title="Proceso destino"  class="inputCodigo" pInputText [(ngModel)]="dto.procesoDestinoId" maxlength ="4" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.procesoDestinoId=$event.toUpperCase()"  required />
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-4">
+                <label>Orden</label>
+                <p-inputNumber [locale]="locale"   styleClass="inputMonto" [(ngModel)]="dto.orden" inputId ="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="0" [disabled]="!objetoTitulo.puedeEditarPk" ></p-inputNumber>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+
+        </div>
+    </div>
+</div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" 
+	[creacionUsuario]="dto.creacionUsuario" 
+	[creacionFecha]="dto.creacionFecha" >
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+

@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="voucherheader.f_label_detail">
+		SELECT
+		rtrim(ReferenceFieldMst.ReferenceField) as "codigo",
+		ReferenceFieldMst.ScreenTitle as "nombre",
+		cast
+		(rtrim(ReferenceFieldMst.AvailableFlag) as varchar) as "estadoId",
+		cast (rtrim(ReferenceFieldMst.Status) as varchar) as "estado"
+		FROM
+		ReferenceFieldMst
+	</sql-query>
+	<sql-query name="voucherheader.f_list_Lastvouchernumber">
+		SELECT lastvouchernumber.month01,
+		lastvouchernumber.month02,
+		lastvouchernumber.month03,
+		lastvouchernumber.month04,
+		lastvouchernumber.month05,
+		lastvouchernumber.month06,
+		lastvouchernumber.month07,
+		lastvouchernumber.month08,
+		lastvouchernumber.month09,
+		lastvouchernumber.month10,
+		lastvouchernumber.month11,
+		lastvouchernumber.month12,
+		rtrim(lastvouchernumber.application) as
+		"application"
+		FROM lastvouchernumber
+		WHERE (
+		lastvouchernumber.companyowner = :p_company) AND
+		(
+		lastvouchernumber.year = :p_year ) AND
+		( lastvouchernumber.type =
+		:p_voucher_type )
+	</sql-query>
+	<sql-query name="voucherheader.f_read_spw_ap_100_voucher">
+     <![CDATA[
+         EXEC Spw_ap_100_voucher 
+		:i_companiasocio          ,
+		:i_periodo                ,
+		:i_accion             ,
+		:i_signo           ,
+		:i_usuarionumero               ,
+		:i_usuariocodigo			,
+		:i_jsonobligaciones			,
+		:i_cantidadregistros                          
+		 ]]>
+	</sql-query>
+	<sql-query name="voucherheader.f_read_voucher">
+		SELECT count(*)
+		FROM voucherheader
+		WHERE (
+		voucherheader.period = :p_period ) AND
+		( voucherheader.companyowner =
+		:p_companyowner ) AND
+		( voucherheader.voucherno = :p_voucherno )
+	</sql-query>
+	<sql-query name="voucherheader.f_validate_period_01">
+		SELECT rtrim(AC_MonthlyCloseControl.Period)
+		as "codigo"
+		FROM AC_MonthlyCloseControl
+		WHERE (
+		AC_MonthlyCloseControl.CompanyOwner = :p_company ) AND
+		(
+		AC_MonthlyCloseControl.Ledger = :p_ledger ) AND
+		(
+		AC_MonthlyCloseControl.CloseIndicator = 'N' ) AND
+		(
+		AC_MonthlyCloseControl.RecordType = 'MC' )
+	</sql-query>
+	<sql-query name="voucherheader.f_validate_period_02">
+		SELECT
+		cast(rtrim(AC_MonthlyCloseControl.CloseIndicator) as varchar) as
+		"codigo"
+		FROM AC_MonthlyCloseControl
+		WHERE (
+		AC_MonthlyCloseControl.CompanyOwner = :p_company ) AND
+		(
+		AC_MonthlyCloseControl.Ledger = :p_ledger ) AND
+		(
+		AC_MonthlyCloseControl.Period = :p_periodo ) AND
+		(
+		AC_MonthlyCloseControl.RecordType = 'PO' )
+	</sql-query>
+	<sql-query name="voucherheader.f_read_account_valid">
+		select
+		cast(afevalidation as varchar) as
+		"afevalidation",
+		cast(commitmentvalidation as varchar) as
+		"commitmentvalidation",
+		cast(intercompanyvalidation as varchar) as
+		"intercompanyvalidation",
+		cast(vendorvalidation as varchar) as
+		"vendorvalidation",
+		cast(invoicevalidation as varchar) as
+		"invoicevalidation",
+		cast(checkvalidation as varchar) as
+		"checkvalidation",
+		cast(datevalidation as varchar) as "datevalidation",
+		cast(subledgervalidation as varchar) as "subledgervalidation",
+		cast(sucursalvalidation as varchar) as "sucursalvalidation",
+		cast(fiscalreferencevalidation as varchar) as
+		"fiscalreferencevalidation",
+		cast(vendortypeflag as varchar) as
+		"vendortypeflag",
+		cast(costcentervalidation as varchar) as
+		"costcentervalidation",
+		cast(costcenterdestvalidation as varchar) as
+		"costcenterdestvalidation",
+		cast(cashflowvalidation as varchar) as
+		"cashflowvalidation"
+		FROM accountmst
+		WHERE ( account = :p_account )
+	</sql-query>
+	<sql-query
+		name="voucherheader.spw_ac_040_voucher_validation_lines">
+     <![CDATA[
+         EXEC Spw_ac_040_voucher_validation_lines 
+		:w_companyowner          ,
+		:w_period                ,
+		:w_voucherno             ,
+		:w_voucherline           ,
+		:w_account               ,
+		:w_dollaramount			,
+		:w_localamount			,
+		:w_afe                   ,
+		:w_vendor                ,
+		:w_commitment            ,
+		:w_invoice	            ,
+		:w_checknumber           ,
+		:w_destinationcompanyowner, 
+		:w_variabledate          ,
+		:w_subledgercode         ,
+		:w_costcenter            ,
+		:w_costcenterdestination ,
+		:w_cashflowcode          ,
+		:w_sucursal              ,
+		:w_referenciafiscal01    ,
+		:w_referenciafiscal02    ,
+		:w_referenciafiscal03    ,
+		:w_code_data_01          ,
+		:w_code_data_02          ,
+		:w_code_data_03          ,
+		:w_code_data_04          ,
+		:w_code_data_05          ,
+		:w_code_data_06          ,
+		:w_code_data_07          ,
+		:w_code_data_08          ,
+		:w_code_data_09          ,
+		:w_code_data_10          
+		 ]]>
+	</sql-query>
+	<sql-query name="voucherheader.voucher_posting">
+	<![CDATA[
+	 EXEC Spw_ac_010_voucher_posting 
+	 :p_company,
+	 :p_periodo, 
+	 :p_voucher,
+	 :p_accion
+	]]>
+	</sql-query>
+</hibernate-mapping>

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="hrafp.obtenertabla">
+    	select codigoafp as "codigo", 
+    			nombreafp as "nombre",
+    			Estado as "estadoId" 
+    			from Hr_afp
+    			where codigoafp = :p_codigoafp 
+	</sql-query>
+	
+    <sql-query name="hrafp.listar">
+    	select codigoafp as "codigo", nombreafp as "nombre"
+    		,Estado as "estadoId" 
+    	from Hr_afp 
+    	order by nombreafp
+	</sql-query>
+	
+	<sql-query name="hrafp.listarActivos">
+    	select codigoafp as "codigo", nombreafp as "nombre"
+    			,Estado as "estadoId" 
+    	from Hr_afp 
+    	where Estado = 'A'
+    	order by nombreafp
+	</sql-query>
+	
+	<sql-query name="hrafp.listarfiltros">
+    	select codigoafp as "codigo", nombreafp as "nombre"
+    			,Estado as "estadoId" 
+    	from Hr_afp 
+    	where  codigoafp = ISNULL(:p_codigoafp,codigoafp)
+			and UPPER(ISNULL(nombreafp,'xxx')) like '%' || ISNULL(:p_nombreafp,UPPER(nombreafp)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by nombreafp	    	
+	</sql-query>
+	
+	<sql-query name="hrafp.contarafpporfiltro">
+        SELECT COUNT(1)
+		FROM HR_AFP A
+		WHERE A.CODIGOAFP = ISNULL(:p_afp, A.CODIGOAFP)
+			AND A.NOMBREAFP like '%' + ISNULL(:p_nombre, A.NOMBREAFP) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+    </sql-query>
+    
+    <sql-query name="hrafp.listarafpporfiltro">
+		SELECT A.CODIGOAFP AS "codigo", 
+			LTRIM(RTRIM(UPPER(A.NOMBREAFP))) AS "nombre",
+			CAST(A.ESTADO AS VARCHAR) AS "estadoId" 
+		FROM HR_AFP A
+		WHERE A.CODIGOAFP = ISNULL(:p_afp, A.CODIGOAFP)
+			AND A.NOMBREAFP like '%' + ISNULL(:p_nombre, A.NOMBREAFP) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+		ORDER BY A.NOMBREAFP
+    </sql-query>
+	
+</hibernate-mapping>

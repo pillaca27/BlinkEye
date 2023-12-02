@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : apcajachica -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="apgastoadelanto.registrarObligacion">
+		update Obligaciones set Voucher= :p_voucher, VoucherAnulacion=null ,
+		FechaVoucher=getdate(),ContabilizacionPendiente=
+		isnull(:p_contabilizacion,ContabilizacionPendiente)
+		where Proveedor= :p_proveedor and TipoDocumento= :p_tipodocumento and
+		NumeroDocumento= :p_numerodocumento
+	</sql-query>
+</hibernate-mapping>

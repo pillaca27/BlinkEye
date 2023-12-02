@@ -1,0 +1,172 @@
+<p-blockUI [blocked]="bloquearPantalla">
+    <div class="ui-g"
+        style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto;width:100px;height: 100px;">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <i class="fa fa-spinner fa-spin fa-5x" style="color:white; margin: 0 auto;"></i>
+        </div>
+        <div class="ui-g-12 ui-md-12 ui-lg-12" style="color:white; margin: 0 auto;">
+            <strong>Procesando</strong>
+        </div>
+    </div>
+</p-blockUI> 
+
+
+<div class="layout-topbar">
+    <div class="topbar-left">
+        <a tabindex="0" class="menu-button" (click)="app.onMenuButtonClick($event)">
+            <i class="pi pi-chevron-left"></i>
+        </a>
+        <span class="topbar-separator"></span>
+        <!-- <ng-template ngFor let-item let-last="last" [ngForOf]="item"> -->
+            <p-breadcrumb class="breadcrumbEscritorio" [model]="items"  [home]="home"></p-breadcrumb>
+            <p-breadcrumb class="breadcrumbMovil" [model]="itemsMovil"></p-breadcrumb>
+            <!-- <span class="viewname" style="text-transform: uppercase">{{item.menuSeguridad.label + item.accion}}</span> -->
+        <!-- </ng-template> -->                
+
+        <!-- <img id="logo-mobile" class="mobile-logo" [src]="'assets/layout/images/logo-'+ (app.colorScheme === 'light' ? 'dark' : 'white') + '.svg'" alt="diamond-layout" /> -->
+        <a href="#" class="mobile-logo" tabindex="0" style="color: #495057; text-align: right; margin-left: auto;" (click)="app.onRightMenuClick($event)">
+            <i class="pi pi-sign-out"></i>
+        </a>
+
+    </div>
+
+    <div class="topbar-right">
+        <ul class="topbar-menu">
+            <li class="search-item">
+                <!-- <ng-template ngFor let-obj let-last="last" [ngForOf]="item.objetoBoton"> 
+                        
+                        <a tabindex="0" (click)="accion(obj)">
+                            <i [title]="obj.nombre" [class]="obj.icono"></i>
+                        </a>
+
+                </ng-template>                 -->
+            </li>
+            <li *ngIf="item.listaOtros.length > 0" class='notifications-item' [ngClass]="{'active-menuitem ': app.topbarNotificationMenuActive}">
+                <a tabindex="0" (click)="app.onTopbarNotificationMenuButtonClick($event)">
+                    <i class="pi pi-plus"></i>
+                    <span class="topbar-badge">{{item.listaOtros.length}}</span>
+                </a>
+                <ul class="notifications-menu fade-in-up">
+                    <ng-template ngFor let-obj2 let-last="last" [ngForOf]="item.listaOtros">
+                        <li role="menuitem" (click)="accionOtros(obj2)">
+                            <a  tabindex="0">
+                                <i [class]="obj2.icono"></i>
+                                <div class="notification-item">
+                                    <div class="notification-summary">{{obj2.nombre}}</div>
+                                </div>
+                            </a>
+                        </li>
+                    </ng-template>                                                                                                    
+                </ul>
+            </li>
+
+            <!-- FOTO DE USUARIO -->
+            <!-- <li class="profile-item">
+                <a>
+                    <img [src]="foto" alt="diamond-layout" class="profile-image">
+                    <ul style="list-style-type: none; text-align: left; line-height: 1rem !important;  padding-inline-start: 10px !important;">
+                        <li><span class="profile-name">{{nombreUsuario}}</span></li>
+                        <li><span class="profile-name" style="font-size: 10px;">{{nombreCompania}}</span></li>
+                    </ul>
+                </a>                    
+            </li> -->            
+
+            <li [ngClass]="{'active-menuitem fadeInDown': app.topbarNotificationMenuActive}" *ngIf="menu">
+                <a title="Aplicaciones" (click)="app.onTopbarNotificationMenuButtonClick($event)">
+                    <i class="pi pi-list"></i>
+                </a>
+                <ul class="profile-menu fade-in-up ul-header" style="padding-bottom: 2rem;">
+                    <ng-template ngFor let-obj2 let-last="last" [ngForOf]="lstAplicaciones">
+                        <li class="li-header">
+                            <a class="tX9u1b" (click)="irWeb(obj2.auxAplicacionWebPage)">
+                                <!-- <div class="pPUwub" aria-hidden="true"></div>
+                                <div class="dKVyP" aria-hidden="true"></div>
+                                <div class="ajYF5e" aria-hidden="true"></div>
+                                <div class="NcWGte" aria-hidden="true"></div> -->
+                                <div class="iconoAplicaciones">
+                                    <i class="{{obj2.auxAplicacionImagen}}"></i>
+                                </div>
+                                <div class="tituloAplicaciones">
+                                    {{obj2.auxAplicacionNombre}}
+                                </div>
+                            </a>
+                        </li>
+                    </ng-template>                    
+                </ul>
+            </li>
+
+
+            <li [ngClass]="{'active-menuitem fadeInDown': app.topbarUserMenuActive}" style="width: 14rem;">
+                <a title="Cuenta" class="profileImage" (click)="app.onTopbarUserMenuButtonClick($event)" 
+                style="width: 100%;font-size: 0.8rem;font-weight: 900;">
+                    <img [src]="foto" alt="diamond-layout" class="profile-image" style="
+                    width: 35px;
+                    height: 100%;
+                    float: left;
+                    margin-right: 1rem;
+                ">
+                    <ul style="list-style-type: none; text-align: left; line-height: 1rem !important;  padding-inline-start: 10px !important; margin-top: 0.4rem;">
+                        <li><span class="profile-name">{{nombreUsuario}}</span></li>
+                        <li><span class="profile-name" style="font-size: 10px;">{{nombreCompania}}</span></li>
+                    </ul>
+                </a>
+                <ul class="profile-menu fade-in-up ul-header-session li-cerrar-session" style="
+                height: 12rem;">
+                    <ul style="
+                    list-style-type: none;
+                    font-size: 0.8rem;
+                    padding-left: 1rem;
+                    padding-top: 1rem;
+                    padding-bottom: 1rem;
+                ">
+                        <li><span><b>Nombre:</b> {{nombreUsuario}}</span></li>
+                        <li><span><b>Clase:</b> {{nombreCompania}}</span></li>
+                        <!-- <li><span><b>Sucursal:</b> {{sucursalNombre}}</span></li>
+                        <li><span><b>Departamento:</b> {{departamentoNombre}}</span></li> -->
+
+                    </ul>
+                    <li class="li-cerrar-session">
+                        <div class="div-cerrar-session">                            
+                            <span>
+                                <a (click)="app.onRightMenuClick($event)"
+                                    class="span-cerrar-session-1 span-cerrar-session-2 span-cerrar-session-3">
+                                    <div class="cerrar-session">Cerrar Sesión</div>
+                                </a>
+                            </span>
+                        </div>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<p-dialog [(visible)]="verTiposExportar" modal="modal" showEffect="fade" hideEffect="size" [contentStyle]="{'max-height':'450px'}" autoAlign="true" [style]="{width: '500px', height: '200px'}" >
+    <div class="ui-fluid">
+        <div>
+            <div class="p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <div class="p-grid">
+                        <div class="p-field p-col-1 p-md-1">
+                            <i class="fa fa-download" style="font-size: 2em; color: #495057; margin-top: 6px;"></i>
+                        </div>
+                        <div class="p-field p-col-11 p-md-11 tituloTexto" style="font-size: 20px;">
+                            Seleccione un formato a Exportar
+                        </div>
+                    </div>                                
+                </div>
+            </div>
+
+            
+                <div class="p-grid">
+                    <ng-template ngFor let-obj let-last="last" [ngForOf]="listaTipoExportar"> 
+                        <div class="p-col-4 p-md-4" style="margin-bottom:10px">
+                            <button type="button" pButton icon="{{obj.icon}}"
+                            style="width: 100%;"   class="ui-button" (click)="exportarTipo(obj.codigo)" label="{{obj.nombre}}"></button>
+                        </div>
+                    </ng-template>
+                </div>
+            
+        </div>
+    </div>
+</p-dialog>

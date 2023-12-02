@@ -1,0 +1,531 @@
+$gutter: 1rem; //for primeflex grid system
+
+@import "../node_modules/primeng/resources/primeng.min.css";
+@import "../node_modules/primeflex/primeflex.scss";
+@import "../node_modules/primeicons/primeicons.css";
+@import "../node_modules/prismjs/themes/prism-coy.css";
+@import "../node_modules/@fullcalendar/core/main.min.css";
+@import "../node_modules/@fullcalendar/daygrid/main.min.css";
+@import "../node_modules/@fullcalendar/timegrid/main.min.css";
+@import "assets/demo/flags/flags.css";
+
+.iconListado {
+  margin-right: 10px;
+  font-size: 1.5em;
+  transition: color 0.5s;
+}
+
+.iconListado:hover {
+  cursor: pointer;
+  color: rgb(79, 79, 235);
+  transition: color 0.5s;
+}
+
+.tituloTexto {
+  margin-top: 3px;
+  // font-family: "Raleway", sans-serif;
+  font-size: 25px;
+  font-weight: 630;
+  color: #495057;
+}
+
+.tituloTextoDialog {
+  // font-family: "Raleway", sans-serif;
+  font-size: 20px;
+  font-weight: 630;
+  padding-top: 10px;
+  color: #495057;
+}
+
+.labelTexto {
+  margin-left: 10px;
+  // font-family: "Raleway", sans-serif;
+  color: #495057;
+}
+
+.botonReducido {
+  height: 20px;
+  width: 15px;
+}
+
+.accionGrilla {
+  width: 100px;
+}
+
+.accionGrilla2 {
+  width: 160px;
+}
+
+#companiaGrilla {
+  width: 35px;
+  text-align: center;
+}
+
+#companiaGrilla2 {
+  width: 100px;
+  text-align: center;
+}
+
+.espacioReducido {
+  padding: 0.1em;
+}
+
+.tamanioIconHeader {
+  font-size: 1.5em;
+}
+
+.tamanioDescHeader {
+  font-size: 15px;
+  display: inline-block;
+  margin-top: 0px;
+}
+
+.reducirMargenPanel {
+  margin-top: -10px;
+  margin-left: -7px;
+}
+
+.espacioEntreControles {
+  margin-right: 12px;
+}
+
+.ajustarEspacioEntreBordesPanel {
+  margin-top: -10px;
+  margin-left: -7px;
+  margin-right: -7px;
+}
+
+.ajustarEspacioEntreBordesPanel2 {
+  margin-top: -10px;
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.ajustarEspacioEntreBordesBotones {
+  margin-top: -5px;
+  margin-left: -7px;
+  margin-right: -7px;
+}
+
+.ajustarEspacioEntreBordesGrilla {
+  margin-left: -7px;
+  margin-right: -7px;
+}
+
+.ajustarEspacioEntreBordes {
+  margin-left: -7px;
+  margin-right: -7px;
+}
+
+.ajustarEspacioEntreBordes2 {
+  margin-left: -10px;
+  margin-right: -10px;
+}
+
+.tamanioFuenteHeaderGrilla {
+  font-size: 11px;
+}
+
+.tamanioFuenteBodyGrilla {
+  font-size: 11px;
+}
+
+.estadoGrilla {
+  width: 120px;
+}
+
+.codigoGrilla {
+  width: 120px;
+}
+
+.descripcionGrilla {
+  text-align: left;
+}
+
+.grillaFecha {
+  width: 100px;
+}
+
+.grillaTexto {
+  text-align: left;
+}
+
+.grillaDato {
+  text-align: right;
+}
+
+.ancho8char {
+  width: 63px;
+}
+
+.ancho9char {
+  width: 75px;
+}
+
+.ancho11char {
+  width: 85px;
+}
+
+.ancho13char {
+  width: 100px;
+}
+
+.ancho15char {
+  width: 110px;
+}
+
+.ancho18char {
+  width: 150px;
+}
+
+.ancho35char {
+  width: 210px;
+}
+
+body .ui-tabview.ui-tabview-top,
+body .ui-tabview.ui-tabview-bottom,
+body .ui-tabview.ui-tabview-left,
+body .ui-tabview.ui-tabview-right {
+  border: 0 none;
+  margin-left: -10px;
+  margin-top: -10px;
+}
+
+#tituloVentana .ui-panel .ui-panel-content {
+  background-color: rgba(255, 255, 255, 0);
+  border-color: rgba(255, 255, 255, 0);
+}
+
+.botonesTitulo {
+  height: 100%;
+  width: 100%;
+}
+
+.p-datatable .p-datatable-thead > tr > th {
+  text-align: left;
+  padding: 1rem;
+  border: 1px solid #49505721 !important;
+  border-width: 0 0 1px;
+  font-weight: 600;
+  color: #495057;
+  background: #f8f9fa;
+  transition: box-shadow 0.2s;
+}
+
+.p-datatable .p-datatable-tbody > tr > td {
+  padding: 0.286em 0.571em;
+  text-align: left;
+  border: 1px solid #49505721;
+  /* padding: 1rem 1rem; */
+}
+
+body .ui-table .ui-table-tfoot > tr > td {
+  text-align: left;
+  border: 1px solid #49505721;
+  border-width: 0 0 1px 0;
+  padding: 1rem 1rem;
+}
+
+.tablaColumnaCentro {
+  text-align: center !important;
+}
+
+.tablaColumnaFecha {
+  text-align: center !important;
+  width: 120px;
+}
+
+.tablaColumnaPeriodo {
+  text-align: center !important;
+  width: 100px;
+}
+
+.tablaColumnaMoneda {
+  text-align: right !important;
+  width: 100px;
+}
+
+.tablaColumnaMontos {
+  text-align: right !important;
+  width: 120px;
+}
+
+.tablaColumnaSolicitud {
+  text-align: center !important;
+  width: 100px;
+}
+
+.tablaColumnaPeriodo {
+  text-align: center !important;
+  width: 100px;
+}
+
+.tablaColumnaEstado {
+  text-align: center !important;
+  width: 120px;
+}
+
+.tablaColumnaAccionChico {
+  text-align: center !important;
+  width: 100px;
+}
+
+.tablaColumnaAccionMediano {
+  text-align: center !important;
+  width: 150px;
+}
+
+.tablaColumnaAccionGrande {
+  text-align: center !important;
+  width: 200px;
+}
+
+.tablaColumnaIzquierda {
+  text-align: left !important;
+}
+
+.tablaColumnaDerecha {
+  text-align: right !important;
+}
+
+.formularioFila {
+  padding: 0.1em;
+  margin-bottom: 0rem !important;
+}
+
+.formularioFila > .p-grid > .p-col,
+.p-grid > [class*="p-col"] {
+  padding: 0.6em;
+}
+
+.p-fieldset {
+  padding: 0;
+}
+
+.p-card .p-card-content {
+  padding: 0rem 0;
+}
+
+.p-card .p-card-body {
+  padding-top: 1rem;
+  padding-right: 1rem;
+  padding-bottom: 0rem;
+  padding-left: 1rem;
+}
+
+.tablaBotonIcono {
+  background-color: #ffffff00 !important;
+  border: 1px solid #ffffff00 !important;
+  color: rgb(27, 27, 27);
+  font-size: 1.5em;
+  box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0) !important;
+  margin-right: 5px !important;
+}
+
+body .ui-button.tablaBotonIcono.ui-button-icon-only {
+  width: 1em;
+  font-size: 20px !important;
+}
+
+.tablaBotonIcono:hover {
+  color: rgb(79, 79, 235) !important;
+  /* para que no se pierda el borde */
+  // border: 1px solid #02814e !important;
+  /* border: 0px solid #ffffff83!important; */
+}
+
+.importante {
+  color: brown;
+}
+
+.panelMantenimiento {
+}
+
+.fieldsetcontenedor {
+}
+
+.p-field > label {
+  display: inline-block;
+  margin-bottom: 0rem;
+}
+
+.formularioFila > .p-grid > .p-col,
+.p-grid > [class*="p-col"] {
+  padding: 0.6em;
+}
+
+.p-field {
+  margin-bottom: 0rem;
+}
+
+.layout-content {
+  padding: 1rem !important;
+}
+
+.p-inputtext {
+  padding: 0.2em;
+}
+
+.p-fluid .p-inputgroup .p-button.p-button-icon-only {
+  padding: 0.2em;
+}
+
+.p-calendar-w-btn .p-datepicker-trigger {
+  padding: 0.2em;
+}
+
+.p-panel-header {
+  padding: 0.5em !important;
+}
+
+.p-fluid .p-button {
+  padding-top: 0.2em;
+  padding-bottom: 0.2em;
+}
+
+.p-fieldset.p-fieldset-toggleable .p-fieldset-legend a {
+  padding: 0.5rem;
+  background-color: #49505700 !important;
+}
+
+.p-fieldset .p-fieldset-legend {
+  padding: 0.5rem;
+}
+
+.p-fieldset .p-fieldset-content {
+  padding: 1rem;
+  padding-bottom: 0.2em;
+}
+
+.p-datatable-scrollable-body {
+  padding-right: 17px;
+}
+
+.p-dialog .p-dialog-content {
+  background: #ffffff;
+  color: #495057;
+  padding: 0 1.5rem 2rem 1.5rem;
+  padding-top: 10px;
+  padding-right: 1.5rem;
+  padding-bottom: 2rem;
+  padding-left: 1.5rem;
+}
+
+@media screen and (min-width: 0em) and (max-width: 30em) {
+  .tablaColumnaCentro {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaEstado {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaFecha {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaPeriodo {
+    text-align: center !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaMoneda {
+    text-align: right !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaMontos {
+    text-align: right !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaSolicitud {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaAccionChico {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaAccionMediano {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaAccionGrande {
+    text-align: left !important;
+    width: 100% !important;
+  }
+
+  .tablaColumnaDerecha {
+    text-align: left !important;
+    width: 100% !important;
+  }
+  .ocultarcelular {
+    display: none;
+  }
+}
+
+@media screen and (min-width: 70em) and (max-width: 120em) and (orientation: landscape) {
+  .tablaColumnaCentro {
+    text-align: center !important;
+  }
+
+  .tablaColumnaEstado {
+    text-align: center !important;
+  }
+
+  .tablaColumnaFecha {
+    text-align: center !important;
+  }
+
+  .tablaColumnaPeriodo {
+    text-align: center !important;
+  }
+
+  .tablaColumnaMoneda {
+    text-align: right !important;
+  }
+
+  .tablaColumnaMontos {
+    text-align: right !important;
+  }
+
+  .tablaColumnaSolicitud {
+    text-align: center !important;
+  }
+
+  .tablaColumnaAccionChico {
+    text-align: center !important;
+  }
+
+  .tablaColumnaAccionMediano {
+    text-align: center !important;
+  }
+
+  .tablaColumnaAccionGrande {
+    text-align: center !important;
+  }
+
+  .tablaColumnaDerecha {
+    text-align: right !important;
+  }
+
+  
+}
+
+/*estilo para circulos semaforos*/
+.widget-overview-box .overview-icon {
+  display: inline-block !important;
+  border-radius: 50% !important;
+  width: 3.5em !important;
+  height: 3.5rem !important;
+  line-height: 3.5rem !important;
+  text-align: center !important;
+  vertical-align: middle !important;
+}

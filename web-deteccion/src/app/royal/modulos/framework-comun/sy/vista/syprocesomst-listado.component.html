@@ -1,0 +1,132 @@
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Aplicación código</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.aplicacioncodigo" maxlength="2" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.aplicacioncodigo=$event.toUpperCase()" style="flex: 1;" />
+                                <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.descripcioncorta" maxlength="100" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.aplicacioncodigo=$event.toUpperCase()" style="flex: 5;" />
+                                <button pButton icon="fa fa-binoculars" (click)="mostrarselectoraplicaciones()" type="button" title="Buscar Proveedor" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" (click)="limpiarselectoraplicaciones()" type="button" title="Limpiar Proveedor" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proceso código</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.procesocodigo" maxlength="10" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.procesocodigo=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input #myDescripcion pInputText type="text" style="width:100%;" [(ngModel)]="filtro.descripcion" maxlength="100" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.descripcion=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.estado" [options]="lstEstados" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <!--  <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimousuario</label>
+                    <input pInputText type="text"  style="width:100%;"
+                        [(ngModel)]="filtro.ultimousuario" maxlength="20" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimousuario=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimafechamodif</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.ultimafechamodif"
+                        maxlength="8" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimafechamodif=$event.toUpperCase()" />
+                </div> -->
+
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [scrollable]="true" scrollHeight="400px" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)"
+        [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigo">Aplicación código</th>
+                <th class="tablaHeaderCodigo">Proceso código</th>
+                <th class="tablaHeaderNombre">Descripción</th>
+                <th class="tablaHeaderEstado">Estado</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning" title="Anular" *ngIf="row.estado == 'A' && menuSeguridad.flgBorrar" (click)="coreAnular(row)"></button>
+                            </th>
+                            <!--   <th>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                class="p-button-rounded p-button-danger p-button-text" title="Eliminar"
+                                *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                        </th> -->
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Aplicación código</span> {{row.aplicacioncodigo}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Proceso código</span> {{row.procesocodigo}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Descripción</span> {{row.descripcion}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="5">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<app-selector-aplicaciones-mast></app-selector-aplicaciones-mast>

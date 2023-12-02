@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : usuario
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="usuario.listar">
+    <![CDATA[
+		select 
+			rtrim(usuario) as "codigo", 
+			rtrim(nombre) as "nombre",
+			Estado as "estadoId"
+		from usuario
+		order by nombre desc
+    ]]>
+	</sql-query>
+	
+	    <sql-query name="usuario.listarTipoPlanilla">
+    <![CDATA[
+    	select 
+			TipoPlanilla as "codigo",
+			Descripcion  as "nombre"
+			from PR_TipoPlanilla
+      ]]>
+	</sql-query>
+	
+	 <sql-query name="usuario.listarcomboSucursal">
+    <![CDATA[
+    
+    
+	 SELECT	
+	 AC_Sucursal.Sucursal "codigo",
+	AC_Sucursal.DescripcionLocal "nombre"
+	FROM	AC_Sucursal
+	WHERE	Estado = 'A'
+    
+       ]]>
+	</sql-query>
+	
+
+
+
+
+	<sql-query name="usuario.listaractivos">
+    <![CDATA[
+		select 
+			rtrim(usuario) as "codigo", 
+			rtrim(nombre) as "nombre",
+			Estado as "estadoId"
+		from usuario
+		where estado = 'A'
+		order by nombre desc
+    ]]>
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerTabla">
+	    <![CDATA[
+	        select usuario as "codigo", nombre as "nombre", Estado as "estadoId" 
+	        from usuario
+			where usuario = :p_usuario
+	    ]]>
+	 </sql-query>
+	 
+	 	<sql-query name="usuario.obtenerUnidadNegocioSeguridad">
+	    <![CDATA[
+	    
+	    select 
+	    SC.CONCEPTO as "codigo",
+	     SC.DESCRIPCIONLOCAL as "nombre"
+	       from SY_SeguridadAutorizaciones sa 
+	       inner join SY_SeguridadConcepto sc 
+	       on SC.APLICACIONCODIGO = SA.APLICACIONCODIGO 
+	       and SC.GRUPO = SA.GRUPO 
+	       and SC.CONCEPTO = SA.CONCEPTO  
+		   where SA.Grupo = :p_grupo and SA.Usuario = :p_user and SA.ESTADO = 'A'
+	     ]]>
+	 </sql-query>
+	 
+	 
+	 
+	 
+	 <sql-query name="usuario.listarfiltros">
+    	select usuario as "codigo", nombre as "nombre"
+    			,Estado as "estadoId" 
+    	from usuario 
+    	where  usuario = ISNULL(:p_usuario,usuario)
+			and UPPER(ISNULL(nombre,'xxx')) like '%' + ISNULL(:p_nombre,UPPER(nombre)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by nombre	    	
+	</sql-query>
+	
+	<sql-query name="usuario.obtenerDto">
+           select 
+			USUARIO "usuario"
+			,USUARIOPERFIL "usuarioperfil"
+			,NOMBRE "nombre"
+			,CLAVE "clave"
+			,CAST(EXPIRARPASSWORDFLAG as VARCHAR) "expirarpasswordflag"
+			,FECHAEXPIRACION "fechaexpiracion"
+			,ULTIMOLOGIN "ultimologin"
+			,CAST(NUMEROLOGINSDISPONIBLE as money) "numerologinsdisponible"
+			,CAST(NUMEROLOGINSUSADOS as money) "numerologinsusados"
+			,SQLLOGIN "sqllogin"
+			,SQLPASSWORD "sqlpassword"
+			,CAST(ESTADO as VARCHAR) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,USUARIORED "usuariored"
+			--,HORAINICIO "horainicio"
+			--,HORAFIN "horafin"
+			--,HORAINICIOAP "horainicioap"
+			--,HORAFINAP "horafinap"
+			--,VALUEHSH "valuehsh"
+			--,FECHACREACION "fechacreacion"
+			--,USUARIOCREACION "usuariocreacion"
+			--,FORCELOGONSPRINGFLAG "forcelogonspringflag"
+			--,FECHAPASSWORD "fechapassword"
+			--,cast(SITUACION as varchar2(2)) "situacion"
+         from USUARIO
+         where 
+			USUARIO = :p_usuario
+    </sql-query>
+    
+    <sql-query name="usuario.listardtofiltros">
+          select 
+			USUARIO "usuario"
+			,USUARIOPERFIL "usuarioperfil"
+			,NOMBRE "nombre"
+			,CLAVE "clave"
+			,CAST(EXPIRARPASSWORDFLAG as VARCHAR) "expirarpasswordflag"
+			,FECHAEXPIRACION "fechaexpiracion"
+			,ULTIMOLOGIN "ultimologin"
+			,CAST(NUMEROLOGINSDISPONIBLE as money) "numerologinsdisponible"
+			,CAST(NUMEROLOGINSUSADOS as money) "numerologinsusados"
+			,SQLLOGIN "sqllogin"
+			,SQLPASSWORD "sqlpassword"
+			,CAST(ESTADO as VARCHAR) "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,USUARIORED "usuariored"
+			--,HORAINICIO "horainicio"
+			--,HORAFIN "horafin"
+			--,HORAINICIOAP "horainicioap"
+			--,HORAFINAP "horafinap"
+			--,VALUEHSH "valuehsh"
+			--,FECHACREACION "fechacreacion"
+			--,USUARIOCREACION "usuariocreacion"
+			--,FORCELOGONSPRINGFLAG "forcelogonspringflag"
+			--,FECHAPASSWORD "fechapassword"
+			--,cast(SITUACION as varchar2(2)) "situacion"
+         from USUARIO
+         where 
+				USUARIO = ISNULL(:p_usuario,USUARIO)
+			and usuarioperfil = ISNULL(:p_perfilusuario,usuarioperfil)
+			and UPPER(ISNULL(nombre,'xxx')) like '%' + ISNULL(:p_nombre,UPPER(nombre)) + '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by nombre
+    </sql-query>
+		
+	<!-- QUERYS - LEONARDO SEGURIDAD MANTENIMIENTO (CAMBIAR NOMBRES QUE NO REPITA) -->
+	<sql-query name="usuario.contar">
+		  select count(1)
+         from Usuario 
+            where USUARIOPERFIL = ISNULL(:p_tipoUsuario, USUARIOPERFIL ) and 
+            UPPER(usuario) like '%' +  ISNULL( UPPER(:p_codigoUsuario) ,  UPPER(usuario)  ) + '%'  and 
+            UPPER(ISNULL(nombre,'XXX')) like '%' + ISNULL( UPPER(:p_nombre) ,  UPPER(ISNULL(nombre,'XXX'))  ) + '%' and 
+            estado = ISNULL( :p_estado, estado)
+            
+	</sql-query>
+	<sql-query name="usuario.listarusuario">
+		select
+		UPPER(usuario) as "codigo",
+		(case when
+		usuarioPerfil = 'PE' then 'Perfil' else 'Usuario' end) as
+		"tipoRegistro",
+		nombre as "nombre",
+		CAST(situacion AS CHAR(1)) as "situacioncod",
+		(case
+		when situacion = 'V' then 'Vigente' else 'No vigente' end) as
+		"situacion",
+		(case when estado = 'A' then 'Activo' else 'Inactivo' end)
+		as "estado"
+		from
+		USUARIO
+	      where USUARIOPERFIL = ISNULL(:p_tipoUsuario, USUARIOPERFIL ) and 
+            UPPER(usuario) like '%' +  ISNULL( UPPER(:p_codigoUsuario) ,  UPPER(usuario)  ) + '%'  and 
+            UPPER(ISNULL(nombre,'XXX')) like '%' + ISNULL( UPPER(:p_nombre) ,  UPPER(ISNULL(nombre,'XXX'))  ) + '%' and 
+            estado = ISNULL( :p_estado, estado)
+		ORDER BY 3
+	</sql-query>
+	<sql-query name="usuario.obtenerCorreo">
+		<!-- SELECT U.PERSONAAGROID as "codigo" -->
+		<!-- ,P.PERSONAAGROCORREO as "nombre" -->
+		<!-- FROM SGAGROSYS.USUARIO U -->
+		<!-- LEFT JOIN SGAGROSYS.AG_GE_PERSONA P -->
+		<!-- ON U.PERSONAAGROID = P.PERSONAAGROID -->
+		<!-- WHERE U.USUARIO = :p_codigoUsuario -->
+		
+<!-- 		SELECT -->
+<!-- 		P.PERSONA as "codigo" -->
+<!-- 		,P.CORREOELECTRONICO as "nombre" -->
+<!-- 		FROM USUARIO U -->
+<!-- 		LEFT JOIN PERSONAMAST P ON U.USUARIO = P.CODIGOUSUARIO -->
+<!-- 		WHERE U.USUARIO = :p_codigoUsuario -->
+
+SELECT
+		CAST(P.PERSONA AS DECIMAL) as "codigo"
+		,P.CORREOELECTRONICO as "nombre"
+		FROM EmpleadoMast U
+		LEFT JOIN  PERSONAMAST P ON U.Empleado = P.Persona 
+		WHERE U.CodigoUsuario = :p_codigoUsuario
+
+	</sql-query>
+
+	<!-- QUERYS - LEONARDO SEGURIDAD MANTENIMIENTO FIN -->
+		
+	<sql-query name="usuario.contarl">
+         select count(1)
+         from Usuario 
+            where USUARIOPERFIL = ISNULL(:p_tipo, USUARIOPERFIL ) and 
+            UPPER(usuario) like '%' +  ISNULL( UPPER(:p_usuario) ,  UPPER(usuario)  ) + '%'  and 
+            UPPER(nombre) like '%' + ISNULL( UPPER(:p_nombre) ,  UPPER(nombre)  ) + '%' and 
+            estado = ISNULL( :p_estado, estado)
+
+    </sql-query>
+
+    <sql-query name="usuario.listarpaginadol">
+         select 
+             USUARIO as "usuario", 
+             NOMBRE as "nombre",
+             USUARIOPERFIL as "usuarioperfil",
+             CAST(ESTADO as varchar) as "estado" 
+         from Usuario 
+            where USUARIOPERFIL = ISNULL(:p_tipo, USUARIOPERFIL ) and 
+            UPPER(usuario) like '%' +  ISNULL( UPPER(:p_usuario) ,  UPPER(usuario)  ) + '%'  and 
+            UPPER(nombre) like '%' + ISNULL( UPPER(:p_nombre) ,  UPPER(nombre)  ) + '%' and 
+            estado = ISNULL( :p_estado, estado)
+    </sql-query>
+    
+      <sql-query name="usuario.obtenerpersona">
+ select 
+ pm.Persona "persona"
+ from PersonaMast pm 
+ left join Usuario u on u.Usuario  = pm.DocumentoFiscal  
+ WHERE 1=1 
+ --and u.UsuarioPerfil = 'PR'
+ AND u.Usuario = :p_documentofiscal
+	  </sql-query>
+	  
+	  
+	  <sql-query name="usuario.listarDtoAutorizacionesAplicacionesUsuarioPerfilAdministrador">
+		select       
+			 b.APLICACIONCODIGO 'aplicacionId'
+			,isnull(b.DescripcionCorta,'') 'auxAplicacionNombre'
+			,isnull(b.orden,0) 'auxAplicacionOrden'
+			,isnull(b.imagen,'fad fa-list') 'auxAplicacionImagen'
+			,isnull(b.WebPage,'#') 'auxAplicacionWebPage'			
+         from SeguridadAutorizaciones a
+         	INNER JOIN AplicacionesMast b
+         		on 	a.APLICACIONCODIGO = b.APLICACIONCODIGO 
+         	INNER JOIN SeguridadGrupo c
+         		on 	a.APLICACIONCODIGO = c.APLICACIONCODIGO
+         		and a.GRUPO = c.GRUPO 
+         	INNER JOIN SeguridadConcepto d
+         		on 	a.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and a.GRUPO = d.GRUPO 
+         		and a.Concepto = d.Concepto
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	a.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND (
+				a.USUARIO IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+							WHERE spu.Usuario = :p_usuarioid and spu.Estado='A'						
+							UNION  ALL 
+							SELECT :p_usuarioid )
+				OR
+				b.APLICACIONCODIGO IN (SELECT  AplicacionCodigo AS "codigo" 
+							FROM SeguridadAutorizaciones 
+							WHERE Concepto = 'SYSADM'
+							AND Usuario IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+											WHERE spu.Usuario = :p_usuarioid and spu.Estado='A'						
+											UNION  ALL 
+											SELECT :p_usuarioid
+											)
+							AND ESTADO = 'A')
+				)
+			AND a.ESTADO = 'A'			
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)
+			AND b.WebPage is not null
+		 group by b.APLICACIONCODIGO, isnull(b.DescripcionCorta,''),isnull(b.orden,0),isnull(b.imagen,'fad fa-list'),isnull(b.WebPage,'#')
+		 order by isnull(b.orden,0), isnull(b.DescripcionCorta,'')
+	</sql-query>
+	  
+	  
+</hibernate-mapping>

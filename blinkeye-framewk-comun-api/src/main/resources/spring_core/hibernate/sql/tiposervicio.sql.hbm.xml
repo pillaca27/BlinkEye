@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="tiposervicio.listar">
+	    <![CDATA[
+	        select tiposervicio as "codigo", descripcion as "nombre", CAST(Estado as VARCHAR) as "estadoId" 
+	        from tiposervicio	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="tiposervicio.listarActivos">
+	    <![CDATA[
+	        select tiposervicio as "codigo", descripcion as "nombre", CAST(Estado as VARCHAR) as "estadoId" 
+	        from tiposervicio
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="tiposervicio.obtenerTabla">
+	    <![CDATA[
+	        select tiposervicio as "codigo", descripcion as "nombre", CAST(Estado as VARCHAR) as "estadoId" 
+	        from tiposervicio
+			where tiposervicio = :p_tiposervicio
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="tiposervicio.listarfiltros">
+    	select tiposervicio as "codigo", descripcion as "nombre"
+    			,CAST(Estado as VARCHAR) as "estadoId" 
+    	from tiposervicio 
+    	where  tiposervicio = ISNULL(:p_tiposervicio,tiposervicio)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+<!-- 	 <sql-query name="tiposervicio.obtenerDto"> -->
+<!--          select  -->
+<!-- 			TIPOSERVICIO "tiposervicio" -->
+<!-- 			,DESCRIPCION "descripcion" -->
+<!-- 			,CAST(REGIMENFISCAL as VARCHAR) "regimenfiscal" -->
+<!-- 			,ULTIMOUSUARIO "ultimousuario" -->
+<!-- 			,ULTIMAFECHAMODIF "ultimafechamodif" -->
+<!-- 			,CLASIFICACIONFISCAL "clasificacionfiscal" -->
+<!-- 			,CAST(Estado as VARCHAR) "estado" -->
+<!-- 			,DESCRIPCIONINGLES "descripcioningles" -->
+<!--          from TIPOSERVICIO -->
+<!--          where  -->
+<!-- 			TIPOSERVICIO = :p_tiposervicio -->
+<!--     </sql-query> -->
+    
+    <sql-query name="tiposervicio.listardtofiltros">
+          select 
+			TIPOSERVICIO "tiposervicio"
+			,DESCRIPCION "descripcion"
+			,CAST(REGIMENFISCAL as VARCHAR) "regimenfiscal"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CLASIFICACIONFISCAL "clasificacionfiscal"
+			,CAST(ESTADO as VARCHAR) "estado"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,UUID "uuid"
+         from TIPOSERVICIO
+         where 
+			TIPOSERVICIO = ISNULL(:p_tiposervicio,TIPOSERVICIO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+    <sql-query name="tiposervicio.listarDtoPorRegimenfiscal">
+          select 
+			TIPOSERVICIO "tiposervicio"
+			,DESCRIPCION "descripcion"
+			,CAST(REGIMENFISCAL as VARCHAR) "regimenfiscal"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CLASIFICACIONFISCAL "clasificacionfiscal"
+			,CAST(ESTADO as VARCHAR) "estado"
+			,DESCRIPCIONINGLES "descripcioningles"
+         from TIPOSERVICIO
+         where 
+				regimenfiscal = ISNULL(:p_regimenfiscal,regimenfiscal)
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+    
+    
+     
+<!--     MANTENIMIENTO LEONARDO -->
+
+ <sql-query name="tiposervicio.obtenerDtoPorUuid">
+         select 
+			TipoServicio "tiposervicio"
+			,Descripcion "descripcion"
+			,cast(RegimenFiscal as varchar) "regimenfiscal"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,ClasificacionFiscal "clasificacionfiscal"
+			,CAST(Estado AS VARCHAR) "estado"
+			,DescripcionIngles "descripcioningles"
+			,UUID "uuid"
+         from TIPOSERVICIO
+         where 
+			UUID = :p_uuid
+
+    </sql-query>
+ <sql-query name="tiposervicio.obtenerDto">
+         select 
+			TipoServicio "tiposervicio"
+			,Descripcion "descripcion"
+			,cast(RegimenFiscal as varchar) "regimenfiscal"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,ClasificacionFiscal "clasificacionfiscal"
+			,CAST(Estado AS VARCHAR) "estado"
+			,DescripcionIngles "descripcioningles"
+			,UUID "uuid"
+         from TIPOSERVICIO
+         where 
+			TipoServicio = :p_tiposervicio
+
+    </sql-query>
+    
+        <sql-query name="tiposervicio.obtenerDtoDetalle">
+   SELECT rtrim(ServicioXImpuesto.TipoServicio) as "tiposervicio",    
+         rtrim(ServicioXImpuesto.Impuesto) as "impuesto",   
+        rtrim(ServicioXImpuesto.Impuesto)  as "tipoimpuesto",
+         cast('A' as varchar) as "accion"
+    FROM ServicioXImpuesto,   
+         Impuestos  
+   WHERE ( Impuestos.Impuesto = ServicioXImpuesto.Impuesto ) and  
+         ( ( ServicioXImpuesto.TipoServicio = :p_tiposervicio ) )    
+
+
+    </sql-query>
+
+    <sql-query name="tiposervicio.listarPaginadoContar">
+         select count(1)
+         from TIPOSERVICIO
+         where 
+         	(ISNULL(:p_tiposervicio, '-') = '-' OR  TipoServicio like '%' + ISNULL(:p_tiposervicio, TipoServicio) + '%')
+			AND (ISNULL(:p_descripcion, '-') = '-' OR  Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%')
+			AND (ISNULL(:p_estado, '-') = '-' OR Estado = :p_estado)
+
+    </sql-query>
+
+    <sql-query name="tiposervicio.listarPaginadoSentencia">
+    			     select 
+			TipoServicio "tiposervicio"
+			,Descripcion "descripcion"
+			,CAST(Estado AS VARCHAR) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+			,UUID "uuid"
+         from TIPOSERVICIO
+         where 
+         	(ISNULL(:p_tiposervicio, '-') = '-' OR  TipoServicio like '%' + ISNULL(:p_tiposervicio, TipoServicio) + '%')
+			AND (ISNULL(:p_descripcion, '-') = '-' OR  Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%')
+			AND (ISNULL(:p_estado, '-') = '-' OR Estado = :p_estado)
+
+    </sql-query>
+
+    <sql-query name="tiposervicio.listarDtoCore">
+         select 
+			TipoServicio "tiposervicio"
+			,Descripcion "descripcion"
+			,RegimenFiscal "regimenfiscal"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,Timestamp "timestamp"
+			,ClasificacionFiscal "clasificacionfiscal"
+			,Estado "estado"
+			,DescripcionIngles "descripcioningles"
+			,UUID "uuid"
+         from TIPOSERVICIO
+         where 
+			TipoServicio = ISNULL(:p_tiposervicio, TipoServicio)
+			TipoServicio = ISNULL(:p_tiposervicio, TipoServicio)
+
+    </sql-query>
+    
+</hibernate-mapping>

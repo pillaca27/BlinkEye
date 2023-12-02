@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : apcajachica -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="vouchergeneration.listarPaginadoSentencia">
+		SELECT Obligaciones.Proveedor as "proveedor",
+		Obligaciones.TipoDocumento as "tipodocumento",
+		RTRIM(Obligaciones.NumeroDocumento) as "numerodocumento",
+		Obligaciones.CompaniaCodigo as "companiacodigo",
+		Obligaciones.MonedaDocumento as "monedadocumento",
+		Obligaciones.MontoObligacion as "montoobligacion",
+		Obligaciones.FechaDocumento as "fechadocumento",
+		rtrim(Obligaciones.Voucher) as "voucher",
+		PersonaMast.Busqueda as
+		"busqueda",
+		Obligaciones.RegistroNumero as "registronumero",
+		Obligaciones.EstadoDocumento as "estadodocumento",
+		Obligaciones.IngresadoPor as "ingresadopor",
+		TipoDocumentoCXP.VoucherTipo as "vouchertipo",
+		personaingresada.Busqueda as "ingresadopornombre"
+		FROM Obligaciones
+		left join PersonaMast personaingresada on
+		(personaingresada.Persona =
+		Obligaciones.IngresadoPor),
+		PersonaMast,
+		TipoDocumentoCXP
+		WHERE (
+		Obligaciones.Proveedor = PersonaMast.Persona ) and
+		(
+		Obligaciones.TipoDocumento = TipoDocumentoCXP.TipoDocumento ) and
+		(
+		Obligaciones.EstadoDocumento IN ('AP','CJ','PP','PA')) AND
+		Obligaciones.Voucher = :p_periodo AND
+		Obligaciones.ContabilizacionPendiente = 'S' AND
+		TipoDocumentoCXP.GenerarProvisionFlag = 'S' AND
+		Obligaciones.CompaniaCodigo = left(:p_companiasocio,6)
+		ORDER BY
+		Obligaciones.CompaniaCodigo ASC,
+		Obligaciones.RegistroNumero ASC
+	</sql-query>
+</hibernate-mapping>

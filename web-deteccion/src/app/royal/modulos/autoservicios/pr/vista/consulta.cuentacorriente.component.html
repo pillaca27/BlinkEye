@@ -1,0 +1,121 @@
+<div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12 p-md-12">
+        <p-table [value]="lstCabecera" [rows]="5" [paginator]="true" [totalRecords]="lstCabecera.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Cuotas</th>
+                    <th class="tablaHeaderAccion1"></th>
+                    <th class="tablaHeaderNombreMedio">Tipo Prestamo</th>
+                    <th class="tablaHeaderCheckBox">N°</th>
+                    <th class="tablaHeaderFecha">Fecha Aprobación</th>
+                    <th class="tablaHeaderCodigo">Periodo Pagado</th>
+                    <th class="tablaHeaderCheckBox">Mon.</th>
+                    <th class="tablaHeaderMonto">Prestado</th>
+                    <th class="tablaHeaderMonto">Pagado</th>
+                    <th class="tablaHeaderMonto">Pendiente</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12" style="text-align: center;" title="Ver Detalle">
+                                <button pButton type="button" icon="fa fa-search" class="p-button-rounded p-button-info"
+                                    (click)="cargarDetalle(rowData)"></button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="tablaColumnaAccion1">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <button pButton type="button" icon="fa fa-hourglass-half" style="font-size:12px"
+                                    class="p-button-success" *ngIf="rowData.estado == 'P'"></button>
+                                <button pButton type="button" icon="fa fa-check" style="font-size:12px"
+                                    class="p-button-success" *ngIf="rowData.estado != 'P'"></button>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        {{rowData.tipoPrestamoNombre}}</td>
+                    <td class="tablaColumnaCheckBox">
+                        {{rowData.nroPrestamo }}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        {{rowData.fechaAprobacion}}</td>
+                    <td class="tablaColumnaCodigo">
+                        {{rowData.periodo}}</td>
+                    <td class="tablaColumnaCheckBox">
+                        {{rowData.moneda}}
+                    </td>
+                    <td class="tablaColumnaMonto"> {{rowData.prestado
+                        == null?'':rowData.prestado.toLocaleString('th-TH',{minimumFractionDigits: 2,
+                        maximumFractionDigits: 2})}}</td>
+                    <td class="tablaColumnaMonto"> {{rowData.pagado ==
+                        null?'':rowData.pagado.toLocaleString('th-TH',{minimumFractionDigits: 2,
+                        maximumFractionDigits: 2})}}</td>
+                    <td class="tablaColumnaMonto"> {{rowData.pendiente ==
+                        null?'':rowData.pendiente.toLocaleString('th-TH',{minimumFractionDigits: 2,
+                        maximumFractionDigits: 2})}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="11">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+    <div class="p-field p-col-12 p-md-8">
+        <p-table [value]="lstDetalle" [rows]="12" [paginator]="true" [totalRecords]="lstDetalle.length">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderCodigo"></th>
+                    <th class="tablaHeaderCodigo" style="font-weight: bolder;">Periodo</th>
+                    <th class="tablaHeaderMonto">Cuota Pago</th>
+                    <th class="tablaHeaderMonto">Saldo Incial</th>
+                    <th class="tablaHeaderMonto">Monto Descuento</th>
+                    <th class="tablaHeaderMonto">Monto Efectivo</th>
+                    <th class="tablaHeaderMonto">Saldo Final</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaCodigo">
+                        <button pButton type="button" icon="fa fa-hourglass-half" style="font-size:12px"
+                            class="p-button"
+                            *ngIf="rowData.cuotapago - (rowData.montodescuento + rowData.montoefectivo) > 0"></button>
+                        <button pButton type="button" icon="fa fa-check" style="font-size:12px" class="p-button-success"
+                            *ngIf="rowData.cuotapago - (rowData.montodescuento + rowData.montoefectivo) <= 0"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo" style="font-weight: bolder;">
+                        {{rowData.periodo}}
+                    </td>
+                    <td class="tablaColumnaMonto">
+                        {{rowData.cuotapago | number:'1.2-2'}}
+                    </td>
+                    <td class="tablaColumnaMonto">
+                        {{rowData.saldoinicial | number:'1.2-2'}}
+                    </td>
+                    <td class="tablaColumnaMonto">
+                        {{rowData.montodescuento | number:'1.2-2'}}
+                    </td>
+                    <td class="tablaColumnaMonto">
+                        {{rowData.montoefectivo | number:'1.2-2'}}
+                    </td>
+                    <td class="tablaColumnaMonto">
+                        {{rowData.saldofinal | number:'1.2-2'}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="7">
+                        No Existen Registros para Mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>

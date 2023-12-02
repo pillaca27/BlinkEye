@@ -1,0 +1,1118 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+        </app-botones-mantenimiento>
+        <p-tabView>
+            <p-tabPanel header="Capacitación">
+                <p-fieldset legend="Datos del Solicitante">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Solicitante</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxSolicitanteDesc" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Unidad de Organigrama</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxSolicitanteUnidadOrganigramaDesc" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos de la Capacitación">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Compañía</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxCompaniaDesc" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Estado</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEstadoDesc" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Capacitación</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.capacitacion" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Programado</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-radioButton label="Si" name="progamado" [style]="{'flex': '1'}" value="S" [(ngModel)]="dtoBean.flagprogramado" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>&nbsp;&nbsp;
+                                        <p-radioButton label="No" name="progamado" [style]="{'flex': '1'}" value="N" [(ngModel)]="dtoBean.flagprogramado" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3" *ngIf="dtoBean.flagprogramado=='S'">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Año</label>
+                                <div class="p-col">
+                                    <input pInputText style="width:100%;" [(ngModel)]="dtoBean.anioplan" type="number" [disabled]="!objetoTitulo.puedeEditar" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha de Solicitud</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechasolicitud" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Vigencia</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.fechadesde" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                        <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.fechahasta" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha Término</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechatermino" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Convenio Capacitación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-radioButton label="Si" name="conveniocapacitacion" [style]="{'flex': '1'}" value="S" [(ngModel)]="dtoBean.flagconvenio" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>&nbsp;&nbsp;
+                                        <p-radioButton label="No" name="conveniocapacitacion" [style]="{'flex': '1'}" value="N" [(ngModel)]="dtoBean.flagconvenio" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">N° Vacantes</label>
+                                <div class="p-col">
+                                    <input pInputText style="width:100%;" [(ngModel)]="dtoBean.numerovacantes" [disabled]="!objetoTitulo.puedeEditar" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">N° Participantes</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.numeroparticipantes" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Horario por</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-radioButton label="Resúmen" name="horariopor" [style]="{'flex': '1'}" value="R" [(ngModel)]="dtoBean.flaghorario" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>&nbsp;&nbsp;
+                                        <p-radioButton label="Detalle" name="horariopor" [style]="{'flex': '1'}" value="D" [(ngModel)]="dtoBean.flaghorario" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo Capacitación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <p-radioButton label="Interno" name="tipocapacitacion" [style]="{'flex': '1'}" value="I" [(ngModel)]="dtoBean.tipocapacitacion" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>&nbsp;&nbsp;
+                                        <p-radioButton label="Externo" name="tipocapacitacion" [style]="{'flex': '1'}" value="E" [(ngModel)]="dtoBean.tipocapacitacion" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>&nbsp;&nbsp;
+                                        <p-radioButton label="Mixto" name="tipocapacitacion" [style]="{'flex': '1'}" value="M" [(ngModel)]="dtoBean.tipocapacitacion" [disabled]="!objetoTitulo.puedeEditar">
+                                        </p-radioButton>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Total Horas</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.totalhoras" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Total Días</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.totaldias" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Centro de Costo</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCentroCostoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCosto()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Unidad de Negocio</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxUnidadNegocioDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarUnidadNegocio()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Sucursal</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxSucursalDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarSucursal()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Proyecto</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxAfeDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarProyecto()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">País Capacitación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxPaisDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPais()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Lugar de Capacitación</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [(ngModel)]="dtoBean.lugar" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Capacitador</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar" style="width:100%;" [(ngModel)]="dtoBean.nombrecapacitador" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Observaciones</label>
+                                <div class="p-col">
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.observacion" [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos del Curso">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <p-checkbox [(ngModel)]="dtoBean.auxCursoNuevo" [disabled]="!objetoTitulo.puedeEditar" binary="true" inputId="cursonuevo" (onChange)="onChangeCursoNuevo($event.checked)"></p-checkbox>
+                                <label *ngIf="dtoBean.auxCursoNuevo" class="p-col-fixed label importante">Curso Nuevo</label>
+                                <label *ngIf="!dtoBean.auxCursoNuevo" class="p-col-fixed label">Curso Nuevo</label>
+                                <div class="p-col">
+                                    <input pInputText [disabled]="!objetoTitulo.puedeEditar||!dtoBean.auxCursoNuevo" style="width:100%;" [(ngModel)]="dtoBean.cursonuevodescripcion" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label *ngIf="!dtoBean.auxCursoNuevo" class="p-col-fixed label importante">Curso</label>
+                                <label *ngIf="dtoBean.auxCursoNuevo" class="p-col-fixed label">Curso</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCursoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCurso()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Área Temática</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxCursoAreaDesc" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Tipo de Curso</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCursoTipoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoCurso()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Centro de Capacitación</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCursoCentroCapacitacionDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCentroCapacitacion()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Modalidad</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxCursoModalidaDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarModalidad()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Plantilla de Evaluación (encuesta post capacitación/eficacia)">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Participantes</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxPlantillaEmpleadoDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPlantillaEmpleado()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Jefes</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxPlantillaJefeDesc" />
+                                        <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarPlantillaJefe()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <p-fieldset legend="Financiamiento y Costo Estimado">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">Financiamiento</label>
+                                        <div class="p-col">
+                                            <div class="p-inputgroup">
+                                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="dtoBean.auxFinanciamientoDesc" />
+                                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarFinanciamiento()" *ngIf="objetoTitulo.puedeEditar" [style]="{'flex': '1'}"></button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">Local</label>
+                                        <div class="p-col">
+                                            <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costototalestimadolocal" mode="decimal" [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">% Empresa</label>
+                                        <div class="p-col">
+                                            <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.porcentajeempresa" mode="decimal" [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="100" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-col-12 p-md-6">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">Extranjero</label>
+                                        <div class="p-col">
+                                            <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costototalestimadoextranjero" mode="decimal" [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                            </p-inputNumber>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p-fieldset legend="Costos">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-12">
+                                    <table style="width: 100%;">
+                                        <tr>
+                                            <td>
+
+                                            </td>
+                                            <td>
+                                                <label>Moneda Local</label>
+                                            </td>
+                                            <td>
+                                                <label>Moneda Extranjera</label>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Sub Total</label>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costosubtotal" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costosubtotalext" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Impuesto</label>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costoimpuestos" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costoimpuestosext" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <label>Total</label>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costototal" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.costototalext" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6" *ngIf="dtoBean.auxflaglogisticaParametro=='S'">
+                        <p-fieldset legend="Logística">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-12">
+                                    <p-checkbox [(ngModel)]="dtoBean.auxFlagLogistica" binary="true" [disabled]="!objetoTitulo.puedeEditar" inputId="enviarlogistica">
+                                    </p-checkbox>
+                                    <label for="enviarlogistica" style="margin-left: 5px;">Enviar a Logística</label>
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-12">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">N° Requis. / Compañía</label>
+                                        <div class="p-col">
+                                            <div class="p-inputgroup">
+                                                <input pInputText disabled style="width:100%;flex: 1;" [(ngModel)]="dtoBean.logisticarequisicion" />
+                                                <input pInputText disabled style="width:100%;flex: 1;" [(ngModel)]="dtoBean.logisticacompaniasocio" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-12">
+                                    <div class="p-field p-grid">
+                                        <label class="p-col-fixed label">Estado en Logistica</label>
+                                        <div class="p-col">
+                                            <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEstadoLogisticaDesc" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </p-fieldset>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Fundamentación">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label><b><u> Fundamentación del Requerimiento (Debe ser llenado por el jefe inmediato del
+                                    trabajador)</u></b></label>
+                        <br>
+                    </div>
+                    <ng-template ngFor let-row [ngForOf]="dtoBean.lstFundamentacion" let-i="index">
+                        <div class="p-field p-col-12 p-md-12">
+                            <label>{{row.descripcion}}</label>
+                            <textarea pInputTextarea style="width:100%" [(ngModel)]="row.detalle" [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+                        </div>
+                    </ng-template>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Participantes">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus" class="p-button-outlined" (click)="agregarParticipante()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.lstParticipantes" [responsive]="true" [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion1" *ngIf="objetoTitulo.puedeEditar">Acciones
+                                            </th>
+                                            <th class="tablaHeaderCodigo">Empleado</th>
+                                            <th class="tablaHeaderNombre">Nombre</th>
+                                            <th class="tablaHeaderCodigoChico">Sexo</th>
+                                            <th class="tablaHeaderNombreMedio">Tipo de Contrato</th>
+                                            <th class="tablaHeaderFecha">Término Contrato</th>
+                                            <th class="tablaHeaderFecha">Fecha Permanencia</th>
+                                            <th class="tablaHeaderFecha">Fecha Convenio</th>
+                                            <th class="tablaHeaderMonto">Importe Gasto</th>
+                                            <th class="tablaHeaderCodigoChico">Aprobó?</th>
+                                            <th class="tablaHeaderCodigoChico">Nota</th>
+                                            <th class="tablaHeaderCodigoChico">Asistió?</th>
+                                            <th class="tablaHeaderCodigoChico">Días Asistidos</th>
+                                            <th class="tablaHeaderCodigoChico">Horas Asistidas</th>
+                                            <th class="tablaHeaderNombreMedio">Comentario</th>
+                                            <th class="tablaHeaderNombreMedio">Correo</th>
+                                            <th class="tablaHeaderCodigo">Situación Empleado</th>
+                                            <th class="tablaHeaderNombreMedio">Compañía</th>
+                                            <th class="tablaHeaderNombreMedio">Unidad Negocio</th>
+                                            <th class="tablaHeaderNombreMedio">Sucursal</th>
+                                            <th class="tablaHeaderNombreMedio">Unidad Operativa</th>
+                                            <th class="tablaHeaderNombreMedio">Tipo Planilla</th>
+                                            <th class="tablaHeaderNombreMedio">Centro de Costo</th>
+                                            <th class="tablaHeaderNombreMedio">Puesto</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion1" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Acciones</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Eliminar" (click)="eliminarParticipante(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Empleado</span> {{row.empleado}}
+                                            </td>
+                                            <td class="tablaColumnaNombre">
+                                                <span class="p-column-title">Nombre</span> {{row.auxEmpleadoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Sexo</span> {{row.auxSexoId}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Tipo de Contrato</span> {{row.auxTipoContratoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Término Contrato</span> {{row.auxTerminoContrato | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Fecha Permanencia</span> {{row.fechapermanencia | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Fecha Convenio</span> {{row.fechaconvenio | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                            <td class="tablaColumnaMonto">
+                                                <span class="p-column-title">Importe Gasto</span> {{row.importegasto | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Aprobó?</span>
+                                                <p-checkbox binary="true" [disabled]="true" [ngModel]="booleanTrue" *ngIf="row.flagaprobado=='S'">
+                                                </p-checkbox>
+                                                <p-checkbox binary="true" [disabled]="true" [ngModel]="booleanFalse" *ngIf="row.flagaprobado!='S'">
+                                                </p-checkbox>
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Nota</span> {{row.nota | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Asistió?</span>
+                                                <p-checkbox binary="true" [disabled]="true" [ngModel]="booleanTrue" *ngIf="row.flagasistencia=='S'">
+                                                </p-checkbox>
+                                                <p-checkbox binary="true" [disabled]="true" [ngModel]="booleanFalse" *ngIf="row.flagasistencia!='S'">
+                                                </p-checkbox>
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Días Asistidos</span> {{row.diasasistencia}}
+                                            </td>
+                                            <td class="tablaColumnaCodigoChico">
+                                                <span class="p-column-title">Horas Asistidas</span> {{row.horasasistencia | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Comentario</span> {{row.comentario}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Correo</span> {{row.auxCorreo}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Situación Empleado</span> {{row.auxSituacionEmpleadoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Compañía</span> {{row.auxCompaniaNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Unidad Negocio</span> {{row.auxUnidadNegocioNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Sucursal</span> {{row.auxSucursalNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Unidad Operativa</span> {{row.auxUnidadOperativaNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Tipo Planilla</span> {{row.auxTipoPlanillaNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Centro de Costo</span> {{row.auxCentroCostoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Puesto</span> {{row.auxPuestoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span> {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span> {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Horarios">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <label>Vigencia Desde</label>
+                        <div class="p-inputgroup">
+                            <div style="flex: 1;">
+                                <p-calendar [disabled]="true" [(ngModel)]="dtoBean.fechadesde" style="width: 100%;" [style]="{'flex': '1'}" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                            </div>
+                            <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(dtoBean.fechadesde)" />
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <label>Vigencia Hasta</label>
+                        <div class="p-inputgroup">
+                            <div style="flex: 1;">
+                                <p-calendar [disabled]="true" [(ngModel)]="dtoBean.fechahasta" style="width: 100%;" [style]="{'flex': '1'}" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                            </div>
+                            <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(dtoBean.fechahasta)" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12" *ngIf="objetoTitulo.puedeEditar&&dtoBean.flaghorario=='D'">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Agregar Detalle" icon="fad fa-plus" class="p-button-outlined" (click)="agregarHorarioDetalle()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12" *ngIf="dtoBean.flaghorario=='D'">
+                        <br>
+                        <p-table [scrollable]="true" [value]="dtoBean.lstHorarioDetalle" [responsive]="true" scrollWidth="100%" [style]="{ width: '100%'}">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acciones</th>
+                                    <th class="tablaHeaderCodigoSuperChico">N°</th>
+                                    <th class="tablaHeaderCodigo">Desde</th>
+                                    <th class="tablaHeaderCodigo">Hasta</th>
+                                    <th class="tablaHeaderCodigo">Total Días</th>
+                                    <th class="tablaHeaderCodigo">Total Horas</th>
+                                    <th class="tablaHeaderCodigo">Lunes</th>
+                                    <th class="tablaHeaderCodigo">Martes</th>
+                                    <th class="tablaHeaderCodigo">Miercoles</th>
+                                    <th class="tablaHeaderCodigo">Jueves</th>
+                                    <th class="tablaHeaderCodigo">Viernes</th>
+                                    <th class="tablaHeaderCodigo">Sabado</th>
+                                    <th class="tablaHeaderCodigo">Domingo</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-columns="columns">
+                                <tr>
+                                    <td class="tablaHeaderAccion3">
+                                        <span class="p-column-title">Acciones</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="objetoTitulo.puedeEditar" (click)="editarHorarioDetalle(row)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="verHorarioDetalle(row)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Eliminar" *ngIf="objetoTitulo.puedeEditar" (click)="eliminarHorarioDetalle(row)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaCodigoSuperChico">
+                                        <span class="p-column-title">N°</span> {{row.secuencia}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Desde</span> {{row.fechadesde | date: 'dd/MM/yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Hasta</span> {{row.fechahasta | date: 'dd/MM/yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Total Días</span> {{row.totaldias}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Total Horas</span> {{row.totalhoras}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Lunes</span>
+                                        <label *ngIf="row.lunes=='S'">
+                                            {{row.horainiciolunes | date: 'HH:mm'}} -
+                                            {{row.horafinlunes | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Martes</span>
+                                        <label *ngIf="row.martes=='S'">
+                                            {{row.horainiciomartes | date: 'HH:mm'}} -
+                                            {{row.horafinmartes | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Miercoles</span>
+                                        <label *ngIf="row.miercoles=='S'">
+                                            {{row.horainiciomiercoles | date: 'HH:mm'}} -
+                                            {{row.horafinmiercoles | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Jueves</span>
+                                        <label *ngIf="row.jueves=='S'">
+                                            {{row.horainiciojueves | date: 'HH:mm'}} -
+                                            {{row.horafinjueves | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Viernes</span>
+                                        <label *ngIf="row.viernes=='S'">
+                                            {{row.horainicioviernes | date: 'HH:mm'}} -
+                                            {{row.horafinviernes | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Sabado</span>
+                                        <label *ngIf="row.sabado=='S'">
+                                            {{row.horainiciosabado | date: 'HH:mm'}} -
+                                            {{row.horafinsabado | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Domingo</span>
+                                        <label *ngIf="row.domingo=='S'">
+                                            {{row.horainiciodomingo | date: 'HH:mm'}} -
+                                            {{row.horafindomingo | date: 'HH:mm'}}
+                                        </label>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12" *ngIf="objetoTitulo.puedeEditar&&dtoBean.flaghorario=='R'">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Agregar Resumen" icon="fad fa-plus" class="p-button-outlined" (click)="agregarHorarioResumen()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-8">
+                        <br>
+                        <p-table [value]="dtoBean.lstHorarioResumen" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion2" *ngIf="dtoBean.flaghorario=='R'&&objetoTitulo.puedeEditar">Eliminar</th>
+                                    <th class="tablaHeaderCodigo">Periodo</th>
+                                    <th class="tablaHeaderCodigo">N° Días</th>
+                                    <th class="tablaHeaderCodigo">N° Horas</th>
+                                    <th class="tablaHeaderUsuario">Último Usuario</th>
+                                    <th class="tablaHeaderFecha">Última Modificación</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-columns="columns">
+                                <tr>
+                                    <td class="tablaHeaderAccion2" *ngIf="dtoBean.flaghorario=='R'&&objetoTitulo.puedeEditar">
+                                        <span class="p-column-title">Eliminar</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="objetoTitulo.puedeEditar" (click)="editarHorarioResumen(row)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Eliminar" *ngIf="objetoTitulo.puedeEditar" (click)="eliminarHorarioResumen(row)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Periodo</span> {{row.periodo | periodoPipe}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">N° Días</span> {{row.totaldias}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">N° Horas</span> {{row.totalhoras}}
+                                    </td>
+                                    <td class="tablaColumnaUsuario">
+                                        <span class="p-column-title">Último Usuario</span> {{row.ultimousuario}}
+                                    </td>
+                                    <td class="tablaColumnaFecha">
+                                        <span class="p-column-title">Última Modificación</span> {{row.ultimafechamodif | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-centrocostos-selector></app-centrocostos-selector>
+<app-selector-unidadnegocio></app-selector-unidadnegocio>
+<app-sucursalselector></app-sucursalselector>
+<app-selector-afemstcomun></app-selector-afemstcomun>
+<app-selector-pais></app-selector-pais>
+<app-selector-curso></app-selector-curso>
+<app-selector-miscelaneos></app-selector-miscelaneos>
+<app-centro-estudios-selector></app-centro-estudios-selector>
+<app-encuestaplantilla-selector></app-encuestaplantilla-selector>
+<app-personacomun-selector></app-personacomun-selector>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalHorario" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" header="HORARIO DETALLE : {{accionHorario == ACCIONES.NUEVO?'Nuevo':accionHorario == ACCIONES.EDITAR?'Editar':'Vista Previa'}}" [style]="{'width':'800px'}"
+        [responsive]="true">
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-12">
+                <p-fieldset legend="Días ({{contarDiasSeleccionados()}})">
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-4">
+                            <label>Vigencia Desde</label>
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-calendar [disabled]="true" [(ngModel)]="dtoBean.fechadesde" style="width: 100%;" [style]="{'flex': '1'}" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                                <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(dtoBean.fechadesde)" />
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label>Vigencia Hasta</label>
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-calendar [disabled]="true" [(ngModel)]="dtoBean.fechahasta" style="width: 100%;" [style]="{'flex': '1'}" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                                <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(dtoBean.fechahasta)" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-4">
+                            <label>Desde</label>
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="accionHorario==ACCIONES.VER" appendTo="body" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="horarioModal.fechadesde" style="width: 100%;flex: 1;" [style]="{'flex': '1'}"
+                                    [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                                <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(horarioModal.fechadesde)" />
+                            </div>
+
+                        </div>
+                        <div class="p-field p-col-12 p-md-4">
+                            <label>Hasta</label>
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="accionHorario==ACCIONES.VER" appendTo="body" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="horarioModal.fechahasta" style="width: 100%;flex: 1;" [style]="{'flex': '1'}"
+                                    [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                                <input pInputText disabled style="width:100%;flex: 1;" [ngModel]="diaDeSemanaLetras(horarioModal.fechahasta)" />
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <br>
+                            <table style="width: 100%;text-align: center;">
+                                <tr>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDiaTodos" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDiasTodos($event.checked)" [(ngModel)]="diasMarcadosTodos">
+                                        </p-checkbox><br>
+                                        <label for="chDiaTodos">Todos</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia1" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(1, $event.checked)" [(ngModel)]="diasMarcados[0]">
+                                        </p-checkbox><br>
+                                        <label for="chDia1">Lu</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia2" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(2, $event.checked)" [(ngModel)]="diasMarcados[1]">
+                                        </p-checkbox><br>
+                                        <label for="chDia2">Ma</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia3" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(3, $event.checked)" [(ngModel)]="diasMarcados[2]">
+                                        </p-checkbox><br>
+                                        <label for="chDia3">Mi</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia4" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(4, $event.checked)" [(ngModel)]="diasMarcados[3]">
+                                        </p-checkbox><br>
+                                        <label for="chDia4">Ju</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia5" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(5, $event.checked)" [(ngModel)]="diasMarcados[4]">
+                                        </p-checkbox><br>
+                                        <label for="chDia5">Vi</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia6" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(6, $event.checked)" [(ngModel)]="diasMarcados[5]">
+                                        </p-checkbox><br>
+                                        <label for="chDia6">Sa</label>
+                                    </td>
+                                    <td>
+                                        <p-checkbox binary="true" inputId="chDia7" [disabled]="accionHorario==ACCIONES.VER" (onChange)="onChangeDias(7, $event.checked)" [(ngModel)]="diasMarcados[6]">
+                                        </p-checkbox><br>
+                                        <label for="chDia7">Do</label>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Inicio</label>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciolunes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[0]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciomartes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[1]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciomiercoles" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[2]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciojueves" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[3]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainicioviernes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[4]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciosabado" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[5]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horainiciodomingo" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[6]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>
+                                        <label>Término</label>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinlunes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[0]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinmartes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[1]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinmiercoles" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[2]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinjueves" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[3]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinviernes" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[4]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafinsabado" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[5]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                    <td>
+                                        <p-calendar [(ngModel)]="horarioModal.horafindomingo" [timeOnly]="true" appendTo="body" [disabled]="!objetoTitulo.puedeEditar||!diasMarcados[6]||accionHorario==ACCIONES.VER">
+                                        </p-calendar>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </p-fieldset>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save" *ngIf="accionHorario!=ACCIONES.VER" class="p-button-outlined" (click)="guardarHorario()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply" class="p-button-outlined p-button-secondary" (click)="verModalHorario=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalHorarioResumen" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" header="HORARIO RESUMEN : {{accionHorario == ACCIONES.NUEVO?'Nuevo':accionHorario == ACCIONES.EDITAR?'Editar':'Vista Previa'}}" [style]="{'width':'300px'}"
+        [responsive]="true">
+
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-12">
+                <label>Periodo</label>
+                <div class="p-inputgroup">
+                    <p-inputNumber [min]="2022" [max]="3000" [style]="{'width':'100%'}" [disabled]="accionHorario==ACCIONES.VER" style="flex: 1;" [(ngModel)]="horarioResumenAnio">
+                    </p-inputNumber>
+                    <p-inputNumber [min]="1" [max]="12" [style]="{'width':'100%'}" style="flex: 1;" [disabled]="accionHorario==ACCIONES.VER" [(ngModel)]="horarioResumenMes">
+                    </p-inputNumber>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>N° Días</label>
+                <p-inputNumber [locale]="locale" [min]="1" [style]="{'width':'100%'}" [disabled]="accionHorario==ACCIONES.VER" [(ngModel)]="horarioResumenModal.totaldias">
+                </p-inputNumber>
+            </div>
+            <div class="p-field p-col-12 p-md-12">
+                <label>N° Horas</label>
+                <p-inputNumber [locale]="locale" [min]="1" [style]="{'width':'100%'}" [disabled]="accionHorario==ACCIONES.VER" [(ngModel)]="horarioResumenModal.totalhoras">
+                </p-inputNumber>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save" *ngIf="accionHorario!=ACCIONES.VER" class="p-button-outlined" (click)="guardarHorarioResumen()"></button>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply" class="p-button-outlined p-button-secondary" (click)="verModalHorarioResumen=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

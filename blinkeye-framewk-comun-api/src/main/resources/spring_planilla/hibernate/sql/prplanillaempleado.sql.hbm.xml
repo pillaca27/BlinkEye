@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prtipoplanilla
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="prplanillaempleado.listarperiodoportipoprocesoyfiltros">
+    	SELECT PE.Periodo as "codigo"
+		,SUBSTRING(PE.Periodo,0,5)||'-'||SUBSTRING(PE.Periodo,5,2) as "nombre"
+	FROM pr_planillaempleado PE
+		INNER JOIN EmpleadoMast EMP
+		ON PE.Empleado = EMP.Empleado
+	WHERE 1=1
+	AND PE.TipoProceso = :p_tipoprocesoid
+	AND PE.CompaniaSocio = isnull(:p_companiasocioid,PE.CompaniaSocio)
+	AND PE.TipoPlanilla = isnull(:p_tipoplanillaid,PE.TipoPlanilla)
+	AND isnull(EMP.Sucursal,'xxx') = isnull(:p_sucursalid,isnull(EMP.Sucursal,'xxx'))
+	group by PE.Periodo
+	order by PE.Periodo desc
+  	</sql-query>
+
+</hibernate-mapping>

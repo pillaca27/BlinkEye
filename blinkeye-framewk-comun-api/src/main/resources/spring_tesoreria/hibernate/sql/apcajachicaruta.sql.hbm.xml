@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : apcajachica
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="apcajachicaruta.obtenerDto">
+         select 
+			RUTA "ruta"
+			,RUTAINICIO "rutainicio"
+			,RUTAFINAL "rutafinal"
+			,DESCRIPCION "descripcion"
+			,PRECIOMINIMO "preciominimo"
+			,PRECIOMAXIMO "preciomaximo"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from AP_CAJACHICARUTA
+         where 
+			RUTA = :p_ruta
+    </sql-query>
+	
+	<sql-query name="apcajachicaruta.listardtofiltros">
+         select 
+			RUTA "ruta"
+			,RUTAINICIO "rutainicio"
+			,RUTAFINAL "rutafinal"
+			,DESCRIPCION "descripcion"
+			,PRECIOMINIMO "preciominimo"
+			,PRECIOMAXIMO "preciomaximo"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from AP_CAJACHICARUTA
+         where 
+			RUTA = ISNULL(:p_ruta,ruta)
+			and UPPER(ISNULL(DESCRIPCION,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(DESCRIPCION)) || '%'
+			and ESTADO = ISNULL(:p_estado,ESTADO)
+		order by DESCRIPCION
+    </sql-query>
+    
+</hibernate-mapping>

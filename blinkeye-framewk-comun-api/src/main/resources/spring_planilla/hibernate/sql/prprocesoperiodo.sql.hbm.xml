@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prtipoproceso
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	 <sql-query name="prprocesoperiodo.obtenerDto">
+         select 
+			COMPANIASOCIO "companiasocio"
+			,PERIODO "periodo"
+			,TIPOPLANILLA "tipoplanilla"
+			,TIPOPROCESO "tipoproceso"
+			,FLAGPROCESADO "flagprocesado"
+			,FLAGPERIODOMENSUAL "flagperiodomensual"
+			,GENERADOR "generador"
+			,FECHADESDE "fechadesde"
+			,FECHAHASTA "fechahasta"
+			,FECHAPROCESO "fechaproceso"
+			,FECHAPAGO "fechapago"
+			,DIASDELMESANTERIOR "diasdelmesanterior"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGAPROBADO "flagaprobado"
+			,FECHAAPROBACION "fechaaprobacion"
+			,APROBADOPOR "aprobadopor"
+			,NROVOUCHER "nrovoucher"
+			,FLAGPRESUPUESTO "flagpresupuesto"
+         from PR_PROCESOPERIODO
+         where 
+				COMPANIASOCIO = :p_companiasocio
+			AND PERIODO = :p_periodo
+			AND TIPOPLANILLA = :p_tipoplanilla
+			AND TIPOPROCESO = :p_tipoproceso
+    </sql-query>
+    
+    <sql-query name="prprocesoperiodo.listardtofiltros">
+           select 
+			COMPANIASOCIO "companiasocio"
+			,PERIODO "periodo"
+			,TIPOPLANILLA "tipoplanilla"
+			,TIPOPROCESO "tipoproceso"
+			,FLAGPROCESADO "flagprocesado"
+			,FLAGPERIODOMENSUAL "flagperiodomensual"
+			,GENERADOR "generador"
+			,FECHADESDE "fechadesde"
+			,FECHAHASTA "fechahasta"
+			,FECHAPROCESO "fechaproceso"
+			,FECHAPAGO "fechapago"
+			,DIASDELMESANTERIOR "diasdelmesanterior"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGAPROBADO "flagaprobado"
+			,FECHAAPROBACION "fechaaprobacion"
+			,APROBADOPOR "aprobadopor"
+			,NROVOUCHER "nrovoucher"
+			,FLAGPRESUPUESTO "flagpresupuesto"
+         from PR_PROCESOPERIODO
+         where 
+				COMPANIASOCIO = :p_companiasocio
+			AND PERIODO = :p_periodo
+			AND TIPOPLANILLA = :p_tipoplanilla
+			AND TIPOPROCESO = :p_tipoproceso
+			and estado = ISNULL(:p_estado,estado)
+    </sql-query>
+    
+    <sql-query name="prprocesoperiodo.obtenerDtoPorCompaniaPeriodoTipoplanillaFlagprocesadoN">
+           select 
+			COMPANIASOCIO "companiasocio"
+			,PERIODO "periodo"
+			,TIPOPLANILLA "tipoplanilla"
+			,TIPOPROCESO "tipoproceso"
+			,FLAGPROCESADO "flagprocesado"
+			,FLAGPERIODOMENSUAL "flagperiodomensual"
+			,GENERADOR "generador"
+			,FECHADESDE "fechadesde"
+			,FECHAHASTA "fechahasta"
+			,FECHAPROCESO "fechaproceso"
+			,FECHAPAGO "fechapago"
+			,DIASDELMESANTERIOR "diasdelmesanterior"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FLAGAPROBADO "flagaprobado"
+			,FECHAAPROBACION "fechaaprobacion"
+			,APROBADOPOR "aprobadopor"
+			,NROVOUCHER "nrovoucher"
+			,FLAGPRESUPUESTO "flagpresupuesto"
+         from PR_PROCESOPERIODO
+         where
+         		1=1         		 
+			AND COMPANIASOCIO = :p_companiasocio
+			AND PERIODO >= :p_periodo
+			AND TIPOPLANILLA = :p_tipoplanilla			
+			AND FlagProcesado = 'N'			
+			AND ROWNUM = 1
+        ORDER BY PERIODO ASC
+    </sql-query>
+    
+</hibernate-mapping>

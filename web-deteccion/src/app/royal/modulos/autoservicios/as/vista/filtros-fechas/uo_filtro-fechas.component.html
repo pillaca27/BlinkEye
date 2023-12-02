@@ -1,0 +1,176 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_allcompania" binary="true"
+                                        (onChange)="onChangeCompania($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaCompanias"
+                                        [(ngModel)]="filtro.idcompaniasocio" filter="true"
+                                        [disabled]="filtro.par_allcompania">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo de Planilla</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_alltipoplanilla" binary="true"
+                                        (onChange)="onChangePlanilla($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaTipoPlanilla"
+                                        [(ngModel)]="filtro.idtipoplanilla" filter="true"
+                                        [disabled]="filtro.par_alltipoplanilla">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Centro de Costo</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_allcentrocosto" binary="true"
+                                        (onChange)="onChangeCentroCosto($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaCentroCostos"
+                                        [(ngModel)]="filtro.idcentrocosto" filter="true"
+                                        [disabled]="filtro.par_allcentrocosto">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Sucursal</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_allsucursal" binary="true"
+                                        (onChange)="onChangeSucursal($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaSucursales"
+                                        [(ngModel)]="filtro.idsucursal" filter="true"
+                                        [disabled]="filtro.par_allsucursal">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Unidad Negocio</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_allunidadnegocio" binary="true"
+                                        (onChange)="onChangeUnidadNegocio($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaUnidadNegocio"
+                                        [(ngModel)]="filtro.idunidadnegocioasignada" filter="true"
+                                        [disabled]="filtro.par_allunidadnegocio">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Area</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-checkbox [(ngModel)]="filtro.par_allarea" binary="true"
+                                        (onChange)="onChangeArea($event.checked)"></p-checkbox>
+                                </div>
+                                <div style="flex: 5;">
+                                    <p-dropdown class="extender" [options]="listaAreas" [(ngModel)]="filtro.idarea"
+                                        filter="true" [disabled]="filtro.par_allarea">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;"
+                                    [(ngModel)]="filtro.empleaadonombrecompleto" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar"
+                                    (click)="agregarEmpleadoModal()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar"
+                                    (click)="limpiarEmpleado()" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                                    style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy"
+                                    firstDayOfWeek="1" [(ngModel)]="filtro.fechaDesde">
+                                </p-calendar>
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200"
+                                    style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy"
+                                    firstDayOfWeek="1" [(ngModel)]="filtro.fechaHasta">
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-2">
+
+                </div>
+
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton label="Buscar" icon="fa fa-binoculars" style="font-size:14px"
+                        class="ui-button-info ui-button-raised ui-button-rounded" type="button"
+                        (click)="buscar()"></button>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-personacomun-selector></app-personacomun-selector>

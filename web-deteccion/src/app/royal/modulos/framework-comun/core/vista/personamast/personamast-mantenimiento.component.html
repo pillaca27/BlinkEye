@@ -1,0 +1,369 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-tabView (onChange)="onTabChange($event)" [activeIndex]="index">
+                <p-tabPanel header="Inf. General">
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Código Persona</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.persona" maxlength="4" type="text" [disabled]="true" [readonly]="!esPersona" pKeyFilter="num" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Clase Persona</label>
+                                    <div class="p-col">
+                                        <p-dropdown [(ngModel)]="dto.tipopersona" [filter]="true" [options]="lstTipoPersona" [readonly]="!esPersona" (onChange)="validarPorTipoPersona()" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Tipo Persona</label>
+                                    <div class="p-col">
+                                        <div class="p-inputgroup">
+                                            <div class="p-field-checkbox">
+                                                <p-checkbox [disabled]="true" [(ngModel)]="esProveedorC" binary="true" [readonly]="!esPersona" inputId="binary"></p-checkbox>
+                                                <label for="ny">Proveedor</label>
+                                            </div>&nbsp;
+                                            <div class="p-field-checkbox">&nbsp;
+                                                <p-checkbox [disabled]="true" [(ngModel)]="esEmpleadoC" binary="true" [readonly]="!esPersona" inputId="binary"></p-checkbox>
+                                                <label for="ny">Empleado</label> &nbsp;
+                                            </div> &nbsp;
+                                            <div class="p-field-checkbox">
+                                                <p-checkbox [disabled]="true" [(ngModel)]="esClienteC" binary="true" [readonly]="!esPersona" inputId="binary"></p-checkbox>
+                                                <label for="ny">Cliente</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Nombre Búsqueda</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.busqueda" maxlength="130" type="text" (keyup)="nombreCompletoKeyJD()" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-6">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Nombre Completo</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.nombrecompleto" maxlength="150" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider align="left" *ngIf="dto.tipopersona != 'J' ">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Datos Persona Natural</b>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Apellido Paterno</label>
+                                    <div class="p-col">
+                                        <input (keyup)="nombreCompletoKey()" pInputText [(ngModel)]="dto.apellidopaterno" [readonly]="!esPersona" maxlength="40" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Apellido Materno</label>
+                                    <div class="p-col">
+                                        <input (keyup)="nombreCompletoKey()" pInputText [(ngModel)]="dto.apellidomaterno" [readonly]="!esPersona" maxlength="40" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Nombre</label>
+                                    <div class="p-col">
+                                        <input (keyup)="nombreCompletoKey()" pInputText [(ngModel)]="dto.nombres" maxlength="40" [readonly]="!esPersona" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Estado Civil</label>
+                                    <div class="p-col">
+                                        <p-dropdown [(ngModel)]="dto.estadocivil" [filter]="true" [options]="lstCivil" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Sexo</label>
+                                    <div class="p-col">
+                                        <p-dropdown [(ngModel)]="dto.sexo" [filter]="true" [options]="lstSexo" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Fecha Nacimiento</label>
+                                    <div class="p-col">
+                                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [disabled]="!objetoTitulo.puedeEditar || !esPersona" [(ngModel)]="dto.fechanacimiento" dateFormat="dd/mm/yy" [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4" *ngIf="dto.tipopersona != 'J'">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Fecha Constitución</label>
+                                    <div class="p-col">
+                                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [disabled]="!objetoTitulo.puedeEditar || !esPersona" [(ngModel)]="dto.fechanacimiento" dateFormat="dd/mm/yy" [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Direcciones</b>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-10">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Email</label> &nbsp;
+                                    <label class="p-col-fixed label">Coloque ";" (punto y coma) para separar emails.</label>
+                                    <div class="p-col">
+                                        <textarea pInputTextarea rows="3" [(ngModel)]="dto.correoelectronico" maxlength="255" [disabled]="!objetoTitulo.puedeEditar" [readonly]="!esPersona" style="width: 100%; max-width: 100%;"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-10">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Email Otros</label> &nbsp;
+                                    <label class="p-col-fixed label">Coloque ";" (punto y coma) para separar emails.</label>
+                                    <div class="p-col">
+                                        <textarea pInputTextarea rows="3" [(ngModel)]="dto.correoelectronicootros" maxlength="255" [disabled]="true" [readonly]="!esPersona" style="width: 100%; max-width: 100%;"> </textarea>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-10">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Dirección</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.direccion" maxlength="200" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-2">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.domicliadoPais" [readonly]="!esPersona" binary="true" inputId="binary">
+                                </p-checkbox>
+                                &nbsp; <label>Domiciliado en el País</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Dpto-Prov-Zona</label>
+                                    <div class="p-col">
+                                        <div class="p-inputgroup">
+                                            <input pInputText [(ngModel)]="dto.ubigeo" maxlength="200" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                            <button pButton icon="fa fa-binoculars" (click)="seleccionarUbigeo()" type="button" [disabled]="!objetoTitulo.puedeEditar || !esPersona" title="Buscar Dpto-Prove-Zona"></button>
+                                            <button pButton icon="fa fa-trash" (click)="limpiarUbigeo()" type="button" [disabled]="!objetoTitulo.puedeEditar || !esPersona" title="Limpiar Dpto-Prove-Zona"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Teléfono</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.telefono" maxlength="20" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" pKeyFilter="num" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-4">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Teléfono 2</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.telefonoemergencia" maxlength="20" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" pKeyFilter="num" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Documentos de Identificación</b>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Tipo Documento</label>
+                                    <div class="p-col">
+                                        <p-dropdown [(ngModel)]="dto.tipodocumento" *ngIf="dto.tipopersona == 'J' " [filter]="true" [options]="lstTipoDocumento" [readonly]="!esPersona" (onChange)="tipoDocumentosChange()" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+
+                                        <p-dropdown [(ngModel)]="dto.tipodocumento" *ngIf="dto.tipopersona != 'J' " [filter]="true" [options]="lstTipoDocumentoj" [readonly]="!esPersona" (onChange)="tipoDocumentosChange()" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Documento</label>
+                                    <div class="p-col">
+                                        <input *ngIf="dto.tipodocumento != 'D'" pInputText [(ngModel)]="dto.documento" [readonly]="!esPersona" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" (keyup)="documentoKey()" [style]="{'width':'100%'}" />
+
+                                        <input *ngIf="dto.tipodocumento == 'D'" pInputText [(ngModel)]="dto.documento" maxlength="8" type="text" [disabled]="!objetoTitulo.puedeEditar" (keyup)="documentoKey()" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Doc. Identidad</label>
+                                    <div class="p-col">
+                                        <input *ngIf="dto.tipodocumento != 'D'" pInputText [(ngModel)]="dto.documentoidentidad" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [readonly]="!esPersona" [style]="{'width':'100%'}" />
+                                        <input *ngIf="dto.tipodocumento == 'D'" pInputText [(ngModel)]="dto.documentoidentidad" maxlength="8" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label importante">Doc. Fiscal</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.documentofiscal" maxlength="20" type="text" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Ingresado por</b>
+                        </div>
+                    </p-divider>
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Ingreso Usuario</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.ingresousuario" maxlength="20" type="text" [readonly]="!esPersona" [disabled]="true" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Ingreso Fecha Registro</label>
+                                    <div class="p-col">
+                                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [disabled]="true" [(ngModel)]="dto.ingresofecharegistro" dateFormat="dd/mm/yy" [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Ingreso Aplicación Código</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.ingresoaplicacioncodigo" maxlength="20" type="text" [readonly]="!esPersona" [disabled]="true" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Origen</label>
+                                    <div class="p-col">
+                                        <input pInputText [(ngModel)]="dto.origen" maxlength="20" type="text" [disabled]="true" [readonly]="!esPersona" [style]="{'width':'100%'}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-3">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Estado</label>
+                                    <div class="p-col">
+                                        <p-dropdown [(ngModel)]="dto.estado" [filter]="true" [options]="lstEstados" [readonly]="!esPersona" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="Clientes" *ngIf="esClienteC">
+                    <p>Clientes</p>
+                </p-tabPanel>
+
+                <p-tabPanel header="Proveedores" *ngIf="esProveedorC">
+                    <app-proveedormast-mantenimiento></app-proveedormast-mantenimiento>
+                </p-tabPanel>
+
+                <p-tabPanel header="Empleados" *ngIf="esEmpleadoC">
+                    <app-empleadomast-mantenimiento></app-empleadomast-mantenimiento>
+                </p-tabPanel>
+
+                <p-tabPanel header="Direcciones" *ngIf="direcciones">
+                </p-tabPanel>
+
+                <p-tabPanel header="Inf. Adicional">
+                    <app-info-adicional-mantenimiento></app-info-adicional-mantenimiento>
+                </p-tabPanel>
+
+
+            </p-tabView>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<app-selector-ubicaciongeografica></app-selector-ubicaciongeografica>
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

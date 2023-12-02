@@ -1,0 +1,182 @@
+<p-card>
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="fad fa-filter p-mr-2"></i>
+            <b>Filtros</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="companias" [style]="{'width':'100%'}" [(ngModel)]="filtro.compania">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proceso</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="procesos" [(ngModel)]="filtro.proceso" [style]="{'width':'100%'}" (onChange)="cargarEstadosProceso()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstadoProceso" [style]="{'width':'100%'}" [(ngModel)]="filtro.estadoProceso">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha Preparación</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.desde">
+                                    </p-calendar>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [style]="{'width':'100%'}" [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="filtro.hasta">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Referencia</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="filtro.referencia" maxlength="20" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proveedor / Empleado / Cliente / Persona</label>
+                        <div class="p-col">
+                            <p-autoComplete [(ngModel)]="solicitante2" [suggestions]="filtroSolicitante2" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (completeMethod)="filtroSolicitanteSimple2($event)" field="nombre" [size]="30" placeholder="Proveedor/Empleado/Cliente/Persona"
+                                [minLength]="3">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Monto</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="filtro.montodesde" inputId="locale-us" mode="decimal" locale="en-US" [inputStyle]="{'text-align': 'right'}" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="filtro.montohasta" inputId="locale-us" mode="decimal" locale="en-US" [inputStyle]="{'text-align': 'right'}" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Área Revisora</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstAreaRevisora" [style]="{'width':'100%'}" [(ngModel)]="filtro.area">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table #dtPrestamo [rows]="30" [style]="{ width:'100%' }" [responsive]="true" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPrestamos($event)" [scrollable]="true" scrollHeight="300px"
+        [value]="filtro.paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion0">Acción</th>
+                <th class="tablaHeaderCodigoChico">Transacción</th>
+                <th class="tablaHeaderNombre">Proceso</th>
+                <th class="tablaHeaderAccion5">Referencia</th>
+                <th class="tablaHeaderFecha">F. Preparación</th>
+                <th class="tablaHeaderEstadoGrande">Estado</th>
+                <th class="tablaHeaderNombre">Solicitante</th>
+                <th class="tablaHeaderCodigoChico">Nivel</th>
+                <th class="tablaHeaderMonto">Monto</th>
+                <th class="tablaHeaderNombre">Proveedor / Empleado / Cliente / Persona</th>
+                <!--
+            <th class="tablaHeaderTexto">Área Revisora</th>
+            -->
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion0">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(rowData)"></button>
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Id</span> {{rowData.transaccion}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Proceso</span> {{rowData.procesoFlujoDescripcion}}
+                </td>
+                <td class="tablaColumnaAccion5">
+                    <span class="p-column-title">Referencia</span> {{rowData.referencia}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">F. Preparación</span> {{rowData.fechaRegistro | date: 'dd/MM/yyyy'}}
+                </td>
+                <td class="tablaColumnaEstadoGrande">
+                    <span class="p-column-title">Estado</span> {{rowData.estadoDescripcion}}
+                    <!--
+                <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Aprobado</label>
+                <label *ngIf="rowData.estado == 'S'">{{rowData.estadoDescripcion}}</label>
+                <label *ngIf="rowData.estado == 'R'" class="tablaEstadoInactivo">Rechazado</label>
+                -->
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Solicitante</span> {{rowData.solicitante}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Nivel</span> {{rowData.nivelActual}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Monto</span> {{rowData.monto | number:'.2-2'}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Proveedor / Empleado / Cliente / Persona</span> {{rowData.nombrepersonareferencia}}
+                </td>
+                <!--
+            <td class="tablaColumnaTexto">
+                <span class="p-column-title">Área Revisora</span>
+                {{rowData.areaNombre}}
+            </td>
+            -->
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="10">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

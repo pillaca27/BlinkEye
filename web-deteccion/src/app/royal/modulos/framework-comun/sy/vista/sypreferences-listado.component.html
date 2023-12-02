@@ -1,0 +1,164 @@
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+              <!--   <div class="p-field p-col-12 p-md-3">
+                    <label>Usuario</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.usuario" maxlength="20"
+                    (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.usuario=$event.toUpperCase()" /> -->
+                        <!-- <div class="p-inputgroup">
+                          
+
+                            <input pInputText type="text" [(ngModel)]="filtro.usuario" disabled class="hoverDisabled"
+                                style="flex: 5;" style="width: 30% !important" maxlength="20"/>
+                            <input pInputText type="text" [(ngModel)]="filtro.usuariodescripcion" disabled style="flex: 5;"
+                                class="hoverDisabled" style="width: 70% !important" />
+                            <button pButton icon="fa fa-binoculars" type="button" (click)="mostrarSelectorUsuario()"
+                                [style]="{'flex': '1'}" title="Buscar Usuario"></button>
+                            <button pButton type="button" icon="fa fa-trash" class="ui-button-warn" (click)="limpiarSelectorUsuario()"
+                                [style]="{'flex': '1'}" title="Buscar Proveedor"></button>
+                        </div> -->
+                <!-- </div> -->
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Preference</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.preference" maxlength="10"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.preference=$event.toUpperCase()" />
+                </div>
+ <!--                <div class="p-field p-col-12 p-md-3">
+                    <label>Aplicación código</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.aplicacioncodigo"
+                        maxlength="2" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.aplicacioncodigo=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Tipovalor</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.tipovalor" maxlength="1"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.tipovalor=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Valorstring</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.valorstring" maxlength="15"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.valorstring=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Valornumero</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.valornumero" maxlength="4"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.valornumero=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Valorfecha</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.valorfecha" maxlength="8"
+                        (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.valorfecha=$event.toUpperCase()" />
+                </div> -->
+               <!--  <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimousuario</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.ultimousuario" maxlength="20"
+                        (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimousuario=$event.toUpperCase()" />
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Ultimafechamodif</label>
+                    <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.ultimafechamodif"
+                        maxlength="8" (keypress)="defaultBuscar($event)"
+                        (ngModelChange)="filtro.ultimafechamodif=$event.toUpperCase()" />
+                </div>
+ -->
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+</app-botones-listado>
+
+<p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" 
+    [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true"
+    (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+    [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderAccion4">Acción</th>
+            <th class="tablaHeaderCodigo">Usuario</th>
+            <th class="tablaHeaderCodigo">Preference</th>
+            <th class="tablaHeaderCodigo">Aplicación código</th>
+            <th class="tablaHeaderCodigo">Tipo valor</th>
+            <th class="tablaHeaderCodigo">Valor string</th>
+            <th class="tablaHeaderMonto">Valor numero</th>
+            <th class="tablaHeaderFecha">Valor fecha</th>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-row>
+        <tr>
+            <td class="tablaColumnaAccion3">
+                <span class="p-column-title">Acción</span>
+                <table>
+                    <tr>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar"
+                                (click)="coreEditar(row)"></button>
+                        </th>
+                        <th>
+                            <button pButton pRipple type="button" icon="fad fa-search"
+                                class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar"
+                                (click)="coreVer(row)"></button>
+                        </th>
+                        <th>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                class="p-button-rounded p-button-danger p-button-text" title="Eliminar"
+                                *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                        </th>
+                    </tr>
+                </table>
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Usuario</span>
+                {{row.usuario}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Preference</span>
+                {{row.preference}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Aplicación código</span>
+                {{row.aplicacioncodigo}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipo valor</span>
+                {{row.tipovalor}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Valor string</span>
+                {{row.valorstring}}
+            </td>
+            <td class="tablaColumnaMonto">
+                <span class="p-column-title">Valor numero</span>
+                {{row.valornumero| number:'1.0-0'}}
+            </td>
+            <td class="tablaColumnaFecha">
+                <span class="p-column-title">Valor fecha</span>
+                {{row.valorfecha| date: 'dd/MM/yyyy'}}
+            </td>
+
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="8">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<app-selector-usuariocomun></app-selector-usuariocomun>

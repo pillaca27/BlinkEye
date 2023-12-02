@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="accashflowmst.listar">
+	    <![CDATA[
+	        select cashflowcode as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_CASHFLOWMST	        
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accashflowmst.listarActivos">
+	    <![CDATA[
+	        select cashflowcode as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_CASHFLOWMST
+	        where status = 'A'
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accashflowmst.obtenerTabla">
+	    <![CDATA[
+	        select cashflowcode as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_CASHFLOWMST
+			where cashflowcode = :p_cashflowcode
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="accashflowmst.listarfiltros">
+    	select cashflowcode as "codigo", localname as "nombre"
+    			,status as "estadoId" 
+    	from AC_CASHFLOWMST 
+    	where  cashflowcode = ISNULL(:p_cashflowcode,cashflowcode)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))			
+		order by localname	    	
+	</sql-query>
+	
+	<sql-query name="accashflowmst.obtenerDto">
+         select 
+			CASHFLOWCODE "cashflowcode"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,CASHFLOWGROUP "cashflowgroup"
+			,INTERNALCODE "internalcode"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,EXCLUIRFLAG "excluirflag"
+
+         from AC_CASHFLOWMST
+         where 
+			CASHFLOWCODE = :p_cashflowcode
+    </sql-query>
+    
+    <sql-query name="accashflowmst.listardtofiltros">
+         select 
+			CASHFLOWCODE "cashflowcode"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,CASHFLOWGROUP "cashflowgroup"
+			,INTERNALCODE "internalcode"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,EXCLUIRFLAG "excluirflag"
+
+         from AC_CASHFLOWMST
+         where 
+				CASHFLOWCODE = ISNULL(:p_cashflowcode,CASHFLOWCODE)			
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and status = ISNULL(:p_status,status)
+		order by localname
+    </sql-query>
+    
+</hibernate-mapping>

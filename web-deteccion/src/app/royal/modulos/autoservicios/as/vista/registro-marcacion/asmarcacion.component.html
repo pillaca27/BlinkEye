@@ -1,0 +1,79 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Nombre del Usuario</label>
+                        <div class="p-col">
+                            <input pInputText type="text" disabled [(ngModel)]="registro.bean.nombreEmpleado" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tarjeta</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [(ngModel)]="registro.bean.carnetid" disabled />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha</label>
+                        <div class="p-col">
+                            <input pInputText type="text" [ngModel]="time | date: 'hh:mm:ss a'" disabled />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="listaAccion" [(ngModel)]="registro.bean.lugarrecoleccion"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-6"></div>
+
+                <div class="p-field p-col-12 p-md-2" style="text-align: right;">
+                    <button pButton icon="fa fa-check" label="Aceptar" style="margin-right:10px" *ngIf="verBoton" class="ui-button-rounded" type="button" title="Buscar" (click)="aceptar()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br>
+    <p-table #dt [scrollable]="true" scrollHeight="300px" [responsive]="true" [value]="registro.lista" [paginator]="true" [rows]="20" [autoLayout]="true" [style]="{ width:'100%' }" selectionMode="single">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderEstado">Fecha/Hora</th>
+                <th class="tablaHeaderEstado">Tipo</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-rowData let-rowIndex="rowIndex">
+            <tr>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Fecha/Hora :</span> {{rowData.pk.fecha | date: 'dd/MM/yyyy HH:mm'}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Tipo :</span> {{rowData.lugarrecoleccion ==='E' ?'Entrada':'Salida'}}
+                </td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="2">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</p-card>

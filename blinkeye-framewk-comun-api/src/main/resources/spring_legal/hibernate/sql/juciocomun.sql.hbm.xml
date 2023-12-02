@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : legal.juciocomun
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="juciocomun.paginadoContar">
+     	SELECT 
+      		count(1)
+		FROM   le_juicios
+		WHERE                 
+       		le_juicios.COMPANYOWNER like :p_compania||'%'
+       		AND ( LE_Juicios.JUICIO LIKE '%' || ISNULL(:p_codigo,ISNULL(LE_Juicios.JUICIO,'ISNULL') ) || '%' )
+  	   AND ( LE_Juicios.DESCRIPCION LIKE '%' || ISNULL(:p_descripcion,ISNULL(LE_Juicios.DESCRIPCION,'ISNULL') ) || '%' )   
+
+    </sql-query>
+    
+    <sql-query name="juciocomun.paginadoListar">
+     SELECT 
+       le_juicios.juicio          AS "juicio",
+       le_juicios.tipo          as "tipo",
+       le_juicios.fechainicio   AS "fechainicio",
+       le_juicios.fechacierre   AS "fechacierre",
+       le_juicios.descripcion   AS "descripcion",
+       le_juicios.naturaleza    AS "naturaleza",
+       le_juicios.tipoproceso   AS "tipoproceso",
+       le_juicios.monedademanda AS "monedademanda",
+       le_juicios.montodemanda  AS "montodemanda",
+       le_juicios.montofinal   AS "montofinal"
+	FROM   le_juicios
+	WHERE                 
+       		le_juicios.COMPANYOWNER like :p_compania||'%'
+       		AND ( LE_Juicios.JUICIO LIKE '%' || ISNULL(:p_codigo,ISNULL(LE_Juicios.JUICIO,'ISNULL') ) || '%' )
+  	   AND ( LE_Juicios.DESCRIPCION LIKE '%' || ISNULL(:p_descripcion,ISNULL(LE_Juicios.DESCRIPCION,'ISNULL') ) || '%' )
+         
+    </sql-query>
+    
+    <sql-query name="juciocomun.obtenerJucio">
+    SELECT  
+    	LE_Juicios.JUICIO as "codigo",           
+  		LE_Juicios.DESCRIPCION as "nombre"
+  	FROM LE_Juicios  
+  	WHERE  
+  		LE_Juicios.JUICIO = :p_juicio 
+  		AND ( LE_Juicios.COMPANYOWNER = :p_compania )
+    </sql-query>
+    
+</hibernate-mapping>

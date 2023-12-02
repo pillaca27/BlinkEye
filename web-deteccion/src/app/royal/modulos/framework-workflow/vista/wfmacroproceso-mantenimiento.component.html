@@ -1,0 +1,107 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Macro proceso</label>
+                        <div class="p-col">
+                            <input #myMacroProcesoId title="Macro proceso" pInputText [(ngModel)]="dto.macroProcesoId" maxlength="4" type="text" [disabled]="true" [style]="{'width':'100%'}" (ngModelChange)="dto.macroProcesoId=$event.toUpperCase()" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Nombre</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.nombre" maxlength="100" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.nombre=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-col-12 p-md-2">
+            <button pButton pRipple type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="nuevodetalle()"></button>
+        </div>
+        <div class="p-col-12 p-md-10"></div>
+    </div>
+
+    <p-table [value]="dto.detalle" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="10">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Acción</th>
+                <th class="tablaHeaderCodigo">Macro proceso</th>
+                <th class="tablaHeaderCodigo">Proceso origen</th>
+                <th class="tablaHeaderCodigo">Proceso destino</th>
+                <th class="tablaHeaderMonto">Orden</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-ri="rowIndex">
+            <tr>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" *ngIf="menuSeguridad.flgBorrar" (click)="eliminardetalle(row,ri)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Macro proceso</span> {{row.macroProcesoId}}
+                    <!--    <input #myMacroProcesoId title="Macro proceso" pInputText [(ngModel)]="row.macroProcesoId" maxlength="4"
+                    type="text" [disabled]="true" [style]="{'width':'100%'}" required /> -->
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Proceso origen</span>
+                    <!-- {{row.procesoOrigenId}} -->
+                    <input #myProcesoOrigenId title="Proceso origen" pInputText [(ngModel)]="row.procesoOrigenId" maxlength="4" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" required />
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Proceso destino</span>
+                    <!-- {{row.procesoDestinoId}} -->
+                    <input #myProcesoDestinoId title="Proceso destino" pInputText [(ngModel)]="row.procesoDestinoId" maxlength="4" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" required />
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Orden</span>
+                    <!--  {{row.orden| number:'1.0-0'}} -->
+                    <p-inputNumber [locale]="locale" [(ngModel)]="row.orden" inputId="integeronly" [disabled]="!objetoTitulo.puedeEditar" [inputStyle]="{'width':'100%','text-align': 'right'}" maxlength="12">
+                    </p-inputNumber>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="5">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [creacionUsuario]="dto.creacionUsuario" [creacionFecha]="dto.creacionFecha">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

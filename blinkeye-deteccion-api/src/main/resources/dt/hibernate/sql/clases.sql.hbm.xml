@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Clases
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="clases.obtenerDto">
+         select 
+			a.ID_Clase "idClase"
+			,a.Nombre "nombre"
+			,a.Fecha_Hora_Inicio "fechaHoraInicio"
+			,a.Fecha_Hora_Fin "fechaHoraFin"
+			,a.ID_Docente "idDocente"
+
+         from CLASES a
+         where 
+			a.ID_Clase = :p_idclase
+
+    </sql-query>
+
+    <sql-query name="clases.listarPaginadoContar">
+         select count(1)
+         from CLASES a
+         where 
+			a.ID_Clase = ISNULL(:p_idclase, a.ID_Clase)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="clases.listarPaginadoSentencia">
+         select 
+			a.ID_Clase "idClase"
+			,a.Nombre "nombre"
+			,a.Fecha_Hora_Inicio "fechaHoraInicio"
+			,a.Fecha_Hora_Fin "fechaHoraFin"
+			,a.ID_Docente "idDocente"
+
+         from CLASES a
+         where 
+			a.ID_Clase = ISNULL(:p_idclase, a.ID_Clase)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="clases.listarDtoCore">
+         select 
+			a.ID_Clase "idClase"
+			,a.Nombre "nombre"
+			,a.Fecha_Hora_Inicio "fechaHoraInicio"
+			,a.Fecha_Hora_Fin "fechaHoraFin"
+			,a.ID_Docente "idDocente"
+
+         from CLASES a
+         where 
+			a.ID_Clase = ISNULL(:p_idclase, a.ID_Clase)
+			AND a.Nombre like '%' + ISNULL(:p_nombre, a.Nombre) + '%' 
+
+    </sql-query>
+
+    <sql-query name="clases.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="clases.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+    <sql-query name="clases.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+    </sql-query>
+
+</hibernate-mapping>

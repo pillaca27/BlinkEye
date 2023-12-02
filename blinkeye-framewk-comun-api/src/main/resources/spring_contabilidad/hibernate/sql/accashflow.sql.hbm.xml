@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="accashflow.contar">
+	    <![CDATA[
+	        SELECT 
+	        	 count(*)  
+		    FROM AC_CashFlowGroup,   
+		         AC_CashFlowMst,   
+		         AC_CashFlowMajor  
+		    WHERE ( AC_CashFlowGroup.CashFlowGroup = AC_CashFlowMst.CashFlowGroup ) and  
+		         ( AC_CashFlowMajor.CashFlowMajor = AC_CashFlowGroup.CashFlowMajor )  and
+		         UPPER(ISNULL(AC_CashFlowMajor.TipoRegistroFlag,'A')) like '%' + ISNULL(:p_tiporegistro,UPPER(AC_CashFlowMajor.TipoRegistroFlag)) + '%' and
+		          UPPER(ISNULL(AC_CashFlowMajor.TipoOperacionFlag,'A')) like '%' + ISNULL(:p_tipooperacion,UPPER(AC_CashFlowMajor.TipoOperacionFlag)) + '%' and
+		           UPPER(ISNULL(AC_CashFlowGroup.CashFlowGroup,'A')) like '%' + ISNULL(:p_grupoflujo,UPPER(AC_CashFlowGroup.CashFlowGroup)) + '%' and
+		            UPPER(ISNULL(AC_CashFlowMst.CashFlowCode,'A')) like '%' + ISNULL(:p_codigo,UPPER(AC_CashFlowMst.CashFlowCode)) + '%' and
+ 			UPPER(ISNULL(AC_CashFlowMst.LocalName,'A')) like '%' + ISNULL(:p_descripcion,UPPER(AC_CashFlowMst.LocalName)) + '%'     
+
+	    ]]>
+	</sql-query>
+    
+	<sql-query name="accashflow.listar">
+	    <![CDATA[
+	        SELECT cast(AC_CashFlowMajor.TipoRegistroFlag as varchar) as "tiporegistroflag",   
+		         AC_CashFlowGroup.CashFlowMajor as "cashflowmajor",   
+		         AC_CashFlowMajor.LocalName as "localname",
+		         AC_CashFlowGroup.CashFlowGroup as "cashflowgroup",
+		         AC_CashFlowGroup.LocalName as "localname1",
+		         AC_CashFlowMst.CashFlowCode as "cashflowcode",
+		         AC_CashFlowMst.LocalName as "localname2",
+		         cast(AC_CashFlowMajor.TipoOperacionFlag as varchar)  as "tipooperacionflag"  
+		    FROM AC_CashFlowGroup,   
+		         AC_CashFlowMst,   
+		         AC_CashFlowMajor  
+		   WHERE ( AC_CashFlowGroup.CashFlowGroup = AC_CashFlowMst.CashFlowGroup ) and  
+		         ( AC_CashFlowMajor.CashFlowMajor = AC_CashFlowGroup.CashFlowMajor )  and
+		         UPPER(ISNULL(AC_CashFlowMajor.TipoRegistroFlag,'A')) like '%' + ISNULL(:p_tiporegistro,UPPER(AC_CashFlowMajor.TipoRegistroFlag)) + '%' and
+		          UPPER(ISNULL(AC_CashFlowMajor.TipoOperacionFlag,'A')) like '%' + ISNULL(:p_tipooperacion,UPPER(AC_CashFlowMajor.TipoOperacionFlag)) + '%' and
+		           UPPER(ISNULL(AC_CashFlowGroup.CashFlowGroup,'A')) like '%' + ISNULL(:p_grupoflujo,UPPER(AC_CashFlowGroup.CashFlowGroup)) + '%' and
+		            UPPER(ISNULL(AC_CashFlowMst.CashFlowCode,'A')) like '%' + ISNULL(:p_codigo,UPPER(AC_CashFlowMst.CashFlowCode)) + '%' and
+ 			UPPER(ISNULL(AC_CashFlowMst.LocalName,'A')) like '%' + ISNULL(:p_descripcion,UPPER(AC_CashFlowMst.LocalName)) + '%' 
+    
+		ORDER BY AC_CashFlowGroup.CashFlowMajor ASC,   
+		         AC_CashFlowGroup.CashFlowGroup ASC,   
+		         AC_CashFlowMst.CashFlowCode ASC   
+	    ]]>
+	</sql-query>
+	
+	
+    
+</hibernate-mapping>

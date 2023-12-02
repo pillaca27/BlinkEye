@@ -1,0 +1,440 @@
+<div class="botonesSeccion">
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS1B">
+    <div class="p-col-12 p-md-2">
+    </div>
+    <div class="p-col-12 p-md-8"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars"  (click)="buscar()"></button>
+    </div> 
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS0B">
+    <div class="p-col-12 p-md-6">
+    </div>
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar()"></button>
+    </div>
+</div>
+
+<!-- [disabled]="!objTitulo.menuSeguridad.flgAgregar" -->
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS2B">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-8"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" class="p-button-outlined" (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS3B">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-6"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS1R">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-6"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Guardar"  icon="fad fa-save"   (click)="guardar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASCI">
+
+    
+    <div class="p-col-12 p-md-2">
+    <button pButton pRipple  type="button" label="Cuadro" icon="fad fa-analytics"  (click)="nuevo()"></button>  
+     </div>
+     <div class="p-col-12 p-md-2">
+        <button class="btn_cotix2" pButton pRipple  type="button" label="Registrar Propuesta" icon="fas fa-usd-circle"  (click)="guardar()"></button>
+    </div>
+    <div class="p-col-12 p-md-4"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASCH">
+
+    <div class="p-col-12 p-md-8">
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASCT">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Invitar" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button   class="btn_cotix" pButton pRipple  type="button" label="Registrar Propuesta" icon="fas fa-usd-circle"  (click)="guardar()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Cuadro" icon="fad fa-analytics"  (click)="salir()"></button> 
+    </div>
+    
+    <div class="p-col-12 p-md-2"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS2D">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Distrito" icon="fa fa-location-arrow"  (click)="salir()"></button>
+    </div>
+    <div class="p-col-12 p-md-4"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASCO">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo"
+        [disabled]="!objTitulo.menuSeguridad.flgAgregar"
+         icon="fad fa-layer-plus"  
+        (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple    
+    class="btn_modificar_orden"  type="button" label="Modif. Restringidas"  icon="fad fa-pencil-alt" 
+          (click)="salir()"></button>
+    </div>
+    <div class="p-col-12 p-md-3"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button>
+    </div>
+   
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASOC">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Imprimir" icon="fad fa-print"  (click)="salir()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <!-- <button pButton pRipple  type="button" label="Anular" icon="fa fa-ban"  (click)="varios('1')"></button> -->
+    </div>  
+    <div class="p-col-12 p-md-2">
+        <!--  <button pButton pRipple  type="button" label="Cerrar" icon="fa fa-times"  (click)="guardar()"></button>  -->
+     </div>
+     <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASGO">
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple class="btn_generar_orden"  type="button" label="Generar Orden" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    
+    <div class="p-col-12 p-md-5"></div>
+    <div class="p-col-12 p-md-2">
+        <!-- <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> --> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASAN">
+    <div class="p-col-12 p-md-6"></div>
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+    <div class="p-col-12 p-md-3">
+        <button pButton pRipple type="button" label="Ejecutar" icon="fas fa-bolt"  (click)="nuevo()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BASGC">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Generar Orden" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    
+    <div class="p-col-12 p-md-6"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS2F">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Nuevo" icon="fad fa-layer-plus"  (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="SubFamilia" icon="fad fa-layer-plus"  (click)="salir()"></button>
+    </div>
+    <div class="p-col-12 p-md-4"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple  type="button" label="Exportar" icon="fas fa-cloud-download-alt"  (click)="exportarDatos()"></button> 
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars"  (click)="buscar()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS1N">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple [disabled]="!objTitulo.menuSeguridad.flgAgregar" type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-10"></div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == TIPOSBOTONES_LISTADO.BAS2N">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple [disabled]="!objTitulo.menuSeguridad.flgAgregar" type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="guardar()"></button>
+    </div>
+    <div class="p-col-12 p-md-8"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple [disabled]="!objTitulo.menuSeguridad.flgAgregar" type="button" label="Salir" icon="fad fa-reply" class="p-button-outlined" (click)="salir()"></button>
+    </div>
+</div>
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == '1'">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[0].nombre" [icon]="objTitulo.objetoBoton[0].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[0])"></button>
+    </div>
+    <div class="p-col-12 p-md-8"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[1].nombre" [icon]="objTitulo.objetoBoton[1].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[1])"></button>
+    </div>
+</div>
+
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == '2'">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[0].nombre" [icon]="objTitulo.objetoBoton[0].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[0])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[1].nombre" [icon]="objTitulo.objetoBoton[1].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[1])"></button>
+    </div>
+    <div class="p-col-12 p-md-6"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[2].nombre" [icon]="objTitulo.objetoBoton[2].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[2])"></button>
+    </div>
+</div>
+
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == '3'">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[0].nombre" [icon]="objTitulo.objetoBoton[0].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[0])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[1].nombre" [icon]="objTitulo.objetoBoton[1].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[1])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[2].nombre" [icon]="objTitulo.objetoBoton[2].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[2])"></button>
+    </div>
+    <div class="p-col-12 p-md-4"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[3].nombre" [icon]="objTitulo.objetoBoton[3].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[3])"></button>
+    </div>
+</div>
+
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == '4'">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" class="p-button-raised" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-2"></div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[0].nombre" [icon]="objTitulo.objetoBoton[0].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[0])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[1].nombre" [icon]="objTitulo.objetoBoton[1].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[1])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[2].nombre" [icon]="objTitulo.objetoBoton[2].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[2])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" class="p-button-raised" (click)="buscar()"></button>
+    </div>
+</div>
+
+
+<div class="p-fluid p-grid formularioFila " *ngIf="tipo == '5'">
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[0].nombre" [icon]="objTitulo.objetoBoton[0].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[0])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[1].nombre" [icon]="objTitulo.objetoBoton[1].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[1])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[2].nombre" [icon]="objTitulo.objetoBoton[2].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[2])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[3].nombre" [icon]="objTitulo.objetoBoton[3].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[3])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[4].nombre" [icon]="objTitulo.objetoBoton[4].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[4])"></button>
+    </div>
+    <div class="p-col-12 p-md-2">
+        <button pButton pRipple type="button" [label]="objTitulo.objetoBoton[5].nombre" [icon]="objTitulo.objetoBoton[5].icono" class="p-button-raised" (click)="accionRealizar(objTitulo.objetoBoton[5])"></button>
+    </div>
+</div>
+
+
+
+<div class="p-fluid p-grid formularioFila" *ngIf="tipo == '6'">
+    <div class="p-col-12 p-md-2" *ngFor="let boton of objTitulo.objetoBoton">
+        <button pButton pRipple type="button" [label]="boton.nombre" [icon]="boton.icono" class="p-button-raised" (click)="accionRealizar(boton)"></button>
+    </div>
+</div>
+
+<p-toolbar *ngIf="tipo == TIPOSBOTONES_LISTADO.BOBUS">
+    <div class="p-toolbar-group-left">
+
+        <div class="p-d-flex p-flex-wrap">
+                <div *ngFor="let col of objTitulo.objetoBoton; let i=index">
+                    <div class="p-mr-2 p-mb-2">
+                    <button pButton pRipple type="button" *ngIf="esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        class="p-button-rounded p-button-raised" 
+                        (click)="accionRealizar(col)">
+                    </button>
+                    <p-splitButton *ngIf="!esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        [model]="col.items" 
+                        class="p-button-rounded p-button-raised">
+                    </p-splitButton>
+                    </div>     
+                </div>                
+        </div>
+    </div>
+    <div class="p-toolbar-group-right">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" style="width: 150px;"
+        class="p-button-rounded p-button-raised" (click)="buscar()"></button>
+    </div>
+</p-toolbar>
+
+<p-toolbar *ngIf="tipo == TIPOSBOTONES_LISTADO.BOSIN">
+    <div class="p-toolbar-group-left">
+
+        <div class="p-d-flex p-flex-wrap">
+            <div class="p-mr-2 p-mb-2">
+                <button pButton pRipple type="button" style="width: 150px;"
+                label="Nuevo"
+                icon="fad fa-layer-plus"
+                class="p-button-rounded p-button-raised" 
+                (click)="nuevo()">
+                </button>
+            </div>                
+                <div *ngFor="let col of objTitulo.objetoBoton; let i=index">
+                    <div class="p-mr-2 p-mb-2">
+                    <button pButton pRipple type="button" *ngIf="esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        [disabled]="col.disabled"                            
+                        [class]="col.clase" 
+                        (click)="accionRealizar(col)">
+                    </button>
+                    <p-splitButton *ngIf="!esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        [model]="col.items" 
+                        [disabled]="col.disabled"
+                        [class]="col.clase" >
+                    </p-splitButton>
+                    </div>     
+                </div>                
+        </div>
+    </div>
+    <div class="p-toolbar-group-right">
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" style="width: 150px;"
+        class="p-button-rounded p-button-raised" (click)="buscar()"></button>
+    </div>
+</p-toolbar>
+
+
+<p-toolbar *ngIf="tipo == TIPOSBOTONES_LISTADO.BOEXP">
+    <div class="p-toolbar-group-left">
+
+        <div class="p-d-flex p-flex-wrap">
+            <div class="p-mr-2 p-mb-2">
+                <button pButton pRipple type="button" style="width: 150px;"
+                label="Nuevo"
+                icon="fad fa-layer-plus"
+                class="p-button-rounded p-button-raised" 
+                (click)="nuevo()">
+                </button>
+            </div>                
+                <div *ngFor="let col of objTitulo.objetoBoton; let i=index">
+                    <div class="p-mr-2 p-mb-2">
+                    <button pButton pRipple type="button" *ngIf="esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        [disabled]="col.disabled"
+                        class="p-button-rounded p-button-raised" 
+                        (click)="accionRealizar(col)">
+                    </button>
+                    <p-splitButton *ngIf="!esListaVacia(col.items)"
+                        [label]="col.nombre"
+                        [icon]="col.icono"
+                        [model]="col.items" 
+                        [disabled]="col.disabled"
+                        class="p-button-rounded p-button-raised">
+                    </p-splitButton>
+                    </div>     
+                </div>                
+        </div>
+    </div>
+    <div class="p-toolbar-group-right">
+        <button pButton pRipple type="button" label="Exportar" icon="fas fa-cloud-download-alt" style="width: 150px;"            
+        class="p-button-rounded p-button-raised" (click)="exportar()"></button>
+        <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" style="width: 150px;"
+        class="p-button-rounded p-button-raised" (click)="buscar()"></button>
+    </div>
+</p-toolbar>
+
+
+
+</div>
+<app-tipoExportar-selector (cargarSeleccionEvent)="seleccionarExportarTipo($event)"></app-tipoExportar-selector> 

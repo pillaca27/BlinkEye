@@ -1,0 +1,2866 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : core.WfTransaccion -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="wftransacciones.listarProcesosWF">
+		<![CDATA[
+			SELECT
+			a.uuid as "uuid", 
+			A.PROCESO_ID as "proceso",
+			A.VERSION_ID AS "version",
+			A.NOMBRE + ' - V'+ CAST(A.VERSION_ID AS VARCHAR) as "descripcion", 
+			C.APLICACION_ID as "aplicacion", 
+			A.ESTADO as "estado", 
+			B.DESCRIPCIONCORTA as "aplicacionAux"
+			FROM sgworkflowsys.WF_PROCESO_VERSION A 
+				JOIN sgworkflowsys.WF_PROCESO C ON A.PROCESO_ID = C.PROCESO_ID 
+				JOIN APLICACIONESMAST B ON C.APLICACION_ID = B.APLICACIONCODIGO
+			WHERE A.PROCESO_ID = ISNULL(:p_sigla, A.PROCESO_ID) and A.NOMBRE LIKE '%'+ISNULL(:p_descripcion, '')+'%'
+			AND C.APLICACION_ID = ISNULL(:p_aplicacion, C.APLICACION_ID)
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarProcesosSinVersion">
+		<![CDATA[
+			SELECT 
+			A.PROCESO_ID as "proceso",
+			A.NOMBRE as "descripcion", 
+			A.APLICACION_ID as "aplicacion", 
+			A.ESTADO as "estado", 
+			B.DESCRIPCIONCORTA as "aplicacionAux"
+			FROM sgworkflowsys.WF_PROCESO A
+				JOIN APLICACIONESMAST B ON A.APLICACION_ID = B.APLICACIONCODIGO
+			WHERE A.PROCESO_ID = ISNULL(:p_sigla, A.PROCESO_ID) and A.NOMBRE LIKE '%'+ISNULL(:p_descripcion, '')+'%'
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.listarOrigenes">
+	<![CDATA[
+		SELECT 
+		CAST(ORIGENDATOSCODIGO AS VARCHAR(10)) AS "codigo" , 
+		NOMBRE AS "descripcion" FROM SY_ORIGEN_DATOS
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.paginadolistarSelector">
+	<![CDATA[
+			SELECT companyowner AS "codigo",
+			       description  AS "descripcion"
+			FROM   companyowner
+			WHERE  'COMP' = :p_tipo
+			       AND companyowner = Isnull(:p_codigo, companyowner)
+			       AND Upper(description) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%')
+			UNION ALL
+			SELECT sucursal,
+			       descripcionlocal
+			FROM   ac_sucursal
+			WHERE  'SUCU' = :p_tipo
+			       AND sucursal = Isnull(:p_codigo, sucursal)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+			                                              '%')
+			UNION ALL
+			SELECT monedacodigo,
+			       descripcioncorta
+			FROM   monedamast
+			WHERE  'MOND' = :p_tipo
+			       AND monedacodigo = Isnull(:p_codigo, monedacodigo)
+			       AND Upper(descripcioncorta) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+			                                              '%')
+			UNION ALL
+			SELECT afe,
+			       localname
+			FROM   afemst
+			WHERE  'AFEM' = :p_tipo
+			       AND afe = Isnull(:p_codigo, afe)
+			       AND Upper(localname) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%')
+			UNION ALL
+			SELECT Rtrim(codigoelemento),
+			       Rtrim(descripcionlocal)
+			FROM   ma_miscelaneosdetalle
+			WHERE  'AREV' = :p_tipo
+			       AND aplicacioncodigo = 'WF'
+			       AND codigotabla = 'FLUJOAREA'
+			       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+			                                              '%')
+			UNION ALL
+			SELECT Rtrim(codigoelemento),
+			       Rtrim(descripcionlocal)
+			FROM   ma_miscelaneosdetalle
+			WHERE  'MORE' = :p_tipo
+			       AND codigotabla = 'RSMOTIVO'
+			       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+			                                              '%')
+			/*UNION ALL
+			SELECT unidadoperativa,
+			       descripcion
+			FROM   hr_unidadoperativa
+			WHERE  'UNOP' = :p_tipo
+			       AND unidadoperativa = Isnull(:p_codigo, unidadoperativa)
+			       AND Upper(descripcion) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%')
+			       AND estado = 'A'*/
+			UNION ALL
+			SELECT Cast(area AS VARCHAR(20)),
+			       nombre
+			FROM   as_area
+			WHERE  'AREA' = :p_tipo
+			       AND area = Isnull(:p_codigo, area)
+			       AND Upper(nombre) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%')
+			UNION ALL
+			SELECT Rtrim(codigoelemento),
+			       Rtrim(descripcionlocal)
+			FROM   ma_miscelaneosdetalle
+			WHERE  'TIDC' = :p_tipo
+			       AND codigotabla = 'TIPODOCI'
+			       AND aplicacioncodigo = 'HR'
+			       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%') 
+			UNION ALL
+			SELECT Rtrim(codigoelemento),
+			       Rtrim(descripcionlocal)
+			FROM   ma_miscelaneosdetalle
+			WHERE  'TIPE' = :p_tipo
+			       AND codigotabla = 'TIPOPERSON'
+			       AND aplicacioncodigo = 'HR'
+			       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') + '%') 
+			UNION ALL
+			SELECT Rtrim(codigoelemento),
+			       Rtrim(descripcionlocal)
+			FROM   ma_miscelaneosdetalle
+			WHERE  'TUTL' = :p_tipo
+			       AND codigotabla = 'SOLVACUTIL'
+			       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+			       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+			                                              '%')
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.paginadocontarSelector">
+	<![CDATA[
+		SELECT Count(1)
+		FROM   (SELECT companyowner AS "codigo",
+               description  AS "descripcion"
+        FROM   companyowner
+        WHERE  'COMP' = :p_tipo
+               AND companyowner = Isnull(:p_codigo, companyowner)
+               AND Upper(description) LIKE Upper('%' + Isnull(:p_descripcion, ''
+                                                 ) + '%'
+                                           )
+        UNION ALL
+        SELECT sucursal,
+               descripcionlocal
+        FROM   ac_sucursal
+        WHERE  'SUCU' = :p_tipo
+               AND sucursal = Isnull(:p_codigo, sucursal)
+               AND Upper(descripcionlocal) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        UNION ALL
+        SELECT monedacodigo,
+               descripcioncorta
+        FROM   monedamast
+        WHERE  'MOND' = :p_tipo
+               AND monedacodigo = Isnull(:p_codigo, monedacodigo)
+               AND Upper(descripcioncorta) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        UNION ALL
+        SELECT afe,
+               localname
+        FROM   afemst
+        WHERE  'AFEM' = :p_tipo
+               AND afe = Isnull(:p_codigo, afe)
+               AND Upper(localname) LIKE Upper('%' + Isnull(:p_descripcion, '')
+                                               + '%')
+        UNION ALL
+        SELECT Rtrim(codigoelemento),
+               Rtrim(descripcionlocal)
+        FROM   ma_miscelaneosdetalle
+        WHERE  'AREV' = :p_tipo
+               AND aplicacioncodigo = 'WF'
+               AND codigotabla = 'FLUJOAREA'
+               AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+               AND Upper(descripcionlocal) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        UNION ALL
+        SELECT Rtrim(codigoelemento),
+               Rtrim(descripcionlocal)
+        FROM   ma_miscelaneosdetalle
+        WHERE  'MORE' = :p_tipo
+               AND codigotabla = 'RSMOTIVO'
+               AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+               AND Upper(descripcionlocal) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        /*UNION ALL
+        SELECT unidadoperativa,
+               descripcion
+        FROM   hr_unidadoperativa
+        WHERE  'UNOP' = :p_tipo
+               AND unidadoperativa = Isnull(:p_codigo, unidadoperativa)
+               AND Upper(descripcion) LIKE Upper('%' + Isnull(:p_descripcion, ''
+                                                 ) + '%'
+                                           )
+               AND estado = 'A'*/
+        UNION ALL
+        SELECT area,
+               nombre
+        FROM   as_area
+        WHERE  'AREA' = :p_tipo
+               AND area = Isnull(:p_codigo, area)
+               AND Upper(nombre) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+                                            '%')
+        UNION ALL
+        SELECT Rtrim(codigoelemento),
+               Rtrim(descripcionlocal)
+        FROM   ma_miscelaneosdetalle
+        WHERE  'TIDC' = :p_tipo
+               AND aplicacioncodigo = 'HR'
+               AND codigotabla = 'TIPODOCI'
+               AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+               AND Upper(descripcionlocal) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        UNION ALL
+        SELECT Rtrim(codigoelemento),
+               Rtrim(descripcionlocal)
+        FROM   ma_miscelaneosdetalle
+        WHERE  'TIPE' = :p_tipo
+               AND aplicacioncodigo = 'HR'
+               AND codigotabla = 'TIPOPERSON'
+               AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+               AND Upper(descripcionlocal) LIKE Upper(
+                   '%' + Isnull(:p_descripcion, '') +
+                   '%')
+        UNION ALL
+		SELECT Rtrim(codigoelemento),
+		       Rtrim(descripcionlocal)
+		FROM   ma_miscelaneosdetalle
+		WHERE  'TUTL' = :p_tipo
+		       AND codigotabla = 'SOLVACUTIL'
+		       AND codigoelemento = Isnull(:p_codigo, codigoelemento)
+		       AND Upper(descripcionlocal) LIKE Upper('%' + Isnull(:p_descripcion, '') +
+		                                              '%')
+      ) ASF
+	]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenerProcesoPorId">
+		<![CDATA[
+			SELECT 
+			b.uuid as "uuid",
+			b.PROCESO_id as "proceso",
+			b.version_id as "version",
+			b.nombre as "descripcion", 
+			a.APLICACION_id as "aplicacion",
+			b.ESTADO as "estado",
+			b.WEB_COMPONENTE as "componenteweb",
+			b.api as "api",
+			b.SP_VER as "spver",
+			b.ORIGEN_DATOS_ID AS "origen",
+			b.SEGMENTO_CODIGOTABLA as "segmentocodigotabla",
+			cast(b.FLG_PLANIFICACION_GENERAR as varchar(1)) as "flgPlanificacionGenerarString",
+			B.ADMINISTRADOR_ID as "administradorId",
+			RTRIM(C.BUSQUEDA) AS "administradorNombre",
+			B.NIVEL_ESTADO_ID_INICIAL as "nivelestadoidinicial",
+			b.COMUNICACION_FLG_ALERTA as "flagComunicacionAlertaString",
+			b.FLG_CORREO_NIVELES as "flagCorreoNivelesString",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'APROBA' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaAprobar",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'RECHAZ' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaRechazar",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'DEVOLV' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaDevolver",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'GUARDA' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaGuardar",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'SEGUIM' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaSeguimiento",
+
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = APLICACION_ID AND RA.ReporteCodigo = A.PROCESO_ID
+			AND RA.CompaniaSocio = '999999' AND RA.Version = 'ALERTA' AND RA.PERIODO = '999999'
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaAlerta"
+			
+			FROM sgworkflowsys.WF_PROCESO a 
+			JOIN sgworkflowsys.WF_PROCESO_VERSION B 
+				ON A.PROCESO_ID  = B.PROCESO_ID
+			LEFT JOIN PERSONAMAST C ON B.ADMINISTRADOR_ID = C.PERSONA
+			WHERE b.UUID = :p_procesoUUID
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerTipoDocumentoProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			TIPO_DOCUMENTO_ID as "tipodocumento",
+			grupo as "grupo",
+			rutaplantilla as "rutaplantilla",
+			sy_tipodocumento.DescripcionLocal as "tipodocumentoAux"
+			FROM sgworkflowsys.WF_PROCESO_DOCUMENTO 
+			left join sy_tipodocumento on TIPO_DOCUMENTO_ID= TipoDocumentoId
+			WHERE PROCESO_ID = :p_proceso
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerVariableProceso">
+		<![CDATA[
+			SELECT 
+				PROCESO_ID as "proceso", 
+				VARIABLE_ID as "variable"
+			FROM sgworkflowsys.WF_PROCESO_VARIABLE WHERE PROCESO_ID = :p_proceso
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerRolProceso">
+		<![CDATA[
+			select 
+			TIPO_APROBADOR_ID as "codigo",
+			NOMBRE as "descripcion"
+			from sgworkflowsys.wf_proceso_rol where PROCESO_ID = :p_proceso and VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerEstadoProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			ESTADO_ID as "estado", 
+			NOMBRE as "descripcion",
+			TIPO_ID as "tipo"
+			FROM sgworkflowsys.WF_PROCESO_ESTADO WHERE PROCESO_ID = :p_proceso
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerFlujoProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			FLUJO_ID as "flujo", 
+			NOMBRE as "descripcion" 
+			FROM sgworkflowsys.WF_PROCESO_FLUJO WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerNivelProceso">
+		<![CDATA[
+			SELECT 
+			sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID as "proceso", 
+			FLUJO_ID as "flujo", 
+			NIVEL_ID as "nivel", 
+			ESTADO_ID as "estado", 
+			FLG_CORREOJEFE as "jefeAux", 
+			FLG_CORREOSOLICITANTE as "soliAux", 
+			CORREOOTROS as "correootros",
+			SP_VALIDAR as "spvalidar",
+			SP_APROBAR as "spaprobar",
+			SP_RECHAZAR as "sprechazar",
+			SP_DEVOLVER as "spdevolver",
+			API as "api",
+			WEB_COMPONENTE as "componenteweb",
+			ORIGEN_DATOS_ID AS "origenDatos",
+			TIPO_APROBADOR_ID as "tipoaprobador",
+			ISNULL(CONDICION_APROBACION_ID, 'SOLOUNO') as "condicionaprobacion",
+			FLG_BOTON_APROBAR as "btnAprobarAux",
+			FLG_BOTON_RECHAZAR as "btnRechazarAux",
+			FLG_BOTON_DEVOLVER as "btnDevolverAux",
+			FLG_NOTIFICAR as "btnNotificarAux",
+			
+			FLG_PLANIFICACION_VER as "flagPlanificacionVer",
+			FLG_PLANIFICACION_EDITABLE as "flagPlanificacionEditar",
+			sgworkflowsys.WF_FLUJO_NIVEL.NOMBRE as "nombre",
+			DURACION_TIPO as "duraciontipo",
+			DURACION_CANTIDAD as "duracioncantidad",
+			
+			FLG_PLANIFICACION_VALIDAR as "flgPlanificacionValidar",
+			PLANIFICACION_TAG as "planificacionTag",
+			
+			DOCUMENTO_FLG_BOTON_NUEVO as "documentoFlgColumnaNuevo",
+			DOCUMENTO_FLG_COLUMNA_GRUPO as "documentoFlgColumnaGrupo",
+			
+			FLG_APROBAR_COMENTARIO_DETALLADO as "flgComentarioDetalladoAprobar",
+			FLG_RECHAZAR_COMENTARIO_DETALLADO as "flgComentarioDetalladoRechazar",
+			FLG_DEVOLVER_COMENTARIO_DETALLADO as "flgComentarioDetalladoDevolver",
+			
+			FLG_CORREO_PERSONA_REFERENCIA AS "flgCorreoPersonaReferencia",
+			FLG_CORREO_TRANSACCION AS "flgCorreoTransaccion",
+			FLG_CORREO_PERSONA as "flgCorreoPersona",
+			
+			FLG_APROBAR_COMENTARIO as "flgAprobarComentario",
+			
+			FLG_CORREO_ADJUNTAR_DOCUMENTOS as "flgCorreoAdjuntarDocumentos",
+			
+			--Buscar si tiene plantillas de correo
+			
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+			AND RA.CompaniaSocio = '999999'
+			AND RA.ReporteCodigo = sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID
+			AND RA.Version = 'APROBA'
+			AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+			CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaAprobar",
+			
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+			AND RA.CompaniaSocio = '999999'
+			AND RA.ReporteCodigo = sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID
+			AND RA.Version = 'RECHAZ'
+			AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+			CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaRechazar",
+			
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+			AND RA.CompaniaSocio = '999999'
+			AND RA.ReporteCodigo = sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID
+			AND RA.Version = 'DEVOLV'
+			AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+			CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaDevolver",
+			
+			
+			CASE WHEN(
+			SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+			WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+			AND RA.CompaniaSocio = '999999'
+			AND RA.ReporteCodigo = sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID
+			AND RA.Version = 'SEGUIM'
+			AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+			CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+			)>0 THEN 'S' ELSE 'N' END as "tienePlantillaSeguimiento"
+			
+			FROM sgworkflowsys.WF_FLUJO_NIVEL JOIN sgworkflowsys.WF_PROCESO ON
+			sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID = sgworkflowsys.WF_PROCESO.PROCESO_ID
+			WHERE sgworkflowsys.WF_FLUJO_NIVEL.PROCESO_ID = :p_proceso AND sgworkflowsys.WF_FLUJO_NIVEL.VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerConfiguracionProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			FLUJO_ID as "flujo", 
+			CONFIGURACION_ID as "configuracion",
+			VARIABLE_ID as "variable", 
+			COMPARACION as "comparacion", 
+			VALORES as "valorDescripcion",
+			RELACION as "relacion"
+			FROM sgworkflowsys.WF_FLUJO_CONFIGURACION WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.obtenerConfiguracionValorProceso">
+		<![CDATA[
+			SELECT sgworkflowsys.FN_WF_GETLABELFROMVALUES(:p_variable, :p_valor) as "descripcion"
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerDocumentoNivelProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			FLUJO_ID as "flujo", 
+			NIVEL_ID as "nivel", 
+			TIPO_DOCUMENTO_ID as "tipodocumento", 
+			FLG_REQUERIDO as "requeridoA", 
+			FLG_FIRMAELECTRONICA as "firmadigitalA", 
+			FLG_FIRMAIMAGEN as "firmaimagenA",
+			FLG_EDITABLE as "editableA"
+			FROM sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAprobadorNivelProceso">
+		<![CDATA[
+			SELECT 
+			A.PROCESO_ID as "proceso", 
+			A.FLUJO_ID as "flujo", 
+			A.NIVEL_ID as "nivel", 
+			A.PERSONA_ID as "empleado", 
+			CASE A.PERSONA_ID WHEN 99999999 THEN 'Jefe Directo' ELSE B.NOMBRECOMPLETO END as "nombreEmpleado",
+			A.SEGMENTO_APROBAR AS "valorDescripcion"			
+			FROM sgworkflowsys.WF_FLUJO_APROBADOR A 
+				LEFT JOIN PERSONAMAST B ON A.PERSONA_ID = B.PERSONA WHERE A.PROCESO_ID = :p_proceso AND VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAccionNivelProceso">
+		<![CDATA[
+			SELECT 
+			PROCESO_ID as "proceso", 
+			FLUJO_ID as "flujo", 
+			NIVEL_ID as "nivel",
+            accion_id as "accion",
+            nombre as "nombre",
+            accion_wf as "accionwf",
+            ESTADO_SUBACCION as "subaccion",
+            NIVEL_DESTINO_ID as "nivelDestinoId"
+			FROM sgworkflowsys.WF_FLUJO_ACCION 
+			WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.eliminarProceso">
+		<![CDATA[
+			sgworkflowsys.SP_WF_REINICIARPROCESO :p_proceso, :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarSelector">
+		<![CDATA[
+			SELECT COMPANYOWNER AS "codigo", DESCRIPTION as "descripcion" FROM COMPANYOWNER where 'COMP' = :p_id
+			UNION ALL
+			SELECT SUCURSAL, DESCRIPCIONLOCAL FROM AC_SUCURSAL where 'SUCU' = :p_id
+			UNION ALL
+			SELECT MONEDACODIGO, DESCRIPCIONCORTA FROM MONEDAMAST where 'MOND' = :p_id
+			UNION ALL
+			SELECT RTRIM(CODIGOELEMENTO), RTRIM(DESCRIPCIONLOCAL) 
+			FROM MA_MiscelaneosDetalle WHERE 'AREV' = :p_id AND APLICACIONCODIGO = 'WF' AND CODIGOTABLA = 'FLUJOAREA'
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.transaccionListarContar">
+		<![CDATA[
+			SELECT
+			COUNT(1)		
+			FROM 
+			sgworkflowsys.WF_TRANSACCION A JOIN 
+			sgworkflowsys.WF_PROCESO C ON A.PROCESO_ID = C.PROCESO_ID LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			WHERE
+			A.ESTADO = 'S'
+			AND sgworkflowsys.FN_WF_ESAPROBADOR(a.transaccion_id,:p_aprobador) > 0
+			AND CAST(A.FECHA_REGISTRO AS DATE) >= CAST(ISNULL(:p_desde, A.FECHA_REGISTRO)AS DATE) 
+			AND CAST(A.FECHA_REGISTRO AS DATE) <= CAST(ISNULL(:p_hasta, A.FECHA_REGISTRO)AS DATE)
+			AND A.SOLICITANTE_ID = ISNULL(:p_solicitante, A.SOLICITANTE_ID)
+			AND A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA)
+			AND A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID)
+			AND C.APLICACION_ID = ISNULL(:p_aplicacion, C.APLICACION_ID)
+			AND upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.AREA_REVISORA_ID, 'X') = ISNULL(:p_area, ISNULL(A.AREA_REVISORA_ID, 'X'))
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND ISNULL(A.PERSONA_REFERENCIA_ID, 0) = ISNULL(:p_2solicitante, ISNULL(A.PERSONA_REFERENCIA_ID, 0))
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+			)
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.transaccionListarPaginacion">
+		<![CDATA[
+			SELECT
+			a.uuid as "uuid",
+			sgworkflowsys.FN_WF_SEGMENTO(a.transaccion_id, :p_aprobador) AS "segmento",
+			XP.BUSQUEDA AS "nombrepersonareferencia",
+			
+			/*case 
+			a.proceso_id
+			when 'PR' THEN CAST((SELECT TOP 1 MontoPrestamo FROM PR_PRESTAMO PR WHERE PR.TRANSACCION_ID = A.TRANSACCION_ID) AS DECIMAL(10,2))
+			ELSE a.MONTO END as "monto",*/
+			
+			a.MONTO as "monto",
+			RTRIM(X.DESCRIPCIONLOCAL) as "areaNombre",
+			A.PROCESO_ID as "proceso",
+			            A.VERSION_ID as "version",
+			A.FLUJO_ID as "flujo",
+			A.REFERENCIA as "referencia",
+			C.NOMBRE +' - '+ D.NOMBRE AS "procesoFlujoDescripcion",
+			A.TRANSACCION_ID as "transaccion",
+			A.FECHA_REGISTRO as "fechaRegistro",
+			ISNULL(A.NIVEL_ID, 0) as "nivelActual",
+			ISNULL(A.NIVEL_ID, 0)+1 as "nivelAprobar",
+			E.NOMBRECOMPLETO AS "solicitante",
+			ISNULL((
+			SELECT c.NOMBRE FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL B JOIN 
+			sgworkflowsys.WF_PROCESO_ESTADO C ON B.PROCESO_ID = C.PROCESO_ID AND B.ESTADO_ID = C.ESTADO_ID
+			WHERE B.PROCESO_ID = A.PROCESO_ID AND B.FLUJO_ID = A.FLUJO_ID AND B.NIVEL_ID = A.NIVEL_ID AND B.VERSION_ID = A.VERSION_ID
+			), 'Solicitado') as "estadoDescripcion",
+			ISNULL(ISNULL((SELECT XX.WEB_COMPONENTE 
+			FROM sgworkflowsys.WF_FLUJO_NIVEL XX 
+			WHERE XX.PROCESO_ID = A.PROCESO_ID AND XX.VERSION_ID = A.VERSION_ID AND XX.FLUJO_ID = A.FLUJO_ID AND XX.NIVEL_ID = (A.NIVEL_ID+1)), 
+			(SELECT YY.WEB_COMPONENTE FROM sgworkflowsys.WF_PROCESO_VERSION YY WHERE YY.PROCESO_ID = A.PROCESO_ID AND YY.VERSION_ID = A.VERSION_ID)
+			), '/portal/workflow/transaccion-mantenimiento')
+			as "componenteweb"		
+			FROM 
+			sgworkflowsys.WF_TRANSACCION A JOIN 
+			sgworkflowsys.WF_PROCESO C ON A.PROCESO_ID = C.PROCESO_ID JOIN
+			sgworkflowsys.WF_PROCESO_FLUJO D ON D.PROCESO_ID = A.PROCESO_ID AND D.FLUJO_ID = A.FLUJO_ID AND D.VERSION_ID = A.VERSION_ID LEFT JOIN
+			PERSONAMAST E ON E.PERSONA = A.SOLICITANTE_ID
+			LEFT JOIN 
+			MA_MiscelaneosDetalle X ON X.APLICACIONCODIGO = 'WF' AND X.CODIGOTABLA = 'FLUJOAREA' AND X.CODIGOELEMENTO = A.AREA_REVISORA_ID
+			LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			LEFT JOIN personamast XP ON XP.PERSONA = A.PERSONA_REFERENCIA_ID
+			WHERE
+			A.ESTADO = 'S'
+			AND sgworkflowsys.FN_WF_ESAPROBADOR(a.transaccion_id,:p_aprobador) > 0
+			AND CAST(A.FECHA_REGISTRO AS DATE) >= CAST(ISNULL(:p_desde, A.FECHA_REGISTRO) AS DATE) 
+			AND CAST(A.FECHA_REGISTRO AS DATE) <= CAST(ISNULL(:p_hasta, A.FECHA_REGISTRO) AS DATE)
+			AND A.SOLICITANTE_ID = ISNULL(:p_solicitante, A.SOLICITANTE_ID)
+			AND A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA)
+			AND A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID)
+			AND C.APLICACION_ID = ISNULL(:p_aplicacion, C.APLICACION_ID)
+			AND upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.AREA_REVISORA_ID, 'X') = ISNULL(:p_area, ISNULL(A.AREA_REVISORA_ID, 'X'))
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND ISNULL(A.PERSONA_REFERENCIA_ID, 0) = ISNULL(:p_2solicitante, ISNULL(A.PERSONA_REFERENCIA_ID, 0))
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+			)
+			ORDER BY FECHA_REGISTRO
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAccionesAdicionales">
+		<![CDATA[
+			select 
+			sp_validar AS "spvalidar", 
+			sp_rechazar AS "sprechazar", 
+			sp_aprobar AS "spaprobar", 
+			sp_devolver AS "spdevolver",
+			api AS "api",
+			c.ORIGENDATOSCODIGO  AS "origenDatos",
+			c.CADENACONECCION  AS "cadenaconexion",
+			c.DIALECTO AS "dialecto",
+			c.DRIVER AS "driver"
+			from 
+			sgworkflowsys.WF_FLUJO_NIVEL a join 
+			sgworkflowsys.WF_TRANSACCION b on a.proceso_id = b.proceso_id and a.version_id = b.version_id and a.flujo_id = b.flujo_id 
+			and :p_nivel + 1 = a.nivel_id
+			LEFT JOIN  SY_ORIGEN_DATOS c ON c.ORIGENDATOSCODIGO  = a.ORIGEN_DATOS_ID 
+			where b.transaccion_id = :p_transaccion
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerApiCabecera">
+		<![CDATA[
+			select api as "api"
+			from sgworkflowsys.WF_PROCESO_VERSION where proceso_id = :p_proceso and VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.validacionesAjuntos">
+		<![CDATA[
+			SELECT 
+			A.TIPO_DOCUMENTO_ID as "tipodocumento", 
+			A.flg_REQUERIDO  as "requerido",  
+			A.flg_FIRMAELECTRONICA as "firmaelectronica", 
+			A.flg_FIRMAIMAGEN as "firmaimagen",
+			CAST(RTRIM(B.DESCRIPCIONLOCAL) AS VARCHAR(500)) as "tipodocumentodescripcion",
+			
+			(select top 1 grupo from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = A.TIPO_DOCUMENTO_ID ) as "grupo",
+			(select top 1 rutaplantilla from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = A.TIPO_DOCUMENTO_ID ) as plantilla
+			
+			FROM sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO A
+			join sy_tipodocumento B on B.TipoDocumentoId = A.TIPO_DOCUMENTO_ID
+			WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version AND FLUJO_ID = :p_flujo AND NIVEL_ID = :p_nivel AND A.ESTADO = 'A'
+		]]>
+	</sql-query>
+	
+	
+	<sql-query name="wftransacciones.validacionesAjuntosPadre">
+		<![CDATA[
+			SELECT 
+			A.TIPO_DOCUMENTO_ID as "tipodocumento", 
+			A.flg_REQUERIDO  as "requerido",  
+			A.flg_FIRMAELECTRONICA as "firmaelectronica", 
+			A.flg_FIRMAIMAGEN as "firmaimagen",
+			CAST(RTRIM(B.DESCRIPCIONLOCAL) AS VARCHAR(500)) as "tipodocumentodescripcion",
+			
+			(select top 1 grupo from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = A.TIPO_DOCUMENTO_ID ) as "grupo",
+			(select top 1 rutaplantilla from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = A.TIPO_DOCUMENTO_ID ) as plantilla
+			
+			FROM sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO A
+			join sy_tipodocumento B on B.TipoDocumentoId = A.TIPO_DOCUMENTO_ID
+			WHERE PROCESO_ID = :p_proceso AND VERSION_ID = :p_version AND FLUJO_ID = :p_flujo AND A.ESTADO = 'A'
+		]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenervalidaciones">
+		<![CDATA[
+			select mensaje as "descripcion" from sgworkflowsys.WF_VALIDACION where uuid = :p_uuid
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.eliminarvalidaciones">
+		<![CDATA[
+			delete from sgworkflowsys.WF_VALIDACION where uuid = :p_uuid
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.aprobartope">
+		<![CDATA[
+			SELECT MAX(X.NIVEL_ID) as "nivel" FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL X 
+			WHERE 
+			X.PROCESO_ID = :p_proceso AND 
+			X.VERSION_ID = :p_version AND 
+			X.FLUJO_ID = :p_flujo AND 
+			X.ESTADO = 'A'
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerEstadoAprobacion">
+		<![CDATA[
+			select
+			case when 
+			(select nivel_ID from sgworkflowsys.WF_TRANSACCION a where a.transaccion_ID = :p_transaccion)>= 
+			(SELECT ISNULL(MAX(B.NIVEL_ID), 0) 
+			FROM sgworkflowsys.WF_FLUJO_NIVEL B where B.proceso_id = :p_proceso and b.version_id = :p_version and B.flujo_id = :p_flujo AND B.ESTADO = 'A')
+			AND :p_estado = 'S' then 'A' ELSE :p_estado END	 as "codigo"
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenermaximoseguimiento">
+		<![CDATA[
+			select ISNULL(max(SEGUIMIENTO_ID), 0)+1 from sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO x where x.TRANSACCION_ID = :p_transaccion
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.registrarSeguimiento">
+		<![CDATA[
+			INSERT INTO sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO(
+			TRANSACCION_ID,
+			SEGUIMIENTO_ID,
+			PROCESO_ID,
+			VERSION_ID,
+			FLUJO_ID,            
+			USUARIO,
+			ESTADO_ID,
+			OBSERVACION,
+			FECHA,
+			CREACION_USUARIO,
+			CREACION_FECHA,
+			NIVEL_ID,
+			SEGMENTO_COMENTARIOS)
+			VALUES
+			(:p_transaccion, 
+			:p_secuencia,
+			:p_proceso, 
+			:p_version,
+			:p_flujo,            
+			:p_usuario,
+			:p_estado, 
+			:p_observacion, 
+			GETDATE(), 
+			:p_usuario, 
+			GETDATE(), 
+			:p_nivel,
+			:p_segmento)
+		]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenerDestinatariosDario">
+	<![CDATA[
+		declare @p_transaccion int = :p_transaccion
+		declare @p_version int = :p_version
+		declare @p_nivel int = :p_nivel
+		declare @p_flujo int = :p_flujo
+		declare @p_proceso varchar(2) = :p_proceso
+		declare @p_solicitante int = :p_solicitante
+		declare @p_accion varchar(10) = :p_accion
+		declare @p_rol varchar(10)
+		
+		SELECT @p_rol=TIPO_APROBADOR_ID FROM sgworkflowsys.wf_flujo_nivel
+			WHERE PROCESO_ID=@p_proceso AND VERSION_ID=@p_version AND FLUJO_ID=@p_flujo AND NIVEL_ID=@p_nivel;
+			
+		SELECT 'Otros' AS "codigo",correo AS "descripcion", '' as "nombre" FROM   sgworkflowsys.Fn_wf_obtener_correootros(@p_proceso, @p_nivel, @p_version,@p_flujo)
+		UNION ALL
+		SELECT DET.tipoc as "codigo", c.CorreoInterno AS "descripcion" , isnull(null, '') as "nombre"
+         FROM (     SELECT 'Persona' AS "tipoc",persona_id
+                    FROM   sgworkflowsys.wf_flujo_nivel wfn
+                           JOIN sgworkflowsys.wf_flujo_aprobador A
+                             ON wfn.proceso_id = a.proceso_id
+                                AND a.version_id = wfn.version_id
+                                AND a.flujo_id = wfn.flujo_id
+                                AND a.nivel_id = wfn.nivel_id
+                    WHERE  A.proceso_id = @p_proceso
+                           AND A.version_id = @p_version
+                           AND A.flujo_id = @p_flujo
+                           AND (A.nivel_id = @p_nivel + 1 or @p_nivel = (select MAX(NIVEL_ID) from sgworkflowsys.wf_flujo_nivel where Proceso_Id=@p_proceso and Flujo_iD = @p_flujo and Version_Id = @p_version) )
+						   AND ( (select B.flg_correo_persona From sgworkflowsys.wf_flujo_nivel B 
+						    WHERE  B.proceso_id = @p_proceso
+                           AND B.version_id = @p_version
+                           AND B.flujo_id = @p_flujo
+                           AND B.nivel_id = @p_nivel ) = 'S'  )
+                           --or (@p_accion='DEVOLVER' and @p_rol='PERS')
+                    UNION ALL
+                    SELECT DISTINCT 'Transaccion' AS "tipoc",persona_id
+                    FROM   sgworkflowsys.wf_flujo_nivel wfn
+                           JOIN sgworkflowsys.wf_transaccion wt
+                             ON WT.proceso_id = wfn.proceso_id
+                                AND WT.version_id = wfn.version_id
+                                AND WT.flujo_id = wfn.flujo_id
+                           JOIN sgworkflowsys.wf_transaccion_aprobador A
+                             ON wt.transaccion_id = A.transaccion_id
+                                AND ( a.nivel_id = wfn.nivel_id
+                                       OR a.nivel_id = -1 )
+                    WHERE  A.transaccion_id = @p_transaccion
+                           AND wfn.nivel_id = @p_nivel
+                           --AND Isnull(wfn.tipo_aprobador_id, 'PERS') = 'TRAP'
+                           AND (wfn.flg_correo_transaccion = 'S'  )
+                           --or (@p_accion='DEVOLVER' and @p_rol='TRAP')
+                    UNION ALL
+                    SELECT TOP 1 'Jefe' AS "tipoc",EMP.jeferesponsable
+                    FROM   sgworkflowsys.wf_flujo_nivel A
+                           LEFT JOIN empleadomast EMP
+                                  ON EMP.empleado = @p_solicitante
+                    WHERE  A.proceso_id = @p_proceso
+                           AND A.version_id = @p_version
+                           AND A.flujo_id = @p_flujo
+                           AND A.nivel_id = @p_nivel
+                           AND ( A.flg_correojefe = 'S'  )
+                           --or (@p_accion='DEVOLVER' and @p_rol='JEIN') 
+                    UNION ALL
+                    SELECT 'Persona Referencia' AS "tipoc",WT.persona_referencia_id
+                    FROM   sgworkflowsys.wf_flujo_nivel wfn
+                           JOIN sgworkflowsys.wf_transaccion wt
+                             ON WT.proceso_id = wfn.proceso_id
+                                AND WT.version_id = wfn.version_id
+                                AND WT.flujo_id = wfn.flujo_id
+                    WHERE  wt.transaccion_id = @p_transaccion
+                           AND wfn.nivel_id = @p_nivel
+                           --AND Isnull(wfn.tipo_aprobador_id, 'PERS') = 'REFE'
+                           AND (wfn.flg_correo_persona_referencia = 'S'   )
+                           --or (@p_accion='DEVOLVER' and @p_rol='REFE') 
+                    UNION ALL
+                    SELECT 'Solicitante' AS "tipoc",@p_solicitante
+                    FROM   sgworkflowsys.wf_flujo_nivel A
+                    WHERE  A.proceso_id = @p_proceso
+                           AND A.version_id = @p_version
+                           AND A.flujo_id = @p_flujo
+                           AND A.nivel_id = @p_nivel
+                           AND ( A.flg_correosolicitante = 'S'  )
+                           --or (@p_accion='DEVOLVER' and @p_rol='SOLI')
+                                       
+                      
+					) DET
+                    --inner join personamast B on DET.PERSONA_ID=B.Persona
+					inner join EmpleadoMast c on c.Empleado = DET.PERSONA_ID
+                    and 
+                    len(rtrim(ISNULL(c.CorreoInterno, '')))>0 
+					--or len(rtrim(ISNULL(B.CorreoElectronicoOtros, '')))>0)
+					and c.EstadoEmpleado = 0
+    ]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenerDestinatarios">
+		<![CDATA[
+		declare @p_transaccion int = :p_transaccion
+		declare @p_version int = :p_version
+		declare @p_nivel int = :p_nivel
+		declare @p_flujo int = :p_flujo
+		declare @p_proceso varchar(2) = :p_proceso
+		declare @p_solicitante int = :p_solicitante
+		
+		SELECT CORREOELECTRONICO as "descripcion" FROM personamast B WHERE B.persona IN(
+		SELECT PERSONA_ID FROM sgworkflowsys.WF_FLUJO_NIVEL wfn join
+		sgworkflowsys.WF_FLUJO_APROBADOR A ON wfn.PROCESO_ID  = a.PROCESO_ID AND a.VERSION_ID= wfn.VERSION_ID AND a.FLUJO_ID = wfn.FLUJO_ID AND a.NIVEL_ID = wfn.NIVEL_ID 
+		WHERE A.PROCESO_ID = @p_proceso AND A.VERSION_ID = @p_version AND A.FLUJO_ID = @p_flujo AND A.NIVEL_ID = @p_nivel AND ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'PERS' and wfn.FLG_CORREO_PERSONA = 'S'
+		UNION ALL
+		SELECT PERSONA_ID FROM sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+		sgworkflowsys.WF_TRANSACCION wt ON WT.PROCESO_ID = wfn.PROCESO_ID  AND WT.VERSION_ID= wfn.VERSION_ID AND WT.FLUJO_ID = wfn.FLUJO_ID JOIN
+		sgworkflowsys.WF_TRANSACCION_APROBADOR A ON wt.TRANSACCION_ID  = A.TRANSACCION_ID AND (a.NIVEL_ID = wfn.NIVEL_ID or a.NIVEL_ID = -1)
+		WHERE A.TRANSACCION_ID = @p_transaccion AND wfn.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'TRAP' and wfn.FLG_CORREO_TRANSACCION = 'S'
+		UNION ALL
+		SELECT top 1 EMP.JEFERESPONSABLE FROM sgworkflowsys.WF_FLUJO_NIVEL wfn
+		JOIN EmpleadoMast EMP ON EMP.Empleado = @p_solicitante
+		WHERE 
+		WFN.PROCESO_ID = @p_proceso  AND WFN.VERSION_ID= @p_version AND wfn.FLUJO_ID = @p_flujo and
+		WFN.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'JEIN'
+		
+		UNION ALL
+		SELECT WT.PERSONA_REFERENCIA_ID FROM sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+		sgworkflowsys.WF_TRANSACCION wt ON WT.PROCESO_ID = wfn.PROCESO_ID  AND WT.VERSION_ID= wfn.VERSION_ID AND WT.FLUJO_ID = wfn.FLUJO_ID
+		WHERE wt.TRANSACCION_ID = @p_transaccion AND wfn.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'REFE' and wfn.FLG_CORREO_PERSONA_REFERENCIA = 'S'
+		
+		UNION ALL
+		SELECT top 1 @p_solicitante FROM sgworkflowsys.WF_FLUJO_NIVEL wfn
+		WHERE 
+		WFN.PROCESO_ID = @p_proceso  AND WFN.VERSION_ID= @p_version AND wfn.FLUJO_ID = @p_flujo and
+		WFN.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'SOLI'
+		UNION ALL
+		SELECT top 1 EMP.JEFERESPONSABLE FROM sgworkflowsys.WF_FLUJO_NIVEL A LEFT JOIN EmpleadoMast EMP ON EMP.Empleado = @p_solicitante
+		WHERE A.PROCESO_ID = @p_proceso AND A.VERSION_ID = @p_version AND A.FLUJO_ID = @p_flujo AND A.NIVEL_ID = @p_nivel
+		AND A.FLG_CORREOJEFE = 'S'
+		UNION ALL
+		SELECT @p_solicitante FROM sgworkflowsys.WF_FLUJO_NIVEL A 
+		WHERE A.PROCESO_ID = @p_proceso AND A.VERSION_ID = @p_version AND A.FLUJO_ID = @p_flujo AND A.NIVEL_ID = @p_nivel
+		AND A.FLG_CORREOSOLICITANTE = 'S'
+		) 
+		and len(rtrim(ISNULL(CORREOELECTRONICO, '')))>0
+		union all
+		SELECT CORREO FROM sgworkflowsys.FN_WF_OBTENER_CORREOOTROS(@p_proceso, @p_nivel, @p_version,@p_flujo)
+		]]>
+	</sql-query>
+	
+	
+	<sql-query name="wftransacciones.obtenerIdAprobadores">
+		<![CDATA[
+		
+		declare @p_transaccion int = :p_transaccion
+		declare @p_version int = :p_version
+		declare @p_nivel int = :p_nivel
+		declare @p_flujo int = :p_flujo
+		declare @p_proceso varchar(2) = :p_proceso
+		declare @p_solicitante int = :p_solicitante
+
+		SELECT PERSONA_ID as "id" FROM sgworkflowsys.WF_FLUJO_NIVEL wfn join
+		sgworkflowsys.WF_FLUJO_APROBADOR A ON wfn.PROCESO_ID  = a.PROCESO_ID AND a.VERSION_ID= wfn.VERSION_ID AND a.FLUJO_ID = wfn.FLUJO_ID AND a.NIVEL_ID = wfn.NIVEL_ID 
+		WHERE A.PROCESO_ID = @p_proceso AND A.VERSION_ID = @p_version AND A.FLUJO_ID = @p_flujo AND A.NIVEL_ID = @p_nivel AND ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'PERS'
+		UNION ALL
+		SELECT PERSONA_ID FROM sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+		sgworkflowsys.WF_TRANSACCION wt ON WT.PROCESO_ID = wfn.PROCESO_ID  AND WT.VERSION_ID= wfn.VERSION_ID AND WT.FLUJO_ID = wfn.FLUJO_ID JOIN
+		sgworkflowsys.WF_TRANSACCION_APROBADOR A ON wt.TRANSACCION_ID  = A.TRANSACCION_ID AND (a.NIVEL_ID = wfn.NIVEL_ID OR a.NIVEL_ID = -1) 
+		WHERE A.TRANSACCION_ID = @p_transaccion AND wfn.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'TRAP'
+		UNION ALL
+		SELECT top 1 EMP.JEFERESPONSABLE FROM sgworkflowsys.WF_FLUJO_NIVEL wfn
+		JOIN EmpleadoMast EMP ON EMP.Empleado = @p_solicitante
+		WHERE 
+		WFN.PROCESO_ID = @p_proceso  AND WFN.VERSION_ID= @p_version AND wfn.FLUJO_ID = @p_flujo and
+		WFN.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'JEIN'
+		UNION ALL
+		SELECT top 1 @p_solicitante FROM sgworkflowsys.WF_FLUJO_NIVEL wfn
+		WHERE 
+		WFN.PROCESO_ID = @p_proceso  AND WFN.VERSION_ID= @p_version AND wfn.FLUJO_ID = @p_flujo and
+		WFN.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'SOLI'
+		UNION ALL
+		SELECT TOP 1 WT.PERSONA_REFERENCIA_ID FROM sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+		sgworkflowsys.WF_TRANSACCION wt ON WT.PROCESO_ID = wfn.PROCESO_ID  AND WT.VERSION_ID= wfn.VERSION_ID AND WT.FLUJO_ID = wfn.FLUJO_ID
+		WHERE wt.TRANSACCION_ID = @p_transaccion AND wfn.NIVEL_ID = @p_nivel and ISNULL(wfn.TIPO_APROBADOR_ID, 'PERS') = 'REFE'
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.transaccionListarSolicitanteContar">
+		<![CDATA[
+			SELECT
+			COUNT(1)
+			FROM
+			sgworkflowsys.WF_PROCESO F JOIN 
+			sgworkflowsys.WF_PROCESO_VERSION C ON F.PROCESO_ID = C.PROCESO_ID JOIN
+			sgworkflowsys.WF_TRANSACCION A ON A.PROCESO_ID = C.PROCESO_ID AND A.VERSION_ID  = C.VERSION_ID JOIN
+			sgworkflowsys.WF_PROCESO_FLUJO D ON D.PROCESO_ID = A.PROCESO_ID AND D.FLUJO_ID = A.FLUJO_ID AND D.VERSION_ID = A.VERSION_ID LEFT JOIN
+			personamast E ON E.persona = A.SOLICITANTE_ID
+			LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			WHERE 
+			A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA) AND
+			F.APLICACION_ID = ISNULL(:p_aplicacion, f.APLICACION_ID) AND
+			A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID) AND
+			cast(A.FECHA_REGISTRO as date) >= cast(ISNULL(:p_desde, A.FECHA_REGISTRO)as date) AND 
+			cast(A.FECHA_REGISTRO as date) <= cast(ISNULL(:p_hasta, A.FECHA_REGISTRO)as date) AND
+			A.solicitante_id = :p_solicitante
+			
+			AND upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.AREA_REVISORA_ID, 'X') = ISNULL(:p_area, ISNULL(A.AREA_REVISORA_ID, 'X'))
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND ISNULL(A.PERSONA_REFERENCIA_ID, 0) = ISNULL(:p_2solicitante, ISNULL(A.PERSONA_REFERENCIA_ID, 0))
+			AND 
+			(
+				--Siempre listamos las pendientes y aprobadas 
+				A.ESTADO IN ('S', 'A')
+				OR
+				--Si estan rechazadas, solo listados cuando el registro no haya sido reEnvidado a WF
+			    (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION wt 
+				WHERE WT.REFERENCIA  = A.REFERENCIA  AND WT.PROCESO_ID = A.PROCESO_ID
+				AND WT.TRANSACCION_ID > A.TRANSACCION_ID
+				) = 0
+			)
+			
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID) AND A.ESTADO IN ('S', 'A'))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+				OR
+				(:p_est_proceso = '-1' and A.ESTADO = 'R')
+			)
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.transaccionListarSolicitantePaginacion">
+		<![CDATA[
+			SELECT
+			a.uuid as "uuid",
+			XP.BUSQUEDA AS "nombrepersonareferencia",
+			a.MONTO as "monto",
+			RTRIM(X.DESCRIPCIONLOCAL) as "areaNombre",
+			a.PROCESO_ID as "proceso",
+			a.VERSION_id as "version",
+			a.FLUJO_ID as "flujo",
+			A.REFERENCIA as "referencia",
+			C.nombre +' - ' + D.nombre AS "procesoFlujoDescripcion",
+			A.TRANSACCION_ID as "transaccion",
+			A.FECHA_REGISTRO as "fechaRegistro",
+			A.NIVEL_ID as "nivelActual",
+			A.ESTADO AS "estado",
+			E.nombrecompleto AS "solicitante",
+			ISNULL((
+			SELECT c_.nombre FROM sgworkflowsys.WF_FLUJO_NIVEL B JOIN sgworkflowsys.WF_PROCESO_ESTADO C_ ON B.PROCESO_ID = C_.PROCESO_ID AND B.ESTADO_ID = C_.ESTADO_ID
+			WHERE B.PROCESO_ID = A.PROCESO_ID AND B.FLUJO_ID = A.FLUJO_ID AND B.NIVEL_ID = A.NIVEL_ID AND B.VERSION_ID = C.VERSION_ID
+			), 'Solicitado') as "estadoDescripcion",
+			ISNULL(ISNULL((SELECT XX.WEB_COMPONENTE 
+			FROM sgworkflowsys.WF_FLUJO_NIVEL XX 
+			WHERE XX.PROCESO_ID = A.PROCESO_ID AND XX.VERSION_ID = A.VERSION_ID AND XX.FLUJO_ID = A.FLUJO_ID AND XX.NIVEL_ID = (A.NIVEL_ID+1)), 
+			(SELECT YY.WEB_COMPONENTE FROM sgworkflowsys.WF_PROCESO_VERSION YY WHERE YY.PROCESO_ID = A.PROCESO_ID AND YY.VERSION_ID = A.VERSION_ID)
+			), '/portal/workflow/transaccion-mantenimiento')
+			as "componenteweb"
+			FROM
+			sgworkflowsys.WF_PROCESO F JOIN 
+			sgworkflowsys.WF_PROCESO_VERSION C ON F.PROCESO_ID = C.PROCESO_ID JOIN
+			sgworkflowsys.WF_TRANSACCION A ON A.PROCESO_ID = C.PROCESO_ID AND A.VERSION_ID  = C.VERSION_ID JOIN
+			sgworkflowsys.WF_PROCESO_FLUJO D ON D.PROCESO_ID = A.PROCESO_ID AND D.FLUJO_ID = A.FLUJO_ID AND D.VERSION_ID = A.VERSION_ID LEFT JOIN
+			personamast E ON E.persona = A.SOLICITANTE_ID
+			LEFT JOIN 
+			MA_MiscelaneosDetalle X ON X.APLICACIONCODIGO = 'WF' AND X.CODIGOTABLA = 'FLUJOAREA' AND X.CODIGOELEMENTO = A.AREA_REVISORA_ID
+			LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			LEFT JOIN personamast XP ON XP.PERSONA = A.PERSONA_REFERENCIA_ID			
+			WHERE 
+			A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA) AND
+			F.APLICACION_ID = ISNULL(:p_aplicacion, f.APLICACION_ID) AND
+			A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID) AND
+			cast(A.FECHA_REGISTRO as date) >= cast(ISNULL(:p_desde, A.FECHA_REGISTRO)as date) AND 
+			cast(A.FECHA_REGISTRO as date) <= cast(ISNULL(:p_hasta, A.FECHA_REGISTRO)as date) AND
+			A.solicitante_id = :p_solicitante 
+			
+			AND upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.AREA_REVISORA_ID, 'X') = ISNULL(:p_area, ISNULL(A.AREA_REVISORA_ID, 'X'))
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND ISNULL(A.PERSONA_REFERENCIA_ID, 0) = ISNULL(:p_2solicitante, ISNULL(A.PERSONA_REFERENCIA_ID, 0))
+			AND
+			(
+				--Siempre listamos las pendientes y aprobadas 
+				A.ESTADO IN ('S', 'A')
+				OR
+				--Si estan rechazadas, solo listados cuando el registro no haya sido reEnvidado a WF
+			    (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION wt 
+				WHERE WT.REFERENCIA  = A.REFERENCIA  AND WT.PROCESO_ID = A.PROCESO_ID
+				AND WT.TRANSACCION_ID > A.TRANSACCION_ID
+				) = 0
+			)
+			
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID) AND A.ESTADO IN ('S', 'A'))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+				OR
+				(:p_est_proceso = '-1' and A.ESTADO = 'R')
+			)
+			ORDER BY FECHA_REGISTRO	DESC
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerVersion">
+		<![CDATA[
+			select
+            max(VERSION_ID) AS "idOracle"
+			from sgworkflowsys.WF_PROCESO_FLUJO where estado = 'A' and proceso_id = :p_proceso
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarFlujosPorProceso">
+		<![CDATA[
+			select 
+			FLUJO_id AS "flujo", 
+			nombre AS "descripcion"
+			from sgworkflowsys.WF_PROCESO_FLUJO WHERE ESTADO = 'A' AND PROCESO_ID = :p_proceso and version_id = :p_version
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.listarCriteriosFlujoPorProceso">
+		<![CDATA[
+			select 
+			VARIABLE_ID AS "variable",
+			COMPARACION AS "comparacion",
+			VALORES AS "valores"
+			from sgworkflowsys.WF_FLUJO_CONFIGURACION WHERE ESTADO = 'A' AND PROCESO_ID = :p_proceso and FLUJO_ID = :p_flujo and version_id = :p_version
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.generarTransaccionPorFlujoProceso">
+		<![CDATA[
+			select 
+			cast(ISNULL(max(transaccion_id), 0)+1 as varchar(100)) as "codigo"
+			from sgworkflowsys.WF_TRANSACCION
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.insertarTransaccion">
+		<![CDATA[
+			INSERT INTO sgworkflowsys.WF_TRANSACCION(
+			PROCESO_ID, 
+			VERSION_ID, 
+			FLUJO_ID, 
+			TRANSACCION_ID, 
+			CRITERIOS, 
+			ESTADO, 
+			CREACION_USUARIO, 
+			CREACION_FECHA, 
+			NIVEL_ID, 
+			FECHA_REGISTRO, 
+			SOLICITANTE_ID, 
+			REFERENCIA,
+			TRANSACCION_ORIGEN_ID
+			)
+			VALUES
+			(:p_proceso, :p_version, :p_flujo, :p_transaccion, 
+			:p_criterios, 'S', :p_usuario, getdate(), 0, getdate(), :p_solicitante, :p_referencia, :p_origentransaccion)
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAccionesAprobacion">
+		<![CDATA[
+			SELECT
+			CAST( (CASE WHEN A.NIVEL_ID = 0 AND A.PROCESO_ID <> 'FP' THEN 'N' ELSE ISNULL(B.FLG_BOTON_DEVOLVER, 'S') end) AS VARCHAR(1)) AS "puedeDevolver",
+			CAST(ISNULL(B.FLG_BOTON_APROBAR, 'S') AS VARCHAR(1)) as "puedeAprobar",
+			CAST(ISNULL(B.FLG_BOTON_RECHAZAR, 'S') AS VARCHAR(1)) as "puedeRechazar"
+			FROM 
+			sgworkflowsys.WF_TRANSACCION A left join sgworkflowsys.WF_FLUJO_NIVEL b on A.PROCESO_ID  = B.PROCESO_ID
+			AND A.VERSION_ID = B.VERSION_ID AND A.FLUJO_ID = B.FLUJO_ID AND ISNULL(A.NIVEL_ID, 0)+1 = B.NIVEL_ID
+			WHERE
+			A.ESTADO = 'S'
+			AND A.UUID = :p_transaccionUUID
+			AND sgworkflowsys.FN_WF_ESAPROBADOR(A.TRANSACCION_ID, :p_aprobador)>0
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.accionesaprobar">
+		<![CDATA[
+			select ESTADO_SUBACCION as "codigo", nombre as "descripcion" 
+			from sgworkflowsys.WF_FLUJO_ACCION a join sgworkflowsys.WF_TRANSACCION b on a.proceso_id = b.proceso_id and a.version_id = b.version_id and a.flujo_id  = b.flujo_id and
+			a.nivel_id = (b.nivel_id + 1)
+			where b.UUID = :p_transaccionUUID and accion_wf = 'A'
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.accionesrechazar">
+		<![CDATA[
+			select ESTADO_SUBACCION as "codigo", nombre as "descripcion" 
+			from sgworkflowsys.WF_FLUJO_ACCION a 
+			join sgworkflowsys.WF_TRANSACCION b on a.proceso_id = b.proceso_id and a.version_id = b.version_id and a.flujo_id  = b.flujo_id and
+			a.nivel_id = (b.nivel_id + 1)
+			where b.UUID = :p_transaccionUUID and accion_wf = 'R'
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.accionesdevolver">
+		<![CDATA[
+			select ESTADO_SUBACCION as "codigo", nombre as "descripcion" 
+			from sgworkflowsys.WF_FLUJO_ACCION a 
+			join sgworkflowsys.WF_TRANSACCION b on a.proceso_id = b.proceso_id and a.version_id = b.version_id and a.flujo_id  = b.flujo_id and
+			a.nivel_id = (b.nivel_id + 1)
+			where b.UUID = :p_transaccionUUID and accion_wf = 'D'
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarSeguimientoWF">
+		<![CDATA[
+			select yyy.usuario as "usuario", yyy.estado as "estado", yyy.observacion as "observacion", yyy.fecha as "fecha", yyy.actual as "actual", yyy.nivel as "nivel", 
+			CASE WHEN yyy.nivel_id is null THEN '' WHEN yyy.nivel_id = 0 THEN 'Solicitado' WHEN yyy.nivel_id = -1 THEN '' ELSE 
+			ISNULL((
+			SELECT c.NOMBRE FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL B JOIN 
+			sgworkflowsys.WF_PROCESO_ESTADO C ON B.PROCESO_ID = C.PROCESO_ID AND B.ESTADO_ID = C.ESTADO_ID
+			WHERE B.PROCESO_ID = :p_proceso AND B.FLUJO_ID = :p_flujo AND B.NIVEL_ID = yyy.nivel_id AND B.VERSION_ID = :p_version
+			), 'Solicitado') END as "estadoDescripcion"
+			from (
+			SELECT NIVEL_ID, (
+			SELECT BUSQUEDA FROM PERSONAMAST PERS WHERE PERS.PERSONA IN(
+				SELECT EMPL.EMPLEADO FROM EMPLEADOMAST EMPL WHERE EMPL.CODIGOUSUARIO  = A.USUARIO
+			) AND ROWNUM = 1
+			) as usuario, ESTADO_ID as estado, OBSERVACION as observacion, FECHA as fecha, cast('N' as VARCHAR(1)) as actual, SEGUIMIENTO_ID as nivel
+			FROM sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO A WHERE TRANSACCION_ID = :p_transaccion
+			UNION ALL
+			SELECT * FROM (
+			SELECT
+			-1 NIVEL_ID,
+			REPLACE(
+			LISTAGG(ISNULL((SELECT ISNULL(YY.BUSQUEDA, TO_CHAR(YY.PERSONA)) FROM PERSONAMAST YY WHERE YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(B.PERSONA_ID)) AND ROWNUM = 1), TO_CHAR(sgworkflowsys.FN_WF_REEMPLAZODE(B.PERSONA_ID)) ), ' - ') 
+			WITHIN GROUP (ORDER BY B.NIVEL_ID), '99999999', 'JEFE SOLICITANTE') USUARIO,
+			null as estado, 
+			'Nivel '||cast(B.NIVEL_ID as varchar(100))||' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN B.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+B.NIVEL_ID nivel
+			FROM sgworkflowsys.WF_FLUJO_APROBADOR B 
+			JOIN sgworkflowsys.WF_TRANSACCION XX ON B.PROCESO_ID = XX.PROCESO_ID AND B.FLUJO_ID = XX.FLUJO_ID AND B.VERSION_ID = XX.VERSION_ID
+			WHERE 
+			XX.TRANSACCION_ID = :p_transaccion AND
+			B.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S'
+			GROUP BY B.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID) XXX) yyy ORDER BY nivel
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerCorreoSolicitante">
+		<![CDATA[
+			--SELECT CORREOELECTRONICO as "descripcion" FROM personamast B WHERE B.persona IN(:p_solicitante) and len(rtrim(ISNULL(CORREOELECTRONICO, '')))>0
+			SELECT CorreoInterno as "descripcion" FROM EmpleadoMast B WHERE B.Empleado IN(:p_solicitante) and len(rtrim(ISNULL(CorreoInterno, '')))>0 and b.EstadoEmpleado = 0
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAdjuntosAprobacionFS">
+		<![CDATA[
+			select
+			x.NOMBRE_REAL as "archivonombre",
+			:p_transaccion as "transaccion",
+			x.DOCUMENTO_ID as "secuencia",
+			x.TIPO_DOCUMENTO_ID as "tipodocumento",
+			x.CODIGONUMERO1_ID as "cantidadfirmas",
+			x.MODIFICACION_USUARIO as "usuario",
+			x.MODIFICACION_FECHA as "fecha",
+			x.CODIGOTEXTO1_ID AS "flagVer",
+			ISNULL((SELECT FLG_EDITABLE FROM sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO wfnd WHERE 
+			wfnd.PROCESO_ID  = :p_proceso AND 
+			wfnd.VERSION_ID  = :p_version AND 
+			wfnd.FLUJO_ID  = :p_flujo AND 
+			wfnd.NIVEL_ID-1 = :p_nivel AND 
+			wfnd.TIPO_DOCUMENTO_ID  = x.TIPO_DOCUMENTO_ID
+			), 'N')AS "puedeEditar"
+			from FS_DOCUMENTO x where x.WORKFLOW_TRANSACCION_ID = :p_transaccion
+		]]>
+	</sql-query>
+	<sql-query name="wftransacciones.obtenerAdjuntosAprobacionSY">
+		<![CDATA[
+			select
+			CAST(rtrim(x.Archivo) AS VARCHAR(500)) as "archivonombre",
+			:p_transaccion as "transaccion",
+			x.Secuencia as "secuencia",
+			x.ProcesoTipoDocumentoId as "tipodocumento",
+			cast(rtrim(x.Comentario) as int) as "cantidadfirmas",
+			CAST(x.UltimoUsuario AS VARCHAR(20)) as "usuario",
+			x.UltimaFechaModif as "fecha",
+			CAST(rtrim(x.Concepto) AS VARCHAR(1)) AS "flagVer",
+			ISNULL((SELECT FLG_EDITABLE FROM sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO wfnd WHERE 
+			wfnd.PROCESO_ID  = :p_proceso AND 
+			wfnd.VERSION_ID  = :p_version AND 
+			wfnd.FLUJO_ID  = :p_flujo AND 
+			wfnd.NIVEL_ID-1 = :p_nivel AND 
+			wfnd.TIPO_DOCUMENTO_ID  = x.ProcesoTipoDocumentoId
+			), 'N')AS "puedeEditar",
+			
+			(select top 1 grupo from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = x.ProcesoTipoDocumentoId ) as "grupo",
+			(select top 1 rutaplantilla from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = :p_proceso and y.TIPO_DOCUMENTO_ID = x.ProcesoTipoDocumentoId ) as plantilla
+			
+			from SY_DocumentoAnexos x where X.MODULO = 'WF' AND x.LINEA = :p_transaccion
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.obtenerParametroValorExplicacion">
+    
+	<![CDATA[
+        select Explicacion as "descripcion" from ParametrosMast
+        where AplicacionCodigo = :p_aplicacion and ParametroClave = :p_parametro
+        and CompaniaCodigo = :p_compania
+    ]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarDocumentosFirma">
+		select 
+		id_documento as "id", 
+		archivo_nombre as "nombre", 
+		archivo_original as "blob",
+		NRO_FIRMA as "nroFirma"
+		from sgworkflowsys.WF_FIRMA_DOCUMENTO where id_firma = :p_id
+	</sql-query>
+	<sql-query name="wftransacciones.listarParametrosFirma">
+		select 
+		id_parametro as "parametro", 
+		valor as "valor", 
+		valor_blob as "blob" 
+		from sgworkflowsys.WF_FIRMA_PARAMETRO where id_firma = :p_id
+		union all select 'CONFIGURACION_TSL_VERIFICA', '0', null 
+        union all select 'CONFIGURACION_TSL_RUTA', 'https://iofe.inia.gob.pe/TSL/tsl-pe.xml', null 
+        union all select 'FIRMA_VISIBLE', '1', null 
+        union all select 'FIRMA_POSICION_X', '70', null 
+        union all select 'FIRMA_POSICION_Y', '125', null 
+        union all select 'FIRMA_PROPOSITO', 'Firmado desde Spring Firma Digital.', null 
+        union all select 'FIRMA_UBICACION', 'Lima - Lima - San Isidro', null  
+        union all select 'FIRMA_MODO_VISTA', 'GRAPHIC_AND_DESCRIPTION', null 
+        union all select 'FIRMA_DOCS_CLAVE', '0', null  
+        union all select 'FIRMA_ELIMINAR_ORIGEN', '0', null  
+        union all select 'FIRMA_PROVIDER', 'WINDOWSMY', null 
+        union all select 'FIRMA_MODO_APLICACION', 'JAR', null 
+        union all select 'CONFIGURACION_TIPO_VALIDACION_CERTIFICADO', 'SOLOFIRMA', null  
+        union all select 'FIRMA_DOCUMENTOS_FIRMAR', 'SOLOFIRMA', null  
+	</sql-query>
+	<sql-query name="wftransacciones.actualizarEstadoCargaFirma">
+		UPDATE sgworkflowsys.wf_firma
+		set estado = 'TERM'
+		where id_firma = :p_id
+	</sql-query>
+	<sql-query
+		name="wftransacciones.listarAplicacionPorUsuario">
+    <![CDATA[
+		select 
+		rtrim(AplicacionCodigo) as "codigo", 
+		rtrim(DescripcionCorta) as "nombre"		
+		from AplicacionesMast
+		order by AplicacionCodigo desc
+    ]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarMiscelaneosActivos">
+    <![CDATA[
+        select 
+        cast(CodigoElemento as varchar(100)) as "codigo", 
+        cast(DescripcionLocal as varchar(100)) as "descripcion",
+        ValorCodigo1 as "estadoId"
+        from MA_MiscelaneosDetalle
+        where AplicacionCodigo = :p_aplicacion and CodigoTabla = :p_codigotabla
+        and Compania = :p_compania
+    ]]>
+	</sql-query>
+	<sql-query name="wftransacciones.listarCompaniasActivas">
+		select
+		companyowner as "codigo",
+		description as
+		"descripcion"
+		from companyowner where company in (
+		select CompaniaCodigo
+		from CompaniaMast where estado = 'A')
+	</sql-query>
+	<sql-query name="wftransacciones.filtrarEmpleados"><![CDATA[
+		select  
+		top 10
+		Persona as "idOracle", 
+		rtrim(nombreCompleto) as "nombre"
+		from 
+		PersonaMast where upper(NombreCompleto) like upper(:p_busqueda) + '%'
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.wf003approvemstedit_dw_1_retrieve_c2">
+	<![CDATA[
+		SELECT
+		  WH_Contrato.CompaniaSocio as "companiasocio",
+		  WH_Contrato.NumeroContrato AS "numeroOrden",
+		  WH_Contrato.UnidadNegocio as "unidadnegocio",
+		  WH_Contrato.Proveedor AS "proveedor",
+		  WH_Contrato.Descripcion AS "descripcion",
+		  WH_Contrato.FormadePago As "formadepago",
+		  WH_Contrato.FechaValidezDesde AS "fechaPrometida",
+		  WH_Contrato.MonedaDocumento AS "monedaCodigo",
+		  WH_Contrato.MontoImponible AS "montoAfecto",
+		  WH_Contrato.MontoImpuestos AS "montoIGV",
+		  WH_Contrato.MontoTotal as "montototal",
+		  WH_Contrato.Comentarios AS "observaciones",
+		  WH_Contrato.RazonRechazo as "razonrechazo",
+		  WH_Contrato.UltimoUsuario as "ultimousuario",
+		  WH_Contrato.UltimaFechaModif as "ultimafechamodif",
+		  WH_Contrato.ResponsableCodigo as "responsablecodigo",
+		  WH_Contrato.ComercialPreparadoPor AS "preparadaPor",
+		  WH_Contrato.ComercialFechaPreparacion AS "fechaPreparacion",
+		  WH_Contrato.ComercialMontoTotal as "comercialmontototal",
+		  WH_Contrato.ComercialEstado AS "estado",
+		  cast(isnull(WH_Contrato.ComercialEnviadoFlag, 'S') as varchar(1)) as "comercialenviadoflag",
+		  MonedaMast.DescripcionCorta AS "monedaDescripcion",
+		  PersonaMast_b.Busqueda AS "preparadaPorNombre",
+		  MA_FormadePago.Descripcion AS "formadePagoDescripcion",
+		  MA_UnidadNegocio.DescripcionLocal AS "unidadNegocioDescripcion",
+		  dbo.udf_WF_Responsible_Name(WH_Contrato.ResponsableCodigo) AS "responsableDescripcion",
+		  dbo.udf_WF_Estado_Name(WH_Contrato.ComercialEstado) AS "estadoDescripcion",
+		  companyowner.description AS "companiaDescripcion",
+		  PersonaMast_a.NombreCompleto AS "proveedorNombre",
+		  TRANSACCION_ID as "transaccionid"
+		FROM WH_Contrato
+		LEFT JOIN PersonaMast PersonaMast_a
+		  ON (WH_Contrato.Proveedor = PersonaMast_a.Persona)
+		LEFT JOIN PersonaMast PersonaMast_b
+		  ON (WH_Contrato.PreparadaPor = PersonaMast_b.Persona)
+		LEFT JOIN MA_FormadePago
+		  ON (WH_Contrato.FormadePago = MA_FormadePago.FormadePago)
+		LEFT JOIN MA_UnidadNegocio
+		  ON (WH_Contrato.UnidadNegocio = MA_UnidadNegocio.UnidadNegocio)
+		INNER JOIN MonedaMast
+		  ON (WH_Contrato.MonedaDocumento = MonedaMast.MonedaCodigo)
+		INNER JOIN companyowner
+		  ON (WH_Contrato.CompaniaSocio = companyowner.companyowner)
+		WHERE 
+		(:p_idTransaccion is not null and WH_Contrato.TRANSACCION_ID = :p_idTransaccion) or
+		(:p_compania is not null and WH_Contrato.CompaniaSocio = :p_compania and WH_Contrato.NumeroContrato = :p_numerocontrato)
+	]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.wf003approvemstedit_wf_reject">
+	<![CDATA[
+	   EXEC SP_WF_REJECT 
+	   :p_tiporegistro, 
+	   :p_estado, 
+	   :p_razonrechazo, 
+	   :p_enviado, 
+	   :p_usuario, 
+	   :p_companiasocio, 
+	   :p_numerodocumento
+	]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.listarTransaccionesPendientes">
+	<![CDATA[
+	 SELECT 
+	 TRANSACCION_ID as "transaccionId", 
+	 PROCESO_ID AS "procesoid",
+	 CRITERIOS as "criterios",  
+	 SOLICITANTE_ID as "solicitanteId",  
+	 FECHA_REGISTRO as "fechaRegistro", 
+	 REFERENCIA as "referencia", 
+	 SENTENCIA as "sentencia", 
+	 ESTADO as "estado", 
+	 INTENTO as "intento", 
+	 MENSAJE as "mensaje",
+	 USUARIO_SOLICITANTE AS "usuarioSolicitante"
+	 from sgworkflowsys.WF_TRANSACCION_TEMP where ESTADO = 'P'
+	]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.registrarIntentoTransaccionesPendientes">
+	<![CDATA[
+		UPDATE
+		sgworkflowsys.WF_TRANSACCION_TEMP
+		SET
+		INTENTO = :p_intentos,
+		MENSAJE = :p_mensaje
+		WHERE TRANSACCION_ID = :p_transaccion
+	]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.transaccionGenerada">
+	<![CDATA[
+		UPDATE
+		sgworkflowsys.WF_TRANSACCION_TEMP
+		SET
+		ESTADO = 'G'
+		WHERE TRANSACCION_ID = :p_transaccion
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerPorIdNL">
+	<![CDATA[
+		SELECT CRITERIOS  AS "descripcion"
+		FROM sgworkflowsys.WF_TRANSACCION wt WHERE TRANSACCION_ID = :p_id
+	]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.listarSeguimientoGeneralWF">
+		<![CDATA[
+			declare @p_proceso varchar(2) = :p_proceso
+			declare @p_flujo int = :p_flujo
+			declare @p_version int = :p_version
+			declare @p_referencia varchar(19) = :p_referencia
+			declare @p_transaccion int = :p_transaccion
+			
+			declare @v_jefereponsable int = (SELECT TOP 1 EMPACT.JEFERESPONSABLE AS PERSONA_ID FROM EMPLEADOMAST EMPACT WHERE EMPACT.EMPLEADO IN (SELECT XX.SOLICITANTE_ID FROM sgworkflowsys.WF_TRANSACCION XX WHERE XX.TRANSACCION_ID = @p_transaccion))
+			
+			select yyy.usuario as "usuario", yyy.estado as "estado", yyy.observacion as "observacion", yyy.fecha as "fecha", yyy.actual as "actual", yyy.nivel as "nivel", 
+			CASE WHEN yyy.nivel_id is null THEN '' WHEN yyy.nivel_id = 0 THEN 'Solicitado' ELSE 
+			ISNULL((
+			SELECT c.NOMBRE FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL B JOIN 
+			sgworkflowsys.WF_PROCESO_ESTADO C ON B.PROCESO_ID = C.PROCESO_ID AND B.ESTADO_ID = C.ESTADO_ID
+			WHERE B.PROCESO_ID = @p_proceso AND B.FLUJO_ID = @p_flujo AND B.NIVEL_ID = (CASE WHEN yyy.nivel > 100 THEN YYY.nivel-100 ELSE YYY.nivel END) AND B.VERSION_ID = @p_version
+			), 'Solicitado') END as "estadoDescripcion",
+			yyy.actividad as "actividad"
+			from (
+			
+			--Historicos anteriores
+			
+			SELECT 
+			TRANSACCION_ID,
+			NIVEL_ID, (
+			SELECT TOP 1 BUSQUEDA FROM PERSONAMAST PERS WHERE PERS.PERSONA IN(
+				SELECT EMPL.EMPLEADO FROM EMPLEADOMAST EMPL WHERE EMPL.CODIGOUSUARIO  = A.USUARIO
+			)
+			) as usuario, ESTADO_ID as estado, OBSERVACION as 
+			observacion, FECHA as fecha, cast('N' as VARCHAR(1)) as actual, SEGUIMIENTO_ID as nivel,
+
+			(select top 1 NOMBRE from sgworkflowsys.WF_FLUJO_NIVEL act where act.PROCESO_ID = a.PROCESO_ID and act.VERSION_ID = a.VERSION_ID and act.FLUJO_ID = a.VERSION_ID and act.NIVEL_ID = a.NIVEL_ID)
+			as actividad
+			FROM sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO A 
+			WHERE 1 = 2 AND TRANSACCION_ID IN
+			(
+				SELECT TRANSACCION_ID 
+				FROM sgworkflowsys.WF_TRANSACCION wt  WHERE REFERENCIA  = @p_referencia AND PROCESO_ID  = @p_proceso
+				AND TRANSACCION_ID < @p_transaccion
+			)
+			
+			UNION ALL
+			
+			--Historico actual
+			
+			SELECT 
+			TRANSACCION_ID,
+			NIVEL_ID, (
+			SELECT TOP 1 BUSQUEDA FROM PERSONAMAST PERS WHERE PERS.PERSONA IN(
+				SELECT EMPL.EMPLEADO FROM EMPLEADOMAST EMPL WHERE EMPL.CODIGOUSUARIO  = A.USUARIO
+				union all
+				SELECT X.Persona FROM PersonaMast X WHERE X.DocumentoFiscal IN (
+				select USUARIO from usuario us where us.usuario = a.USUARIO and us.UsuarioPerfil = 'PV')
+			)
+			) as usuario, ESTADO_ID as estado, OBSERVACION as observacion, FECHA as fecha, cast('N' as VARCHAR(1)) as actual, NIVEL_ID as nivel,
+
+			(select top 1 NOMBRE from sgworkflowsys.WF_FLUJO_NIVEL act where act.PROCESO_ID = a.PROCESO_ID and act.VERSION_ID = a.VERSION_ID and act.FLUJO_ID = a.VERSION_ID and act.NIVEL_ID = a.NIVEL_ID)
+			as actividad
+			FROM sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO A WHERE TRANSACCION_ID = @p_transaccion
+			
+			-- Proyeccion PERS
+						
+			UNION ALL
+			SELECT * FROM (
+			SELECT
+			@p_transaccion TRANSACCION_ID,
+			-1 NIVEL_ID,
+			(SELECT RESM.ASD FROM (
+			select STUFF((
+			SELECT ', ' + ISNULL(LTRIM(RTRIM(YY.BUSQUEDA)), cast(YY.PERSONA as varchar(40))) 
+			FROM sgworkflowsys.WF_FLUJO_APROBADOR US JOIN PERSONAMAST YY ON YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(US.PERSONA_ID)) WHERE US.PROCESO_ID = XX.PROCESO_ID AND US.FLUJO_ID = XX.FLUJO_ID AND US.VERSION_ID = XX.VERSION_ID  AND US.NIVEL_ID = B.NIVEL_ID
+			FOR XML PATH('')), 1, 1, '') ASD) RESM)
+			USUARIO,
+			null as estado, 
+			'Nivel '+cast(B.NIVEL_ID as varchar(100))+' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN B.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+B.NIVEL_ID nivel,
+			wfn.nombre
+			FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+			sgworkflowsys.WF_FLUJO_APROBADOR B ON WFN.PROCESO_ID = B.PROCESO_ID AND WFN.VERSION_ID =B.VERSION_ID AND wfn.FLUJO_ID = B.FLUJO_ID AND WFN.NIVEL_ID = B.NIVEL_ID 
+			JOIN sgworkflowsys.WF_TRANSACCION XX ON B.PROCESO_ID = XX.PROCESO_ID AND B.FLUJO_ID = XX.FLUJO_ID AND B.VERSION_ID = XX.VERSION_ID
+			WHERE 
+			XX.TRANSACCION_ID = @p_transaccion AND
+			B.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S' AND
+			ISNULL(WFN.TIPO_APROBADOR_ID, 'PERS') = 'PERS'
+			GROUP BY B.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID, wfn.nombre) XXX
+			
+			UNION ALL
+			--PROYECTION SOLI
+			
+			SELECT * FROM (
+			SELECT
+			@p_transaccion TRANSACCION_ID,
+			-1 NIVEL_ID,
+			isnull((SELECT RESM.ASD FROM (
+			select STUFF((
+			SELECT ', ' + ISNULL(LTRIM(RTRIM(YY.BUSQUEDA)), cast(YY.PERSONA as varchar(40))) 
+			FROM PERSONAMAST YY where YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(XX.SOLICITANTE_ID))
+			FOR XML PATH('')), 1, 1, '') ASD) RESM), 'Sin Solicitante') USUARIO,
+			
+			null as estado, 
+			'Nivel '+cast(wfn.NIVEL_ID as varchar(100))+' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN wfn.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+wfn.NIVEL_ID nivel,
+			wfn.nombre
+			FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+			sgworkflowsys.WF_TRANSACCION XX ON wfn.PROCESO_ID = XX.PROCESO_ID AND wfn.FLUJO_ID = XX.FLUJO_ID AND wfn.VERSION_ID = XX.VERSION_ID
+			WHERE 
+			XX.TRANSACCION_ID = @p_transaccion AND
+			wfn.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S' AND
+			ISNULL(WFN.TIPO_APROBADOR_ID, 'PERS') = 'SOLI'
+			GROUP BY wfn.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID, XX.SOLICITANTE_ID, wfn.nombre
+			) XXX_SOL
+			
+			
+			UNION ALL
+			--PROYECTION REFE
+			
+			SELECT * FROM (
+			SELECT
+			@p_transaccion TRANSACCION_ID,
+			-1 NIVEL_ID,
+			isnull((SELECT RESM.ASD FROM (
+			select STUFF((
+			SELECT ', ' + ISNULL(LTRIM(RTRIM(YY.BUSQUEDA)), cast(YY.PERSONA as varchar(40))) 
+			FROM PERSONAMAST YY where YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(XX.PERSONA_REFERENCIA_ID))
+			FOR XML PATH('')), 1, 1, '') ASD) RESM), 'Sin Solicitante') USUARIO,
+			
+			null as estado, 
+			'Nivel '+cast(wfn.NIVEL_ID as varchar(100))+' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN wfn.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+wfn.NIVEL_ID nivel,
+			wfn.nombre
+			FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+			sgworkflowsys.WF_TRANSACCION XX ON wfn.PROCESO_ID = XX.PROCESO_ID AND wfn.FLUJO_ID = XX.FLUJO_ID AND wfn.VERSION_ID = XX.VERSION_ID
+			WHERE 
+			XX.TRANSACCION_ID = @p_transaccion AND
+			wfn.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S' AND
+			ISNULL(WFN.TIPO_APROBADOR_ID, 'PERS') = 'REFE'
+			GROUP BY wfn.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID, XX.PERSONA_REFERENCIA_ID, wfn.nombre
+			) XXX_REFE
+			
+			--Proyeccion TRAP
+			
+			UNION ALL
+			
+			SELECT * FROM (
+			SELECT
+			@p_transaccion TRANSACCION_ID,
+			-1 NIVEL_ID,
+			
+			
+			isnull((SELECT RESM.ASD FROM (
+			select STUFF((
+			SELECT ', ' + ISNULL(LTRIM(RTRIM(YY.BUSQUEDA)), cast(YY.PERSONA as varchar(40))) 
+			FROM sgworkflowsys.WF_TRANSACCION_APROBADOR US JOIN PERSONAMAST YY ON YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(US.PERSONA_ID)) WHERE US.TRANSACCION_ID = @p_transaccion  AND (US.NIVEL_ID = wfn.NIVEL_ID or us.NIVEL_ID = -1)
+			FOR XML PATH('')), 1, 1, '') ASD) RESM), 'Sin Aprobador Trans.') USUARIO,
+			
+			null as estado, 
+			'Nivel '+cast(wfn.NIVEL_ID as varchar(100))+' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN wfn.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+wfn.NIVEL_ID nivel,
+			wfn.nombre
+			FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL wfn left JOIN
+			sgworkflowsys.WF_TRANSACCION XX ON wfn.PROCESO_ID = XX.PROCESO_ID AND wfn.FLUJO_ID = XX.FLUJO_ID AND wfn.VERSION_ID = XX.VERSION_ID left JOIN
+			sgworkflowsys.WF_TRANSACCION_APROBADOR wta ON wta.TRANSACCION_ID = XX.TRANSACCION_ID AND (wta.NIVEL_ID = wfn.NIVEL_ID or wta.NIVEL_ID = -1)--comodin
+			WHERE 
+			XX.TRANSACCION_ID = @p_transaccion AND
+			wfn.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S' AND
+			ISNULL(WFN.TIPO_APROBADOR_ID, 'PERS') = 'TRAP'
+			GROUP BY wfn.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID, wfn.nombre
+			) XXX_TRAP			
+			
+			--Proyeccion JEIN
+			
+			
+			UNION ALL
+			
+			SELECT * FROM (
+			SELECT
+			@p_transaccion TRANSACCION_ID,
+			-1 NIVEL_ID,
+			
+			
+			isnull((SELECT RESM.ASD FROM (
+			select STUFF((
+			SELECT ', ' + ISNULL(LTRIM(RTRIM(YY.BUSQUEDA)), cast(YY.PERSONA as varchar(40))) 
+			FROM PERSONAMAST YY where YY.PERSONA = (sgworkflowsys.FN_WF_REEMPLAZODE(@v_jefereponsable))
+			FOR XML PATH('')), 1, 1, '') ASD) RESM), 'Sin Jefe Responsable') USUARIO,
+			
+			null as estado, 
+			'Nivel '+cast(wfn.NIVEL_ID as varchar(100))+' pendiente' observacion,  
+			null fecha, 
+			CASE WHEN wfn.NIVEL_ID = xx.NIVEL_ID+1 THEN cast('S' as VARCHAR(1)) ELSE cast('N' as VARCHAR(1)) END actual,
+			100+wfn.NIVEL_ID nivel,
+			wfn.nombre
+			FROM 
+			sgworkflowsys.WF_FLUJO_NIVEL wfn JOIN
+			sgworkflowsys.WF_TRANSACCION XX ON wfn.PROCESO_ID = XX.PROCESO_ID AND wfn.FLUJO_ID = XX.FLUJO_ID AND wfn.VERSION_ID = XX.VERSION_ID
+			WHERE 
+			XX.TRANSACCION_ID = @p_transaccion AND
+			wfn.NIVEL_ID >= XX.NIVEL_ID+1 AND 
+			XX.ESTADO = 'S' AND
+			ISNULL(WFN.TIPO_APROBADOR_ID, 'PERS') = 'JEIN'
+			GROUP BY wfn.NIVEL_ID, xx.nivel_id, XX.PROCESO_ID, XX.FLUJO_ID, XX.VERSION_ID, wfn.nombre
+			) XXX_JEIN		
+			
+			
+			) yyy ORDER BY TRANSACCION_ID, nivel
+		]]>
+	</sql-query>
+	
+	
+	
+	<sql-query
+		name="wftransacciones.obtenerOrigenDatos">
+	<![CDATA[
+		SELECT 
+		CADENACONECCION AS "cadenaconexion",
+		DRIVER AS "driver"
+		FROM SY_ORIGEN_DATOS WHERE ORIGENDATOSCODIGO = :p_origendatosid
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.registrarSeguimientoFirmas">
+	<![CDATA[
+		INSERT INTO FS_DOCUMENTO_FIRMA (DOCUMENTO_ID, FIRMA_ID, FIRMA_TIPO_ID, FIRMANTE_ID, ESTADO, CREACION_USUARIO, CREACION_FECHA, MODIFICACION_USUARIO, MODIFICACION_FECHA)
+    	VALUES
+    	(:p_documentoId, ISNULL((SELECT MAX(FIRMA_ID) FROM FS_DOCUMENTO_FIRMA X WHERE X.DOCUMENTO_ID = :p_documentoId),0)+1, :p_tipoFirma, :p_empleadoFirmante, 'A', :p_usuarioFirmante, SYSDATE, :p_usuarioFirmante, SYSDATE)
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerNombreSegmento">
+	<![CDATA[
+		SELECT DESCRIPCIONLOCAL AS "descripcion" FROM MA_MISCELANEOSDETALLE mm  WHERE CODIGOTABLA = :p_codigotabla AND COMPANIA = '999999' AND CODIGOELEMENTO = :p_valor
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerSeguimientoAprobacionesXNivel">
+	<![CDATA[
+		SELECT E.EMPLEADO AS "id" FROM sgworkflowsys.WF_TRANSACCION_SEGUIMIENTO wts JOIN EMPLEADOMAST E ON E.CODIGOUSUARIO  = WTS.CREACION_USUARIO
+		WHERE TRANSACCION_ID  = :p_transaccionid AND NIVEL_ID = :p_nivel
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.verPlantilla">
+	<![CDATA[
+		SELECT B.Explicacion + A.PROCESO_ID + '\' + CAST(A.VERSION_ID AS VARCHAR) + '\' AS "descripcion"
+		FROM sgworkflowsys.WF_TRANSACCION A LEFT JOIN ParametrosMast B ON B.ParametroClave = 'RUTAADJUN' AND B.AplicacionCodigo = 'SY' 
+		WHERE A.UUID = :p_transaccionUUID
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.generarPlanificacion">
+	<![CDATA[
+		DECLARE @I_PROCESO VARCHAR(4) = :p_proceso
+		DECLARE @I_VERSION INT = :p_version
+		DECLARE @I_FLUJO INT = :p_flujo
+		
+		DECLARE @V_FECHA DATETIME = GETDATE()
+		
+		DECLARE @V_NIVEL INT
+		DECLARE @V_NOMBRE VARCHAR(200)
+		DECLARE @V_TIPO VARCHAR(20)
+		DECLARE @V_CANTIDAD INT
+		
+		DECLARE @T_GENERAL AS TABLE (
+			NIVEL INT,
+			NOMBRE VARCHAR(200),
+			TIPO VARCHAR(20),
+			CANTIDAD INT,
+			INICIO DATETIME,
+			FIN DATETIME
+		)
+		
+		INSERT INTO @T_GENERAL(NIVEL, NOMBRE, TIPO, CANTIDAD)
+		select NIVEL_ID, NOMBRE, DURACION_TIPO, DURACION_CANTIDAD 
+		from sgworkflowsys.WF_FLUJO_NIVEL A WHERE A.PROCESO_ID = @I_PROCESO AND A.VERSION_ID = @I_VERSION AND A.FLUJO_ID = @I_FLUJO
+		
+		DECLARE C_NIVELES CURSOR FOR
+		SELECT NIVEL, NOMBRE, TIPO, CANTIDAD FROM @T_GENERAL
+		
+		OPEN C_NIVELES  
+		FETCH NEXT FROM C_NIVELES INTO @V_NIVEL, @V_NOMBRE, @V_TIPO, @V_CANTIDAD
+		
+		WHILE @@FETCH_STATUS = 0  
+		BEGIN  
+			DECLARE @C_V_FECHAINICIO DATETIME
+			DECLARE @C_V_FECHAFIN DATETIME
+		
+			IF @V_TIPO = 'DHA'
+			BEGIN
+				SET @C_V_FECHAINICIO = @V_FECHA
+				SET @C_V_FECHAFIN = @V_FECHA
+		
+				DECLARE @I INT = 1
+		
+				WHILE @I <= @V_CANTIDAD
+				BEGIN
+					SET @C_V_FECHAFIN = @C_V_FECHAFIN + 1
+					IF DATEPART(DW, @C_V_FECHAFIN) IN (2,3,4,5,6)
+					BEGIN
+						SET @I = @I + 1
+					END
+				END
+			END
+			ELSE IF @V_TIPO = 'DIA'
+			BEGIN
+				SET @C_V_FECHAINICIO = @V_FECHA
+				SET @C_V_FECHAFIN = @V_FECHA + @V_CANTIDAD
+			END
+			ELSE IF @V_TIPO = 'HOR'
+			BEGIN
+				SET @C_V_FECHAINICIO = @V_FECHA
+				SET @C_V_FECHAFIN = DATEADD(HOUR,@V_CANTIDAD,@V_FECHA)
+			END
+			ELSE IF @V_TIPO = 'MIN'
+			BEGIN
+				SET @C_V_FECHAINICIO = @V_FECHA
+				SET @C_V_FECHAFIN = DATEADD(MINUTE,@V_CANTIDAD,@V_FECHA)
+			END
+			ELSE IF @V_TIPO = 'SEG'
+			BEGIN
+				SET @C_V_FECHAINICIO = @V_FECHA
+				SET @C_V_FECHAFIN = DATEADD(SECOND,@V_CANTIDAD,@V_FECHA)
+			END
+		
+			SET @V_FECHA = DATEADD(SECOND,1,@C_V_FECHAFIN)
+		
+			UPDATE @T_GENERAL SET 
+			INICIO = @C_V_FECHAINICIO, 
+			FIN = @C_V_FECHAFIN 
+			WHERE NIVEL = @V_NIVEL
+		
+			FETCH NEXT FROM C_NIVELES INTO @V_NIVEL, @V_NOMBRE, @V_TIPO, @V_CANTIDAD
+		END   
+		CLOSE C_NIVELES;  
+		DEALLOCATE C_NIVELES;  
+		
+		SELECT NIVEL AS "nivel", nombre as "nombre", tipo as "tipo", cantidad as "cantidad", inicio as "inicio", fin as "fin" FROM @T_GENERAL
+	]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.obtenerEstadoSiguienteNivel">
+	<![CDATA[
+		DECLARE @I_PROCESO VARCHAR(4) = :p_proceso
+		DECLARE @I_VERSION INT = :p_version
+		DECLARE @I_FLUJO INT = :p_flujo
+		DECLARE @I_NIVEL INT = :p_nivel
+		
+		SET @I_NIVEL = @I_NIVEL + 1
+		
+		DECLARE @V_ESTADO VARCHAR(4)
+		
+		SELECT @V_ESTADO = ESTADO_ID FROM sgworkflowsys.WF_FLUJO_NIVEL A 
+		WHERE 
+		A.PROCESO_ID = @I_PROCESO AND
+		A.VERSION_ID = @I_VERSION AND
+		A.FLUJO_ID = @I_FLUJO AND
+		A.NIVEL_ID = @I_NIVEL
+		
+		SELECT @V_ESTADO AS "codigo"
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerEstadoActualNivel">
+	<![CDATA[
+		DECLARE @I_PROCESO VARCHAR(4) = :p_proceso
+		DECLARE @I_VERSION INT = :p_version
+		DECLARE @I_FLUJO INT = :p_flujo
+		DECLARE @I_NIVEL INT = :p_nivel
+		
+		SET @I_NIVEL = @I_NIVEL
+		
+		DECLARE @V_ESTADO VARCHAR(4)
+		
+		SELECT @V_ESTADO = ESTADO_ID FROM sgworkflowsys.WF_FLUJO_NIVEL A 
+		WHERE 
+		A.PROCESO_ID = @I_PROCESO AND
+		A.VERSION_ID = @I_VERSION AND
+		A.FLUJO_ID = @I_FLUJO AND
+		A.NIVEL_ID = @I_NIVEL
+		
+		if @I_NIVEL = 0
+			select @V_ESTADO = NIVEL_ESTADO_ID_INICIAL from sgworkflowsys.WF_PROCESO_VERSION where PROCESO_ID = @I_PROCESO AND VERSION_ID = @I_VERSION
+		
+		SELECT @V_ESTADO AS "codigo"
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerAdjuntosSoloLectura">
+	<![CDATA[
+		--LISTA DE DOCUMENTOS X PROCESOS Y PERSONAACTUAL
+		DECLARE @I_TRANSACCION INT = (SELECT T.TRANSACCION_ID FROM sgworkflowsys.WF_TRANSACCION T WHERE T.UUID = :p_transaccionUUID)
+		DECLARE @I_PERSONAACTUAL INT = :p_personaId
+		DECLARE @I_NIVELDEF INT = :p_nivel
+		
+		DECLARE @V_PROCESO VARCHAR(4)
+		DECLARE @V_VERSION INT
+		DECLARE @V_FLUJO INT
+		DECLARE @V_JEFE INT
+		DECLARE @V_SOLICITANTE INT
+		DECLARE @V_REFERENCIA INT
+		
+		--DATOS DEL PROCESO Y FLUJO DE LA TRANSACCION
+		SELECT
+		@V_PROCESO = A.PROCESO_ID,
+		@V_VERSION = A.VERSION_ID,
+		@V_FLUJO = A.FLUJO_ID,
+		@V_SOLICITANTE = A.SOLICITANTE_ID,
+		@V_JEFE = (SELECT JefeResponsable FROM EmpleadoMast E WHERE E.Empleado = A.SOLICITANTE_ID AND E.EstadoEmpleado = '0' AND E.Estado = 'A' 
+		AND E.CompaniaSocio = A.COMPANIA_SOCIO_ID),
+		@V_REFERENCIA = PERSONA_REFERENCIA_ID
+		FROM sgworkflowsys.WF_TRANSACCION A WHERE A.TRANSACCION_ID = @I_TRANSACCION
+		
+		DECLARE @TB_NIVELES AS TABLE(NIVEL INT)
+		
+		--NIVELES DONDE TIENE PARTICIPACION EL USUARIO ACTUAL
+		INSERT INTO @TB_NIVELES(NIVEL)
+		SELECT NIVEL_ID FROM 
+		sgworkflowsys.WF_FLUJO_NIVEL A 
+		WHERE A.PROCESO_ID = @V_PROCESO AND A.VERSION_ID = @V_VERSION AND A.FLUJO_ID = @V_FLUJO
+		AND 
+		(
+			(A.TIPO_APROBADOR_ID = 'JEIN' AND @V_JEFE = @I_PERSONAACTUAL)
+			OR
+			(A.TIPO_APROBADOR_ID = 'SOLI' AND @V_SOLICITANTE = @I_PERSONAACTUAL)
+			OR
+			(A.TIPO_APROBADOR_ID = 'REFE' AND @V_REFERENCIA = @I_PERSONAACTUAL)
+			OR
+			(A.TIPO_APROBADOR_ID = 'TRAP' AND @I_PERSONAACTUAL IN 
+				(
+					SELECT TA.PERSONA_ID 
+					FROM sgworkflowsys.WF_TRANSACCION_APROBADOR TA 
+					WHERE TA.TRANSACCION_ID = @I_TRANSACCION AND TA.NIVEL_ID = A.NIVEL_ID
+				)
+			)
+			OR
+			(A.TIPO_APROBADOR_ID = 'PERS' AND @I_PERSONAACTUAL IN 
+				(
+					SELECT TA.PERSONA_ID 
+					FROM sgworkflowsys.WF_FLUJO_APROBADOR TA 
+					WHERE TA.PROCESO_ID = A.PROCESO_ID AND A.VERSION_ID = TA.VERSION_ID AND A.FLUJO_ID = TA.FLUJO_ID AND TA.NIVEL_ID = A.NIVEL_ID
+				)
+			)
+		)
+		--PARA CONTROLAR SI MOSTRAR GENERAL O SOLO DE UN NIVEL ESPECIFICO
+		AND (A.NIVEL_ID = @I_NIVELDEF OR @I_NIVELDEF = -1)
+		
+		DECLARE @TB_DOCUMENTOS AS TABLE (NIVEL INT, TIPO VARCHAR(10), REQUERIDO VARCHAR(1), FILENAME_PLANTILLA VARCHAR(500))
+		
+		--DOCUMENTOS NECESARIOS X NIVEL
+		
+		--Cuando es general de todos los niveles, hay el caso que un docuimento esta en varios niveles
+		--aca se elimina los duplicados
+		if @I_NIVELDEF = -1
+		begin
+			INSERT INTO @TB_DOCUMENTOS(NIVEL, TIPO, REQUERIDO, FILENAME_PLANTILLA)
+			SELECT min(B.NIVEL_ID), B.TIPO_DOCUMENTO_ID, max(B.FLG_REQUERIDO), max(C.rutaplantilla)
+			FROM 
+			@TB_NIVELES A JOIN 
+			sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO B 
+			ON B.PROCESO_ID = @V_PROCESO AND B.VERSION_ID = @V_VERSION AND B.FLUJO_ID = @V_FLUJO AND B.NIVEL_ID = A.NIVEL LEFT JOIN
+			sgworkflowsys.WF_PROCESO_DOCUMENTO C ON B.PROCESO_ID = C.PROCESO_ID AND C.TIPO_DOCUMENTO_ID = B.TIPO_DOCUMENTO_ID
+			group by B.TIPO_DOCUMENTO_ID
+			order by 1
+		end
+		else
+		begin
+			INSERT INTO @TB_DOCUMENTOS(NIVEL, TIPO, REQUERIDO, FILENAME_PLANTILLA)
+			SELECT B.NIVEL_ID, B.TIPO_DOCUMENTO_ID, B.FLG_REQUERIDO, C.rutaplantilla 
+			FROM 
+			@TB_NIVELES A JOIN 
+			sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO B 
+			ON B.PROCESO_ID = @V_PROCESO AND B.VERSION_ID = @V_VERSION AND B.FLUJO_ID = @V_FLUJO AND B.NIVEL_ID = A.NIVEL LEFT JOIN
+			sgworkflowsys.WF_PROCESO_DOCUMENTO C ON B.PROCESO_ID = C.PROCESO_ID AND C.TIPO_DOCUMENTO_ID = B.TIPO_DOCUMENTO_ID
+		end
+		
+		--LLENAR CON LOS ARCHIVOS SUBIDOS
+		DECLARE @TB_SUBIDOS AS TABLE (TIPO VARCHAR(10), FILENAME_SUBIDO VARCHAR(500), FECHA DATETIME, USUARIO VARCHAR(20), SECUENCIA INT)
+		INSERT INTO @TB_SUBIDOS(TIPO, FILENAME_SUBIDO, FECHA, USUARIO, SECUENCIA)
+		SELECT ProcesoTipoDocumentoId, Archivo, UltimaFechaModif, UltimoUsuario, Secuencia FROM SY_DocumentoAnexos WHERE Modulo = 'WF' AND LINEA = @I_TRANSACCION
+		
+		--LISTA FINAL
+		SELECT 
+		A.NIVEL as "nivel", 
+		A.TIPO as "tipodocumento", 
+		(select top  1 DescripcionLocal from SY_TipoDocumento where TipoDocumentoId = a.TIPO) as "tipodocumentodescripcion",
+		A.REQUERIDO as "auxRequerido", 
+		B.FILENAME_SUBIDO as "archivonombre", 
+		A.FILENAME_PLANTILLA as "plantilla", 
+		B.FECHA as "fecha", 
+		B.USUARIO as "usuario",
+		B.SECUENCIA AS "secuencia"
+		FROM @TB_DOCUMENTOS A LEFT JOIN @TB_SUBIDOS B ON A.TIPO = B.TIPO
+		WHERE 
+		(@I_NIVELDEF > 0) OR (@I_NIVELDEF = -1 AND B.SECUENCIA IS NOT NULL) 
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerSiguienteEstado">
+	<![CDATA[
+		select FN.ESTADO_ID as "codigo"
+			from sgworkflowsys.WF_TRANSACCION T
+			INNER JOIN sgworkflowsys.WF_FLUJO_NIVEL FN
+			ON		t.PROCESO_ID = fn.PROCESO_ID	
+				and t.VERSION_ID = fn.VERSION_ID
+				and t.FLUJO_ID = fn.FLUJO_ID
+				and (t.NIVEL_ID+1) = fn.NIVEL_ID
+			where t.TRANSACCION_ID = :p_transaccion_id
+	]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenerAnteriorEstado">
+	<![CDATA[
+		select FN.ESTADO_ID as "codigo"
+			from sgworkflowsys.WF_TRANSACCION T
+			INNER JOIN sgworkflowsys.WF_FLUJO_NIVEL FN
+			ON		t.PROCESO_ID = fn.PROCESO_ID	
+				and t.VERSION_ID = fn.VERSION_ID
+				and t.FLUJO_ID = fn.FLUJO_ID
+				and (t.NIVEL_ID-1) = fn.NIVEL_ID
+			where t.TRANSACCION_ID = :p_transaccion_id
+	]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.obtenerAnteriorEstadoInterno">
+	<![CDATA[
+		select FN.ESTADO_ID as "codigo"
+			from sgworkflowsys.WF_TRANSACCION T WITH (READUNCOMMITTED) 
+			INNER JOIN sgworkflowsys.WF_FLUJO_NIVEL FN WITH (READUNCOMMITTED) 
+			ON		t.PROCESO_ID = fn.PROCESO_ID	
+				and t.VERSION_ID = fn.VERSION_ID
+				and t.FLUJO_ID = fn.FLUJO_ID
+				and (:p_nivel_id-1) = fn.NIVEL_ID
+			where t.TRANSACCION_ID = :p_transaccion_id
+	]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerRechazadoEstado">
+	<![CDATA[
+		select PE.ESTADO_ID AS "codigo" 
+		from sgworkflowsys.WF_TRANSACCION T with (nolock)
+		INNER JOIN sgworkflowsys.WF_PROCESO P with (nolock)
+			ON T.PROCESO_ID=P.PROCESO_ID
+		INNER JOIN sgworkflowsys.WF_PROCESO_ESTADO PE with (nolock)
+			ON T.PROCESO_ID=PE.PROCESO_ID
+		WHERE T.TRANSACCION_ID = :p_transaccion_id
+		AND PE.TIPO_ID = 'RECH'
+	]]>
+	</sql-query>
+	
+	
+	
+	
+	<sql-query
+		name="wftransacciones.transaccionListarAdminContar">
+		<![CDATA[
+			SELECT
+			COUNT(1)
+			FROM
+			sgworkflowsys.WF_PROCESO F JOIN 
+			sgworkflowsys.WF_PROCESO_VERSION C ON F.PROCESO_ID = C.PROCESO_ID JOIN
+			sgworkflowsys.WF_TRANSACCION A ON A.PROCESO_ID = C.PROCESO_ID AND A.VERSION_ID  = C.VERSION_ID JOIN
+			sgworkflowsys.WF_PROCESO_FLUJO D ON D.PROCESO_ID = A.PROCESO_ID AND D.FLUJO_ID = A.FLUJO_ID AND D.VERSION_ID = A.VERSION_ID LEFT JOIN
+			personamast E ON E.persona = A.SOLICITANTE_ID
+			LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			WHERE 
+			A.TRANSACCION_ID = ISNULL(:p_transaccion, A.TRANSACCION_ID) AND
+			A.solicitante_id = ISNULL(:p_solicitante, A.solicitante_id) AND
+			A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA) AND
+			F.APLICACION_ID = ISNULL(:p_aplicacion, f.APLICACION_ID) AND
+			A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID) AND
+			cast(A.FECHA_REGISTRO as date) >= cast(ISNULL(:p_desde, A.FECHA_REGISTRO)as date) AND 
+			cast(A.FECHA_REGISTRO as date) <= cast(ISNULL(:p_hasta, A.FECHA_REGISTRO)as date) AND
+			upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND 
+			(
+				--Siempre listamos las pendientes y aprobadas 
+				A.ESTADO IN ('S', 'A')
+				OR
+				--Si estan rechazadas, solo listados cuando el registro no haya sido reEnvidado a WF
+			    (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION wt 
+				WHERE WT.REFERENCIA  = A.REFERENCIA  AND WT.PROCESO_ID = A.PROCESO_ID
+				AND WT.TRANSACCION_ID > A.TRANSACCION_ID
+				) = 0
+			)
+			
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID) AND A.ESTADO IN ('S', 'A'))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+				OR
+				(:p_est_proceso = '-1' and A.ESTADO = 'R')
+			)
+		]]>
+	</sql-query>
+	<sql-query
+		name="wftransacciones.transaccionListarAdminPaginacion">
+		<![CDATA[
+			SELECT
+			XP.BUSQUEDA AS "nombrepersonareferencia",
+			a.MONTO as "monto",
+			RTRIM(X.DESCRIPCIONLOCAL) as "areaNombre",
+			a.PROCESO_ID as "proceso",
+			a.VERSION_id as "version",
+			a.FLUJO_ID as "flujo",
+			A.REFERENCIA as "referencia",
+			C.nombre +' - ' + D.nombre AS "procesoFlujoDescripcion",
+			A.TRANSACCION_ID as "transaccion",
+			A.FECHA_REGISTRO as "fechaRegistro",
+			A.NIVEL_ID as "nivelActual",
+			A.ESTADO AS "estado",
+			E.nombrecompleto AS "solicitante",
+			ISNULL((
+			SELECT c_.nombre FROM sgworkflowsys.WF_FLUJO_NIVEL B JOIN sgworkflowsys.WF_PROCESO_ESTADO C_ ON B.PROCESO_ID = C_.PROCESO_ID AND B.ESTADO_ID = C_.ESTADO_ID
+			WHERE B.PROCESO_ID = A.PROCESO_ID AND B.FLUJO_ID = A.FLUJO_ID AND B.NIVEL_ID = A.NIVEL_ID AND B.VERSION_ID = C.VERSION_ID
+			), 'Solicitado') as "estadoDescripcion",
+			ISNULL(ISNULL((SELECT XX.WEB_COMPONENTE 
+			FROM sgworkflowsys.WF_FLUJO_NIVEL XX 
+			WHERE XX.PROCESO_ID = A.PROCESO_ID AND XX.VERSION_ID = A.VERSION_ID AND XX.FLUJO_ID = A.FLUJO_ID AND XX.NIVEL_ID = (A.NIVEL_ID+1)), 
+			(SELECT YY.WEB_COMPONENTE FROM sgworkflowsys.WF_PROCESO_VERSION YY WHERE YY.PROCESO_ID = A.PROCESO_ID AND YY.VERSION_ID = A.VERSION_ID)
+			), '/portal/workflow/transaccion-mantenimiento')
+			as "componenteweb"
+			FROM
+			sgworkflowsys.WF_PROCESO F JOIN 
+			sgworkflowsys.WF_PROCESO_VERSION C ON F.PROCESO_ID = C.PROCESO_ID JOIN
+			sgworkflowsys.WF_TRANSACCION A ON A.PROCESO_ID = C.PROCESO_ID AND A.VERSION_ID  = C.VERSION_ID JOIN
+			sgworkflowsys.WF_PROCESO_FLUJO D ON D.PROCESO_ID = A.PROCESO_ID AND D.FLUJO_ID = A.FLUJO_ID AND D.VERSION_ID = A.VERSION_ID LEFT JOIN
+			personamast E ON E.persona = A.SOLICITANTE_ID
+			LEFT JOIN 
+			MA_MiscelaneosDetalle X ON X.APLICACIONCODIGO = 'WF' AND X.CODIGOTABLA = 'FLUJOAREA' AND X.CODIGOELEMENTO = A.AREA_REVISORA_ID
+			LEFT JOIN
+			sgworkflowsys.WF_FLUJO_NIVEL FN ON 
+				FN.PROCESO_ID = A.PROCESO_ID AND 
+				FN.FLUJO_ID = A.FLUJO_ID AND 
+				FN.NIVEL_ID = A.NIVEL_ID AND 
+				FN.VERSION_ID = A.VERSION_ID
+			LEFT JOIN personamast XP ON XP.PERSONA = A.PERSONA_REFERENCIA_ID			
+			WHERE 
+			A.TRANSACCION_ID = ISNULL(:p_transaccion, A.TRANSACCION_ID) AND
+			A.solicitante_id = ISNULL(:p_solicitante, A.solicitante_id) AND
+			A.REFERENCIA = ISNULL(:p_referencia, A.REFERENCIA) AND
+			F.APLICACION_ID = ISNULL(:p_aplicacion, f.APLICACION_ID) AND
+			A.PROCESO_ID = ISNULL(:p_proceso, A.PROCESO_ID) AND
+			cast(A.FECHA_REGISTRO as date) >= cast(ISNULL(:p_desde, A.FECHA_REGISTRO)as date) AND 
+			cast(A.FECHA_REGISTRO as date) <= cast(ISNULL(:p_hasta, A.FECHA_REGISTRO)as date) AND
+			upper(A.CRITERIOS) like  '%' + ISNULL(:p_compania, '') + '%'
+			AND ISNULL(A.MONTO, 0) BETWEEN :p_montoDesde AND :p_montoHasta
+			AND 
+			(
+				--Siempre listamos las pendientes y aprobadas 
+				A.ESTADO IN ('S', 'A')
+				OR
+				--Si estan rechazadas, solo listados cuando el registro no haya sido reEnvidado a WF
+			    (
+				SELECT COUNT(1) FROM sgworkflowsys.WF_TRANSACCION wt 
+				WHERE WT.REFERENCIA  = A.REFERENCIA  AND WT.PROCESO_ID = A.PROCESO_ID
+				AND WT.TRANSACCION_ID > A.TRANSACCION_ID
+				) = 0
+			)
+			
+			AND 
+			(
+				:p_est_proceso is null
+				OR
+				(:p_est_proceso > '0' and FN.ESTADO_ID = ISNULL(:p_est_proceso, FN.ESTADO_ID) AND A.ESTADO IN ('S', 'A'))
+				OR
+				(:p_est_proceso = '0' and ISNULL(A.NIVEL_ID, 0) = 0)
+				OR
+				(:p_est_proceso = '-1' and A.ESTADO = 'R')
+			)
+			ORDER BY FECHA_REGISTRO	DESC
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerVistaAvanzada">
+		<![CDATA[
+			  select
+			  		pv.uuid as "procesoUUID",
+			  		T.UUID AS "transaccionUUID",
+		             t.transaccion_id as "transaccionId"
+		             ,t.flujo_id as "flujoId"
+		             ,t.nivel_id as "nivelId"
+		             ,t.criterios as "criterios"
+		             ,t.solicitante_id as "solicitanteId"
+		             ,p.NombreCompleto as "solicitanteNombre"
+		             ,t.persona_referencia_id as "personaReferenciaId"
+		             ,pr.NombreCompleto as "personaReferenciaNombre"
+		             ,t.referencia as "referencia"
+		             ,t.estado as "estado"
+		             ,t.nivel_estado_id as "nivelEstadoId"
+		             ,es.NOMBRE as "nivelEstadoNombre"
+		             ,t.nivel_estado_siguiente_id as "nivelEstadoSiguienteId"
+		             ,es2.NOMBRE as "nivelEstadoSiguienteNombre"
+		             ,t.PROCESO_ID as "procesoId"
+		       from sgworkflowsys.wf_transaccion t
+		             left join PersonaMast p
+		                    on t.solicitante_id = p.Persona
+		             left join PersonaMast pr
+		                    on t.persona_referencia_id = pr.Persona
+		             left join sgworkflowsys.wf_proceso_estado es
+		                    on  t.PROCESO_ID = es.PROCESO_ID
+		                    and t.nivel_estado_id = es.ESTADO_ID
+		             left join sgworkflowsys.wf_proceso_estado es2
+		                    on  t.PROCESO_ID = es2.PROCESO_ID
+		                    and t.nivel_estado_siguiente_id = es2.ESTADO_ID
+		             left join sgworkflowsys.wf_proceso_version pv
+		             		on pv.PROCESO_ID = t.PROCESO_ID and pv.version_id = t.version_id
+		       where t.UUID = :p_transaccionUUID
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerSeguimientoVistaAvanzada">
+		<![CDATA[
+			   select s.seguimiento_id as "seguimientoId"
+                    ,s.nivel_id as "nivelId"
+                    ,s.usuario as "usuario"
+                    ,s.observacion as "observacion"
+                    ,s.estado_id as "estadoId"
+             from sgworkflowsys.wf_transaccion_seguimiento s JOIN sgworkflowsys.wf_transaccion T ON S.transaccion_id = T.transaccion_id
+             where T.uuid = :p_transaccionUUID
+             order by s.seguimiento_id
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerNivelAnteriorEstado">
+		<![CDATA[
+			 select	nb.NIVEL_ID nivel
+					,nb.ESTADO_ID estado
+			from sgworkflowsys.WF_FLUJO_NIVEL (nolock) nb
+			inner join (
+			select n.PROCESO_ID, n.VERSION_ID, n.FLUJO_ID, n.NIVEL_ID from sgworkflowsys.WF_TRANSACCION (nolock) t	
+			inner join sgworkflowsys.WF_FLUJO_NIVEL (nolock) n
+			on t.PROCESO_ID=n.PROCESO_ID and t.VERSION_ID=n.VERSION_ID and t.FLUJO_ID=n.FLUJO_ID
+			where     t.TRANSACCION_ID = :p_transaccionid 
+				  and n.ESTADO_ID = :p_estado_id
+				  ) dat
+			on 		nb.PROCESO_ID=dat.PROCESO_ID 
+				and nb.VERSION_ID=dat.VERSION_ID 
+				and nb.FLUJO_ID=dat.FLUJO_ID 
+				and nb.NIVEL_ID=dat.NIVEL_ID-1
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerTitleWF">
+		<![CDATA[
+			DECLARE @I_TRANSACCIONUUID VARCHAR(40) = :p_transaccionUUID
+
+			SELECT 'Nro. Transaccion: ' + cast(a.TRANSACCION_ID as varchar) + ', Estado Proceso: ' + b.NOMBRE + ' ('+b.ESTADO_ID+')' as "descripcion",
+			LTRIM(RTRIM(ObservacionAprobacion)) as "nombre"
+			FROM sgworkflowsys.WF_TRANSACCION a
+			left join sgworkflowsys.WF_PROCESO_ESTADO b on a.PROCESO_ID = b.PROCESO_ID and a.NIVEL_ESTADO_ID = b.ESTADO_ID
+			WHERE a.UUID = @I_TRANSACCIONUUID 
+
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.contarSyTipoDocumentos">
+		<![CDATA[
+			select 
+			count(1)
+			from  
+			sy_tipodocumento b LEFT JOIN
+			SY_TipoDocumentoProceso a on a.TipoDocumentoId = b.TipoDocumentoId
+			where 
+			ISNULL(a.AplicacionCodigo, 'X') = isnull(:p_aplicacion, ISNULL(a.AplicacionCodigo, 'X')) and
+			ISNULL(a.ProcesoCodigo, 'X') = isnull(:p_proceso, ISNULL(a.ProcesoCodigo, 'X')) and
+			ISNULL(a.TipoDocumentoId, 'X') = isnull(:p_codigo, ISNULL(a.TipoDocumentoId, 'X')) and
+			b.DescripcionLocal like '%' + isnull(:p_nombre, '') + '%' 
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.listarSyTipoDocumentos">
+		<![CDATA[
+			select 
+			b.TipoDocumentoId as "codigo", 
+			b.DescripcionLocal as "descripcion" 
+			from  
+			sy_tipodocumento b LEFT JOIN
+			SY_TipoDocumentoProceso a on a.TipoDocumentoId = b.TipoDocumentoId
+			where 
+			ISNULL(a.AplicacionCodigo, 'X') = isnull(:p_aplicacion, ISNULL(a.AplicacionCodigo, 'X')) and
+			ISNULL(a.ProcesoCodigo, 'X') = isnull(:p_proceso, ISNULL(a.ProcesoCodigo, 'X')) and
+			ISNULL(a.TipoDocumentoId, 'X') = isnull(:p_codigo, ISNULL(a.TipoDocumentoId, 'X')) and
+			b.DescripcionLocal like '%' + isnull(:p_nombre, '') + '%' 
+			order by b.DescripcionLocal
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.syprocesomst">
+		<![CDATA[
+			select
+			AplicacionCodigo as "estadoId",
+			ProcesoCodigo as "codigo",
+			Descripcion as "descripcion"
+			from SY_ProcesoMst
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.sytipodocumento">
+		<![CDATA[
+			select 
+			TipoDocumentoId as "codigo",
+			DescripcionLocal as "descripcion",
+			link as "estadoId"
+			from sy_tipodocumento
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerDestino">
+		<![CDATA[
+			select NIVEL_DESTINO_ID as "id" from 
+			sgworkflowsys.WF_FLUJO_ACCION
+			where PROCESO_ID = :p_proceso and VERSION_ID = :p_version and FLUJO_ID = :p_flujo and NIVEL_ID = :p_nivel and ACCION_WF IN ('A', 'D') AND ESTADO_SUBACCION = :p_subaccion
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.existeVersion">
+		<![CDATA[
+			select count(1) from sgworkflowsys.WF_PROCESO_VERSION where PROCESO_ID = :p_proceso and VERSION_ID = :p_version
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerTransaccionAprobadorVistaAvanzada">
+		<![CDATA[
+			select 
+			b.persona as "id",
+			rtrim(b.Busqueda) as "nombre", 
+			cast(a.NIVEL_ID as varchar(10)) as "codigo"
+			from sgworkflowsys.WF_TRANSACCION_APROBADOR a
+			join sgworkflowsys.wf_transaccion T ON A.transaccion_id = T.transaccion_id
+			join PersonaMast b on a.PERSONA_ID = b.Persona
+			where t.UUID = :p_transaccionUUID
+		]]>
+	</sql-query>
+	
+	
+	<sql-query
+		name="wftransacciones.obtenerbeangp_proveedoresid">
+		<![CDATA[
+		
+		select 
+		regfechasolicitud as "regfechasolicitud",
+		regfechavencimiento as "regfechavencimiento",
+		regnombreempresa as "regnombreempresa",
+		regdocumentofiscal as "regdocumentofiscal"
+		from 
+		gp_registroproveedor
+		where 
+		REGREGISTROID=:p_regregistroid
+		
+		]]>
+	</sql-query>
+	
+	<sql-query
+		name="wftransacciones.obtenerConfiguracionDocumentosVistaAvanzada">
+		<![CDATA[
+		
+		select  
+		tn.NIVEL_ID as "nivel",  
+		tn.TIPO_APROBADOR_ID as "tipoAprobador", 
+		rol.NOMBRE as "rolNombre",
+		tnd.TIPO_DOCUMENTO_ID as "tipoDocumento", 
+		td.DescripcionLocal as "tipoDocumentoDescripcion", 
+		tnd.ESTADO as "estado", 
+		tnd.FLG_REQUERIDO as "flgRequerido", 
+		tnd.FLG_EDITABLE as "flgEditable"
+		from 
+		sgworkflowsys.WF_TRANSACCION t inner join 
+		sgworkflowsys.WF_FLUJO_NIVEL tn on t.PROCESO_ID=tn.PROCESO_ID and t.VERSION_ID=tn.VERSION_ID and t.FLUJO_ID=tn.FLUJO_ID  inner join 
+		sgworkflowsys.WF_FLUJO_NIVEL_DOCUMENTO tnd on tn.PROCESO_ID=tnd.PROCESO_ID and tn.VERSION_ID=tnd.VERSION_ID and tn.FLUJO_ID  =tnd.FLUJO_ID  and tn.NIVEL_ID  =tnd.NIVEL_ID inner join 
+		SY_TipoDocumento td on tnd.TIPO_DOCUMENTO_ID=td.TipoDocumentoId left join 
+		sgworkflowsys.WF_PROCESO_ROL rol on tn.PROCESO_ID = rol.PROCESO_ID and tn.VERSION_ID = rol.VERSION_ID and tn.TIPO_APROBADOR_ID = rol.TIPO_APROBADOR_ID
+		where 
+		t.UUID=:p_transaccionUUID
+		order by tn.NIVEL_ID,tn.TIPO_APROBADOR_ID,td.DescripcionLocal
+		
+		]]>
+	</sql-query>
+	
+	
+	<sql-query name="wftransacciones.cambiarNivel">
+	    <![CDATA[
+	        declare @v_nivel_actual int;
+			declare @v_nivel_maximo int;
+			declare @v_proceso_id varchar(10);
+			declare @v_version_id int;
+			declare @v_flujo_id int;
+			declare @v_guardar int;
+			
+			declare @v_nuevo_seguimiento_id int;
+			declare @p_nuevo_esestado varchar(20);
+			declare @p_nuevo_estado_id varchar(20);
+			declare @p_nuevo_estado_siguiente_id varchar(20);
+			
+			declare @p_transaccion_id int;
+			declare @p_nuevo_nivel int;
+			declare @p_usuario varchar(50);
+			
+			-- PARAMETROS DE ENTRADA
+			set @p_transaccion_id = :p_transaccion  ;
+			set @p_nuevo_nivel = :p_nivel ;
+			set @p_usuario = :p_usuario ;
+			
+				-- obtener valores de la transaccion actual
+				select @v_nivel_actual = NIVEL_ID
+					,@v_proceso_id=PROCESO_ID
+					,@v_version_id=VERSION_ID
+					,@v_flujo_id=FLUJO_ID
+				from sgworkflowsys.wf_transaccion t
+				where TRANSACCION_ID = @p_transaccion_id;
+			
+				-- obtener el maximo nivel
+				select @v_nivel_maximo = MAX(NIVEL_ID)
+				from sgworkflowsys.WF_FLUJO_NIVEL fn
+				where PROCESO_ID=@v_proceso_id
+				and VERSION_ID=@v_version_id
+				and FLUJO_ID=@v_flujo_id;
+			
+				set @v_guardar = 0;
+			
+				-- obtener seguimiento id
+				select @v_nuevo_seguimiento_id = isnull(max([SEGUIMIENTO_ID]),0)
+				from [sgworkflowsys].[WF_TRANSACCION_SEGUIMIENTO]
+				where [TRANSACCION_ID] = @p_transaccion_id;
+			
+			print '@v_nivel_actual:' + cast(@v_nivel_actual as varchar)
+			print '@v_nivel_maximo:' + cast(@v_nivel_maximo as varchar)
+			
+			IF @p_nuevo_nivel=0 
+				BEGIN	
+					PRINT 'NIVEL 0'
+					set @v_guardar = 1;
+					-- asignar estado
+					set @p_nuevo_esestado = 'S'
+					-- obtener nuevo estado
+					select @p_nuevo_estado_id = NIVEL_ESTADO_ID_INICIAL
+					from sgworkflowsys.WF_PROCESO_VERSION
+					WHERE PROCESO_ID = @v_proceso_id
+					and VERSION_ID = @v_version_id;
+					-- obtener nuevo estado siguiente
+					select @p_nuevo_estado_siguiente_id = ESTADO_ID
+					from sgworkflowsys.WF_FLUJO_NIVEL fn
+					where PROCESO_ID = @v_proceso_id
+					and VERSION_ID = @v_version_id
+					and FLUJO_ID = @v_flujo_id
+					and NIVEL_ID = @p_nuevo_nivel+1;
+				END
+			
+			IF @p_nuevo_nivel>0 and @p_nuevo_nivel<=@v_nivel_maximo
+				BEGIN
+					PRINT 'NIVEL <> 0'
+					set @v_guardar = 1;
+					-- asignar estado
+					set @p_nuevo_esestado = 'S'
+					-- obtener nuevo estado
+					select @p_nuevo_estado_id = ESTADO_ID
+					from sgworkflowsys.WF_FLUJO_NIVEL fn
+					where PROCESO_ID = @v_proceso_id
+					and VERSION_ID = @v_version_id
+					and FLUJO_ID = @v_flujo_id
+					and NIVEL_ID = @p_nuevo_nivel;
+					-- obtener nuevo estado siguiente
+					select @p_nuevo_estado_siguiente_id = ESTADO_ID
+					from sgworkflowsys.WF_FLUJO_NIVEL fn
+					where PROCESO_ID = @v_proceso_id
+					and VERSION_ID = @v_version_id
+					and FLUJO_ID = @v_flujo_id
+					and NIVEL_ID = @p_nuevo_nivel+1;
+			
+					IF @p_nuevo_nivel=@v_nivel_maximo
+						BEGIN
+							PRINT 'NIVEL FINAL'
+							set @p_nuevo_esestado = 'A'
+							set @p_nuevo_estado_siguiente_id=''
+						END
+				END
+			
+			if @v_guardar=1
+				BEGIN
+					print '=====>'
+					print '@p_nuevo_nivel:' + cast(@p_nuevo_nivel as varchar)
+					print '@p_nuevo_estado_id:' + cast(@p_nuevo_estado_id as varchar)
+					print '@p_nuevo_estado_siguiente_id:' + @p_nuevo_estado_siguiente_id
+					print '@@p_nuevo_esestado:' + @p_nuevo_esestado
+			
+					UPDATE sgworkflowsys.wf_transaccion
+					SET NIVEL_ID=@p_nuevo_nivel
+					,NIVEL_ESTADO_ID = @p_nuevo_estado_id
+					,NIVEL_ESTADO_SIGUIENTE_ID = @p_nuevo_estado_siguiente_id
+					,ESTADO = @p_nuevo_esestado
+					WHERE TRANSACCION_ID = @p_transaccion_id;
+			
+						INSERT INTO [sgworkflowsys].[WF_TRANSACCION_SEGUIMIENTO]
+			           ([TRANSACCION_ID],[SEGUIMIENTO_ID],[PROCESO_ID],[VERSION_ID]
+					   ,[FLUJO_ID],[NIVEL_ID],[ESTADO_ID],[USUARIO]
+			           ,[OBSERVACION]
+			           ,[FECHA]
+			           ,[CREACION_USUARIO]
+			           ,[CREACION_FECHA]
+			           )
+						VALUES
+			           (@p_transaccion_id,@v_nuevo_seguimiento_id+1,@v_proceso_id,@v_version_id
+					   ,@v_flujo_id,@p_nuevo_nivel,@p_nuevo_esestado,@p_usuario
+			           ,'ADMINASTRADOR SIGUIENTE NIVEL'
+			           ,GETDATE()
+			           ,@p_usuario
+			           ,GETDATE());
+				END
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="wftransacciones.listarProcesoCorreosPRO">
+	    <![CDATA[
+			select 
+				a.FLUJO_ID "flujoId"
+				,a.NIVEL_ID "nivelId"
+				,a.TIPO_APROBADOR_ID "tipoAprobadorId"
+				,isnull(rol.NOMBRE,a.TIPO_APROBADOR_ID) 'tipoAprobadorNombre'
+				,a.nombre "accion"
+				,a.ESTADO_ID "estadoId"
+				,EST.NOMBRE 'estadoNombre'
+				,case isnull(a.FLG_CORREO_PERSONA,'N') when 'S' then 'Si' else '' end 'correoPersona'
+				,case isnull(a.FLG_CORREOJEFE,'N') when 'S' then 'Si' else '' end 'correoJefe'
+				,case isnull(a.FLG_CORREOSOLICITANTE,'N') when 'S' then 'Si' else '' end 'correoSolicitante'
+				,case isnull(a.FLG_CORREO_PERSONA_REFERENCIA,'N') when 'S' then 'Si' else '' end 'correoPersonaReferencia'
+				,case isnull(a.FLG_CORREO_TRANSACCION,'N') when 'S' then 'Si' else '' end 'correoTransaccion'
+				,a.CORREOOTROS 'correoOtros'
+				,case a.TIPO_APROBADOR_ID 
+					  when 'PERS' then (SELECT  CAST(per.nombrecompleto AS VARCHAR(200)) + ' ; '
+										FROM    sgworkflowsys.WF_FLUJO_APROBADOR apo
+											inner join PersonaMast per
+											on apo.persona_id=per.persona
+										where apo.proceso_id=a.proceso_id
+										and apo.version_id=a.version_id
+										and apo.flujo_id=a.flujo_id
+										and apo.nivel_id=a.nivel_id
+										FOR     XML PATH('')) 
+					 else ''
+				 end as 'aprobadores'			
+				,case a.TIPO_APROBADOR_ID 
+				  when 'PERS' then (SELECT  CAST(per1.CorreoElectronico AS VARCHAR(200)) + ' ; '
+									FROM    sgworkflowsys.WF_FLUJO_APROBADOR apo1
+										inner join PersonaMast per1
+										on apo1.persona_id=per1.persona
+									where apo1.proceso_id=a.proceso_id
+									and apo1.version_id=a.version_id
+									and apo1.flujo_id=a.flujo_id
+									and apo1.nivel_id=a.nivel_id
+									FOR     XML PATH(''))
+					else ''
+				end as 'aprobadoresCorreos'	,
+				
+				
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'APROBA'
+				AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaAprobar",
+	
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'RECHAZ'
+				AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaRechazar",
+	
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'DEVOLV'
+				AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaDevolver",
+				
+				
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'SEGUIM'
+				AND RA.PERIODO = 'F' + CASE WHEN FLUJO_ID> 9 THEN CAST(FLUJO_ID AS VARCHAR) ELSE '0' + CAST(FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN NIVEL_ID> 9 THEN CAST(NIVEL_ID AS VARCHAR) ELSE '0' + CAST(NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaSeguimiento"
+							
+			from [sgworkflowsys].[WF_FLUJO_NIVEL] a
+				left join sgworkflowsys.WF_PROCESO_ROL rol
+					on a.PROCESO_ID=rol.PROCESO_ID and a.VERSION_ID=rol.version_id and a.TIPO_APROBADOR_ID=rol.TIPO_APROBADOR_ID
+				left join sgworkflowsys.WF_PROCESO_ESTADO est
+					on a.PROCESO_ID=est.PROCESO_ID and a.ESTADO_ID=est.ESTADO_ID
+				JOIN sgworkflowsys.WF_PROCESO 
+					ON a.PROCESO_ID = sgworkflowsys.WF_PROCESO.PROCESO_ID	
+				JOIN sgworkflowsys.WF_PROCESO_version v  on   v.PROCESO_ID = a.PROCESO_ID and v.VERSION_ID = a.VERSION_ID
+			where 1=1
+			AND v.UUID = :p_procesoUUID
+			Order by a.PROCESO_ID,a.VERSION_ID, a.FLUJO_ID, a.NIVEL_ID
+		]]>
+	 </sql-query>
+	 
+	 <sql-query name="wftransacciones.listarProcesoCorreosTRA">
+	    <![CDATA[	
+			select 
+			a.FLUJO_ID "flujoId"
+			,a.NIVEL_ID "nivelId"
+			,a.TIPO_APROBADOR_ID "tipoAprobadorId"
+			,isnull(rol.NOMBRE,a.TIPO_APROBADOR_ID) 'tipoAprobadorNombre'
+			,a.nombre "accion"
+			,a.ESTADO_ID "estadoId"
+			,EST.NOMBRE 'estadoNombre'
+			,case isnull(a.FLG_CORREO_PERSONA,'N') when 'S' then 'Si' else '' end 'correoPersona'
+			,case isnull(a.FLG_CORREOJEFE,'N') when 'S' then 'Si' else '' end 'correoJefe'
+			,case isnull(a.FLG_CORREOSOLICITANTE,'N') when 'S' then 'Si' else '' end 'correoSolicitante'
+			,case isnull(a.FLG_CORREO_PERSONA_REFERENCIA,'N') when 'S' then 'Si' else '' end 'correoPersonaReferencia'
+			,case isnull(a.FLG_CORREO_TRANSACCION,'N') when 'S' then 'Si' else '' end 'correoTransaccion'
+			,a.CORREOOTROS 'correoOtros'
+			,[sgworkflowsys].[FN_WF_TRANSACCION_PARTICIPANTES](tra.TRANSACCION_ID,a.NIVEL_ID,isnull(a.FLG_CORREO_PERSONA,'N'),isnull(a.FLG_CORREOJEFE,'N'),
+				isnull(a.FLG_CORREOSOLICITANTE,'N'),isnull(a.FLG_CORREO_PERSONA_REFERENCIA,'N'),isnull(a.FLG_CORREO_TRANSACCION,'N')) 'aprobadores'
+			,[sgworkflowsys].[FN_WF_TRANSACCION_CORREOS](tra.TRANSACCION_ID,a.NIVEL_ID,isnull(a.FLG_CORREO_PERSONA,'N'),isnull(a.FLG_CORREOJEFE,'N'),
+				isnull(a.FLG_CORREOSOLICITANTE,'N'),isnull(a.FLG_CORREO_PERSONA_REFERENCIA,'N'),isnull(a.FLG_CORREO_TRANSACCION,'N')) as 'aprobadoresCorreos',
+			
+				
+				
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'APROBA'
+				AND RA.PERIODO = 'F' + CASE WHEN a.FLUJO_ID> 9 THEN CAST(a.FLUJO_ID AS VARCHAR) ELSE '0' + CAST(a.FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN a.NIVEL_ID> 9 THEN CAST(a.NIVEL_ID AS VARCHAR) ELSE '0' + CAST(a.NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaAprobar",
+	
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'RECHAZ'
+				AND RA.PERIODO = 'F' + CASE WHEN a.FLUJO_ID> 9 THEN CAST(a.FLUJO_ID AS VARCHAR) ELSE '0' + CAST(a.FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN a.NIVEL_ID> 9 THEN CAST(a.NIVEL_ID AS VARCHAR) ELSE '0' + CAST(a.NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaRechazar",
+	
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'DEVOLV'
+				AND RA.PERIODO = 'F' + CASE WHEN a.FLUJO_ID> 9 THEN CAST(a.FLUJO_ID AS VARCHAR) ELSE '0' + CAST(a.FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN a.NIVEL_ID> 9 THEN CAST(a.NIVEL_ID AS VARCHAR) ELSE '0' + CAST(a.NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaDevolver",
+				
+				CASE WHEN(
+				SELECT COUNT(1) FROM SY_ReporteArchivo RA 
+				WHERE RA.AplicacionCodigo = sgworkflowsys.WF_PROCESO.APLICACION_ID
+				AND RA.CompaniaSocio = '999999'
+				AND RA.ReporteCodigo = a.PROCESO_ID
+				AND RA.Version = 'SEGUIM'
+				AND RA.PERIODO = 'F' + CASE WHEN a.FLUJO_ID> 9 THEN CAST(a.FLUJO_ID AS VARCHAR) ELSE '0' + CAST(a.FLUJO_ID AS VARCHAR) END + '-' + 
+				CASE WHEN a.NIVEL_ID> 9 THEN CAST(a.NIVEL_ID AS VARCHAR) ELSE '0' + CAST(a.NIVEL_ID AS VARCHAR) END
+				)>0 THEN 'S' ELSE 'N' END as "tienePlantillaSeguimiento"
+				
+				
+		from sgworkflowsys.WF_TRANSACCION tra
+			inner join [sgworkflowsys].[WF_FLUJO_NIVEL] a
+				on tra.PROCESO_ID=a.PROCESO_ID and tra.VERSION_ID=a.VERSION_ID  and tra.FLUJO_ID=a.FLUJO_ID
+			left join sgworkflowsys.WF_PROCESO_ROL rol
+				on a.PROCESO_ID=rol.PROCESO_ID and a.VERSION_ID=rol.version_id and a.TIPO_APROBADOR_ID=rol.TIPO_APROBADOR_ID
+			left join sgworkflowsys.WF_PROCESO_ESTADO est
+				on a.PROCESO_ID=est.PROCESO_ID and a.ESTADO_ID=est.ESTADO_ID
+			JOIN sgworkflowsys.WF_PROCESO 
+					ON a.PROCESO_ID = sgworkflowsys.WF_PROCESO.PROCESO_ID				
+		where 1=1
+		AND tra.UUID = :p_transaccionUUID
+		Order by a.PROCESO_ID,a.VERSION_ID, a.FLUJO_ID, a.NIVEL_ID
+		]]>
+	 </sql-query>
+	 
+	 <sql-query name="wftransacciones.listarJerarquiaMacroProceso">
+	    <![CDATA[	
+		DECLARE @I_TRANSACCION INT = :p_transaccion
+		DECLARE @V_PADRE INT
+		DECLARE @TB_JERARQUIA AS TABLE 
+			(
+				TRANSACCION INT, 
+				PADRE INT,
+				DATO1 VARCHAR(2000),
+				DATO2 VARCHAR(2000),
+				DATO3 VARCHAR(2000),
+				DATO4 VARCHAR(2000),
+				DATO5 VARCHAR(2000),
+				DATO6 VARCHAR(2000),
+				DATO7 VARCHAR(2000)
+			)
+		DECLARE @V_CANTIDAINICIAL INT
+		DECLARE @V_CANTIDADFINAL INT
+		DECLARE @V_NUEVOSINGRESOS VARCHAR(1)
+		DECLARE @V_TRANSACCION INT
+		
+		DECLARE @V_D1 VARCHAR(2000)
+		DECLARE @V_D2 VARCHAR(2000)
+		DECLARE @V_D3 VARCHAR(2000)
+		DECLARE @V_D4 VARCHAR(2000)
+		DECLARE @V_D5 VARCHAR(2000)
+		DECLARE @V_D6 VARCHAR(2000)
+		DECLARE @V_D7 VARCHAR(2000)
+		
+		--AGREGARSE A SI MISMA
+		INSERT INTO @TB_JERARQUIA(TRANSACCION, PADRE) 
+		VALUES (@I_TRANSACCION, (SELECT TRANSACCION_ORIGEN_ID FROM sgworkflowsys.WF_TRANSACCION WHERE TRANSACCION_ID = @I_TRANSACCION))
+		
+		SET @V_NUEVOSINGRESOS = 'S'
+		
+		--JERARQUIA RECURSIVA
+		WHILE @V_NUEVOSINGRESOS = 'S'
+		BEGIN 
+			SET @V_CANTIDAINICIAL = (SELECT COUNT(1) FROM @TB_JERARQUIA)
+		
+		    INSERT INTO @TB_JERARQUIA(TRANSACCION, PADRE)
+			SELECT TRANSACCION_ID, TRANSACCION_ORIGEN_ID FROM sgworkflowsys.WF_TRANSACCION 
+			WHERE 
+			TRANSACCION_ID NOT IN (SELECT TRANSACCION FROM @TB_JERARQUIA)
+			AND 
+			(
+				TRANSACCION_ORIGEN_ID IN (SELECT TRANSACCION FROM @TB_JERARQUIA) OR 
+				TRANSACCION_ID IN (SELECT PADRE FROM @TB_JERARQUIA )
+			)
+		
+			SET @V_CANTIDADFINAL = (SELECT COUNT(1) FROM @TB_JERARQUIA)
+		
+			IF @V_CANTIDADFINAL <> @V_CANTIDAINICIAL
+				SET @V_NUEVOSINGRESOS = 'S'
+			ELSE 
+				SET @V_NUEVOSINGRESOS = 'N'
+		END
+		
+		--DATOS ADICIONALES
+		
+		DECLARE C_JERARQUIA CURSOR FOR
+		SELECT TRANSACCION FROM @TB_JERARQUIA
+		
+		OPEN C_JERARQUIA        
+		FETCH NEXT FROM C_JERARQUIA INTO @V_TRANSACCION
+		
+		WHILE @@FETCH_STATUS = 0            
+		  BEGIN
+			
+			SELECT
+			--EJM, COMPLETAR
+			@V_D1 = 'Transacion nro: ' + cast(T.TRANSACCION_ID as varchar),
+			@V_D2 = 'Flujo: ' + cast(T.FLUJO_ID as varchar),
+			@V_D3 = P.NOMBRE,
+			@V_D4 = 'Registro: ' + convert(varchar, T.FECHA_REGISTRO, 103) 
+			FROM 
+			sgworkflowsys.WF_TRANSACCION T
+			JOIN sgworkflowsys.WF_PROCESO P ON T.PROCESO_ID = P.PROCESO_ID
+			WHERE T.TRANSACCION_ID = @V_TRANSACCION
+		
+			UPDATE @TB_JERARQUIA SET 
+			DATO1 = @V_D1,	DATO5 = @V_D5,
+			DATO2 = @V_D2,	DATO6 = @V_D6,
+			DATO3 = @V_D3,	DATO7 = @V_D7,
+			DATO4 = @V_D4
+			WHERE TRANSACCION = @V_TRANSACCION
+			FETCH NEXT FROM C_JERARQUIA INTO  @V_TRANSACCION
+		  END        
+		CLOSE C_JERARQUIA           
+		DEALLOCATE C_JERARQUIA 
+		
+		SELECT 
+		TRANSACCION as "transaccion", 
+		PADRE as "padre", 
+		DATO1 as "dato1",
+		DATO2 as "dato2",
+		DATO3 as "dato3",
+		DATO4 as "dato4",
+		DATO5 as "dato5",
+		DATO6 as "dato6",
+		DATO7 as "dato7",
+		t.UUID AS "transaccionUUID"
+		FROM @TB_JERARQUIA j join sgworkflowsys.WF_TRANSACCION t on j.TRANSACCION = t.TRANSACCION_ID
+		]]>
+	 </sql-query>
+	 
+	 <sql-query name="wftransacciones.obtenerPlantillasRelacionadas">
+	    <![CDATA[	
+		declare @i_proceso varchar(20) = :p_proceso
+
+		select
+		rep.APLICACIONCODIGO AS "aplicacioncodigo",
+		rep.ReporteCodigo AS "reportecodigo",
+		rep.CompaniaSocio as "companiasocio",
+		rep.Periodo "periodo",
+		rep.Version "version",
+		CAST(rep.ESTADO as varchar(2)) AS "estado",
+		apl.DescripcionLarga as "aplicacionDescripcion",
+		rep.Nombre "nombre",
+		R.DescripcionLocal "nombreReporte"
+		from 
+		sgworkflowsys.WF_PROCESO_REPORTE A JOIN 
+		SY_REPORTEARCHIVO rep ON A.ReporteCodigo = REP.ReporteCodigo AND A.AplicacionCodigo = rep.AplicacionCodigo
+		and a.Version = rep.Version and A.CompaniaSocio = rep.CompaniaSocio and A.Periodo = rep.Periodo
+		JOIN AplicacionesMast apl ON apl.AplicacionCodigo=rep.APLICACIONCODIGO
+		JOIN SY_Reporte R ON R.ReporteCodigo = A.ReporteCodigo AND R.AplicacionCodigo = A.AplicacionCodigo
+		WHERE 
+		A.PROCESO_ID = @i_proceso
+		ORDER BY rep.APLICACIONCODIGO, rep.ReporteCodigo
+		]]>
+	 </sql-query>
+	 <sql-query name="wftransacciones.obtenerWfTransaccion">
+		<![CDATA[
+			select NIVEL_ID as "id", UUID as "codigo"
+			from sgworkflowsys.WF_TRANSACCION 
+			where TRANSACCION_ID = :p_id
+		]]>
+	</sql-query>
+	
+	<sql-query name="wftransacciones.listarTipoAdjuntosPorTransaccion">
+		<![CDATA[
+			declare @i_transaccion int = :p_transaccion
+			declare @i_proceso varchar(4) = :p_proceso
+			
+			select
+			x.ProcesoTipoDocumentoId as "tipodocumento",
+			td.DescripcionLocal as "tipodocumentodescripcion",
+			(select top 1 grupo from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = @i_proceso and y.TIPO_DOCUMENTO_ID = x.ProcesoTipoDocumentoId ) as "grupo",
+			(select top 1 rutaplantilla from sgworkflowsys.WF_PROCESO_DOCUMENTO y where y.PROCESO_ID = @i_proceso and y.TIPO_DOCUMENTO_ID = x.ProcesoTipoDocumentoId ) as plantilla,
+			CAST('N' AS varchar(1)) AS "auxRequerido"
+			from SY_DocumentoAnexos x 
+			join SY_TipoDocumento td on td.TipoDocumentoId= x.ProcesoTipoDocumentoId
+			where X.MODULO = 'WF' AND x.LINEA = @i_transaccion
+		]]>
+	</sql-query>
+	 
+</hibernate-mapping>
+

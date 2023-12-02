@@ -1,0 +1,87 @@
+<div class="ui-fluid">
+    <p-dialog header="SELECTOR DE REQUERIMIENTO" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        hideEffect="size" [style]="{'width':'900px'}">
+        <div class="p-grid">
+            <div class="p-field p-col-12 p-md-4">
+                <label>Compañía</label>
+                <div class="p-inputgroup">
+                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCompaniaNombre" />
+                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania()"
+                        [style]="{'flex': '1'}"></button>
+                    <button pButton icon="fa fa-trash" type="button" title="Limpiar"
+                        (click)="filtro.auxCompaniaNombre=null;filtro.compania=null;" [style]="{'flex': '1'}"></button>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <label>N° Requerimiento</label>
+                <input pInputText style="width:100%;" [(ngModel)]="filtro.requerimiento" />
+            </div>
+        </div>
+        <br>
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion">
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtUbicacionGeo)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <p-table #dtUbicacionGeo [rows]="registrosPorPagina" [lazy]="true" [value]="lista" [paginator]="true"
+            selectionMode="single" [totalRecords]="lista.length" (onLazyLoad)="cargarPuesto($event)"
+            [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderNombreMedio">Compañía</th>
+                    <th class="tablaHeaderCodigo">Requerimiento</th>
+                    <th class="tablaHeaderFecha">Inicio Vigencia</th>
+                    <th class="tablaHeaderFecha">Fin Vigencia</th>
+                    <th class="tablaHeaderNombreMedio">Puesto</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1">
+                        <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text"
+                            title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Compañía</span>
+                        {{row.compania}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Requerimiento</span>
+                        {{row.requerimiento}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Inicio Vigencia</span>
+                        {{row.inicioVigencia}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Fin Vigencia</span>
+                        {{row.finVigencia}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Puesto</span>
+                        {{row.puestoSolicitado}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </p-dialog>
+</div>
+
+<app-selector-compania></app-selector-compania>

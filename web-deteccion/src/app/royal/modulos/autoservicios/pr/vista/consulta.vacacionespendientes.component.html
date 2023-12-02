@@ -1,0 +1,117 @@
+<div class="p-grid">
+    <div class="p-col-10">
+        <p-card>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <p-table [responsive]="true" [value]="lstPeriodos" [paginator]="true" [rows]="4" [style]="{ width:'100%' }" selectionMode="single" [(selection)]="periodoSeleccionado" dataKey="periodo">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderAccion1">Acción</th>
+                                <th class="tablaHeaderAccion1">N° Periodo</th>
+                                <th class="tablaHeaderAccion1">Periodo</th>
+                                <th class="tablaHeaderAccion1">Mes Prog.</th>
+                                <th class="tablaHeaderMonto">Derecho / Truncos</th>
+                                <th class="tablaHeaderMonto">Pendiente Per. Anterior</th>
+                                <th class="tablaHeaderMonto">Total Utilizado</th>
+                                <th class="tablaHeaderMonto">Vac. Pend.</th>
+                            </tr>
+                        </ng-template>
+
+                        <ng-template pTemplate="body" let-row let-columns="columns">
+                            <tr [pSelectableRow]="row">
+                                <td class="tablaColumnaAccion1">
+                                    <div class="p-grid">
+                                        <div class="p-col-12 p-md-12 p-lg-12" title="Ver Detalle"><span class="p-column-title">Acción</span>
+                                            <button pButton type="button" icon="fa fa-search" class="p-button-rounded" (click)="verDetalle(row)"></button>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="tablaColumnaAccion1">
+                                    <span class="p-column-title">N° Periodo</span> {{row.periodo}}
+                                </td>
+                                <td class="tablaColumnaAccion1">
+                                    <span class="p-column-title">Periodo</span> {{row.rangoAnios}}
+                                </td>
+                                <td class="tablaColumnaAccion1">
+                                    <span class="p-column-title">Mes Prog.</span> {{row.mesAniversario}}
+                                </td>
+                                <td class="tablaColumnaMonto">
+                                    <span class="p-column-title">Derecho</span> {{row.diasDerecho | number : '.2-2'}}
+                                </td>
+                                <td class="tablaColumnaMonto">
+                                    <span class="p-column-title">Pendiente Per. Anterior</span> {{row.diasPendientePeriodoAnterior | number : '.2-2'}}
+                                </td>
+                                <td class="tablaColumnaMonto">
+                                    <span class="p-column-title">Total Utilizado</span> {{row.diasTotalUtilizado | number : '.2-2'}}
+                                </td>
+                                <td class="tablaColumnaMonto">
+                                    <span class="p-column-title">Vac. Pend.</span> {{row.diasPendientes | number : '.2-2'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="8">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <label style="font-weight: bold;text-decoration: underline;">Utilización</label>
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-6">
+                            <p-table [responsive]="true" [value]="lstDetalle" [paginator]="true" [rows]="5" [style]="{ width:'100%' }">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderFecha">Inicio</th>
+                                        <th class="tablaHeaderFecha">Fin</th>
+                                        <th class="tablaHeaderCodigo">Utilización</th>
+                                        <th class="tablaHeaderMonto">Calendario</th>
+                                        <th class="tablaHeaderMonto">Hábiles</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns">
+                                    <tr>
+                                        <td class="tablaColumnaFecha">
+                                            <span class="p-column-title">Inicio</span> {{row.desde | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                        <td class="tablaColumnaFecha">
+                                            <span class="p-column-title">Fin</span> {{row.hasta | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Utilización</span> {{row.utilizacion}}
+                                        </td>
+                                        <td class="tablaColumnaMonto">
+                                            <span class="p-column-title">Calendario</span> {{row.dias | number : '.2-2'}}
+                                        </td>
+                                        <td class="tablaColumnaMonto">
+                                            <span class="p-column-title">Hábiles</span> {{row.diasutiles | number : '.2-2'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="footer" let-columns>
+                                    <tr>
+                                        <td class="tablaColumnaCodigo" colspan="3">Total:</td>
+                                        <td class="tablaColumnaMonto">{{totalDias | number : '.2-2'}}</td>
+                                        <td class="tablaColumnaMonto">{{totalUtiles | number : '.2-2'}}</td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="5">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </p-card>
+    </div>
+</div>

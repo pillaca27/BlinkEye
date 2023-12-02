@@ -1,0 +1,67 @@
+<div class="p-grid">
+
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Compañía Socio</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.companiasocio" [filter]="true" [options]="lstCompanias" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Usuario de Red(PC)</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.codigousuario" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Unidad Negocio</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.unidadnegocioasignada" [filter]="true" [options]="lstUnidadNegocio" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Cód. Responsable</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.responsableempleado" [filter]="true" [options]="lstResponsable" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-8">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Área Usuaria</label>
+                    <div class="p-col">
+                        <div class="p-inputgroup">
+                            <input pInputText [(ngModel)]="dto.centrocostos" maxlength="50" type="text" [disabled]="true" [style]="{'width':'60px'}" />&nbsp;&nbsp;&nbsp;
+                            <input pInputText [(ngModel)]="dto.centrocostosDescri" maxlength="100" type="text" [disabled]="true" [style]="{'width':'100%'}" />
+                            <button [disabled]="!objetoTitulo.puedeEditar" pButton icon="fa fa-binoculars" (click)="mostrarSelectorCentroCosto()" type="button" title="Buscar Área Usuaria"></button>
+                            <button pButton icon="fa fa-trash" (click)="limpiarCostos()" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Área Usuaria"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Departamento</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.deptoorganizacion" [filter]="true" [options]="lstDeparamentos" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<app-centrocostos-selector></app-centrocostos-selector>

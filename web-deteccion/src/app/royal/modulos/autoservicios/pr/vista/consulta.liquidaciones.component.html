@@ -1,0 +1,97 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Empleado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEmpleadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEmpleado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEmpleadoNombre=null;filtro.empleado=null;filtro.companiasocio=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.desde">
+                                </p-calendar>
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1" [(ngModel)]="filtro.hasta">
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS1B"></app-botones-listado>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion1">Acciones</th>
+                <th class="tablaHeaderCodigo">Empleado</th>
+                <th class="tablaHeaderNombre">Nombre</th>
+                <th class="tablaHeaderFecha">Fecha de Ingreso</th>
+                <th class="tablaHeaderFecha">Fecha de Cese</th>
+                <th class="tablaHeaderFecha">Fecha de Liquidación</th>
+                <th class="tablaHeaderMonto">Ingresos</th>
+                <th class="tablaHeaderMonto">Descuentos</th>
+                <th class="tablaHeaderMonto">Monto</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Acciones</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-print" class="p-button-rounded p-button-text botonGrilla" title="Imprimir" (click)="imprimir(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Empleado</span> {{rowData.empleadoId}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Nombre</span> {{rowData.empleadoNombre}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha de Ingreso</span> {{rowData.fechaIngreso}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha de Cese</span> {{rowData.fechaCese}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha de Liquidación</span> {{rowData.fechaLiquidacion}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Ingresos</span> {{rowData.ingresos | number:'1.2-2'}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Descuentos</span> {{rowData.descuentos | number:'1.2-2'}}
+                </td>
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Monto</span> {{rowData.monto | number:'1.2-2'}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="9">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+<app-personacomun-selector></app-personacomun-selector>

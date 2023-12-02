@@ -1,0 +1,367 @@
+<p-card *ngIf="!cargando&&(tipoDocsNivel.length>0||adjuntos.length>0)">
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center" [title]="tooltipWF">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>{{tituloDocumentos}}</b>
+        </div>
+    </p-divider>
+    <div class="p-grid" *ngIf="flagVerBotones=='S'">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2" *ngIf="tipoDocsNivel.length>1&&flgVerDocumentoNuevo">
+                    <button pButton type="button" icon="fad fa-plus" label="Nuevo" class="p-button-outlined"
+                        (click)="cargarFolioPre()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-3" *ngIf="puedeFirmarDigital">
+                    <button pButton type="button" icon="fal fa-file-signature" label="Firma Electrónica"
+                        class="p-button-outlined" (click)="enviarDocumentoFirmaElectronica()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2" *ngIf="puedeFirmarImagen">
+                    <button pButton type="button" icon="fad fa-signature" label="Firma Imagen" class="p-button-outlined"
+                        (click)="enviarDocumentoFirmaImagen()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-table [scrollable]="true" [style]="{'width': '100%'}" [value]="adjuntos" [responsive]="true"
+        [(selection)]="docsSeleccionados" dataKey="secuencia">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderCheckBox" *ngIf="puedeFirmarDigital||puedeFirmarImagen||puedeSeleccionar">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaColumnaNombre">Documento</th>
+                <th class="tablaColumnaNombre">Tipo</th>
+                <th class="tablaHeaderAccion1" *ngIf="flgVerDocumentoGrupo">Grupo</th>
+                <th class="tablaHeaderAccion1">Plantilla</th>
+                <th class="tablaHeaderNumero" *ngIf="puedeFirmarDigital||puedeFirmarImagen">Cantidad Firmas</th>
+                <th class="tablaHeaderFechaHora">Fecha</th>
+                <th class="tablaHeaderUsuario">Usuario</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaCheckBox" *ngIf="puedeFirmarDigital||puedeFirmarImagen||puedeSeleccionar">
+                    <span class="p-column-title">Marca</span>
+                    <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                </td>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+
+                    <input #photoInput2 type="file" class="form-control" style="display:none"
+                        (change)="cargarFolioActualizarDocumento(photoInput2)">
+                    <input #photoInput4 type="file" class="form-control" style="display:none"
+                        (change)="cargarFolioSubida(photoInput4)">
+
+                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                        *ngIf="flagVerBotones=='S'&&rowData.puedeEditar=='S'&&puedeEditarAgregarEliminarAdjunto"
+                        class="p-button-rounded p-button-text" title="Editar"
+                        (click)="editarDocumento(rowData.secuencia);photoInput2.click()"></button>
+                    <button pButton pRipple type="button" icon="fad fa-cloud-download" *ngIf="rowData.secuencia!=null&&puedeDescargarAdjunto"
+                        title="Descargar" class="p-button-rounded p-button-text"
+                        (click)="descargarDocumento(rowData.secuencia) "></button>
+                    <button pButton pRipple type="button" icon="fad fa-cloud-upload"
+                        *ngIf="rowData.secuencia==null&&puedeEditarAgregarEliminarAdjunto" title="Subir"
+                        class="p-button-rounded p-button-text"
+                        (click)="subirDocumento(rowData.tipodocumento, rowData.grupo);photoInput4.click()"></button>
+                    <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                        *ngIf="flagVerBotones=='S'&&rowData.puedeEditar=='S'&&puedeEditarAgregarEliminarAdjunto"
+                        title="Eliminar" class="p-button-rounded p-button-danger p-button-text"
+                        (click)="eliminarDocumento(rowData.secuencia, rowData)"></button>
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Documento</span>
+                    {{rowData.archivonombre}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Tipo</span>
+                    <span *ngIf="rowData.auxRequerido=='S'&&!tieneLink(rowData.tipodocumento)"
+                        style="color: brown;font-weight: bold;">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido=='S'&&tieneLink(rowData.tipodocumento)"
+                        style="color: brown;font-weight: bold;text-decoration: underline;cursor: pointer;"
+                        (click)="irLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido!='S'&&!tieneLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                    <span *ngIf="rowData.auxRequerido!='S'&&tieneLink(rowData.tipodocumento)"
+                        style="text-decoration: underline;cursor: pointer;" (click)="irLink(rowData.tipodocumento)">
+                        {{rowData.tipodocumento | labelFromItem : tipoDocs}}
+                    </span>
+                </td>
+                <td class="tablaColumnaAccion1" *ngIf="flgVerDocumentoGrupo">
+                    <span class="p-column-title">Grupo</span>
+                    {{rowData.grupo}}
+                </td>
+                <td class="tablaColumnaAccion1">
+                    <span class="p-column-title">Plantilla</span>
+                    <button pButton pRipple type="button" icon="fad fa-file" class="p-button-rounded p-button-text"
+                        title="Plantilla" *ngIf="rowData.plantilla" (click)="verPlantilla(rowData.plantilla)"></button>
+                </td>
+                <td class="tablaColumnaNumero" *ngIf="puedeFirmarDigital||puedeFirmarImagen">
+                    <span class="p-column-title">Firmas</span>
+                    {{rowData.cantidadfirmas}}
+                </td>
+                <td class="tablaHeaderFechaHora">
+                    <span class="p-column-title">Fecha</span>
+                    {{rowData.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+                </td>
+                <td class="tablaHeaderUsuario">
+                    <span class="p-column-title">Usuario</span>
+                    {{rowData.usuario}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <p-dialog header="Tipo Documento" [(visible)]="verModalTipoDocumento" modal="modal" showEffect="fade"
+        [blockScroll]="true" hideEffect="size" [style]="{width: '350px'}">
+        <div class="p-fluid p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12" style="margin-top: 20px;">
+                <span>Seleccione el Tipo de Documento</span>
+                <p-dropdown [options]="tipoDocsNivel" [style]="{'width':'100%'}" [(ngModel)]="tipoDocumento"
+                    appendTo="body">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-5 p-lg-5">
+                <button pButton type="button" icon="pi pi-check" label="Aceptar" style="width: 100%;"
+                    *ngIf="tipoDocumento!=null" (click)="photoInput.click()"></button>
+                <input #photoInput type="file" class="form-control" style="display:none"
+                    (change)="cargarFolio(photoInput)">
+            </div>
+            <div class="p-md-2 p-lg-2">
+            </div>
+            <div class="p-col-12 p-md-5 p-lg-5">
+                <button pButton type="button" icon="pi pi-reply" label="Cancelar" style="width: 100%;"
+                    (click)="cancelarTipoDoc()"></button>
+            </div>
+        </div>
+    </p-dialog>
+    <br>
+</p-card>
+
+<br>
+
+<p-card *ngIf="!cargando&&flagVerBotones=='S'">
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center" [title]="tooltipWF">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Aprobación</b>
+        </div>
+    </p-divider>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2" *ngFor="let boton of accionesPermitidas.botonesaprobar">
+                    <button pButton type="button" icon="pi pi-check" [label]="boton.nombreBoton" style="width: 100%;"
+                        class="p-button-success" (click)="aprobar(boton.subaccion, boton.nombreBoton)"></button>
+                </div>
+
+                <div class="p-col-12 p-md-2 p-lg-2" *ngFor="let boton of accionesPermitidas.botonesrechazar">
+                    <button pButton type="button" icon="pi pi-times" [label]="boton.nombreBoton" style="width: 100%;"
+                        class="p-button-danger" (click)="rechazar(boton.subaccion, boton.nombreBoton)"></button>
+                </div>
+
+                <div class="p-col-12 p-md-2 p-lg-2" *ngFor="let boton of accionesPermitidas.botonesdevolver">
+                    <button pButton type="button" icon="pi pi-arrow-left" [label]="boton.nombreBoton"
+                        style="width: 100%;" class="p-button-warning" (click)="devolver(boton.subaccion, boton.nombreBoton)"></button>
+                </div>
+
+                <div class="p-col-12 p-md-2 p-lg-2" *ngFor="let boton of botonesAdicionales">
+                    <button pButton type="button" [icon]="boton.icon" [label]="boton.nombreBoton" style="width: 100%;"
+                        class="p-button-outlined" (click)="adicional(boton.subaccion, boton.nombreBoton)"></button>
+                </div>
+
+                <div class="p-col-12 p-md-2 p-lg-2" *ngIf="cargarDataEvent">
+                    <button pButton type="button" icon="fad fa-reply" label="Salir" style="width: 100%;"
+                        class="p-button-outlined" (click)="salir()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <p-dialog [header]="'Validaciones'" [(visible)]="verValidaciones" [modal]="true " [responsive]="true"
+        [resizable]="false " [blockScroll]="true"
+        [style]="{'max-width':'450px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+        <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="validaciones" [responsive]="true">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th>Descripción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr>
+                    <td>{{rowData.mensaje}}</td>
+                </tr>
+            </ng-template>
+        </p-table>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" label="Aceptar" (click)="verValidaciones=false">
+            </p-button>
+        </ng-template>
+    </p-dialog>
+    <p-dialog [header]="tituloDlgMotivo" [(visible)]="verDlgMotivo" [modal]="true" [responsive]="true"
+        [resizable]="false " [blockScroll]="true"
+        [style]="{'max-width':'450px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+        <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="motivo" style="width:100%"> </textarea>
+        <ng-template pTemplate="footer">
+            <p-button icon="pi pi-check" label="Aceptar" (click)="aceptarMotivo('N')">
+            </p-button>
+        </ng-template>
+    </p-dialog>
+    <p-dialog [header]="tituloDlgMotivo" [(visible)]="verDlgMotivoDetallado" [modal]="true" [responsive]="true"
+        [resizable]="false " [blockScroll]="true"
+        [style]="{'max-width':'1100px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+
+        <div class="p-grid">
+
+            <div class="p-col-5">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Destinatario" icon="fad fa-plus" type="button" class="p-button-outlined"
+                            (click)="agregarCorreo()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" [value]="mail.listaCorreoDestino">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Eliminar</th>
+                                    <th>Correo</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-columns>
+                                <tr>
+                                    <td class="tablaColumnaAccion1">
+                                        <button pButton icon="fal fa-trash-alt" (click)="eliminarCorreo(row)"
+                                            class="p-button-rounded p-button-danger p-button-text"
+                                            type="button"></button>
+                                    </td>
+                                    <td pEditableColumn>
+                                        <input pInputText type="text" style="width:100%"
+                                            [(ngModel)]="row.correoDestino">
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="2">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Adjunto" icon="fad fa-plus" type="button" class="p-button-outlined"
+                            (click)="photoInputDlgMail.click()"></button>
+                        <input #photoInputDlgMail type="file" class="form-control" style="display:none"
+                            (change)="cargarFolioDlgMail(photoInputDlgMail)">
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" [value]="mail.listaCorreoAdjunto">
+                            <ng-template pTemplate="header" let-columns>
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Eliminar</th>
+                                    <th>Documento</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-row let-columns>
+                                <tr>
+                                    <td class="tablaColumnaAccion1">
+                                        <button pButton icon="fal fa-trash-alt"
+                                            (click)="eliminarDocumentoObservaciones(row)"
+                                            class="p-button-rounded p-button-danger p-button-text"
+                                            type="button"></button>
+                                    </td>
+                                    <td>
+                                        {{row.nombreArchivo}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="2">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Documentos del proceso</label>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [value]="adjuntosDlgObservaciones">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Sel.</th>
+                                    <th>Documento</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion1">
+                                        <button pButton pRipple type="button" icon="fad fa-check" title="Seleccionar"
+                                            class="p-button-rounded"
+                                            (click)="seleccionarDocProcesosDlgObservacion(rowData.secuencia)"></button>
+                                    </td>
+                                    <td class="tablaColumnaNombre">
+                                        {{rowData.archivonombre}}
+                                    </td>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="2">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-col-7">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Asunto</label>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="mail.asunto" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <angular-editor [(ngModel)]="mail.cuerpoCorreoBase64" [config]="configHtmlEditor">
+                        </angular-editor>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar"
+                            icon="fad fa-undo" (click)="verDlgMotivoDetallado=false"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6"></div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check"
+                            (click)="enviarMotivoDetallado()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </p-dialog>
+</p-card>
+
+<app-firma (block)="bloquearPaginaPadre()" (unBlock)="desbloquearPaginaPadre()" (aceptar)="cargarFirmaImagen()">
+</app-firma>

@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : workflow.WfMacroProceso
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="wfprocesos.obtenerProcesoSolicitante">
+         select	
+		(select p.NombreCompleto
+		from PersonaMast p WITH (NOLOCK) where p.Persona = :p_persona_id ) as "codigo"
+		,(select wp.Nombre 
+		from sgworkflowsys.wf_proceso wp WITH (NOLOCK) where wp.PROCESO_ID = :p_proceso_id ) as "nombre"
+    </sql-query>
+	
+</hibernate-mapping>

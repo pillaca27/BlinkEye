@@ -1,0 +1,54 @@
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModal" modal="modal" showEffect="fade" hideEffect="size" [style]="{'width':'500px'}">
+
+        <p-header>
+            <div style="float: left;">
+                <i class="fad fa-unlock-alt" style="font-size: 3em;"></i>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            </div>
+            <div style="float: left;">
+                <p style="font-size:16px;display:inline-block; margin-top: 10px;">CAMBIO DE CLAVE</p>
+            </div>
+        </p-header>
+        <p-card>
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span>Usuario</span>
+                            <input pInputText [(ngModel)]="usuario" [disabled]='verUsuario' />
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span style="color:#ff0000">Clave Anterior</span>
+                            <input [(ngModel)]="clave" pPassword style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span style="color:#ff0000">Clave Nueva</span>
+                            <input [(ngModel)]="clave1" pPassword style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span style="color:#ff0000">Repetir Clave</span>
+                            <input [(ngModel)]="clave2" pPassword style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+            <div class="p-grid" *ngIf="mensajeAMostrar">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <label style="color:#ff0000;font-weight: bolder;font-size: 13px;">{{mensajeAMostrar}}</label>
+                </div>
+            </div>
+            <br>
+
+            <div class="p-fluid p-grid formularioFila">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <button pButton pRipple type="button" label="Guardar" icon="fad fa-save" class="p-button-outlined" (click)="guardar()"></button>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <button pButton pRipple type="button" label="Salir" icon="fad fa-reply" class="p-button-outlined p-button-secondary" (click)="salir()"></button>
+                </div>
+            </div> 
+        </p-card>
+    </p-dialog>
+</div>

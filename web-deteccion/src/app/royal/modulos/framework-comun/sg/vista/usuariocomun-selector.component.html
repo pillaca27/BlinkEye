@@ -1,0 +1,80 @@
+<div class="ui-fluid">    
+
+    <p-dialog header="SELECTOR DE USUARIOS" [(visible)]="verSelector" modal="modal" showEffect="fade"
+    hideEffect="size" [style]="{'width':'1200px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Usuario</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.usuario" (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Nombre</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.nombre" (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div>
+
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Tipo</span>
+                <p-dropdown [options]="lstTipo" [(ngModel)]="filtro.tipo" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Estado</span>
+                <p-dropdown [options]="lstEstados" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}"></p-dropdown>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion" >
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtUbicacionGeo)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <p-table #dtUbicacionGeo [rows]="registrosPorPagina" [lazy]="true" [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" selectionMode="single" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+            (onLazyLoad)="cargarPuesto($event)" [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderUsuarioGrande">Usuario</th>
+                    <th class="tablaHeaderIzquierda">Nombre</th>
+                    <th class="tablaHeaderCodigo">Tipo</th>
+                    <th class="tablaHeaderEstado">Estado</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text botonGrilla" title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaUsuarioGrande"><span class="p-column-title">Usuario</span>{{row.usuario}}</td>
+                    <td class="tablaColumnaIzquierda"><span class="p-column-title">Nombre</span>{{row.nombre}}</td>
+                    <td class="tablaColumnaCodigo"><span class="p-column-title">Tipo</span>
+                        <label *ngIf="row.usuarioperfil == 'US'" >Usuario</label> 
+                        <label *ngIf="row.usuarioperfil == 'PE'" >Perfil</label> 
+                    </td>
+                    <td class="tablaColumnaEstado"><span class="p-column-title">Estado</span>
+                        <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo" >Activo</label>
+                        <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo" >Inactivo</label>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="5">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

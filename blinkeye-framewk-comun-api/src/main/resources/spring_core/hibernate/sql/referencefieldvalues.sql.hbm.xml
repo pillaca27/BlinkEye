@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="referencefieldvalues.obtenerDto">
+         select 
+			REFERENCEFIELD "referencefield"
+			,REFERENCEVALUE "referencevalue"
+			,DESCRIPTION "description"
+         from REFERENCEFIELDVALUES
+         where 
+			REFERENCEFIELD = :p_referencefield
+			AND REFERENCEVALUE = :p_referencevalue
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.listardtofiltros">
+         select 
+			REFERENCEFIELD "referencefield"
+			,REFERENCEVALUE "referencevalue"
+			,DESCRIPTION "description"
+         from REFERENCEFIELDVALUES
+         where 
+				REFERENCEFIELD = ISNULL(:p_referencefield,referencefield)
+			AND REFERENCEVALUE = ISNULL(:p_referencevalue,referencevalue)
+			and UPPER(ISNULL(description,'xxx')) like '%' || ISNULL(:p_description,UPPER(description)) || '%'
+		 order by description
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.listardtoporreferencefield">
+         select 
+			REFERENCEFIELD "referencefield"
+			,REFERENCEVALUE "referencevalue"
+			,DESCRIPTION "description"
+         from REFERENCEFIELDVALUES
+         where 
+				REFERENCEFIELD = :p_referencefield
+		 order by REFERENCEVALUE
+    </sql-query>
+    
+    <sql-query name="referencefieldvalues.obtenerreferencefield">
+         select
+			 referencefield as "referencefield",
+			 screentitle as "screentitle",
+			 length as "length",
+			 tablevalidatedflag as "tablevalidatedflag",
+			 localname as "localname",
+			 englishname as "englishname",
+			 internalcodeflag as "internalcodeflag",
+			 availableflag as "availableflag",
+			 internalcode as "internalcode"
+		From REFERENCEFIELDMST
+		where REFERENCEFIELD = :p_referencefield         
+    </sql-query>
+    
+</hibernate-mapping>

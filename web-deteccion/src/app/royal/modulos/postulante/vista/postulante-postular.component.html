@@ -1,0 +1,125 @@
+<div class="p-fluid p-grid formularioFila" *ngIf="verRequerimientos">
+    <div class="p-col-12 p-md-4">
+        <label>Puesto</label>
+        <input pInputText style="width:100%;" [(ngModel)]="filtro.puestoNombre" />
+    </div>
+    <div class="p-col-12 p-md-2">
+        <br>
+        <button pButton pRipple type="button" label="Buscar" icon="fa fa-search" (click)="buscar()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [paginator]="true"
+            [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderNombreMedio">Compañia</th>
+                    <th class="tablaHeaderCodigo">Requerimiento</th>
+                    <th class="tablaHeaderNombreMedio">Puesto</th>
+                    <th class="tablaHeaderNombreMedio">Centro de Costo</th>
+                    <th class="tablaHeaderFecha">Vigencia</th>
+                    <th class="tablaHeaderCodigo">Vacantes</th>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Compañia</span>
+                        {{rowData.companiaNombre}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Requerimiento</span>
+                        {{rowData.requerimiento}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Puesto</span>
+                        {{rowData.puestoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Centro de Costo</span>
+                        {{rowData.centroNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Vigencia</span>
+                        {{rowData.vigenciaHasta}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Vacantes</span>
+                        {{rowData.vacantes}}
+                    </td>
+                    <td class="tablaColumnaAccion1">
+                        <span class="p-column-title">Acción</span>
+                        <table [title]="rowData.postulanteLeyenda" *ngIf="rowData.postulanteIndicador==1">
+                            <tr>
+                                <th>
+                                    <button pButton icon="fa fa-paper-plane" class="p-button-success" type="button"
+                                        (click)='postular(rowData)'></button>
+                                </th>
+                            </tr>
+                        </table>
+                        <table [title]="rowData.postulanteLeyenda" *ngIf="rowData.postulanteIndicador==2">
+                            <tr>
+                                <th>
+                                    <button pButton icon="fa fa-flag" class="p-button-info" type="button"></button>
+                                </th>
+                            </tr>
+                        </table>
+                        <table [title]="rowData.postulanteLeyenda" *ngIf="rowData.postulanteIndicador==3">
+                            <tr>
+                                <th>
+                                    <button pButton icon="fa fa-flag-checkered" class="p-button-danger"
+                                        type="button"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="7">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+<div class="p-fluid p-grid formularioFila" *ngIf="verPerfil">
+    <div class="p-col-12 p-md-3">
+        <label>Puesto</label>
+        <input pInputText style="width:100%;" [(ngModel)]="perfil.puestoNombre" disabled />
+    </div>
+    <div class="p-col-12 p-md-3">
+        <label>Vacantes</label>
+        <input pInputText style="width:100%;" [(ngModel)]="perfil.vacantes" disabled />
+    </div>
+    <div class="p-col-12 p-md-3">
+        <label>Desde</label>
+        <input pInputText style="width:100%;" [(ngModel)]="perfil.vigenciaDesde" disabled />
+    </div>
+    <div class="p-col-12 p-md-3">
+        <label>Hasta</label>
+        <input pInputText style="width:100%;" [(ngModel)]="perfil.vigenciaHasta" disabled />
+    </div>
+    <div class="p-col-12 p-md-2">
+        <br>
+        <button pButton pRipple type="button" label="Postular" icon="fa fa-check"
+            (click)="registrarPostulacion()"></button>
+    </div>
+    <div class="p-col-12 p-md-8">
+    </div>
+    <div class="p-col-12 p-md-2">
+        <br>
+        <button pButton pRipple type="button" label="Volver" icon="fad fa-reply" (click)="salir()"></button>
+    </div>
+    <div class="p-col-12 p-md-12" style="height: 1160px;">
+        <br>
+        <ng2-pdfjs-viewer #vPerfil>
+        </ng2-pdfjs-viewer>
+    </div>
+</div>

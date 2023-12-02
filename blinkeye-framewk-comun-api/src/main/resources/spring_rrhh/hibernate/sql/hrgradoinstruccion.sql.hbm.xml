@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrgradoinstruccion
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  
+  <sql-query name="hrgradoinstruccion.obtenertabla">
+    select 
+            GRADOINSTRUCCION "codigo"
+            ,DESCRIPCION "nombre"
+            ,ESTADO "estadoId"
+         from HR_GRADOINSTRUCCION    
+         where GRADOINSTRUCCION = :p_gradoinstruccion
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.obtenerdto">
+    select 
+            GRADOINSTRUCCION "gradoinstruccion"
+            ,DESCRIPCION "descripcion"
+            ,FLAGCENTROESTUDIOS "flagcentroestudios"
+            ,ESTADO "estado"
+            ,ULTIMOUSUARIO "ultimousuario"
+            ,UITIMAFECHAMODIF "uitimafechamodif"
+            ,FLAGTIENECARRERA "flagtienecarrera"
+            ,JERARQUIA "jerarquia"
+            ,FLAGMUESTRADURACION "flagmuestraduracion"
+            ,GRADOCUANTITATIVO "gradocuantitativo"
+            ,PUNTOSGRADO "puntosgrado"
+            ,PORCENTAJEGRADO "porcentajegrado"
+            ,NIVELEDUCATIVORTPS "niveleducativortps"
+            ,FLAGTERMINO "flagtermino"
+         from HR_GRADOINSTRUCCION    
+         where GRADOINSTRUCCION = :p_gradoinstruccion
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.listar">
+    select GradoInstruccion as "codigo", Descripcion as "nombre"
+    		,estado as "estadoId" 
+    from HR_GradoInstruccion
+    order by Descripcion    
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.listarActivos">
+    select GradoInstruccion as "codigo", Descripcion as "nombre"
+    	,estado as "estadoId" 
+    from HR_GradoInstruccion
+    where Estado = 'A'
+    order by Descripcion
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.listardtofiltros">
+    select 
+            GRADOINSTRUCCION "gradoinstruccion"
+            ,DESCRIPCION "descripcion"
+            ,FLAGCENTROESTUDIOS "flagcentroestudios"
+            ,ESTADO "estado"
+            ,ULTIMOUSUARIO "ultimousuario"
+            ,UITIMAFECHAMODIF "uitimafechamodif"
+            ,FLAGTIENECARRERA "flagtienecarrera"
+            ,JERARQUIA "jerarquia"
+            ,FLAGMUESTRADURACION "flagmuestraduracion"
+            ,GRADOCUANTITATIVO "gradocuantitativo"
+            ,PUNTOSGRADO "puntosgrado"
+            ,PORCENTAJEGRADO "porcentajegrado"
+            ,NIVELEDUCATIVORTPS "niveleducativortps"
+            ,FLAGTERMINO "flagtermino"
+         from HR_GRADOINSTRUCCION   
+         where gradoinstruccion = ISNULL(:p_gradoinstruccion,gradoinstruccion)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+			 
+         order by Descripcion
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.listarPaginadoContar">
+    	SELECT COUNT(1)
+		FROM HR_GRADOINSTRUCCION A
+		WHERE 1 = 1
+		AND A.GRADOINSTRUCCION = ISNULL(:p_gradoinstruccion, A.GRADOINSTRUCCION)
+		AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+  </sql-query>
+  
+  <sql-query name="hrgradoinstruccion.listarPaginadoSentencia">
+	    SELECT A.GRADOINSTRUCCION AS "gradoinstruccion", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCION))) AS "descripcion",
+			CAST(A.ESTADO AS VARCHAR) AS "estado", 
+			CAST(A.FLAGCENTROESTUDIOS AS VARCHAR) AS "flagcentroestudios", 
+			CAST(A.FLAGTERMINO AS VARCHAR) AS "flagtermino", 
+			CAST(A.FLAGTIENECARRERA AS VARCHAR) AS "flagtienecarrera", 
+			CAST(A.TIPOMAESTRO AS VARCHAR) AS "tipomaestro"
+		FROM HR_GRADOINSTRUCCION A
+		WHERE 1 = 1
+		AND A.GRADOINSTRUCCION = ISNULL(:p_gradoinstruccion, A.GRADOINSTRUCCION)
+		AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		ORDER BY A.DESCRIPCION
+  </sql-query>
+  
+</hibernate-mapping>

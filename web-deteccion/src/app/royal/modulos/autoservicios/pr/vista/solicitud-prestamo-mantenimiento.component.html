@@ -1,0 +1,305 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+        </app-botones-mantenimiento>
+        <p-tabView>
+            <p-tabPanel header="Solicitud de Préstamo">
+                <p-fieldset legend="Datos Generales">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Préstamo</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.nroprestamo" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha de Solicitud</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechasolicitud" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Preparado Por</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxPreparadoPorNombre" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Empleado</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEmpleadoNombre" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Fecha de Aprobación</label>
+                                <div class="p-col">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [disabled]="true" [(ngModel)]="dtoBean.fechaaprobacion" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                    </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Aprobado Por</label>
+                                <div class="p-col">
+                                    <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxAprobadoPorNombre" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-4" *ngIf="dtoBean.auxUIHabilitarConcepto=='S'">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Concepto</label>
+                                <div class="p-col">
+                                    <p-dropdown [options]="lstConcepto" [style]="{'width':'100%'}" [(ngModel)]="dtoBean.concepto">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4" *ngIf="accion==ACCIONES.WORKFLOW||accion==ACCIONES.VER">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Tipo Documento</label>
+                                <div class="p-col">
+                                    <p-dropdown [options]="lstTipoDocumento" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.tipodocumentoref">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4" *ngIf="accion==ACCIONES.WORKFLOW||accion==ACCIONES.VER">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Documento</label>
+                                <div class="p-col">
+                                    <input pInputText style="width:100%;" [(ngModel)]="dtoBean.documentoref" [disabled]="!objetoTitulo.puedeEditar" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Comentario</label>
+                                <div class="p-col">
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.comentario" [disabled]="!objetoTitulo.puedeEditar" maxlength="255"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+                <br>
+                <p-fieldset legend="Datos del Préstamo">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Tipo</label>
+                                <div class="p-col">
+                                    <p-dropdown [options]="lstTipo" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dtoBean.tipoprestamo">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Moneda</label>
+                                <div class="p-col">
+                                    <p-dropdown [options]="lstMonedas" [style]="{'width':'100%'}" [disabled]="true" [(ngModel)]="dtoBean.monedadocumento">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Interés</label>
+                                <div class="p-col">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.interesprestamo" mode="decimal" [min]="0" [max]="500" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Monto Solicitado</label>
+                                <div class="p-col">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.montosolicitado" mode="decimal" [disabled]="!objetoTitulo.puedeEditar" [min]="0" [max]="1000000" (keyup)="uiUpdateMontoSolicitado($event.target.value)" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                        [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Monto del Préstamo</label>
+                                <div class="p-col">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.montoprestamo" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-fieldset>
+            </p-tabPanel>
+            <p-tabPanel header="Cronograma de Pagos">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-{{objetoTitulo.puedeEditar?8:7}}">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-2" *ngIf="objetoTitulo.puedeEditar">
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus" class="p-button-outlined" (click)="agregarPeriodo()"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-12">
+                                <p-table [scrollable]="true" [value]="dtoBean.lstPeriodos" [responsive]="true" [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion2" *ngIf="objetoTitulo.puedeEditar">Eliminar
+                                            </th>
+                                            <th class="tablaHeaderCodigo">Periodo</th>
+                                            <th class="tablaHeaderMonto">Quincena</th>
+                                            <th class="tablaHeaderMonto">Gratificación</th>
+                                            <th class="tablaHeaderMonto">Utilidades</th>
+                                            <th class="tablaHeaderMonto">Fin de Mes</th>
+                                            <th class="tablaHeaderMonto">Cuota Mensual</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion2" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Acciones</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Eliminar" *ngIf="objetoTitulo.puedeEditar" (click)="eliminarPeriodo(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Periodo</span>
+                                                <p-inputMask [(ngModel)]="row.periodo" mask="9999-99" [disabled]="!objetoTitulo.puedeEditar" [style]="{'text-align':'center'}"></p-inputMask>
+                                            </td>
+                                            <td class="tablaColumnaMonto">
+                                                <span class="p-column-title">Quincena</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.cuotaquincena" [disabled]="!objetoTitulo.puedeEditar" (keyup)="uiUpdateMontoQuincena($event.target.value, row)" mode="decimal" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                                    [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaMonto">
+                                                <span class="p-column-title">Gratificación</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.cuotagratificacion" [disabled]="!objetoTitulo.puedeEditar" (keyup)="uiUpdateMontoGratificacion($event.target.value, row)" mode="decimal" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                                    [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaMonto">
+                                                <span class="p-column-title">Utilidades</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.cuotautilidades" [disabled]="!objetoTitulo.puedeEditar" (keyup)="uiUpdateMontoUtilidades($event.target.value, row)" mode="decimal" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                                    [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaMonto">
+                                                <span class="p-column-title">Fin de Mes</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.cuotafindemes" [disabled]="!objetoTitulo.puedeEditar" (keyup)="uiUpdateMontoFinDeMes($event.target.value, row)" mode="decimal" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                                    [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaMonto" style="padding-right: 1rem !important;">
+                                                <span class="p-column-title">Cuota Mensual</span> {{row.cuotapago | number:'1.2-2'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="summary">
+                                        <div class="p-inputgroup">
+                                            <div class="p-ai-center p-jc-between" style="width:100%;flex: 1;">
+                                                Totales <br> Nro. Cuotas
+                                            </div>
+                                            <div class="p-ai-center p-jc-between" style="width:100%;flex: 1;text-align: right;">
+                                                {{sumarCuotaMensuales() | number:'1.2-2'}}<br> {{dtoBean.lstPeriodos.length}}
+                                            </div>
+                                        </div>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-1" *ngIf="objetoTitulo.puedeEditar">
+                    </div>
+                    <div class="p-field p-col-12 p-md-3" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Total Préstamo</label>
+                                    <div class="p-col">
+                                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.montoprestamo" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                        </p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-12">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Número de Cuotas</label>
+                                    <div class="p-col">
+                                        <p-inputNumber [locale]="locale" [min]="0" [max]="500" [style]="{'width':'100%'}" [(ngModel)]="dtoBean.auxNroCuotas">
+                                        </p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-12">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Monto Mensual</label>
+                                    <div class="p-col">
+                                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.auxMontoMensual" mode="decimal" [min]="0" [max]="1000000" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                                        </p-inputNumber>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-col-12 p-md-12">
+                                <div class="p-field p-grid">
+                                    <label class="p-col-fixed label">Periodo Inicio (aaaa-mm)</label>
+                                    <div class="p-col">
+                                        <p-inputMask [(ngModel)]="dtoBean.auxPeriodo" mask="9999-99"></p-inputMask>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <br>
+                                <button pButton pRipple type="button" label="Ordenar" class="p-button-outlined" (click)="ordenarPeriodo()"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-6">
+                                <br>
+                                <button pButton pRipple type="button" label="Aplicar" class="p-button-outlined" (click)="aplicarPeriodo()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

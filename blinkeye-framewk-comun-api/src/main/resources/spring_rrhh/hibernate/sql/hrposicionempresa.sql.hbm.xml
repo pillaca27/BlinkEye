@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ * @author : Luis Vargas
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<sql-query name="hrposicionempresa.listardto">
+         select 
+			COMPANYOWNER "companyowner"
+			,CODIGOPOSICION "codigoposicion"
+			,CODIGOTIPO "codigotipo"
+			,DESCRIPCION "descripcion"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,FLAGSTAFF "flagstaff"
+			,CENTROCOSTOS "centrocostos"
+			,COMENTARIOS "comentarios"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+			,UNIDADOPERATIVA "unidadoperativa"
+			,ORDEN "orden"
+			,RESPONSIBLE_RRHH "responsibleRrhh"
+			,DEPARTMENT "department"
+			,CODIGOPOSICIONSUPERIOR "codigoposicionsuperior"
+         from HR_POSICIONEMPRESA
+		order by DESCRIPCION
+    </sql-query>
+    
+    <sql-query name="hrposicionempresa.listardtoactivos">
+         select 
+			COMPANYOWNER "companyowner"
+			,CODIGOPOSICION "codigoposicion"
+			,CODIGOTIPO "codigotipo"
+			,DESCRIPCION "descripcion"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,FLAGSTAFF "flagstaff"
+			,CENTROCOSTOS "centrocostos"
+			,COMENTARIOS "comentarios"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+			,UNIDADOPERATIVA "unidadoperativa"
+			,ORDEN "orden"
+			,RESPONSIBLE_RRHH "responsibleRrhh"
+			,DEPARTMENT "department"
+			,CODIGOPOSICIONSUPERIOR "codigoposicionsuperior"
+         from HR_POSICIONEMPRESA
+         where ESTADO = 'A'
+		order by DESCRIPCION
+    </sql-query>
+    
+    <sql-query name="hrposicionempresa.obtenerdto">
+         select 
+			COMPANYOWNER "companyowner"
+			,CODIGOPOSICION "codigoposicion"
+			,CODIGOTIPO "codigotipo"
+			,DESCRIPCION "descripcion"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,FLAGSTAFF "flagstaff"
+			,CENTROCOSTOS "centrocostos"
+			,COMENTARIOS "comentarios"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+			,UNIDADOPERATIVA "unidadoperativa"
+			,ORDEN "orden"
+			,RESPONSIBLE_RRHH "responsibleRrhh"
+			,DEPARTMENT "department"
+			,CODIGOPOSICIONSUPERIOR "codigoposicionsuperior"
+         from HR_POSICIONEMPRESA
+         where 
+			COMPANYOWNER = :p_companyowner
+			AND CODIGOPOSICION = :p_codigoposicion
+    </sql-query>
+    
+	<sql-query name="hrposicionempresa.listardtofiltros">
+         select 
+			COMPANYOWNER "companyowner"
+			,CODIGOPOSICION "codigoposicion"
+			,CODIGOTIPO "codigotipo"
+			,DESCRIPCION "descripcion"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,FLAGSTAFF "flagstaff"
+			,CENTROCOSTOS "centrocostos"
+			,COMENTARIOS "comentarios"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,UNIDADREPLICACION "unidadreplicacion"
+			,UNIDADOPERATIVA "unidadoperativa"
+			,ORDEN "orden"
+			,RESPONSIBLE_RRHH "responsibleRrhh"
+			,DEPARTMENT "department"
+			,CODIGOPOSICIONSUPERIOR "codigoposicionsuperior"
+         from HR_POSICIONEMPRESA
+         where 
+			COMPANYOWNER = ISNULL(:p_companyowner,companyowner)
+			AND CODIGOPOSICION = ISNULL(:p_codigoposicion,codigoposicion)
+			AND codigotipo = ISNULL(:p_codigotipo,codigotipo)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))	
+		order by DESCRIPCION
+    </sql-query>
+    
+    <sql-query name="hrposicionempresa.listarPaginadoContar">
+    	<![CDATA[   
+        SELECT COUNT(1)
+		FROM HR_POSICIONEMPRESA 
+		INNER JOIN COMPANYOWNER ON HR_POSICIONEMPRESA.COMPANYOWNER = COMPANYOWNER.COMPANYOWNER
+		INNER JOIN SEGURIDADAUTORIZACIONCOMPANIA ON COMPANYOWNER.COMPANYOWNER = SEGURIDADAUTORIZACIONCOMPANIA.COMPANYOWNER
+		WHERE USUARIO = :p_usuario 
+		AND HR_POSICIONEMPRESA.CODIGOPOSICION = ISNULL(:p_unidadorg, HR_POSICIONEMPRESA.CODIGOPOSICION)
+		AND HR_POSICIONEMPRESA.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, HR_POSICIONEMPRESA.DESCRIPCION) + '%'
+    	]]>
+  	</sql-query>
+  
+  	<sql-query name="hrposicionempresa.listarPaginadoSentencia">
+    	<![CDATA[   
+        SELECT HR_POSICIONEMPRESA.CODIGOPOSICION AS "codigoposicion", 
+			LTRIM(RTRIM(UPPER(HR_POSICIONEMPRESA.DESCRIPCION))) AS "descripcion", 
+			HR_POSICIONEMPRESA.COMPANYOWNER AS "companyowner", 
+			LTRIM(RTRIM(UPPER(COMPANYOWNER.DESCRIPTION))) AS "companianombre", 
+			CAST(HR_POSICIONEMPRESA.ESTADO AS VARCHAR) AS "estado"
+		FROM HR_POSICIONEMPRESA 
+		INNER JOIN COMPANYOWNER ON HR_POSICIONEMPRESA.COMPANYOWNER = COMPANYOWNER.COMPANYOWNER
+		INNER JOIN SEGURIDADAUTORIZACIONCOMPANIA ON COMPANYOWNER.COMPANYOWNER = SEGURIDADAUTORIZACIONCOMPANIA.COMPANYOWNER
+		WHERE USUARIO = :p_usuario 
+		AND HR_POSICIONEMPRESA.CODIGOPOSICION = ISNULL(:p_unidadorg, HR_POSICIONEMPRESA.CODIGOPOSICION)
+		AND HR_POSICIONEMPRESA.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, HR_POSICIONEMPRESA.DESCRIPCION) + '%'
+		ORDER BY HR_POSICIONEMPRESA.DESCRIPCION
+    	]]>
+  	</sql-query>
+    
+</hibernate-mapping>

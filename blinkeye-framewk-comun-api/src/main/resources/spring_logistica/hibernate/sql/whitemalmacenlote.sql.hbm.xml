@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : asistencia.AsArea
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+     <sql-query name="whitemalmacenlote.obtenerDto">
+         select 
+			ITEM "item"
+			,CONDICION "condicion"
+			,ALMACENCODIGO "almacencodigo"
+			,LOTE "lote"
+			,DONANTE "donante"
+			,FECHAINGRESO "fechaingreso"
+			,FECHAVENCIMIENTO "fechavencimiento"
+			,STOCKINGRESO "stockingreso"
+			,STOCKACTUAL "stockactual"
+			,STOCKCOMPROMETIDO "stockcomprometido"
+			,STOCKACTUALDOBLE "stockactualdoble"
+			,PRECIOUNITARIO "preciounitario"
+			,PRIORIDAD "prioridad"
+			,PRECIOPROMEDIOLOCAL "preciopromediolocal"
+			,PRECIOPROMEDIODOLARES "preciopromediodolares"
+			,PRECIOPROMEDIOCANTIDAD "preciopromediocantidad"
+			,DOCUMENTOREFERENCIA "documentoreferencia"
+			,LOTEEQUIVALENTE "loteequivalente"
+			,INGRESADOPOR "ingresadopor"
+			,PRECIOUNITARIODOLARES "preciounitariodolares"
+         from WH_ITEMALMACENLOTE
+         where 
+			ITEM = :p_item
+			AND CONDICION = :p_condicion
+			AND ALMACENCODIGO = :p_almacencodigo
+			AND LOTE = :p_lote
+
+    </sql-query>
+    
+    <sql-query name="whitemalmacenlote.stockActualPorItemAlmacen">
+		 SELECT 
+		 	Sum(WH_ItemAlmacenLote.StockActual) AS "stockactual"  
+    	 FROM 
+    	 	WH_ItemAlmacenLote  
+  		 WHERE 
+  		 	WH_ItemAlmacenLote.Item = :p_item  AND
+	 		WH_ItemAlmacenLote.AlmacenCodigo = :p_almacencodigo
+    </sql-query>
+    
+</hibernate-mapping>

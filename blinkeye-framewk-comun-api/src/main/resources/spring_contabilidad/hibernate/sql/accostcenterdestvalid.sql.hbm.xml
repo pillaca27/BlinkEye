@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	  <sql-query name="accostcenterdestvalid.obtenerDto">
+         select 
+			COSTCENTER "costcenter"
+			,COSTCENTERDESTINATION "costcenterdestination"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_COSTCENTERDESTVALID
+         where 
+			COSTCENTER = :p_costcenter
+			AND COSTCENTERDESTINATION = :p_costcenterdestination
+
+    </sql-query>
+    
+  	
+  	<sql-query name="accostcenterdestvalid.listardtofiltros">
+    	select 
+			COSTCENTER "costcenter"
+			,COSTCENTERDESTINATION "costcenterdestination"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_COSTCENTERDESTVALID
+         where 
+			COSTCENTER = ISNULL(:p_costcenter,COSTCENTER)
+			AND COSTCENTERDESTINATION = ISNULL(:p_costcenterdestination,COSTCENTERDESTINATION) 
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))
+		order by costcenter
+  	</sql-query>
+  	
+</hibernate-mapping>

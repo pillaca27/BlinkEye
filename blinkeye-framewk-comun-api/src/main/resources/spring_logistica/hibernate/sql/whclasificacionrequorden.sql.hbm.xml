@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whclasificacionrequorden.listar">
+	    <![CDATA[
+	        select clasificacion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CLASIFICACIONREQUORDEN	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclasificacionrequorden.listarActivos">
+	    <![CDATA[
+	        select clasificacion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CLASIFICACIONREQUORDEN
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclasificacionrequorden.obtenerTabla">
+	    <![CDATA[
+	        select clasificacion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CLASIFICACIONREQUORDEN
+			where clasificacion = :p_clasificacion
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whclasificacionrequorden.listarfiltros">
+    	select clasificacion as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from WH_CLASIFICACIONREQUORDEN 
+    	where  clasificacion = ISNULL(:p_clasificacion,clasificacion)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal	    	
+	</sql-query>
+	
+	<sql-query name="whclasificacionrequorden.obtenerDto">
+          select 
+			CAST(CLASIFICACION AS VARCHAR) "clasificacion"
+			,CAST(REQUISICIONORDENCOMPRAFLAG AS VARCHAR)  "requisicionordencompraflag"
+			,CAST(DESCRIPCIONLOCAL AS VARCHAR)  "descripcionlocal"
+			,CAST(DESCRIPCIONINGLES AS VARCHAR)  "descripcioningles"
+			,CAST(RECEPCIONALMACENFLAG AS VARCHAR)  "recepcionalmacenflag"
+			,CAST(ALMACENCODIGODEFAULT AS VARCHAR)  "almacencodigodefault"
+			,CAST(REQUISICIONTIPOITEMFLAG AS VARCHAR)  "requisiciontipoitemflag"
+			,CAST(REQUISICIONTIPOITEM AS VARCHAR)  "requisiciontipoitem"
+			,CAST(REQUISICIONREVISIONFLAG AS VARCHAR)  "requisicionrevisionflag"
+			,CAST(REQUISICIONITEMSFLAG AS VARCHAR)  "requisicionitemsflag"
+			,CAST(REQUISICIONCOMPRASALMACENFLAG AS VARCHAR)  "requisicioncomprasalmacenflag"
+			,CAST(TRANSACCIONDELSISTEMAFLAG AS VARCHAR)  "transacciondelsistemaflag"
+			,CAST(DISPONIBLEUSUARIOFLAG AS VARCHAR)  "disponibleusuarioflag"
+			,CAST(ESTADO AS VARCHAR)  "estado"
+			,CAST(ULTIMOUSUARIO AS VARCHAR)  "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(LICITACIONESFLAG AS VARCHAR)  "licitacionesflag"
+			,CAST(REVISIONFLUJOCODIGO AS VARCHAR)  "revisionflujocodigo"
+			,CAST(XDESCRIPCION AS VARCHAR)  "xdescripcion"
+			,CAST(CONTRATOSFLAG  AS VARCHAR) "contratosflag"
+
+         from WH_CLASIFICACIONREQUORDEN
+         where 
+			CLASIFICACION = :p_clasificacion
+    </sql-query>
+    
+    <sql-query name="whclasificacionrequorden.listardtofiltros">
+         select 
+			CAST(CLASIFICACION AS VARCHAR(3)) "clasificacion"
+			,CAST(REQUISICIONORDENCOMPRAFLAG  AS VARCHAR(1)) "requisicionordencompraflag"
+			,CAST(DESCRIPCIONLOCAL  AS VARCHAR(30)) "descripcionlocal"
+			,CAST(DESCRIPCIONINGLES  AS VARCHAR(30)) "descripcioningles"
+			,CAST(RECEPCIONALMACENFLAG  AS VARCHAR(1)) "recepcionalmacenflag"
+			,CAST(ALMACENCODIGODEFAULT  AS VARCHAR(10)) "almacencodigodefault"
+			,CAST(REQUISICIONTIPOITEMFLAG  AS VARCHAR(1)) "requisiciontipoitemflag"
+			,CAST(REQUISICIONTIPOITEM  AS VARCHAR(2)) "requisiciontipoitem"
+			,CAST(REQUISICIONREVISIONFLAG  AS VARCHAR(1)) "requisicionrevisionflag"
+			,CAST(REQUISICIONITEMSFLAG  AS VARCHAR(1)) "requisicionitemsflag"
+			,CAST(REQUISICIONCOMPRASALMACENFLAG   AS VARCHAR(1)) "requisicioncomprasalmacenflag"
+			,CAST(TRANSACCIONDELSISTEMAFLAG  AS VARCHAR(1)) "transacciondelsistemaflag"
+			,CAST(DISPONIBLEUSUARIOFLAG  AS VARCHAR(1))"disponibleusuarioflag"
+			,CAST(ESTADO  AS VARCHAR(1)) "estado"
+			,CAST(ULTIMOUSUARIO  AS VARCHAR(10))"ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(LICITACIONESFLAG  AS VARCHAR(1)) "licitacionesflag"
+			,CAST(REVISIONFLUJOCODIGO  AS VARCHAR(6))"revisionflujocodigo"
+			,CAST(XDESCRIPCION  AS VARCHAR(60)) "xdescripcion"
+			,CAST(CONTRATOSFLAG  AS VARCHAR(1)) "contratosflag"
+
+         from WH_CLASIFICACIONREQUORDEN
+         where 
+				CLASIFICACION = ISNULL(:p_clasificacion,CLASIFICACION)				
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' + ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) + '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+        <sql-query name="whclasificacionrequorden.listarClasificacionesdisponibles">
+          select 
+			CLASIFICACION "clasificacion"
+			,CAST(REQUISICIONORDENCOMPRAFLAG as varchar(1)) "requisicionordencompraflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,CAST(RECEPCIONALMACENFLAG as varchar(1)) "recepcionalmacenflag"
+			,ALMACENCODIGODEFAULT "almacencodigodefault"
+			,CAST(REQUISICIONTIPOITEMFLAG as varchar(1)) "requisiciontipoitemflag"
+			,REQUISICIONTIPOITEM "requisiciontipoitem"
+			,CAST(REQUISICIONREVISIONFLAG as varchar(1)) "requisicionrevisionflag"
+			,CAST(REQUISICIONITEMSFLAG as varchar(1)) "requisicionitemsflag"
+			,CAST(REQUISICIONCOMPRASALMACENFLAG  as varchar(1)) "requisicioncomprasalmacenflag"
+			,CAST(TRANSACCIONDELSISTEMAFLAG as varchar(1)) "transacciondelsistemaflag"
+			,CAST(DISPONIBLEUSUARIOFLAG as varchar(1)) "disponibleusuarioflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(LICITACIONESFLAG as varchar(1)) "licitacionesflag"
+			,REVISIONFLUJOCODIGO "revisionflujocodigo"
+			,XDESCRIPCION "xdescripcion"
+			,CAST(CONTRATOSFLAG as varchar(1)) "contratosflag"
+         from WH_CLASIFICACIONREQUORDEN
+         WHERE ( WH_ClasificacionRequOrden.RequisicionOrdenCompraFlag = 'R' ) AND  
+         ( WH_ClasificacionRequOrden.DisponibleUsuarioFlag = 'S' ) AND  
+         ( WH_ClasificacionRequOrden.Estado = 'A' )   
+ORDER BY WH_ClasificacionRequOrden.Clasificacion ASC   
+    </sql-query>
+    
+    <sql-query name="whclasificacionrequorden.listardtolicitacionrequesicion">
+          select 
+			CLASIFICACION "clasificacion"
+			,CAST(REQUISICIONORDENCOMPRAFLAG as varchar(1)) "requisicionordencompraflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,CAST(RECEPCIONALMACENFLAG as varchar(1)) "recepcionalmacenflag"
+			,ALMACENCODIGODEFAULT "almacencodigodefault"
+			,CAST(REQUISICIONTIPOITEMFLAG as varchar(1)) "requisiciontipoitemflag"
+			,REQUISICIONTIPOITEM "requisiciontipoitem"
+			,CAST(REQUISICIONREVISIONFLAG as varchar(1)) "requisicionrevisionflag"
+			,CAST(REQUISICIONITEMSFLAG as varchar(1)) "requisicionitemsflag"
+			,CAST(REQUISICIONCOMPRASALMACENFLAG  as varchar(1)) "requisicioncomprasalmacenflag"
+			,CAST(TRANSACCIONDELSISTEMAFLAG as varchar(1)) "transacciondelsistemaflag"
+			,CAST(DISPONIBLEUSUARIOFLAG as varchar(1)) "disponibleusuarioflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(LICITACIONESFLAG as varchar(1)) "licitacionesflag"
+			,REVISIONFLUJOCODIGO "revisionflujocodigo"
+			,XDESCRIPCION "xdescripcion"
+			,CAST(CONTRATOSFLAG as varchar(1)) "contratosflag"
+         from WH_CLASIFICACIONREQUORDEN
+         where 
+				requisicionordencompraflag = 'R'			
+			AND licitacionesflag = 'S'
+			AND estado = 'A'
+		order by descripcionlocal
+    </sql-query>
+    
+    <sql-query name="whclasificacionrequorden.listardtorequesicion">
+          select 
+			CLASIFICACION "clasificacion"
+			,REQUISICIONORDENCOMPRAFLAG "requisicionordencompraflag"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,RECEPCIONALMACENFLAG "recepcionalmacenflag"
+			,ALMACENCODIGODEFAULT "almacencodigodefault"
+			,REQUISICIONTIPOITEMFLAG "requisiciontipoitemflag"
+			,REQUISICIONTIPOITEM "requisiciontipoitem"
+			,REQUISICIONREVISIONFLAG "requisicionrevisionflag"
+			,REQUISICIONITEMSFLAG "requisicionitemsflag"
+			,REQUISICIONCOMPRASALMACENFLAG "requisicioncomprasalmacenflag"
+			,TRANSACCIONDELSISTEMAFLAG "transacciondelsistemaflag"
+			,DISPONIBLEUSUARIOFLAG "disponibleusuarioflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,LICITACIONESFLAG "licitacionesflag"
+			,REVISIONFLUJOCODIGO "revisionflujocodigo"
+			,XDESCRIPCION "xdescripcion"
+			,CONTRATOSFLAG "contratosflag"
+         from WH_CLASIFICACIONREQUORDEN
+         where 
+				requisicionordencompraflag = 'R'			
+			AND estado = 'A'
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

@@ -1,0 +1,100 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Tipo de Pago</label>
+                    <input pInputText [(ngModel)]="dto.tipopago" maxlength="2" type="text" 
+                    (ngModelChange)="dto.tipopago = $event.toUpperCase()"    [disabled]="accionnuevo" [pKeyFilter]="blockSpecial" /> 
+                </div>
+                <div class="p-field p-col-12 p-md-8">
+                    <label class="importante">Descripción</label>
+                    <input pInputText [(ngModel)]="dto.descripcion" maxlength="40" type="text" 
+                    [disabled]="!objetoTitulo.puedeEditar"   [style]="{'width':'100%'}"  /> 
+                </div>                       
+            </div>
+
+            
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-11">
+                    <p-fieldset legend="Características">
+                        <div class="p-fluid seccionAuditoria">
+
+                            <div class="p-field p-col-12 p-md-8">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.restringidocheck" binary="true"
+                                    inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<label for="ny">Restringido (Seguridad)</label>
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-8">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.generanumerocheck"
+                                    binary="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<label for="ny">Genera Numeración</label>
+                            </div>
+                            <div class="p-field p-col-12 p-md-8">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.generavouchercheck"
+                                    binary="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<label for="ny">Genera Voucher Sumarizado</label>
+                            </div>
+                        </div>
+
+                    </p-fieldset>
+                </div>
+            </div>
+
+
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado"  [options]="lstEstados"
+                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+    </p-card>
+<br>
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+[modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<div class="p-fluid p-formgrid p-grid">
+    <div class="p-field p-col-12 p-md-12">
+        <p-fieldset legend="Nota: Los siguientes Tipos de Pago son del Sistema">
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-12 p-md-6">
+                    
+                    <label>CH: Cheques</label>
+                </div>
+
+                <div class="p-field p-col-12 p-md-6">
+                   
+                    <label>C1: Carta de Transferencia - Personas</label>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    
+                    <label>IB: Interfase Bancaria (Diskette) (l2,l3,l4)</label>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    
+                    <label>C2: Carta de Transferencia - Cuentas(TR)</label>
+                </div>
+            </div>
+
+        </p-fieldset>
+    </div>
+</div>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+

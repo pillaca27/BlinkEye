@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	   <sql-query name="acafecompany.obtenerDto">
+         select 
+			AFE "afe"
+			,COMPANYOWNER "companyowner"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_AFECOMPANY
+         where 
+			AFE = :p_afe
+			AND COMPANYOWNER = :p_companyowner
+
+    </sql-query>
+    
+  	
+  	<sql-query name="acafecompany.listardtofiltros">
+    	select 
+			AFE "afe"
+			,COMPANYOWNER "companyowner"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_AFECOMPANY
+         where 
+			AFE = ISNULL(:p_afe,AFE)
+			AND COMPANYOWNER = ISNULL(:p_companyowner,COMPANYOWNER)
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))
+		order by afe
+  	</sql-query>
+  	
+</hibernate-mapping>

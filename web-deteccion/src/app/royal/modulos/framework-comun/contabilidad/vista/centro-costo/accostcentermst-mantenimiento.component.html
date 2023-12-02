@@ -1,0 +1,572 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-tabView (onChange)="onTabChange($event)" [activeIndex]="index">
+
+                <p-tabPanel header="Datos Generales">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-8">
+
+                            <div class="p-field p-grid">
+                                <label for="firstname5" class="p-col-fixed importante" style="width:175px">Centro de
+                                    Costo</label>
+                                <div class="p-col">
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col-12 p-md-6">
+                                            <input pInputText [(ngModel)]="dto.costcenter" maxlength="10" type="text" [disabled]="accionnuevo" [pKeyFilter]="blockSpecial" (ngModelChange)="dto.costcenter = $event.toUpperCase()" (keyup)="centerCostCod()" [style]="{'width':'200px'}" />
+                                        </div>
+
+                                        <div class="p-field p-col-12 p-md-6">
+
+                                        </div>
+
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed importante" style="width:180px">Descripción</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.localname" maxlength="40" type="text" (keyup)="centerCostDescri()" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed" style="width:180px">Descr. Inglés</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.englishname" maxlength="40" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+
+                            <br>
+
+                            <p-divider align="left">
+                                <div class="p-d-inline-flex p-ai-center">
+                                    <i class="pi pi-bars p-mr-2"></i>
+                                    <b>Niveles de Autorización</b>
+                                </div>
+                            </p-divider>
+
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed importante" style="width: 280px;">Empleado
+                                    Supervisor del
+                                    C.C.</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.vendorDescri" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                        <button pButton icon="fa fa-binoculars" (click)="selector('EMPSUP')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Empleado Supervisor"></button>
+                                        <button pButton icon="fa fa-trash" (click)="limpiar('EMPSUP')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Empleado Supervisor"></button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+
+                            <div class="p-field p-grid" *ngIf="parametro1">
+                                <label for="lastname5" class="p-col-fixed" style="width: 280px;">Monto Autorizado
+                                    (Dólares)</label>
+                                <div class="p-col">
+                                    <p-inputNumber [(ngModel)]="dto.amountinvoices" mode="decimal" [style]="{'width':'100%'}" [disabled]="true" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid" *ngIf="parametro1">
+                                <label for="lastname5" class="p-col-fixed" style="width: 280px;">Siguiente Nivel de
+                                    Autorización
+                                    (C.C.)</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.costcenternextDescri" type="text" readonly [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                        <button pButton icon="fa fa-binoculars" (click)="selector('NIVAUT')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Nivel de Autorización"></button>
+                                        <button pButton icon="fa fa-trash" (click)="limpiar('NIVAUT')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Nivel de Autorización"></button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <br>
+
+
+                        </div>
+
+                        <div class="p-col-12 p-md-4">
+
+                            <div class="p-fluid  p-grid">
+                                <div class="p-field p-col-12 p-md-12">
+                                    <p-fieldset legend="Tipo de Gasto">
+                                        <div class="p-fluid seccionAuditoria">
+
+                                            <div class="p-field p-col-12 p-md-8">
+                                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check01" binary="true" inputId="binary">
+                                                </p-checkbox>
+                                                &nbsp;&nbsp;<label for="ny">Administrativo</label>
+                                            </div>
+
+                                            <div class="p-field p-col-12 p-md-8">
+                                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check02" binary="true" inputId="binary">
+                                                </p-checkbox>
+                                                &nbsp;&nbsp;<label for="ny">Ventas</label>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-8">
+                                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check03" binary="true" inputId="binary">
+                                                </p-checkbox>
+                                                &nbsp;&nbsp;<label for="ny">Financiero</label>
+                                            </div>
+                                            <div class="p-field p-col-12 p-md-8">
+                                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check04" binary="true" inputId="binary">
+                                                </p-checkbox>
+                                                &nbsp;&nbsp;<label for="ny">Producción</label>
+                                            </div>
+                                        </div>
+
+                                    </p-fieldset>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid" style="padding-left: 31px;">
+
+                                <div class="p-col">
+                                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check05" binary="true" inputId="binary"></p-checkbox>
+                                    &nbsp;&nbsp;<label for="ny">Centro de Ingresos</label>
+                                </div>
+                            </div>
+
+
+                        </div>
+
+                    </div>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-6">
+
+                            <p-divider align="left">
+                                <div class="p-d-inline-flex p-ai-center">
+                                    <i class="pi pi-bars p-mr-2"></i>
+                                    <b>Información Adicional</b>
+                                </div>
+                            </p-divider>
+
+
+                            <div class="p-field p-grid" *ngIf="parametro1">
+                                <label for="lastname5" class="p-col-fixed" style="width:180px">Cuenta por
+                                    Defecto</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.account" type="text" maxlength="20" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                        <button pButton icon="fa fa-binoculars" (click)="selector('CUENTA')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Cuenta por Defecto"></button>
+                                        <button pButton icon="fa fa-trash" (click)="limpiar('CUENTA')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Cuenta por Defecto"></button>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid" *ngIf="parametro1">
+                                <label for="lastname5" class="p-col-fixed" style="width:180px">Cuenta
+                                    Estadística</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.accountdestination" type="text" maxlength="20" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                        <button pButton icon="fa fa-binoculars" (click)="selector('CUENTA2')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Cuenta Estadística"></button>
+                                        <button pButton icon="fa fa-trash" (click)="limpiar('CUENTA2')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Cuenta Estadística"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="p-field p-grid" *ngIf="parametro2">
+                                <label for="lastname5" class="p-col-fixed" style="width:180px">Sucursal por
+                                    Defecto</label>
+                                <div class="p-col">
+                                    <p-dropdown [(ngModel)]="dto.sucursal" [options]="lstSucursal" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+
+                        </div>
+
+                        <div class="p-col-12 p-md-6" *ngIf="parametro2">
+
+                            <p-divider align="left">
+                                <div class="p-d-inline-flex p-ai-center">
+                                    <i class="pi pi-bars p-mr-2"></i>
+                                    <b>Información Presupuestal</b>
+                                </div>
+                            </p-divider>
+
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed" style="width:150px">Clasificación</label>
+                                <div class="p-col">
+                                    <p-dropdown [(ngModel)]="dto.costcenterclasification" [options]="lstClasificacion" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed" style="width:150px">Grupo</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.grupo" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                        <button pButton icon="fa fa-binoculars" (click)="selector('GRUPO')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Grupo"></button>
+                                        <button pButton icon="fa fa-trash" (click)="limpiar('GRUPO')" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Limpiar Grupo"></button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="p-field p-grid">
+                                <label for="lastname5" class="p-col-fixed" style="width:150px">Sub_Grupo</label>
+                                <div class="p-col">
+                                    <div class="p-inputgroup">
+                                        <input pInputText [(ngModel)]="dto.subgrupo" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Estado</label>
+                                <div class="p-col">
+                                    <p-dropdown [(ngModel)]="dto.status" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </p-tabPanel>
+
+                <p-tabPanel header="Cuentas Válidas" *ngIf="parametroDetalle1">
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+
+
+                            <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                                <div class="p-col-12 p-md-12">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle('TAB01')"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-10">
+
+                            <p-table [value]="dto.lstDetalle1" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" scrollHeight="450px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigo">Acción</th>
+                                        <th class="tablaHeaderIzquierda">Cuenta</th>
+                                        <th class="tablaHeaderIzquierda">Descripción</th>
+                                        <th class="tablaHeaderEstado">Ult. Usuario</th>
+                                        <th class="tablaHeaderEstado">Ult. Modif</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-ri="rowIndex">
+                                    <tr *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar('TAB01',row,ri)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+
+                                        <td class="tablaColumnaIzquierda">
+                                            <div class="p-inputgroup">
+                                                <input pInputText [(ngModel)]="row.account" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarCuentaDetalle(row)" *ngIf="row.accion == 'N'" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Cuentas"></button>
+
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarCuentaDetalle(row)" *ngIf="row.accion == 'A'" type="button" [disabled]="true" title="Buscar Cuentas"></button>
+                                            </div>
+                                        </td>
+                                        <td class="tablaColumnaIzquierda">
+                                            <span class="p-column-title">Descripción</span> {{row.descripcion}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Usuario</span> {{row.lastuser}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Modif</span> {{row.lastdate | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="5">
+                                            No existen registros para mostrar
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="Supervisores Válidos" *ngIf="parametroDetalle2">
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+
+
+                            <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                                <div class="p-col-12 p-md-12">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle('TAB02')"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-10">
+
+                            <p-table [value]="dto.lstDetalle2" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" scrollHeight="450px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigo">Acción</th>
+                                        <th class="tablaHeaderIzquierda">Nombre</th>
+                                        <th class="tablaHeaderCodigoChico">Empleado</th>
+                                        <th class="tablaHeaderEstado">Ult. Usuario</th>
+                                        <th class="tablaHeaderEstado">Ult. Modif</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-ri="rowIndex">
+                                    <tr *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar('TAB02',row,ri)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+
+                                        <td class="tablaColumnaIzquierda">
+                                            <div class="p-inputgroup">
+                                                <input pInputText [(ngModel)]="row.descripcion" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarEmpleadoDetalle(row)" *ngIf="row.accion == 'N'" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Cuentas"></button>
+
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarEmpleadoDetalle(row)" *ngIf="row.accion == 'A'" type="button" [disabled]="true" title="Buscar Cuentas"></button>
+                                            </div>
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Empleado</span> {{row.vendor}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Usuario</span> {{row.lastuser}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Modif</span> {{row.lastdate | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="5">
+                                            No existen registros para mostrar
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="C.C. Destino Válidos" *ngIf="parametroDetalle3">
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+
+
+                            <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                                <div class="p-col-12 p-md-12">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle('TAB03')"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-10">
+
+                            <p-table [value]="dto.lstDetalle3" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" scrollHeight="450px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigo">Acción</th>
+                                        <th class="tablaHeaderIzquierda">C.Costos Destino</th>
+                                        <th class="tablaHeaderEstado">Status</th>
+                                        <th class="tablaHeaderEstado">Ult. Usuario</th>
+                                        <th class="tablaHeaderEstado">Ult. Modif</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-ri="rowIndex">
+                                    <tr *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar('TAB03',row,ri)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+
+                                        <td class="tablaColumnaIzquierda" *ngIf="row.accion == 'N'">
+                                            <p-dropdown [(ngModel)]="row.costcenterdestination" [options]="lstCostosDestino" [disabled]="!objetoTitulo.puedeEditar" appendTo="body" [style]="{'width':'100%'}">
+                                            </p-dropdown>
+                                        </td>
+                                        <td class="tablaColumnaIzquierda" *ngIf="row.accion == 'A'">
+                                            <p-dropdown [(ngModel)]="row.costcenterdestination" [options]="lstCostosDestino" [disabled]="true" appendTo="body" [style]="{'width':'100%'}">
+                                            </p-dropdown>
+                                        </td>
+                                        <td class="tablaHeaderEstado">
+                                            <span class="p-column-title">Status</span>
+                                            <label *ngIf="row.status == 'A'" class="tablaEstadoActivo">Activo</label>
+                                            <label *ngIf="row.status == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Usuario</span> {{row.lastuser}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Modif</span> {{row.lastdate | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="5">
+                                            No existen registros para mostrar
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="Proyectos Válidos" *ngIf="parametroDetalle4">
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+
+
+                            <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                                <div class="p-col-12 p-md-12">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle('TAB04')"></button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-10">
+
+                            <p-table [value]="dto.lstDetalle4" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" scrollHeight="450px">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderCodigo">Acción</th>
+                                        <th class="tablaHeaderCodigoChico">Proyecto</th>
+                                        <th class="tablaHeaderIzquierda">Descripción</th>
+                                        <th class="tablaHeaderEstado">Status</th>
+                                        <th class="tablaHeaderEstado">Ult. Usuario</th>
+                                        <th class="tablaHeaderEstado">Ult. Modif</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-ri="rowIndex">
+                                    <tr *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar('TAB04',row,ri)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+
+
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Proyecto</span> {{row.afe}}
+                                        </td>
+                                        <td class="tablaColumnaIzquierda">
+                                            <div class="p-inputgroup">
+                                                <input pInputText [(ngModel)]="row.descripcion" readonly type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarProyectos(row)" *ngIf="row.accion == 'N'" type="button" [disabled]="!objetoTitulo.puedeEditar" title="Buscar Proyectos"></button>
+
+                                                <button pButton icon="fa fa-binoculars" (click)="agregarProyectos(row)" *ngIf="row.accion == 'A'" type="button" [disabled]="true" title="Buscar Proyectos"></button>
+                                            </div>
+                                        </td>
+                                        <td class="tablaHeaderEstado">
+                                            <span class="p-column-title">Status</span>
+                                            <label *ngIf="row.status == 'A'" class="tablaEstadoActivo">Activo</label>
+                                            <label *ngIf="row.status == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Usuario</span> {{row.lastuser}}
+                                        </td>
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Ult. Modif</span> {{row.lastdate | date: 'dd/MM/yyyy'}}
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td [attr.colspan]="6">
+                                            No existen registros para mostrar
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+        </div>
+    </div>
+
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.lastuser" [modificacionFecha]="dto.lastdate">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-personacomun-selector></app-personacomun-selector>
+<app-centrocostos-selector></app-centrocostos-selector>
+<app-selector-accountmst></app-selector-accountmst>
+<app-selector-grupo-sub-grupo></app-selector-grupo-sub-grupo>
+<app-selector-afemstcomun></app-selector-afemstcomun>

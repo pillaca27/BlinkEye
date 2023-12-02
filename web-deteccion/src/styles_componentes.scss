@@ -1,0 +1,3559 @@
+/* ARMAS: TABLA - ESTADO COLORES */
+
+* {
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+.input-label {
+    background-color: #e4e9ed00 !important;
+    color: #000000 !important;
+    text-align: center;
+    font-weight: bold;
+    height: 20px;
+    width: 170px;
+    opacity: 0.9 !important;
+    border: aliceblue;
+}
+
+.tablaEstadoActivo {
+    color: rgb(111, 204, 154);
+}
+
+.tablaEstadoInactivo {
+    color: rgb(255, 152, 152);
+}
+
+.tablaEstadoPreparado {
+    color: skyblue;
+}
+
+.tablaEstadoAprobado {
+    color: green;
+}
+
+.tablaEstadoAnulado {
+    color: red;
+}
+
+.tablaEstadoTransferido {
+    color: orange;
+}
+
+.tablaEstadoPagado {
+    color: mediumpurple;
+}
+
+.labelCodigo30 {
+    width: 30px;
+}
+
+.labelCodigoMedio {
+    width: 90px;
+}
+
+.labelCodigo80 {
+    width: 80px;
+}
+
+.labelCodigo93 {
+    width: 93px;
+}
+
+.labelCodigoEstado {
+    width: 101px;
+}
+
+.labelCodigoFechaDoc {
+    width: 100px;
+}
+
+.labelCodigoMedioGrande {
+    width: 110px;
+}
+
+.labelCodigo120 {
+    width: 120px;
+}
+
+.labelCodigo130 {
+    width: 130px;
+}
+
+.labelCodigo135 {
+    width: 135px;
+}
+
+.labelCodigoMedioGrandeP {
+    width: 113px;
+}
+
+.labelCodigoMedioGrande2 {
+    width: 109px;
+}
+
+.labelCodigoPreparadopor {
+    width: 116px;
+}
+
+.labelCodigoCompania {
+    width: 129px;
+}
+
+.labelCodigo105 {
+    width: 110px;
+}
+
+.labelCodigo135 {
+    width: 135px;
+}
+
+.labelCodigo140 {
+    width: 140px;
+}
+
+.labelCodigo141 {
+    width: 141px;
+}
+
+.labelCodigo146 {
+    width: 146px;
+}
+
+.labelCodigo148 {
+    width: 148px;
+}
+
+.labelCodigo150 {
+    width: 150px;
+}
+
+.labelCodigo158 {
+    width: 158px;
+}
+
+.labelCodigo160 {
+    width: 160px;
+}
+
+.labelCodigo200 {
+    width: 200px;
+}
+
+.check_obligaciones {
+    margin-top: 2px;
+}
+
+.check_obligaciones2 {
+    margin-top: 2px;
+    padding-left: -11px;
+}
+
+.div_obligaciones {
+    padding-left: 0.4rem;
+}
+
+.div_obligaciones_colum1 {
+    padding-left: 0.4rem;
+    width: 237px;
+}
+
+.div_obligaciones_colum_check {
+    padding-left: 0.4rem;
+    width: 130px;
+}
+
+.div_obligaciones_colum_check {
+    padding-left: 0.4rem;
+    width: 130px;
+}
+
+.div_obligaciones_colum_check2 {
+    padding-left: 0.4rem;
+    max-width: 180px;
+}
+
+.div_obligaciones_colum_check3 {
+    padding-left: 0.4rem;
+    max-width: 160px;
+}
+
+.voucher {
+    width: 100%;
+    background-color: #e4e9ed00 !important;
+    color: #000000 !important;
+    opacity: 0.9 !important;
+    border: aliceblue;
+    font-weight: bold;
+}
+
+.p-fluid .p-inputtext {
+    display: flex !important;
+}
+
+.p-fluid .p-inputnumber {
+    display: flex !important;
+}
+
+.importante {
+    color: brown !important;
+}
+
+.p-datatable-scrollable-header {
+    margin-right: 0px;
+}
+
+.record_ac {
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_codigo_grande {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_persona {
+    max-width: 264px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_busqueda {
+    max-width: 300px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_sucursal {
+    max-width: 220px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_CodigoGrande {
+    max-width: 120px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_ac_company {
+    max-width: 224px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_ac_codregistro {
+    max-width: 240px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_codigocuenta {
+    max-width: 160px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_flujo {
+    max-width: 150px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_tipodocumento {
+    max-width: 170px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.record_banco {
+    max-width: 135px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
+
+.tablaHeaderTipoDocumento {
+    text-align: center !important;
+    width: 170px !important;
+}
+
+.tablaHeaderTipoDocumentoIzquierda {
+    text-align: left !important;
+    width: 170px !important;
+}
+
+
+/* LEONARDO: TABLA - ESTADO JUICIO-LEGAL COLORES*/
+
+.tablaEstadoTramite {
+    color: #4fb9fe;
+}
+
+.tablaEstadoSentenciado {
+    color: #6a9955;
+}
+
+
+/* DARIO:TABLA - INICIO */
+
+.tablaHeaderCodigoRegistro {
+    text-align: center !important;
+    width: 240px;
+}
+
+.tablaHeaderBanco {
+    text-align: left !important;
+    width: 135px;
+}
+
+.tablaHeaderCodigoRegistroIzquierda {
+    text-align: left !important;
+    width: 240px;
+}
+
+.tablaHeaderAccion0 {
+    text-align: center !important;
+    width: 60px;
+}
+
+.tablaHeaderAccion1 {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaHeaderMontoChico {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaHeaderAccion2 {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderCantidadGrande {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaHeaderAccion3 {
+    text-align: center !important;
+    width: 120px !important;
+}
+
+.tablaHeaderAccion4 {
+    text-align: center !important;
+    width: 140px;
+}
+
+.tablaHeaderAccion5 {
+    text-align: center !important;
+    width: 140px;
+}
+
+.tablaHeaderAccion6 {
+    text-align: center !important;
+    width: 155px;
+}
+
+.tablaHeaderAccion7 {
+    text-align: center !important;
+    width: 160px;
+}
+
+.tablaHeaderReferenciaDocumento {
+    text-align: center !important;
+    width: 190px;
+}
+
+.tablaHeaderCodigoSucursal {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaHeaderCodigoSucursalIzquierda {
+    text-align: left !important;
+    width: 200px;
+}
+
+.tablaHeaderCodigoSucursalDerecha {
+    text-align: right !important;
+    width: 200px;
+}
+
+.tablaHeaderAccion8 {
+    text-align: center !important;
+    width: 175px;
+}
+
+.tablaHeaderAccion9 {
+    text-align: center !important;
+    width: 190px;
+}
+
+.tablaHeaderckeckselect {
+    text-align: center !important;
+    width: 60px;
+}
+
+.tablaHeaderCheckBox1 {
+    text-align: center !important;
+    width: 70px;
+}
+
+.tablaHeaderCheckBox {
+    text-align: center !important;
+    width: 40px;
+}
+
+.tablaColumnaCheckBoxMediano {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderCantidad {
+    text-align: center !important;
+    width: 80px;
+}
+
+.tablaHeaderCodigoChico {
+    text-align: center !important;
+    width: 80px;
+}
+
+.tablaHeaderCodigoSuperChico {
+    text-align: center !important;
+    width: 50px;
+}
+
+.tablaHeaderCodigoChicoDerecha {
+    text-align: right !important;
+    width: 80px;
+}
+
+.tablaHeaderCodigoChico2 {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaHeaderMonedaChico {
+    text-align: center !important;
+    width: 95px;
+}
+
+.tablaHeaderCodigo {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaHeaderCodigo2 {
+    text-align: right !important;
+    width: 120px;
+}
+
+.tablaHeaderCodigoIzquierda {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderCodigoCuenta {
+    text-align: center !important;
+    width: 160px;
+}
+
+.tablaHeaderCodigoCuenta2 {
+    text-align: center !important;
+    width: 170px;
+}
+
+.tablaHeaderCodigoDerecha {
+    text-align: right !important;
+    width: 120px;
+}
+
+.tablaHeaderSucursal {
+    text-align: center !important;
+    width: 220px;
+}
+
+.tablaHeaderSucursalDerecha {
+    text-align: right !important;
+    width: 220px;
+}
+
+.tablaHeaderMoneda {
+    text-align: center !important;
+    width: 65px;
+}
+
+.tablaHeaderMonedaPago {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaHeaderMonedaPago2 {
+    text-align: center !important;
+    width: 60px;
+}
+
+.tablaHeaderMonedaDerecha {
+    text-align: right !important;
+    width: 65px;
+}
+
+.tablaHeaderCompania {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaHeaderCompaniaIzquierda {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaHeaderCompaniaDerecha {
+    text-align: right !important;
+    width: 200px;
+}
+
+.tablaHeaderCodigoGrande {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaHeaderCodigoGrandeDerecha {
+    text-align: right !important;
+    width: 120px;
+}
+
+.tablaHeaderCodigoGrandeX {
+    text-align: center !important;
+    width: 160px;
+}
+
+.tablaHeaderUsuario {
+    /* login de usuario*/
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaHeaderDocumento {
+    /*numero de documento*/
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderAdjunto {
+    /*numero de documento*/
+    text-align: center !important;
+    width: 180px;
+}
+
+.tablaHeaderFactura {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaHeaderDocumentoAdjunto {
+    /*numero de documento*/
+    text-align: center !important;
+    width: 250px !important;
+}
+
+.tablaHeaderFecha {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderFechaMedio {
+    text-align: center !important;
+    width: 130px;
+}
+
+.tablaHeaderFechaGrande {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeaderFechaHora {
+    text-align: center !important;
+    width: 180px;
+}
+
+.tablaHeaderHora {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderDia {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderPeriodo {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderKPIMes {
+    text-align: center !important;
+    width: 50px;
+}
+
+.tablaHeaderKPIMesDerecha {
+    text-align: right !important;
+    width: 50px;
+}
+
+.tablaHeaderSecuencia {
+    text-align: center !important;
+    width: 65px;
+}
+
+.tablaHeaderKPIAnio {
+    text-align: center !important;
+    width: 35px;
+}
+
+.tablaHeaderKPISimbolo {
+    text-align: center !important;
+    width: 15px;
+}
+
+.tablaHeaderMonto {
+    text-align: center !important;
+    width: 115px;
+}
+
+.tablaHeaderMontoDocumento {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderMontoSaldo {
+    text-align: center !important;
+    width: 130px;
+}
+
+.tablaHeaderMontoCajaChica {
+    text-align: center !important;
+    width: 85px;
+}
+
+.tablaHeaderPorcentaje {
+    text-align: center !important;
+    width: 40px;
+}
+
+.tablaHeaderMontoSmall {
+    text-align: center !important;
+    width: 70px;
+}
+
+.tablaHeaderMonedaChico {
+    text-align: center !important;
+    width: 95px;
+}
+
+.tablaHeaderRequerimiento {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeaderMontoMedio {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeaderMontoGrande {
+    text-align: center !important;
+    width: 170px;
+}
+
+.tablaHeaderNumero {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaHeaderTexto {
+    text-align: center !important;
+}
+
+.tablaHeaderEstado {
+    text-align: center !important;
+    width: 105px;
+}
+
+.tablaHeaderEstadoDerecha {
+    text-align: right !important;
+    width: 105px;
+}
+
+.tablaHeaderEstadoGrande {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaHeaderEstadoFlujo {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeaderEstadoDetalle {
+    text-align: center !important;
+    width: 160px;
+}
+
+.tablaHeaderEstadoComboBox {
+    text-align: center !important;
+    width: 130px;
+}
+
+.tablaHeaderEstadoMedioComboBox {
+    text-align: center !important;
+    width: 180px;
+}
+
+.tablaHeaderTipo {
+    text-align: center !important;
+    width: 100px !important;
+}
+
+.tablaHeaderNombre {
+    text-align: left !important;
+    width: 300px;
+}
+
+.tablaHeaderNombreChico {
+    text-align: left !important;
+    width: 150px;
+}
+
+.tablaHeaderNombreMedio {
+    text-align: left !important;
+    width: 200px;
+}
+
+.tablaHeaderNombreOrg {
+    text-align: center !important;
+    width: 550px;
+}
+
+.tablaHeaderUbigeo {
+    text-align: center !important;
+    width: 240px;
+}
+
+.tablaHeaderUbigeoGrande {
+    text-align: center !important;
+    width: 350px;
+}
+
+.tablaHeaderCorreo {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaHeaderDireccion {
+    text-align: center !important;
+    width: 400px;
+}
+
+.tablaHeaderNombreGrandeEvento {
+    text-align: center !important;
+    width: 480px;
+}
+
+.tablaHeaderCentro {
+    text-align: center !important;
+}
+
+.tablaHeaderIzquierda {
+    text-align: left !important;
+}
+
+.tablaHeaderIzquierdaCenter {
+    width: 270px !important;
+    text-align: center !important;
+}
+
+.tablaHeaderIzquierdaAc {
+    width: 270px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderPreparadoPor {
+    width: 300px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderBusqueda {
+    width: 300px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderPresupuestal {
+    width: 360px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderPreparadoPorDerecha {
+    width: 300px !important;
+    text-align: right !important;
+}
+
+.tablaHeaderPreparadoPorCenter {
+    width: 300px !important;
+    text-align: center !important;
+}
+
+.tablaHeaderTelefono {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeaderCelular {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaHeader2NombreProceso {
+    width: 264px !important;
+    text-align: center !important;
+}
+
+.tablaHeaderNombreProceso {
+    width: 264px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderBoxSemaforo {
+    /*  x5 de los CARDS */
+    width: 1225px !important;
+    text-align: left !important;
+}
+
+.tablaHeaderCheckBoxMediano {
+    text-align: center !important;
+    width: 100px;
+}
+
+//REPORTE TRANSPORTE
+.tablaHeaderKardexMes {
+    width: 300px !important;
+    text-align: center !important;
+}
+
+.tablaHeaderCombustibleAnualMes {
+    width: 200px !important;
+    text-align: center !important;
+}
+
+
+/* DARIO:TABLA - FIN */
+
+
+/* DARIO:TABLA COLUMNA - INICIO */
+
+.tablaColumnaAccion0 {
+    text-align: center !important;
+    width: 60px !important;
+}
+
+.tablaColumnaAccion1 {
+    text-align: center !important;
+    width: 90px !important;
+}
+
+.tablaColumnaAccion2 {
+    text-align: center !important;
+    width: 100px !important;
+}
+
+.tablaColumnaAccion3 {
+    text-align: center !important;
+    width: 120px !important;
+}
+
+.tablaColumnaAccion4 {
+    text-align: center !important;
+    width: 140px !important;
+}
+
+.tablaColumnaAccion5 {
+    text-align: center !important;
+    width: 140px !important;
+}
+
+.tablaColumnaAccion6 {
+    text-align: center !important;
+    width: 155px !important;
+}
+
+.tablaColumnaAccion7 {
+    text-align: center !important;
+    width: 160px !important;
+}
+
+.tablaColumnaAccion8 {
+    text-align: center !important;
+    width: 175px !important;
+}
+
+.tablaColumnaAccion9 {
+    text-align: center !important;
+    width: 190px !important;
+}
+
+.tablaColumnaCodigoChico {
+    text-align: center !important;
+    width: 80px;
+}
+
+.tablaColumnaCodigoSuperChico {
+    text-align: center !important;
+    width: 50px;
+}
+
+.tablaColumnaCodigoChico2 {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaColumnaCheckBox {
+    text-align: center !important;
+    width: 40px;
+}
+
+.tablaColumnaCheckBox1 {
+    text-align: center !important;
+    width: 70px;
+}
+
+.tablaCheckBoxCentro {
+    justify-content: center !important;
+    align-items: center !important;
+}
+
+.tablaColumnaCodigo {
+    text-align: center !important;
+    width: 120px !important;
+}
+
+.tablaColumnaCantidadGrande {
+    text-align: right !important;
+    width: 90px;
+}
+
+.tablaColumnaCantidadGrandeCentro {
+    text-align: center !important;
+    width: 90px;
+}
+
+.tablaColumnaCodigoIzquierda {
+    text-align: left !important;
+    width: 120px !important;
+}
+
+.tablaColumnaCodigoCuenta {
+    text-align: left !important;
+    width: 160px !important;
+}
+
+.tablaColumnaCodigoCuentaCenter {
+    text-align: center !important;
+    width: 160px !important;
+}
+
+.tablaColumnaCodigoCuentaCenter2 {
+    text-align: center !important;
+    width: 170px !important;
+}
+
+.tablaColumnaTipoDocumento {
+    text-align: left !important;
+    width: 170px !important;
+}
+
+.tablaColumnaCodigoSucursal {
+    text-align: center !important;
+    width: 200px;
+}
+
+.tablaColumnaCodigoSucursalIzquierda {
+    text-align: left !important;
+    width: 200px;
+}
+
+.tablaColumnaCodigoGrande {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaColumnaCodigoGrandeDerecha {
+    text-align: right !important;
+    width: 120px;
+}
+
+.tablaColumnaCodigoGrandeX {
+    text-align: center !important;
+    width: 160px;
+}
+
+.tablaColumnaTipoDocumentoDerecha {
+    text-align: right !important;
+    width: 170px !important;
+}
+
+.tablaColumnaCodigoGrandeIzquierda {
+    text-align: left !important;
+    width: 120px;
+}
+
+.tablaColumnaKPIMes {
+    text-align: center !important;
+    width: 50px;
+}
+
+.tablaColumnaKPIAnio {
+    text-align: center !important;
+    width: 35px !important;
+}
+
+.tablaColumnaTipoDocumentoCentro {
+    text-align: center !important;
+    width: 170px !important;
+}
+
+.tablaColumnaKPISimbolo {
+    text-align: center !important;
+    width: 20px;
+}
+
+.tablaColumnaCompania {
+    text-align: center !important;
+    width: 200px !important;
+}
+
+.tablaColumnaCompaniaIzquierda {
+    text-align: left !important;
+    width: 200px !important;
+}
+
+.tablaColumnaDocumento {
+    /*numero de documento*/
+    text-align: center;
+    width: 100px !important;
+}
+
+.tablaColumnaAdjunto {
+    /*adjunto grilla*/
+    text-align: center;
+    width: 180px !important;
+}
+
+.tablaColumnaCodigoRegistro {
+    text-align: center !important;
+    width: 240px !important;
+}
+
+.tablaColumnaCodigoRegistroIzquierda {
+    text-align: left !important;
+    width: 240px !important;
+}
+
+.tablaColumnaDocumentoAdjunto {
+    /*numero de documento*/
+    text-align: center !important;
+    width: 250px !important;
+}
+
+.tablaColumnaBoxSemaforo {
+    width: 245px;
+}
+
+.tablaColumnaNombreProceso {
+    width: 264px !important;
+    text-align: left !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaNombreProcesoDerecha {
+    width: 264px !important;
+    text-align: right !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaUsuario {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaColumnaCantidad {
+    text-align: right !important;
+    width: 80px;
+}
+
+.tablaColumnaCantidadDerecha {
+    text-align: right !important;
+    width: 80px;
+}
+
+.tablaColumnaFecha {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaColumnaFechaMedio {
+    text-align: center !important;
+    width: 130px;
+}
+
+.tablaColumnaRequerimiento {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaColumnaBanco {
+    text-align: left !important;
+    width: 135px;
+}
+
+.tablaColumnaFechaGrande {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaColumnaFechaHora {
+    text-align: center;
+    width: 180px;
+}
+
+.tablaColumnaHora {
+    text-align: center;
+    width: 100px;
+}
+
+.tablaColumnaDia {
+    text-align: center;
+    width: 100px;
+}
+
+.tablaColumnaPeriodo {
+    text-align: center !important;
+    width: 100px;
+}
+
+.tablaColumnaMonto {
+    text-align: right !important;
+    width: 115px;
+}
+
+.tablaColumnaMoneda {
+    text-align: left !important;
+    width: 65px;
+}
+
+.tablaColumnaMonedaDerecha {
+    text-align: right !important;
+    width: 65px;
+}
+
+.tablaColumnaMonedaPago {
+    text-align: left !important;
+    width: 90px;
+}
+
+.tablaColumnaMonedaPago2 {
+    text-align: right !important;
+    width: 60px;
+}
+
+.tablaColumnaMonedaChico {
+    text-align: center !important;
+    width: 95px;
+}
+
+.tablaColumnaMontoCajaChica {
+    text-align: right !important;
+    width: 85px;
+}
+
+.tablaColumnaPorcentaje {
+    text-align: right !important;
+    width: 40px;
+}
+
+.tablaColumnaMontoDocumento {
+    text-align: right !important;
+    width: 100px;
+}
+
+.tablaColumnaMontoSaldo {
+    text-align: right !important;
+    width: 130px;
+}
+
+.tablaColumnaMontoMedio {
+    text-align: right !important;
+    width: 150px;
+}
+
+.tablaColumnaMontoGrande {
+    text-align: right !important;
+    width: 100px;
+}
+
+.tablaColumnaNumero {
+    text-align: right !important;
+    width: 100px;
+}
+
+.tablaColumnaTexto {
+    text-align: left !important;
+}
+
+.tablaColumnaEstado {
+    text-align: center !important;
+    width: 105px;
+}
+
+.tablaColumnaEstadoIzquierda {
+    text-align: left !important;
+    width: 105px;
+}
+
+.tablaColumnaEstadoGrande {
+    text-align: center !important;
+    width: 120px;
+}
+
+.tablaColumnaSecuencia {
+    width: 65px !important;
+    text-align: center !important;
+}
+
+.tablaColumnaSecuenciaDerecha {
+    width: 65px !important;
+    text-align: right !important;
+}
+
+.tablaColumnaEstadoFlujo {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaColumnaEstadoFlujoIzquierda {
+    text-align: left !important;
+    width: 150px;
+}
+
+.tablaColumnaEstadoComboBox {
+    text-align: center;
+    width: 130px;
+}
+
+.tablaColumnaEstadoDetalle {
+    text-align: center;
+    width: 160px;
+}
+
+.tablaColumnaSucursal {
+    text-align: center !important;
+    width: 220px;
+}
+
+.tablaColumnaTipo {
+    text-align: center !important;
+    width: 100px !important;
+}
+
+.tablaColumnaNombre {
+    text-align: left;
+    width: 300px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaMontoChico {
+    text-align: right !important;
+    width: 90px;
+}
+
+.tablaColumnaNombreGrandeEvento {
+    text-align: left;
+    width: 480px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaReferenciaDocumento {
+    text-align: center !important;
+    width: 190px !important;
+}
+
+.tablaColumnaNombreChico {
+    text-align: left;
+    width: 150px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaNombreMedio {
+    text-align: left;
+    width: 200px;
+    word-wrap: break-word;
+}
+
+.tablaColumnaNombreOrg {
+    text-align: left;
+    width: 550px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaMontoSmall {
+    text-align: right !important;
+    width: 70px;
+}
+
+.tablaColumnaUbigeo {
+    text-align: left;
+    width: 240px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaUbigeoGrande {
+    text-align: left;
+    width: 350px !important;
+    word-wrap: break-word;
+}
+
+.tablaColumnaCorreo {
+    text-align: left;
+    width: 200px;
+}
+
+.tablaColumnaEdad {
+    text-align: left;
+    width: 210px;
+}
+
+.tablaColumnaDireccion {
+    text-align: left !important;
+    width: 400px !important;
+}
+
+.tablaColumnaCentro {
+    text-align: center !important;
+}
+
+.tablaColumnaIzquierda {
+    text-align: left !important;
+}
+
+.tablaColumnaIzquierdaAc {
+    text-align: left !important;
+    width: 270px !important;
+}
+
+.tablaColumnaPreparadoPor {
+    text-align: left !important;
+    width: 300px !important;
+}
+
+.tablaColumnaPreparadoPor2 {
+    text-align: right !important;
+    width: 300px !important;
+}
+
+.tablaColumnaBusqueda {
+    text-align: left !important;
+    width: 300px !important;
+}
+
+.tablaColumnaPresupuestal {
+    text-align: left !important;
+    width: 360px !important;
+}
+
+.tablaColumnaDerecha {
+    text-align: right !important;
+}
+
+.tablaCompletaDerecha {
+    text-align: right;
+    width: 100%;
+}
+
+.tablaCompletaCentro {
+    text-align: center;
+    width: 100%;
+}
+
+.tablaCompletaIzquieda {
+    text-align: left;
+    width: 100%;
+}
+
+.tablaColumnaTelefono {
+    text-align: center !important;
+    width: 150px;
+}
+
+.tablaColumnaCelular {
+    text-align: center;
+    width: 150px;
+}
+
+.tablaColumnaFactura {
+    text-align: center !important;
+    width: 200px !important;
+}
+
+
+/* DARIO:TABLA COLUMNA - FIN */
+
+.p-md-1,
+.p-md-2,
+.p-md-3,
+.p-md-4,
+.p-md-5,
+.p-md-6,
+.p-md-7,
+.p-md-8,
+.p-md-9,
+.p-md-10,
+.p-md-11,
+.p-md-12 {
+    padding-bottom: 0rem !important;
+}
+
+.p-col-1,
+.p-col-2,
+.p-col-3,
+.p-col-4,
+.p-col-5,
+.p-col-6,
+.p-col-7,
+.p-col-8,
+.p-col-9,
+.p-col-10,
+.p-col-11,
+.p-col-12 {
+    padding-top: 0.3rem !important;
+}
+
+.tablaBotonIcono {
+    /*background-color: #ffffff00 !important;*/
+    border: 1px solid #ffffff00 !important;
+    box-shadow: 0 0px 0px 0 rgba(0, 0, 0, 0) !important;
+    /*margin-right: 10px !important;*/
+}
+
+.tablaBotonIconoEditar {}
+
+.tablaBotonIconoVer {}
+
+.tablaBotonIconoAnular {}
+
+.tablaBotonIconoEliminar {}
+
+.breadcrumbEscritorio {
+    display: flex;
+}
+
+.breadcrumbMovil {
+    display: none;
+}
+
+.p-treetable .p-treetable-tbody>tr>td {
+    padding: 0.1rem 1rem 0.1rem 1rem;
+}
+
+.tablaColumnaAccion1>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion4>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion2>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion3>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion4>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion5>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion6>table {
+    width: 100%;
+    float: left;
+}
+
+.tablaColumnaAccion1>table>tr>th {
+    width: 100% !important;
+    text-align: center;
+}
+
+.tablaColumnaAccion2>table>tr>th {
+    width: 50% !important;
+    text-align: center;
+}
+
+.tablaColumnaAccion3>table>tr>th {
+    width: 33% !important;
+    text-align: center;
+}
+
+.tablaColumnaAccion4>table>tr>th {
+    width: 25% !important;
+    text-align: center;
+}
+
+.tablaColumnaAccion5>table>tr>th {
+    width: 20% !important;
+    text-align: center;
+}
+
+.tablaColumnaAccion6>table>th {
+    width: 16.5% !important;
+    text-align: center;
+}
+
+.p-button.p-button-icon-only.p-button-rounded {
+    height: 1.357rem !important;
+    border: none !important;
+}
+
+.inputCodigo {
+    width: 40% !important;
+}
+
+.inputMonto {
+    width: 40% !important;
+}
+
+.inputFecha {
+    width: 40% !important;
+    text-align: center;
+}
+
+.inputFechaHora {
+    width: 80% !important;
+    text-align: center;
+}
+
+.login-body .login-wrapper .login-panel .login-form {
+    width: 250px;
+}
+
+.login-body .login-wrapper .login-panel .login-form>input {
+    width: 100%;
+    max-width: 100%;
+}
+
+.login-body .login-wrapper .login-panel .login-form>button {
+    width: 100%;
+    max-width: 100%;
+}
+
+@media screen and (min-width: 0em) and (max-width: 40em) {
+    body {
+        zoom: 100%;
+    }
+    .login-body .login-wrapper .login-panel .login-form {
+        width: 100%;
+        margin-top: 0rem;
+    }
+    .p-col-1,
+    .p-col-2,
+    .p-col-3,
+    .p-col-4,
+    .p-col-5,
+    .p-col-6,
+    .p-col-7,
+    .p-col-8,
+    .p-col-9,
+    .p-col-10,
+    .p-col-11,
+    .p-col-12 {
+        padding-top: 0.3rem !important;
+    }
+    .labelCodigoMedio {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo30 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo80 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoEstado {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo93 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo140 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo130 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo135 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo141 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoFechaDoc {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoMedioGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoMedioGrandeP {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoPreparadopor {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoCompania {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo105 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaFactura {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo200 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo135 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMonedaPago2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo146 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo148 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo158 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCantidadGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCantidadGrandeCentro {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo160 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigoChico {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaBanco {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones_colum1 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones_colum_check {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones_colum_check2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones_colum_check3 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .div_obligaciones_colum2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .check_obligaciones {
+        text-align: left !important;
+        padding-left: 20px;
+        //width: 100% !important;
+    }
+    .check_obligaciones2 {
+        text-align: left !important;
+        padding-left: 20px;
+        width: 100% !important;
+    }
+    .p-col-0 {
+        display: none;
+    }
+    .app-auditoria {
+        display: none;
+    }
+    .tablaColumnaAccion1 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion3 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion4 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion5 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion6 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaEstadoFlujo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaEstadoFlujoIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaEstadoIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoSucursal {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoSucursalIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion7 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaSecuencia {
+        width: 100% !important;
+        text-align: left !important;
+    }
+    .tablaColumnaSecuenciaDerecha {
+        width: 100% !important;
+        text-align: left !important;
+    }
+    .tablaColumnaAccion8 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAccion9 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCantidad {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoChico {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCantidadDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoChico {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoSuperChico {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoChico2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaKPIMes {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaKPIAnio {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaKPISimbolo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCheckBox {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCheckBox1 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMoneda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMonedaDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMonedaPago {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCheckBoxMediano {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoCuenta {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoCuentaCenter {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoCuentaCenter2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTipoDocumento {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCompania {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCompaniaIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoGrandeDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoGrandeX {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCodigoGrandeIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaUsuario {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaDocumento {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaAdjunto {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaDocumentoAdjunto {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaFecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo150 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaFechaGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaFechaHora {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoDocumento {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaHora {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaDia {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaPeriodo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMonto {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoSaldo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTipoDocumentoDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoCajaChica {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaPorcentaje {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMonedaChico {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaNumero {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTexto {
+        text-align: left !important;
+    }
+    .tablaColumnaEstado {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaEstadoDetalle {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaSucursal {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTipo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaNombre {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .tablaColumnaNombreGrandeEvento {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .tablaColumnaNombreChico {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .tablaColumnaNombreMedio {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .tablaColumnaNombreOrg {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .tablaColumnaRequerimiento {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaUbigeo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaUbigeoGrande {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCorreo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaDireccion {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCentro {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaIzquierda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaIzquierdaAc {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaReferenciaDocumento {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaMontoSmall {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaPreparadoPor {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaPreparadoPor2 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaBusqueda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaPresupuestal {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaCompletaDerecha {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTipoDocumentoCentro {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaCompletaCentro {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaCompletaIzquieda {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaTelefono {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaCelular {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .labelCodigo120 {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .textosPequenio720p {
+        font-size: 1px !important;
+    }
+    .tablaColumnaBoxSemaforo {
+        text-align: left !important;
+        width: 100% !important;
+    }
+    .tablaColumnaNombreProceso {
+        text-align: left !important;
+        width: 100% !important;
+        word-wrap: break-word;
+    }
+    .textochicoKPI {
+        font-size: 1rem !important;
+    }
+    .p-breadcrumb {
+        border: 1px solid #dee2e600;
+        border-radius: 4px;
+        padding: 1rem;
+    }
+    .p-breadcrumb ul li .p-menuitem-link .p-menuitem-text {
+        font-size: 14px !important;
+    }
+    .p-breadcrumb ul li.p-breadcrumb-chevron {
+        margin: 0 0 0 0;
+        font-size: 14px;
+    }
+    .p-paginator .p-paginator-pages .p-paginator-page {
+        margin: 0rem;
+    }
+    .topbar-right {
+        display: none;
+        color: #495057;
+    }
+    .layout-wrapper .layout-topbar {
+        height: 4.125rem !important;
+    }
+    .layout-wrapper .layout-content-wrapper {
+        padding-top: 4.125rem;
+    }
+    .p-paginator .p-paginator-current {
+        display: none;
+    }
+    .breadcrumbEscritorio {
+        display: none;
+    }
+    .breadcrumbMovil {
+        display: flex;
+    }
+    .p-datatable .p-datatable-tbody>tr:nth-child(even) {
+        background: #e6edff;
+    }
+    .p-datatable .p-datatable-tbody>tr:nth-child(even).p-highlight {
+        background: #e6edff;
+        color: #495057;
+    }
+    .tablaColumnaAccion1>table {
+        width: 40% !important;
+        float: left;
+    }
+    .tablaColumnaAccion2>table {
+        width: 40% !important;
+        float: left;
+    }
+    .tablaColumnaAccion3>table {
+        width: 40% !important;
+        float: left;
+    }
+    .tablaColumnaAccion4>table {
+        width: 40% !important;
+        float: left;
+    }
+    .tablaColumnaAccion5>table {
+        width: 40% !important;
+        float: left;
+    }
+    .tablaColumnaAccion6>table {
+        width: 40% !important;
+        float: left;
+    }
+    .layout-wrapper .layout-topbar .topbar-left {
+        justify-content: left;
+    }
+    .login-body .login-wrapper .login-panel {
+        display: block;
+        margin-top: 10%;
+    }
+    .login-body .login-wrapper .login-panel .logo {
+        margin-bottom: 10%;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion1:before {
+        margin-left: 5.4rem !important;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion2:before {
+        margin-left: 5.4rem !important;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion3:before {
+        margin-left: 5.4rem !important;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion4:before {
+        margin-left: 5.4rem !important;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion5:before {
+        margin-left: 5.4rem !important;
+    }
+    .p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion6:before {
+        margin-left: 5.4rem !important;
+    }
+}
+
+
+/*estilo para circulos semaforos*/
+
+.widget-overview-box .overview-icon {
+    display: inline-block !important;
+    border-radius: 50% !important;
+    width: 3.5em !important;
+    height: 3.5rem !important;
+    line-height: 3.5rem !important;
+    text-align: center !important;
+    vertical-align: middle !important;
+}
+
+.buttonretroceder:hover {
+    color: #17aac0;
+}
+
+.descprincipal:hover {
+    color: #163347;
+}
+
+
+/* box on hover semaforos*/
+
+.boxSemaforo {
+    transition: all 0.2s ease-in-out;
+}
+
+.boxSemaforo:hover {
+    transform: scale(1.05);
+    z-index: 9999;
+    box-shadow: 2px 2px 2px #6c757d6b;
+}
+
+// SECCION
+.p-fieldset .p-fieldset-content {
+    padding-top: 0.1rem !important;
+    padding-bottom: 1rem !important;
+}
+
+.p-card {
+    padding-bottom: 1rem !important;
+    margin-bottom: 0.1rem !important;
+}
+
+.p-card .p-card-body {
+    padding-top: 0.1rem !important;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight {
+    background: #2C87CA;
+    color: white;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+    border: 0px solid #49505721;
+    padding-top: 0rem !important;
+    padding-left: 0.2rem !important;
+    padding-bottom: 0rem !important;
+    padding-right: 0.2rem !important;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    padding: 0.2rem 1rem !important;
+}
+
+.p-datepicker table td {
+    padding: 0.1rem !important;
+}
+
+.p-datepicker table td>span {
+    width: 2rem !important;
+    height: 2rem !important;
+}
+
+.p-datatable .p-datatable-thead>tr>th {
+    padding: 0.2rem !important;
+}
+
+.botonesSeccion {
+    margin-bottom: 0.8rem !important;
+    margin-top: 0.5rem !important;
+}
+
+.botonesSeccionOB {
+    margin-bottom: 0.1rem !important;
+    margin-top: 0.1rem !important;
+}
+
+.botonesSeccionAlter {
+    margin-bottom: 0rem !important;
+    margin-top: 0rem !important;
+}
+
+.seccionAuditoria {
+    margin-bottom: 1rem !important;
+}
+
+.p-grid {
+    margin-top: 0rem !important;
+}
+
+.p-dialog .p-dialog-header {
+    padding-top: 0.5rem !important;
+    padding-bottom: 0.5rem !important;
+    padding-left: 1rem !important;
+    padding-right: 1rem !important;
+}
+
+.p-panelmenu .p-panelmenu-header>a {
+    padding-top: 0.6rem !important;
+    padding-bottom: 0.6rem !important;
+    padding-left: 0.6rem !important;
+    padding-right: 0.1rem !important;
+    font-size: 12.5px !important;
+}
+
+.p-panelmenu .p-panelmenu-header>a .p-panelmenu-icon {
+    margin-right: 0.5rem !important;
+    font-size: 9px !important;
+}
+
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link {
+    padding: 0.34rem !important;
+    font-size: 12px !important;
+    margin-left: 0.7rem !important;
+}
+
+.p-panelmenu-icon {
+    order: 1 !important; // to be the first item on right side.
+}
+
+.p-menuitem-text {
+    flex-grow: 1 !important; // to fill the whole space and push the icon to the end
+}
+
+.p-panelmenu .p-panelmenu-header>a .p-panelmenu-icon {
+    margin-right: 0.5rem !important;
+}
+
+.p-panelmenu .p-panelmenu-header>a .p-menuitem-icon {
+    margin-right: 0.01rem !important;
+}
+
+.p-panelmenu .p-panelmenu-content .p-menuitem .p-menuitem-link .p-menuitem-icon {
+    margin-right: 0.4rem !important;
+    width: 1rem;
+    text-align: center;
+}
+
+.botonGrilla {
+    height: 1rem !important;
+}
+
+.botonGrilla-selected {
+    height: 1rem !important;
+    color: white;
+    background-color: transparent;
+    border-color: transparent;
+}
+
+.p-datatable .p-paginator-bottom {
+    font-size: 11px !important;
+}
+
+.p-paginator .p-paginator-first,
+.p-paginator .p-paginator-prev,
+.p-paginator .p-paginator-next,
+.p-paginator .p-paginator-last {
+    background-color: rgba(255, 255, 255, 0) !important;
+}
+
+.p-paginator .p-paginator-pages .p-paginator-page.p-highlight {
+    background: #e3f2fd00;
+    color: #001aff;
+    font-weight: bold;
+}
+
+input.ng-untouched.ng-pristine.p-inputtext.p-component.ng-star-inserted {
+    width: 100%;
+}
+
+.sinespacioanchoKPI {
+    padding: 0rem !important;
+    margin: 0rem !important;
+}
+
+//MEDIA SCREEN SOLO PARA KPI INICIO
+@media screen and (min-width: 41em) {
+    .textochicoKPI {
+        font-size: 0.5rem !important;
+    }
+}
+
+@media screen and (min-width: 85.375em) {
+    .textochicoKPI {
+        font-size: 0.7rem !important;
+    }
+}
+
+@media screen and (min-width: 90em) {
+    .textochicoKPI {
+        font-size: 0.9rem !important;
+    }
+}
+
+//MEDIA SCREEN SOLO PARA KPI FIN
+.p-paginator .p-paginator-pages .p-paginator-page {
+    margin: 0rem !important;
+}
+
+.p-fluid .p-inputnumber .p-inputnumber-input {
+    text-align: right;
+}
+
+input:invalid {
+    border: 1px solid rgb(221, 0, 0) !important;
+    outline: none;
+}
+
+input:valid {
+    border: 1px solid #ced4da !important;
+    outline: none;
+}
+
+textarea:invalid {
+    border: 1px solid rgb(221, 0, 0) !important;
+    outline: none;
+}
+
+textarea:valid {
+    border: 1px solid #ced4da !important;
+    outline: none;
+}
+
+textarea {
+    display: flex;
+    margin-left: 1px;
+}
+
+@mixin clearfix() {
+    &:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+}
+
+@mixin border-box() {
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+}
+
+$teamSecondaryTextColor: #aeb0b5;
+
+/*Chat*/
+
+$messagefromBorderColor: #4aa564;
+$messageownBorderColor: #e31c3d;
+$messageBgColor: #f4f4f4;
+$messageTimeTextColor: #aeb0b5;
+$messageBorderColor: #d6d7d9;
+$messageIconColor: #d6d7d9;
+.chat {
+    .p-panel-content {
+        padding: 0;
+    }
+    ul {
+        padding: 0;
+        margin: 0;
+        list-style-type: none;
+        li {
+            padding: 16px 0;
+            @include clearfix();
+            font-size: 0;
+            .message-meta {
+                font-size: 14px;
+                width: 160px;
+                @include border-box();
+                display: inline-block;
+                vertical-align: top;
+                padding: 8px;
+                text-align: left;
+                img {
+                    width: 48px;
+                    height: 48px;
+                    display: block;
+                }
+                .name {
+                    font-weight: 600;
+                }
+                .time {
+                    color: $teamSecondaryTextColor;
+                    display: block;
+                }
+            }
+            .message {
+                font-size: 14px;
+                @include border-box();
+                width: calc(100% - 160px);
+                padding: 12px;
+                background-color: $messageBgColor;
+                display: inline-block;
+                vertical-align: top;
+            }
+            &.message-from {
+                .message-meta {
+                    border-left: 4px solid $messagefromBorderColor;
+                    img {
+                        float: left;
+                        margin-right: 8px;
+                    }
+                }
+            }
+            &.message-own {
+                .message-meta {
+                    border-right: 4px solid $messageownBorderColor;
+                    img {
+                        float: right;
+                        margin-left: 8px;
+                    }
+                }
+            }
+        }
+    }
+    .write-message {
+        border-top: 1px solid $messageBorderColor;
+        margin-top: 10px;
+        position: relative;
+        .i1 {
+            font-size: 24px;
+            color: $messageIconColor;
+            position: absolute;
+            left: 8px;
+            top: 50%;
+            margin-top: -14px;
+        }
+        .i2 {
+            font-size: 24px;
+            color: $messageIconColor;
+            position: absolute;
+            left: 50px;
+            top: 50%;
+            margin-top: -14px;
+        }
+        input {
+            @include border-box();
+            border: 0 none;
+            width: 100%;
+            height: 40px;
+            font-size: 14px;
+            padding-left: 90px;
+            &:focus {
+                outline: 0 none;
+            }
+        }
+    }
+    .p-checkbox .p-checkbox-box .p-checkbox-icon {
+        transition-duration: 0.2s;
+        color: black !important;
+        font-size: 14px;
+    }
+}
+
+
+/* INICIO*/
+
+
+/* TABLES*/
+
+.p-datatable .p-datatable-thead>tr>th {
+    text-align: left;
+    padding: 1rem;
+    font-weight: 700;
+    border-top: 1px solid rgba(100, 121, 143, 0.122);
+    //color: #495057;
+    background: #ffffff;
+    letter-spacing: 0.01785714em;
+    line-height: 1.25rem;
+    //hyphens: auto;
+    word-break: break-word;
+    font-size: 0.937rem;
+    color: #202124;
+    transition: box-shadow 0.2s;
+}
+
+.p-datatable .p-datatable-tbody>tr>td {
+    padding: 0.286em 0.571em;
+    text-align: left;
+    font-weight: 500;
+    font-size: 0.977rem;
+    border: 1px solid #49505721;
+    border: 0px solid #49505721;
+    padding-top: 0.3rem !important;
+    padding-left: 0.2rem !important;
+    padding-bottom: 0.3rem !important;
+    padding-right: 0.2rem !important;
+    box-shadow: inset 0 -1px 0 0 rgb(100 121 143 / 12%);
+}
+
+.p-datatable.p-datatable-hoverable-rows .p-datatable-tbody>tr:not(.p-highlight):hover {
+    color: #202124;
+    -webkit-user-drag: none;
+    user-select: none;
+    //display: inline-flex;
+    position: relative;
+    box-shadow: inset 1px 0 0 #dadce0, inset -1px 0 0 #dadce0, 0 1px 2px 0 rgb(60 64 67 / 30%), 0 1px 3px 1px rgb(60 64 67 / 15%);
+    z-index: 2;
+    background: rgba(242, 245, 245, 0.8);
+}
+
+.p-datatable .p-datatable-header {
+    background: #f8f9fa00;
+    border: 0px solid #e9ecef;
+    padding: 0rem 0rem 0rem 0rem;
+    color: #495057;
+    border-width: 0px 0 0px 0;
+    font-weight: 500;
+    font-size: 0.937rem;
+}
+
+
+/* flexbox*/
+
+.p-field.p-grid>label {
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    display: flex;
+    align-items: center;
+    font-weight: 600;
+    color: #0d0c0c;
+    font-size: 0.937rem
+}
+
+.p-tabview .p-tabview-panels {
+    font-weight: 500;
+    flex: 1 1 auto;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    width: 100%;
+    color: #3c4043 !important;
+}
+
+.p-inputgroup .p-inputtext,
+.p-fluid .p-inputgroup .p-inputtext {
+    font-weight: 500;
+    flex: 1 1 auto;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    width: 100%;
+    color: #3c4043 !important;
+}
+
+.p-inputgroup .p-inputtext,
+.p-fluid .p-inputgroup .p-inputtext:disabled {
+    font-weight: 500;
+    flex: 1 1 auto;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    width: 100%;
+    color: #3c4043; // !important;
+}
+
+.p-fluid .p-inputtext {
+    font-weight: 500;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    color: #3c4043 !important;
+}
+
+.p-fluid .p-inputgroup .p-button.p-button-icon-only {
+    color: #1a73e8;
+    border-radius: 4px !important;
+    margin-top: 0px;
+    height: auto;
+    padding: 0.2em;
+}
+
+.p-breadcrumb {
+    background: #ffffff;
+    border: 1px solid #dee2e600;
+    border-radius: 4px;
+    padding: 1rem;
+    color: #1a73e8;
+    font-weight: 700;
+}
+
+.p-breadcrumb ul li .p-menuitem-link .p-menuitem-icon {
+    color: #2C87CA;
+}
+
+.p-breadcrumb ul li .p-menuitem-link .p-menuitem-text {
+    color: #2C87CA;
+    font-size: 16px;
+}
+
+
+/* FIN FLEXBOX*/
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    font-weight: 500;
+    font-size: 0.937rem;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item-group {
+    margin: 0;
+    padding: 0.75rem 1rem;
+    color: #495057;
+    background: #ebebeb;
+    font-weight: 600;
+}
+
+.p-button-label {
+    font-weight: 500;
+    font-size: 0.937rem;
+}
+
+.p-menu .p-menuitem-link {
+    font-size: 0.937rem;
+    font-weight: 600;
+}
+
+
+/* TAB VIEW*/
+
+.p-tabview .p-tabview-nav li.p-highlight .p-tabview-nav-link {
+    background: #ffffff;
+    border-color: #1a73e8 #1a73e8 #ffffff #1a73e8;
+    color: #1a73e8;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-weight: 700;
+}
+
+.p-tabview .p-tabview-nav li .p-tabview-nav-link {
+    border: solid;
+    border-width: 1px;
+    border-color: #ffffff #ffffff #1a73e8 #ffffff;
+    background: #ffffff;
+    color: #6c757d;
+    padding: 0.75rem 1rem;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-weight: 700;
+    border-top-right-radius: 4px;
+    border-top-left-radius: 4px;
+    transition: box-shadow 0.15s;
+    margin: 0 0 -1px 0;
+}
+
+
+/* FIN TABVIEW*/
+
+.p-ai-center {
+    color: #202124;
+}
+
+.p-card {
+    padding-bottom: 1rem !important;
+    margin-bottom: 0.1rem !important;
+    border-radius: 8px;
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    box-shadow: none;
+}
+
+
+/* BUTTONS */
+
+.p-fluid .p-button {
+    background-color: #fff !important;
+    border: 1px solid #dadce0 !important;
+    border-radius: 16px !important;
+    color: black;
+    --mdc-ripple-fg-size: 0;
+    --mdc-ripple-left: 0;
+    --mdc-ripple-top: 0;
+    --mdc-ripple-fg-scale: 1;
+    --mdc-ripple-fg-translate-end: 0;
+    --mdc-ripple-fg-translate-start: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    will-change: transform, opacity;
+    position: relative;
+    outline: none;
+    height: 30px;
+    overflow: hidden;
+}
+
+.p-button .p-button-icon-left {
+    color: #1a73e8;
+}
+
+.p-button .p-button-icon-left {
+    color: #1a73e8;
+}
+
+.p-splitbutton .p-splitbutton-defaultbutton {
+    background-color: #fff;
+    border: 1px solid #dadce0;
+    border-radius: 16px;
+    color: black;
+    --mdc-ripple-fg-size: 0;
+    --mdc-ripple-left: 0;
+    --mdc-ripple-top: 0;
+    --mdc-ripple-fg-scale: 1;
+    --mdc-ripple-fg-translate-end: 0;
+    --mdc-ripple-fg-translate-start: 0;
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+    will-change: transform, opacity;
+    position: relative;
+    outline: none;
+    overflow: hidden;
+    width: 145px;
+}
+
+
+/* FIN BUTTONS */
+
+
+/* DEFAULTS INPUT, TEXTAREAM ETC...*/
+
+input:disabled {
+    background-color: #d2e3fc !important;
+    color: #3c4043 !important;
+    opacity: 0.9 !important;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+}
+
+input[type="text"]:disabled {
+    background-color: #d2e3fc !important;
+    color: #3c4043 !important;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    opacity: 0.9 !important;
+}
+
+textarea {
+    font-weight: 500;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    color: #3c4043 !important;
+}
+
+textarea:disabled {
+    background-color: #d2e3fc !important;
+    color: #3c4043 !important;
+    opacity: 0.9 !important;
+    border-radius: 4px;
+    font-weight: 600;
+    border: 1px solid #ced4da;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-size: 1rem;
+}
+
+.p-fluid .p-dropdown .p-dropdown-label {
+    width: 0px;
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    font-weight: 500;
+    color: #3c4043;
+}
+
+.p-dropdown .p-dropdown-label {
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    width: 0px;
+    font-weight: 500;
+    color: #3c4043;
+}
+
+.fa-cloud-download-alt:before,
+.fa-print:before,
+.fa-cloud-download:before,
+.fa-cloud-upload:before,
+.fa-file-pdf:before {
+    color: #f29900;
+}
+
+.fa-layer-plus:before,
+.fa-clone:before,
+.fa-file-excel:before,
+.fa-plus:before,
+.p-button .fa-sack-dollar:before {
+    color: #188038;
+}
+
+.fa-times:before,
+.fa-exchange:before,
+.fa-ban:before,
+.fa-window-close:before,
+.fa-trash-alt:before {
+    color: #E31937;
+}
+
+.p-fluid .p-inputgroup .p-button:enabled:hover {
+    background: #0d89ece8;
+    color: #1a73e8 !important;
+    border-color: #0d89ec;
+}
+
+
+/* CLASES PERSONALIZADAS*/
+
+.checked-label {
+    font-family: "Google Sans", Roboto, Arial, sans-serif;
+    align-items: center;
+    font-weight: 600;
+    color: #0d0c0c;
+    font-size: 0.937rem;
+}
+
+.color-blue .p-button.p-button-icon-only.p-button-rounded {
+    background-color: #2C87CA !important;
+    color: white !important;
+    border: 0px solid #ced4da !important;
+}
+
+.color-white .p-button.p-button-icon-only.p-button-rounded {
+    background-color: #ffffff00;
+    border: 0px solid #ced4da !important;
+}
+
+.color-blue .p-inputnumber .p-inputnumber-input {
+    background-color: #2C87CA !important;
+    color: white !important;
+    border: 0px solid #ced4da !important;
+}
+
+.color-white .p-inputnumber .p-inputnumber-input {
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #ced4da !important;
+}
+
+.color-blue .p-inputgroup .p-inputtext,
+.color-blue .p-fluid .p-inputgroup .p-inputtext {
+    background-color: #2C87CA !important;
+    color: white !important;
+    border: 0px solid #ced4da !important;
+}
+
+.color-blue .p-inputgroup .p-inputtext,
+.color-blue .p-fluid .p-inputgroup .p-inputtext:disabled {
+    background-color: #2C87CA !important;
+    color: white !important;
+    border: 0px solid #ced4da !important;
+}
+
+.color-white .p-inputgroup .p-inputtext,
+.color-white .p-fluid .p-inputgroup .p-inputtext {
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #ced4da !important;
+}
+
+.color-blue .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: #060606;
+    background: #008fff;
+    color: #ffffff;
+}
+
+.color-white .p-checkbox .p-checkbox-box.p-highlight {
+    border-color: #2196F3;
+    background: #008fff;
+    color: #ffffff;
+}
+
+.color-blue .p-inputtext {
+    background-color: #2C87CA !important;
+    color: white !important;
+    border: 0px solid #ced4da !important;
+}
+
+.color-white .p-inputtext {
+    background-color: #ffffff;
+    color: black;
+    border: 1px solid #ced4da !important;
+}
+
+.p-tabview .p-tabview-nav {
+    background: #ffffff;
+    border: 1px solid #dee2e600;
+    border-width: 0 0 2px 0;
+}
+
+.a2R0F {
+    background-color: #fbbc04;
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    margin-right: 6px;
+}
+
+.KcpzD {
+    display: flex;
+    -webkit-box-align: center;
+    box-align: center;
+    align-items: center;
+    font-weight: 500;
+    color: #5f6368;
+    margin-right: 16px;
+}
+
+.a2R0F2 {
+    background-color: #188038;
+    height: 8px;
+    width: 8px;
+    border-radius: 100%;
+    margin-right: 6px;
+}
+
+.KcpzD2 {
+    display: flex;
+    -webkit-box-align: center;
+    box-align: center;
+    align-items: center;
+    font-weight: 500;
+    color: #5f6368;
+    margin-right: 16px;
+}
+
+//AGRUPADOR DE OPCIONES
+.ul-header {
+    box-sizing: content-box;
+    margin: 0;
+    padding: 1rem;
+    top: 3rem !important;
+    width: 314px;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.ul-header-session {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 3px 6px 9px;
+    width: 276px; //366px
+    top: 5rem !important;
+    margin-block-start: 1em;
+    margin-block-end: 1em;
+    margin-inline-start: 0px;
+    margin-inline-end: 0px;
+    padding-inline-start: 40px;
+}
+
+.li-header {
+    display: inline-block;
+    height: 84px;
+    list-style-type: none;
+    margin: 0rem 0rem 1rem 0rem;
+    padding: 6px;
+    position: relative;
+    transition: transform .2s cubic-bezier(.333, 0, 0, 1);
+    vertical-align: top;
+    width: 104px;
+}
+
+.pPUwub {
+    border-bottom: 5px solid transparent;
+    border-right: 5px solid #4273db;
+    border-top: 5px solid transparent;
+    float: left;
+    left: 0;
+    top: 26px;
+    visibility: hidden;
+}
+
+.dKVyP {
+    border-bottom: 5px solid transparent;
+    border-left: 5px solid #4273db;
+    border-top: 5px solid transparent;
+    float: right;
+    left: 79px;
+    top: 26px;
+    visibility: hidden;
+}
+
+.ajYF5e {
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 5px solid #4273db;
+    left: 36px;
+    top: 57px;
+    visibility: hidden;
+}
+
+.NcWGte {
+    border-bottom: 5px solid #4273db;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    left: 36px;
+    top: 0;
+    visibility: hidden;
+}
+
+.pPUwub,
+.dKVyP,
+.NcWGte,
+.ajYF5e {
+    height: 0;
+    position: absolute;
+    width: 0;
+}
+
+.CgwTDb {
+    height: 62px;
+    transform: scale(calc(5/6));
+}
+
+.MrEfLc {
+    display: inline-block;
+    height: 64px;
+    vertical-align: top;
+    width: 64px;
+}
+
+.MrEfLc.dOs7We {
+    background-size: 64px;
+}
+
+.Rq5Gcb {
+    color: #202124;
+    display: inline-block;
+    font-family: "Google Sans", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.09px;
+    line-height: 18px;
+    overflow: inherit;
+    text-overflow: ellipsis;
+    padding: 0.2rem;
+    white-space: nowrap;
+    width: 76px;
+}
+
+.tX9u1b {
+    border-radius: 8px !important;
+    margin: 0;
+    outline: none;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    padding: 0rem !important;
+    display: grid !important;
+    width: 84px;
+}
+
+//menu cerrar session
+.div-cerrar-session {
+    border-bottom-color: rgb(58, 62, 65);
+    border-top-color: rgb(58, 62, 65);
+    border-bottom: 1px solid #dadce0;
+    border-top: 1px solid #dadce0;
+    padding: 16px 0;
+    text-align: center;
+}
+
+.li-cerrar-session {
+    padding: 0rem !important;
+}
+
+.layout-topbar .topbar-menu>li.active-menuitem>ul .li-cerrar-session {
+    padding: 0rem !important;
+}
+
+.layout-topbar .topbar-menu>li>ul .li-cerrar-session {
+    padding: 0rem !important;
+}
+
+.span-cerrar-session-1 {
+    max-width: 246px;
+    outline: 0;
+    padding: 8px 24px !important;
+    outline-color: initial;
+    border: 1px solid #dadce0;
+    display: inline-block !important;
+    text-overflow: ellipsis;
+}
+
+.span-cerrar-session-2 {
+    color: #3c4043 !important;
+    font: 500 14px/20px "Google Sans", Roboto, Helvetica, Arial, sans-serif;
+    letter-spacing: .25px;
+    text-align: center;
+    vertical-align: middle;
+    white-space: nowrap !important;
+}
+
+.span-cerrar-session-3 {
+    color: rgb(192, 186, 178);
+}
+
+.cerrar-session {
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    display: -webkit-box;
+    overflow: hidden;
+    max-height: 40px;
+}
+
+//TITULO DEL MODULO
+.layout-topbar .topbar-menu>li>ul li a .tX9u1b {
+    border-radius: 8px;
+    margin: 0;
+    outline: none;
+    position: absolute;
+    text-align: center;
+    text-decoration: none;
+    width: 84px;
+}
+
+.span-header {
+    background-size: 64px 3169px;
+    height: 62px;
+    transform: scale(calc(5/6));
+}
+
+.font-weight-500 {
+    font-weight: 500;
+}
+
+// IMAGEN CON LETRA DEL PRIMER NOMBRE
+.profileImage {
+    font-family: "Google Sans", Roboto, Helvetica, Arial, sans-serif;
+    width: 3rem;
+    height: 3rem;
+    font-size: 1.3rem;
+    color: black;
+    text-align: center;
+    margin: 2rem 0;
+}
+
+.p-field.p-grid,
+.p-formgrid.p-grid {
+    padding-bottom: 0.3px !important;
+    padding-top: 0.3px !important;
+    padding-right: 0.3rem !important;
+}
+
+.p-datatable-scrollable-body {
+    padding-right: 0px;
+}
+
+.p-dropdown .p-dropdown-label {
+    width: 0px;
+}
+
+.p-fluid .p-dropdown .p-dropdown-label {
+    width: 0px !important;
+}
+
+.p-fluid .p-dropdown {
+    display: flex !important;
+    height: 26.59px !important;
+}
+
+.p-col {
+    padding: 0.25rem;
+}
+
+.form {
+    width: 100%;
+}
+
+.form .p-field.p-grid .p-col,
+.form .p-formgrid.p-grid .p-col {
+    padding: 0.2rem !important;
+}
+
+.div-divider {
+    margin-top: -5px
+}
+
+.div-divider_second {
+    margin-top: -4px
+}
+
+.p-toolbar {
+    background: #ffffff;
+    border: 0px solid #dee2e6;
+    padding: 0rem;
+    border-radius: 4px;
+}
+
+.col-button {
+    padding-left: 1.2rem !important;
+}
+
+.col-flex-contador {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.p-datatable .p-datatable-tfoot>tr>td {
+    padding: 0.3rem;
+}
+
+.invoice .invoice-items table th,
+.invoice .invoice-items table td {
+    padding: 0.4rem !important;
+}
+
+.flex-right-button-table {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding-bottom: 0rem;
+    padding-left: 0rem;
+    padding-right: 0.7rem;
+    padding-top: 0rem;
+}
+
+.p-selectbutton .p-button.p-highlight {
+    background: #0eb331;
+    border-color: #0eb331;
+    color: #ffffff;
+}
+
+.flex-right-button-table {
+    display: flex;
+    justify-content: flex-end;
+    width: 100%;
+    padding-bottom: 0rem;
+    padding-left: 0rem;
+    padding-right: 0.7rem;
+    padding-top: 0rem;
+}
+
+.p-button:focus {
+    box-shadow: 0 0 0 0.1rem #1F3BFF;
+}
+
+.negative {
+    color: rgb(221, 0, 0);
+}
+
+.div-card {
+    min-width: auto;
+    max-width: auto;
+    box-sizing: border-box;
+    border: 1px solid #dadce0;
+    padding-bottom: 120px;
+    border-radius: 12px;
+}
+
+.p-toolbar,
+.p-toolbar-group-left,
+.p-toolbar-group-right {
+    align-items: center;
+    display: flex;
+    margin-top: 7px;
+    margin-bottom: 5px;
+}
+
+.fa-money-bill-wave-alt:before,
+.fa-money-bill-wave:before,
+.fa-search-alt:before,
+.fa-search:before {
+    color: #188038;
+}
+
+.fa-hourglass-start-alt:before,
+.fa-hourglass-start:before {
+    color: #ffbb00;
+}
+
+.p-splitbutton .p-splitbutton-defaultbutton {
+    border-bottom-right-radius: 0;
+    border-right: 0;
+    border-top-right-radius: 0;
+    flex: 1 1 auto;
+    border-radius: 6rem;
+}
+
+.p-splitbutton-menubutton {
+    align-items: center;
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    display: flex;
+    justify-content: center;
+    border-radius: 6rem;
+    color: rgb(34, 34, 34) !important;
+    border-color: lightgray !important;
+}
+
+.p-button.p-button-rounded {
+    border-color: lightgray !important;
+    color: rgb(34, 34, 34) !important;
+}
+
+.p-button:enabled:hover {
+    background: lightgray !important;
+    color: rgb(34, 34, 34) !important;
+    border-color: lightgray !important;
+}
+
+.label {
+    width: 140px;
+}
+
+.labelMedio {
+    width: 93px;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion1:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion2:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion3:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion4:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion5:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr.p-highlight>.tablaColumnaAccion6:before {
+    font-family: "Font Awesome 5 Pro";
+    font-weight: 900;
+    content: "";
+    position: absolute;
+    vertical-align: middle;
+    margin-left: 3.4rem;
+    margin-top: 0.2%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion1>table {
+    width: 75%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion2>table {
+    width: 75%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion3>table {
+    width: 75%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion4>table {
+    width: 75%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion5>table {
+    width: 75%;
+}
+
+.p-datatable .p-datatable-tbody>tr>.tablaColumnaAccion6>table {
+    width: 75%;
+}
+
+.tituloAplicaciones {
+    color: #202124;
+    display: inline-block;
+    font-family: "Google Sans", Roboto, Helvetica, Arial, sans-serif;
+    font-size: 14px;
+    letter-spacing: 0.09px;
+    line-height: 18px;
+    overflow: inherit;
+    text-overflow: ellipsis;
+    padding: 0.2rem;
+    width: 76px;
+    word-wrap: break-word;
+}
+
+.iconoAplicaciones {
+    height: 50px;
+    font-size: 2rem;
+}
+
+.p-tree .p-tree-container .p-treenode {
+    padding: 0rem !important;
+}
+
+.p-tree .p-tree-container .p-treenode .p-treenode-content {
+    padding: 0rem !important;
+}
+
+
+/* FIN */

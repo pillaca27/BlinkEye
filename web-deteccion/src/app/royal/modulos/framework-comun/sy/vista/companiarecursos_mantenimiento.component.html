@@ -1,0 +1,39 @@
+<div class="ui-fluid" #frm>
+    <div class="ui-panel-content ui-widget-content ng-tns-c1-15 ui-panel ui-widget ui-widget-content ui-corner-all">
+        <div class="ui-panel-content ui-widget-content">
+
+            <div class="p-grid">
+                <div class="p-col-12">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Código</label>
+                                <div class="p-col">
+                                    <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="recurso.codigoelemento" disabled/>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Descripción</label>
+                                <div class="p-col">
+                                    <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="recurso.descripcionlocal" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Estado</label>
+                                <div class="p-col">
+                                    <p-dropdown [style]="{'width':'100%'}" [options]="estados" [(ngModel)]="recurso.estado"></p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>

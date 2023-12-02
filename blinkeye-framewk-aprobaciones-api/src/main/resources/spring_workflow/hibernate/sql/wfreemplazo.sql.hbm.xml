@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : core.WfTransaccion -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+<sql-query name="wfreemplazo.estavivobd">
+    <![CDATA[
+       select cast(getdate() as varchar(400)) as "nombre"
+    ]]>
+	</sql-query>
+	<sql-query name="wfreemplazo.obtenerReemplazos">
+    <![CDATA[
+       SELECT 
+		ISNULL(
+		((select top 1 rtrim(CodigoUsuario) from EmpleadoMast x where x.Empleado = A.EMPLEADO_NUEVO AND CodigoUsuario IS NOT NULL)),
+		((select rtrim(isnull(Busqueda, cast(A.EMPLEADO_NUEVO as varchar(100)))) from personamast x where x.persona = A.EMPLEADO_NUEVO))) as "nuevoNombre",
+		
+		ISNULL(
+		((select top 1 rtrim(CodigoUsuario) from EmpleadoMast x where x.Empleado = A.EMPLEADO_ANTIGUO AND CodigoUsuario IS NOT NULL)),
+		((select rtrim(isnull(Busqueda, cast(A.EMPLEADO_ANTIGUO as varchar(100)))) from personamast x where x.persona = A.EMPLEADO_ANTIGUO))) as "antiguoNombre"
+		
+		from sgworkflowsys.WF_REEMPLAZO A WHERE A.TIPO = 'T' AND A.ESTADO = 'A' AND cast(GETDATE() as date) >= cast(A.DESDE as date) AND cast(GETDATE() as date) <= cast(A.HASTA as date)
+		ORDER BY SECUENCIA ASC
+    ]]>
+	</sql-query>
+	<sql-query name="wfreemplazo.solicitudListarContar">
+    <![CDATA[
+      	Select 
+		count(1)
+		from sgworkflowsys.WF_REEMPLAZO A 
+		JOIN PersonaMast B ON A.EMPLEADO_ANTIGUO = B.Persona 
+		JOIN PersonaMast C ON A.EMPLEADO_NUEVO = C.Persona 
+		where 
+		A.EMPLEADO_ANTIGUO = isnull(:p_empleado, A.EMPLEADO_ANTIGUO)
+		and A.ESTADO = isnull(:p_estado, A.ESTADO)
+		and A.EMPLEADO_NUEVO = isnull(:p_reemplazo, A.EMPLEADO_NUEVO)
+    ]]>
+	</sql-query>
+	<sql-query name="wfreemplazo.solicitudListarPaginacion">
+    <![CDATA[
+       Select 
+		A.tipo as "tipo",
+		A.SECUENCIA as "secuencia", 
+		B.Busqueda as "antiguoNombre", 
+		c.Busqueda as "nuevoNombre",
+		A.DESDE as "desde", 
+		A.HASTA as "hasta", 
+		A.OBSERVACION as "observacion", 
+		case when A.ESTADO = 'A' then 'Activo' else 'Inactivo' end as "estado"
+		from sgworkflowsys.WF_REEMPLAZO A 
+		JOIN PersonaMast B ON A.EMPLEADO_ANTIGUO = B.Persona 
+		JOIN PersonaMast C ON A.EMPLEADO_NUEVO = C.Persona 
+		where 
+		A.EMPLEADO_ANTIGUO = isnull(:p_empleado, A.EMPLEADO_ANTIGUO)
+		and A.ESTADO = isnull(:p_estado, A.ESTADO)
+		and A.EMPLEADO_NUEVO = isnull(:p_reemplazo, A.EMPLEADO_NUEVO)
+		ORDER BY a.secuencia DESC
+    ]]>
+	</sql-query>
+	<sql-query name="wfreemplazo.reemplazarNivelesAprobacion">
+    <![CDATA[
+        update 
+		sgworkflowsys.WF_FLUJO_APROBADOR
+		set 
+		persona_id = :p_nuevo
+		where 
+		persona_id = :p_anterior
+    ]]>
+	</sql-query>
+	<sql-query name="wfreemplazo.obtenerNombreCompletoPersona">
+    <![CDATA[
+	      select rtrim(Busqueda) as "codigo" from PersonaMast where Persona = :p_persona
+    ]]>
+	</sql-query>
+</hibernate-mapping>

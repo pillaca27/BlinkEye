@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrcargosmast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="hrcargosmast.listarActivos">
+    	select Cargo as "codigo", DescripcionLocal as "nombre"
+				,estado as "estadoId"
+    	from Hr_Cargosmast where Estado = 'A'
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hrcargosmast.listar">
+    	select Cargo as "codigo", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from Hr_Cargosmast
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hrcargosmast.obtenertabla">
+    	select Cargo as "codigo", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from Hr_Cargosmast
+    	where Cargo = :p_cargo
+	</sql-query>
+	
+	<sql-query name="hrcargosmast.listarfiltros">
+    	select Cargo as "codigo", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from Hr_Cargosmast
+    	where
+    			Cargo = ISNULL(:p_cargo,Cargo)
+			and UPPER(ISNULL(DescripcionLocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(DescripcionLocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))	
+    	order by DescripcionLocal
+	</sql-query>
+	
+	<sql-query name="hrcargosmast.contarcargosporfiltro">
+        SELECT COUNT(1)
+		FROM HR_CARGOSMAST A
+		WHERE A.CARGO = ISNULL(:p_cargo, A.CARGO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+    </sql-query>
+    
+    <sql-query name="hrcargosmast.listarcargosporfiltro">
+		SELECT A.CARGO AS "cargo", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCIONLOCAL))) AS "descripcionlocal",
+			CAST(A.ESTADO AS VARCHAR) AS "estado"
+		FROM HR_CARGOSMAST A
+		WHERE A.CARGO = ISNULL(:p_cargo, A.CARGO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+		ORDER BY A.DESCRIPCIONLOCAL
+    </sql-query>
+	
+</hibernate-mapping>

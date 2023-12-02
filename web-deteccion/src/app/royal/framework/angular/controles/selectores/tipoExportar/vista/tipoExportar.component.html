@@ -1,0 +1,65 @@
+<p-dialog *ngIf="!wh" [(visible)]="verTiposExportar" modal="modal" showEffect="fade" hideEffect="size"
+    [contentStyle]="{'max-height':'450px'}" autoAlign="true" [style]="{width: '500px', height: '175px'}">
+    <div class="ui-fluid" >
+        <div>
+            <div class="ui-g">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <div class="p-grid">
+                        <div class="p-col-1 p-md-1 p-lg-1">
+                            <i class="fa fa-download" style="font-size: 2em; color: #495057; margin-top: 6px;"></i>
+                        </div>
+                        <div class="p-col-11 p-md-11 p-lg-11 tituloTexto" style="font-size: 20px;">
+                            Seleccione un formato a Exportar
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <div *ngFor="let even of listaTipoExportar">
+                        <div class="ui-g-12 ui-md-4 ui-lg-4" style="margin-bottom:10px">
+                            <!-- <p-radioButton value="{{even.codigo}}" label="{{even.nombre}}" [(ngModel)]="tipo" inputId="opt1"></p-radioButton> -->
+                            <button type="button" pButton icon="{{even.icon}}" style="width: 100%;" class="ui-button"
+                                (click)="exportarTipo(even.codigo)" label="{{even.nombre}}"></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog *ngIf="wh" header="Exportar"  [(visible)]="verTiposExportar" modal="modal" showEffect="fade" hideEffect="size"
+    [contentStyle]="{'max-height':'450px'}" autoAlign="true">
+
+    <p-card *ngIf="wh">
+        <div class="p-grid">
+            <div class="p-col-12">
+
+                <p-divider align="left">
+                    <div class="p-d-inline-flex p-ai-center">
+                        <i class="pi pi-bars p-mr-2"></i>
+                        <b>Seleccione un formato a Exportar</b>
+                    </div>
+                </p-divider>
+
+                <div class="p-fluid p-formgrid p-grid">
+                    
+                    <div *ngFor="let even of listaTipoExportar">
+                    <div class="p-field p-col-12 p-md-4" style="margin-bottom:10px">
+                        
+                            <button styleClass="p-button-lg" type="button" pButton icon="{{even.icon}}"  
+                           style="width: 100px;" label="{{even.nombre}}"  (click)="exportarTipo(even.codigo)" ></button>
+                       
+
+                        </div>
+                    </div>
+                
+                </div>
+
+            </div>
+
+        </div>
+    </p-card>
+</p-dialog>

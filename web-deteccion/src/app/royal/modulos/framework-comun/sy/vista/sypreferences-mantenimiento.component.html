@@ -1,0 +1,82 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Usuario</label>
+                    <input #myUsuario title="Usuario" pInputText [(ngModel)]="dto.usuario" maxlength="20" type="text"
+                        [disabled]="true" [style]="{'width':'100%'}" (ngModelChange)="dto.usuario=$event.toUpperCase()"
+                        required />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Preference</label>
+                    <input #myPreference title="Preference" pInputText [(ngModel)]="dto.preference" maxlength="10"
+                        type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.preference=$event.toUpperCase()" required />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Aplicación Código</label>
+                    <!-- <input pInputText [(ngModel)]="dto.aplicacioncodigo" maxlength="2" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.aplicacioncodigo=$event.toUpperCase()" /> -->
+                    <div class="p-inputgroup">
+                        <input pInputText type="text" style="width:100%;" [(ngModel)]="dto.aplicacioncodigo"
+                            maxlength="2" disabled
+                            (ngModelChange)="dto.aplicacioncodigo=$event.toUpperCase()" style="flex: 1;" />
+                        <input pInputText type="text" style="width:100%;" [(ngModel)]="dto.descripcioncorta"
+                            maxlength="100"  disabled
+                            (ngModelChange)="dto.aplicacioncodigo=$event.toUpperCase()" style="flex: 5;" />
+                        <button pButton icon="fa fa-binoculars" (click)="mostrarselectoraplicaciones()" type="button"
+                            title="Buscar Proveedor" [style]="{'flex': '1'}"></button>
+                        <button pButton icon="fa fa-trash" (click)="limpiarselectoraplicaciones()" type="button"
+                            title="Limpiar Proveedor" [style]="{'flex': '1'}"></button>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Tipo Valor</label>
+                    <!--  <input pInputText [(ngModel)]="dto.tipovalor" maxlength="1" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.tipovalor=$event.toUpperCase()" /> -->
+                    <p-dropdown [options]="lstTipoValor" [(ngModel)]="dto.tipovalor" [style]="{'width':'100%'}"
+                        (onChange)="onChange()" [disabled]="!objetoTitulo.puedeEditar">
+                    </p-dropdown>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Valor String</label>
+                    <input pInputText [(ngModel)]="dto.valorstring" maxlength="15" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar || !ocultarcadena" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.valorstring=$event.toUpperCase()" />
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Valor Número</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.valornumero" inputId="locale-us" mode="decimal" locale="en-US"
+                        [minFractionDigits]="0" [disabled]="!objetoTitulo.puedeEditar || !ocultarnumero">
+                    </p-inputNumber>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <label>Valor Fecha</label>
+                    <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030"
+                        [disabled]="!objetoTitulo.puedeEditar || !ocultarfecha" [(ngModel)]="dto.valorfecha"
+                        dateFormat="dd/mm/yy" [ngStyle]="{'width':'100%'}" [showIcon]="true" yearRange="2000:2030">
+                    </p-calendar>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+    [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+
+<app-selector-aplicaciones-mast></app-selector-aplicaciones-mast>

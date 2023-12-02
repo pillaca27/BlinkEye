@@ -1,0 +1,116 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Código</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.reportecodigo" maxlength="3" [disabled]="accion==ACCIONES.EDITAR" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Aplicación</label>
+                        <div class="p-col">
+                            <p-dropdown [disabled]="accion==ACCIONES.EDITAR" [options]="lstAplicacion" [(ngModel)]="syReporte.aplicacioncodigo" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-12">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Nombre</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.descripcionlocal" maxlength="50" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-12">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Asunto</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.asunto" maxlength="500" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-12">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo Reporte</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstTipoReporte" [(ngModel)]="syReporte.tiporeporte" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-12">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstado" [(ngModel)]="syReporte.estado" [style]="{'width':'100%'}" [disabled]="accion == ACCIONES.NUEVO"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid" *ngIf="syReporte.tiporeporte=='CORRE'">
+                <div class="p-col-12 p-md-12">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Correo</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.descripcioningles" maxlength="200" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</p-card>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+
+<!-- <div class="ui-fluid" #frm>     -->
+<!-- <div class="ui-g">
+            <div class="ui-g-12 ui-md-12 ui-lg-1" *ngIf="syReporte.tiporeporte=='INGOO'">
+                <label>Url Informe Google</label>
+            </div>
+
+            <div class="ui-g-12 ui-md-12 ui-lg-4" *ngIf="syReporte.tiporeporte=='INGOO'">
+                <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.urlInformeGoogle"
+                    maxlength="200" />
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-12 ui-lg-1" *ngIf="syReporte.tiporeporte=='GDEXC'">
+                <label>ID Hoja Google</label>
+            </div>
+
+            <div class="ui-g-12 ui-md-12 ui-lg-4" *ngIf="syReporte.tiporeporte=='GDEXC'">
+                <input pInputText type="text" style="width:100%" [(ngModel)]="syReporte.hojaid" maxlength="100" />
+            </div>
+        </div>
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-12 ui-lg-1" *ngIf="syReporte.tiporeporte=='GDEXC'">
+                <label>Sentencia</label>
+            </div>
+
+            <div class="ui-g-12 ui-md-12 ui-lg-4" *ngIf="syReporte.tiporeporte=='GDEXC'">
+                <textarea pInputTextarea rows="10" cols="30" style="width:100%;"
+                    [(ngModel)]="syReporte.auxsentencia"></textarea>
+            </div>
+        </div> -->
+<!-- </div> -->

@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : logistica.WhCommodity
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="whcommodity.obtenerDto">
+         select 
+			Commodity01 "commodity01"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,Clasificacion "clasificacion"
+			, cast(CodigoBarrasFlag as varchar(1)) as "codigobarrasflag"
+			,cast(Estado as varchar(1)) as "estado"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,Timestamp "timestamp"
+			,xDescripcionLocal "xdescripcionlocal"
+			,'A' as "accion"
+
+         from WH_COMMODITY
+         where 
+			Commodity01 = :p_commodity01
+
+    </sql-query>
+
+        <sql-query name="whcommodity.obtenerDetalleDto">
+           SELECT  
+           WH_CommoditySub.Commodity as "commodity", 
+            WH_CommoditySub.Commodity01 as "commodity01", 
+         WH_CommoditySub.Commodity02 as "commodity02",   
+         WH_CommoditySub.DescripcionLocal as "descripcionlocal", 
+		 WH_CommoditySub.ReferenciaFiscal02 as "referenciafiscal02",
+         WH_CommoditySub.UnidadporDefecto as "unidadpordefecto",   
+         rtrim(cast(WH_CommoditySub.DetraccionCodigo as varchar)) as "detraccioncodigo",  
+         rtrim(cast(WH_CommoditySub.CuentaContableGasto as varchar)) as "cuentacontablegasto",   
+         rtrim(cast (WH_CommoditySub.ElementoGasto as varchar)) as "elementogasto",   
+         rtrim(cast (WH_CommoditySub.ClasificacionActivo as varchar)) as "clasificacionactivo",   
+         rtrim(cast (WH_CommoditySub.FlujodeCaja as varchar)) as "flujodecaja",   
+         rtrim(cast (WH_CommoditySub.ElementoInversion  as varchar)) as "elementoinversion",           
+         cast(WH_CommoditySub.Estado as varchar(1)) as "estado",
+         'A' as "accion"
+    FROM WH_CommoditySub  
+   WHERE WH_CommoditySub.Commodity01 = :p_commodity01    
+		order by WH_CommoditySub.Commodity asc
+
+    </sql-query>
+
+	<sql-query name="whcommodity.listarCommodity">
+	             <![CDATA[
+		  SELECT WH_Commodity.Commodity01 as "commodity01",   
+         WH_Commodity.DescripcionLocal as "descripcionlocal",   
+         cast(WH_Commodity.Estado as varchar(1))  as "estado",   
+         WH_Commodity.Clasificacion as "clasificacionactivo",   
+         WH_CommodityClasificacion.DescripcionLocal   as "descripcioningles"
+         ,case when cast(WH_Commodity.Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion" 
+    FROM WH_Commodity,   
+         WH_CommodityClasificacion  
+   WHERE ( WH_CommodityClasificacion.Clasificacion = WH_Commodity.Clasificacion ) and
+             ( ( WH_Commodity.Commodity01 =ISNULL(:p_codigo,WH_Commodity.Commodity01)  ) ) 
+             and  UPPER(ISNULL( WH_Commodity.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descripcion,UPPER( WH_Commodity.DescripcionLocal)) + '%'
+ORDER BY WH_CommodityClasificacion.DescripcionLocal ASC,   
+         WH_Commodity.Commodity01 ASC  
+        
+ ]]>
+		    </sql-query>
+		    
+		    
+		        <sql-query name="whcommodity.listarPaginadoContar">
+	             <![CDATA[
+	             	  SELECT
+	             	  count(1)
+			    FROM WH_Commodity,   
+			         WH_CommoditySub
+			   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and 
+			         ( ( WH_Commodity.Estado = 'A' ) AND  
+			         ( WH_CommoditySub.Estado = 'A' ) )
+				             
+	              ]]>
+		    </sql-query>
+		    
+		    <sql-query name="whcommodity.listarPaginadoSentencia">
+	             <![CDATA[
+	             
+	             
+	               SELECT 
+			  WH_Commodity.DescripcionLocal as "descripcionlocal",   
+	         WH_CommoditySub.Commodity01 as "commodity01",   
+	         WH_CommoditySub.Commodity02 as "commodity02",   
+	         WH_CommoditySub.Commodity as "commodity",   
+	         WH_CommoditySub.DescripcionLocal as "descripcionlocalsub",
+			 WH_Commodity.Clasificacion as "clasificacion"
+	    FROM WH_Commodity,   
+	         WH_CommoditySub
+	   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and 
+	         ( ( WH_Commodity.Estado = 'A' ) AND  
+	         ( WH_CommoditySub.Estado = 'A' ) )
+	             
+	              ]]>
+		    </sql-query>
+		    
+		    
+</hibernate-mapping>

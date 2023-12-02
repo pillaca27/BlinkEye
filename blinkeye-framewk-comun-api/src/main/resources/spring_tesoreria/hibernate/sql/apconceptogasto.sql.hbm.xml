@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : apcajachica
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="apconceptogasto.listar">
+	    <![CDATA[
+	        select conceptogasto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from AP_CONCEPTOGASTO	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="apconceptogasto.listarActivos">
+	    <![CDATA[
+	        select conceptogasto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from AP_CONCEPTOGASTO
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="apconceptogasto.obtenerTabla">
+	    <![CDATA[
+	        select conceptogasto as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from AP_CONCEPTOGASTO
+			where conceptogasto = :p_conceptogasto
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="apconceptogasto.listarfiltros">
+    	select conceptogasto as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from AP_CONCEPTOGASTO 
+    	where  conceptogasto = ISNULL(:p_conceptogasto,conceptogasto)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal	    	
+	</sql-query>
+	
+	<sql-query name="apconceptogasto.obtenerDto">
+         select 
+			CONCEPTOGASTO "conceptogasto"
+			,CONCEPTOGASTOGRUPO "conceptogastogrupo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONREQUERIDAFLAG "descripcionrequeridaflag"
+			,ELEMENTOGASTO "elementogasto"
+			,CUENTACONTABLE "cuentacontable"
+			,FRECUENCIA "frecuencia"
+			,IMPORTACIONFLAG "importacionflag"
+			,PORCENTAJE "porcentaje"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,EMPLEADOAUTORIZADOFLAG "empleadoautorizadoflag"
+			,VIAJEFLAG "viajeflag"
+			,MONEDACODIGO "monedacodigo"
+			,MONTO "monto"
+			,VIAJEALIMENTOSFLAG "viajealimentosflag"
+			,GASTOFLAG "gastoflag"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,TIPOCENTROCOSTO "tipocentrocosto"
+			,XCENTROCOSTO "xcentrocosto"
+			,CUENTACONTABLEEXTRANJERA "cuentacontableextranjera"
+			,cast(ITEMREQUERIDOFLAG as varchar2(1)) "itemrequeridoflag"
+			,commodity as "commodity"
+         from AP_CONCEPTOGASTO
+         where 
+			CONCEPTOGASTO = :p_conceptogasto
+    </sql-query>
+	
+	<sql-query name="apconceptogasto.listardtofiltros">
+         select 
+			CONCEPTOGASTO "conceptogasto"
+			,CONCEPTOGASTOGRUPO "conceptogastogrupo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONREQUERIDAFLAG "descripcionrequeridaflag"
+			,ELEMENTOGASTO "elementogasto"
+			,CUENTACONTABLE "cuentacontable"
+			,FRECUENCIA "frecuencia"
+			,IMPORTACIONFLAG "importacionflag"
+			,PORCENTAJE "porcentaje"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,EMPLEADOAUTORIZADOFLAG "empleadoautorizadoflag"
+			,VIAJEFLAG "viajeflag"
+			,MONEDACODIGO "monedacodigo"
+			,MONTO "monto"
+			,VIAJEALIMENTOSFLAG "viajealimentosflag"
+			,GASTOFLAG "gastoflag"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,TIPOCENTROCOSTO "tipocentrocosto"
+			,XCENTROCOSTO "xcentrocosto"
+			,CUENTACONTABLEEXTRANJERA "cuentacontableextranjera"
+			,cast(ITEMREQUERIDOFLAG as varchar2(1)) "itemrequeridoflag"
+			,commodity as "commodity"
+         from AP_CONCEPTOGASTO
+         where 
+			CONCEPTOGASTO = ISNULL(:p_conceptogasto,CONCEPTOGASTO)
+			and UPPER(ISNULL(DESCRIPCIONLOCAL,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(DESCRIPCIONLOCAL)) || '%'
+			and CONCEPTOGASTOGRUPO = ISNULL(:p_grupoconceptogasto,CONCEPTOGASTOGRUPO)
+			and ESTADO = ISNULL(:p_estado,ESTADO)
+		order by DESCRIPCIONLOCAL
+    </sql-query>
+    
+    <sql-query name="apconceptogasto.obtenerdtoviajeflags">
+         select 
+			CONCEPTOGASTO "conceptogasto"
+			,CONCEPTOGASTOGRUPO "conceptogastogrupo"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONREQUERIDAFLAG "descripcionrequeridaflag"
+			,ELEMENTOGASTO "elementogasto"
+			,CUENTACONTABLE "cuentacontable"
+			,FRECUENCIA "frecuencia"
+			,IMPORTACIONFLAG "importacionflag"
+			,PORCENTAJE "porcentaje"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,EMPLEADOAUTORIZADOFLAG "empleadoautorizadoflag"
+			,VIAJEFLAG "viajeflag"
+			,MONEDACODIGO "monedacodigo"
+			,MONTO "monto"
+			,VIAJEALIMENTOSFLAG "viajealimentosflag"
+			,GASTOFLAG "gastoflag"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,TIPOCENTROCOSTO "tipocentrocosto"
+			,XCENTROCOSTO "xcentrocosto"
+			,CUENTACONTABLEEXTRANJERA "cuentacontableextranjera"
+			,cast(ITEMREQUERIDOFLAG as varchar2(1)) "itemrequeridoflag"
+			,commodity as "commodity"
+         from AP_CONCEPTOGASTO
+         where 
+			CONCEPTOGASTO = :p_conceptogasto
+			and VIAJEFLAG = 'S'
+    </sql-query>
+    
+</hibernate-mapping>

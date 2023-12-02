@@ -1,0 +1,102 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Tipo</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="filtro.tipocomprobante" [style]="{'width':'100%'}" (ngModelChange)="filtro.tipocomprobante = $event.toUpperCase()" pInputText type="text" maxlength="2" (keypress)="defaultBuscar($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.companiacodigo" [filter]="true" [options]="lstCompanias" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Serie</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="filtro.serie" [style]="{'width':'100%'}" pInputText type="text" maxlength="4" (keypress)="defaultBuscar($event)">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigoSmall">Tipo</th>
+                <th class="tablaHeaderCodigoSmall">Serie</th>
+                <th class="tablaHeaderIzquierda">Descripción</th>
+                <th class="tablaHeaderCodigoChico">Compañía</th>
+                <th class="tablaHeaderCodigoChico">Último Nro. Generado</th>
+                <th class="tablaHeaderEstado">Estado</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="tablaColumnaCodigoSmall">
+                    <span class="p-column-title">Tipo</span> {{row.tipocomprobante}}
+                </td>
+                <td class="tablaColumnaCodigoSmall">
+                    <span class="p-column-title">Serie</span> {{row.serie}}
+                </td>
+
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Descripción</span> {{row.descripcion}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Compañía</span> {{row.companiacodigo}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Último Nro. Generado</span> {{row.correlativonumero}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

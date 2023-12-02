@@ -1,0 +1,154 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha de Solicitud</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [(ngModel)]="filtro.fechaSolicitudDesde" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                                <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [(ngModel)]="filtro.fechaSolicitudHasta" style="width: 100%;" [style]="{'flex': '1'}" [showIcon]="true" dateFormat="dd/mm/yy" firstDayOfWeek="1">
+                                </p-calendar>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEstado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEstadoNombre=null;filtro.estado=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-2">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Disponible</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [ngModel]="dispo()" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-2">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Pendientes</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="diasInfo.diasPendientes" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-2">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Truncos</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="diasInfo.diasTruncos" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-2">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Días en Proceso</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="diasInfo.diasSolicitados" mode="decimal" [disabled]="true" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                            </p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+            </div> -->
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado"
+        [(selection)]="registroSeleccionado" selectionMode="single" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigo">Nº</th>
+                <th class="tablaHeaderNombre">Empleado</th>
+                <th class="tablaHeaderFecha">Fecha de Solicitud</th>
+                <th class="tablaHeaderNombreChico">Tipo</th>
+                <th class="tablaHeaderFecha">Periodo</th>
+                <th class="tablaHeaderFecha">Desde</th>
+                <th class="tablaHeaderFecha">Hasta</th>
+                <th class="tablaHeaderCodigo">Dias Hábiles</th>
+                <th class="tablaHeaderEstadoGrande">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acciones</span>
+                    <table>
+                        <tr>
+                            <th *ngIf="rowData.puedeEditar === 'S'">
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(rowData)"></button>
+                            </th>
+                            <th *ngIf="rowData.puedeAnular === 'S'">
+                                <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text p-button-warning botonGrilla" title="Anular" *ngIf="menuSeguridad.flgBorrar" (click)="coreAnular(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Nº</span> {{rowData.nro}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Empleado</span> {{rowData.empleado}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fecha de Solicitud</span> {{rowData.fechaSolicitud}}
+                </td>
+                <td class="tablaColumnaNombreChico">
+                    <span class="p-column-title">Tipo</span> {{rowData.auxUtilizacion}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Periodo</span> {{rowData.auxPeriodo}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Desde</span> {{rowData.desde}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Hasta</span> {{rowData.hasta}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Dias Hábiles</span> {{rowData.diasUtiles}}
+                </td>
+                <td class="tablaColumnaEstadoGrande">
+                    <span class="p-column-title">Estado</span> {{rowData.estadoDesc}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="10">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-selector-miscelaneos></app-selector-miscelaneos>

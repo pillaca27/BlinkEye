@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prconceptoperfil
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="prconceptoperfil.contarperfilporfiltro">
+        SELECT COUNT(1)
+		FROM PR_CONCEPTOPERFIL A
+		WHERE 1 = 1
+			AND A.PERFIL = ISNULL(:p_perfil, A.PERFIL)
+			AND A.DESCRIPCION like '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+			AND A.ESTADO = ISNULL(:p_estado, A.ESTADO)
+    </sql-query>
+
+    <sql-query name="prconceptoperfil.listarperfilporfiltro">
+		SELECT A.PERFIL as "id", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCION))) AS "descripcion", 
+			CAST(A.ESTADO AS VARCHAR) as "estadoId" 
+		FROM PR_CONCEPTOPERFIL A
+		WHERE 1 = 1
+			AND A.PERFIL = ISNULL(:p_perfil, A.PERFIL)
+			AND A.DESCRIPCION like '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+			AND A.ESTADO = ISNULL(:p_estado, A.ESTADO)
+		ORDER BY A.DESCRIPCION
+    </sql-query>
+	
+</hibernate-mapping>

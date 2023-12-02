@@ -1,0 +1,404 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : asistencia.AsArea
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+ 	<sql-query name="whitemmast.estavivobd">
+   	select cast(getdate() as varchar(400)) as "nombre"
+    </sql-query>
+    
+    <sql-query name="whitemmast.obtenerDto">
+ select 
+			Item "item"
+			,rtrim(cast(WH_ITEMMAST.ItemTipo as varchar)) "itemtipo"
+			,cast(MarcaCodigo as varchar) "marcacodigo"
+			,WH_ITEMMAST.Linea "linea"
+			,WH_ITEMMAST.Familia "familia"
+			,WH_ITEMMAST.SubFamilia "subfamilia"
+			,WH_ITEMMAST.DescripcionLocal "descripcionlocal"
+			,WH_ITEMMAST.DescripcionIngles "descripcioningles"
+			,WH_ITEMMAST.DescripcionCompleta "descripcioncompleta"
+			,rtrim(NumeroDeParte) "numerodeparte"
+			,rtrim(CodigoInterno) "codigointerno"
+			,RTRIM(UnidadCodigo) "unidadcodigo"
+			,RTRIM(UnidadCodigoDoble) "unidadcodigodoble"
+			,PartidaArancelaria "partidaarancelaria"
+			,Modelo "modelo"
+			,Color "color"
+			,CodigoBarras "codigobarras"
+			,CodigoBarrasFabricante "codigobarrasfabricante"
+			,MonedaCodigo "monedacodigo"
+			,PrecioCosto "preciocosto"
+			,PrecioUnitarioLocal "preciounitariolocal"
+			,PrecioUnitarioDolares "preciounitariodolares"
+			,cast(ItemPrecioFlag as varchar) "itemprecioflag"
+			,cast(ItemPrecioCodigo as varchar) "itempreciocodigo"
+			,cast(DisponibleVentaFlag as varchar) "disponibleventaflag"
+			,cast(rtrim(ItemProcedencia) as varchar) "itemprocedencia"
+			,cast(ManejoxLoteFlag as varchar) "manejoxloteflag"
+			,cast(ManejoxSerieFlag as varchar) "manejoxserieflag"
+			,cast(ManejoxKitFlag as varchar) "manejoxkitflag"
+			,cast(AfectoImpuestoVentasFlag as varchar) "afectoimpuestoventasflag"
+			,cast(AfectoImpuesto2Flag as varchar) "afectoimpuesto2flag"
+			,cast(RequisicionamientoAutomaticoFl as varchar) "requisicionamientoautomaticofl"
+			,cast(DisponibleTransferenciaFlag as varchar) "disponibletransferenciaflag"
+			,cast(DisponibleConsumoFlag as varchar) "disponibleconsumoflag"
+			,cast(FormularioFlag as varchar) "formularioflag"
+			,FormularioNroJuegos "formularionrojuegos"
+			,cast(ManejoxUnidadFlag as varchar) "manejoxunidadflag"
+			,cast(ISOAplicableFlag as varchar) "isoaplicableflag"
+			,cast(CantidadDobleFlag as varchar) "cantidaddobleflag"
+			,ISONormaInterna "isonormainterna"
+			,UnidadReplicacion "unidadreplicacion"
+			,ImageFile "imagefile"
+			,MapaFile "mapafile"
+			,WH_ITEMMAST.CuentaInventario "cuentainventario"
+			,WH_ITEMMAST.CuentaGasto "cuentagasto"
+			,CuentaInversion "cuentainversion"
+			,CuentaServicioTecnico "cuentaserviciotecnico"
+			,CuentaSalidaTerceros "cuentasalidaterceros"
+			,rtrim(WH_ITEMMAST.ElementoGasto) "elementogasto"
+			,ElementoInversion "elementoinversion"
+			,WH_ITEMMAST.PartidaPresupuestal "partidapresupuestal"
+			,WH_ITEMMAST.FlujodeCaja "flujodecaja"
+			,LotedeCompra "lotedecompra"
+			,LotedeDespacho "lotededespacho"
+			,PeriodicidadCompraMeses "periodicidadcomprameses"
+			,EspecificacionTecnica "especificaciontecnica"
+			,rtrim(Dimensiones) "dimensiones"
+			,FactorEquivalenciaComercial "factorequivalenciacomercial"
+			,RTRIM(ABCCodigo) "abccodigo"
+			,InventarioTolerancia "inventariotolerancia"
+			,cast(WH_ITEMMAST.Estado as varchar) "estado"
+			,WH_ITEMMAST.UltimaFechaModif "ultimafechamodif"
+			,WH_ITEMMAST.UltimoUsuario "ultimousuario"
+			,WH_ITEMMAST.CuentaVentas "cuentaventas"
+			,RTRIM(UnidadCompra) "unidadcompra"
+			,LotedeCompraM3 "lotedecompram3"
+			,LotedeCompraKG "lotedecomprakg"
+			,cast(ControlCalidadFlag as varchar) "controlcalidadflag"
+			,RTRIM(UnidadEmbalaje) "unidadembalaje"
+			,WH_ITEMMAST.CuentaTransito "cuentatransito"
+			,ManejoxKitSplitFlag "manejoxkitsplitflag"
+			,MapaCodigo "mapacodigo"
+			,CantidadDobleFactor "cantidaddoblefactor"
+			,SubFamiliaInferior "subfamiliainferior"
+			,ClasificacionComercial "clasificacioncomercial"
+			,StockMinimo "stockminimo"
+			,StockMaximo "stockmaximo"
+			,LotedeVenta "lotedeventa"
+			,DescripcionAdicional "descripcionadicional"
+			,CodigoPrecio "codigoprecio"
+			,CaracteristicaValor01 "caracteristicavalor01"
+			,CaracteristicaValor02 "caracteristicavalor02"
+			,CaracteristicaValor03 "caracteristicavalor03"
+			,CaracteristicaValor04 "caracteristicavalor04"
+			,CaracteristicaValor05 "caracteristicavalor05"
+			,WH_ITEMMAST.ReferenciaFiscal02 "referenciafiscal02"
+			,rtrim(DetraccionCodigo) "detraccioncodigo"
+			,CodigoBarras2 "codigobarras2"
+			,ReferenciaFiscalIngreso02 "referenciafiscalingreso02"
+			,CodigoCatalogo25 "codigocatalogo25"
+			,CodigoGS1 "codigogs1"
+			,WH_ClaseLinea.DescripcionLocal AS "lineaDescri"
+			,WH_ClaseFamilia.DescripcionLocal as "familiaDescri"
+			,WH_ClaseSubFamilia.DescripcionLocal as "subFamiliaDescri"
+
+         from WH_ITEMMAST
+		 left join WH_ClaseLinea ON WH_ClaseLinea.Linea=WH_ITEMMAST.Linea
+		 left join WH_ClaseFamilia on WH_ClaseFamilia.Linea=WH_ClaseLinea.Linea and WH_ClaseFamilia.Familia=WH_ITEMMAST.Familia
+		 left join WH_ClaseSubFamilia on WH_ClaseSubFamilia.Linea=WH_ClaseFamilia.Linea and WH_ClaseSubFamilia.Familia= WH_ClaseFamilia.Familia 
+		 and  WH_ClaseSubFamilia.SubFamilia=WH_ITEMMAST.SubFamilia
+         where 
+			Item = :p_item
+		
+
+    </sql-query>
+    
+    <sql-query name="whitemmast.obtenerDtoDetalleUnidad">
+       SELECT rtrim(WH_ItemUnidad.Item) as "item",   
+         rtrim(WH_ItemUnidad.UnidadCodigo) as "unidadcodigo",   
+         cast(WH_ItemUnidad.FactorConversion as decimal) as "factorconversion",   
+         rtrim(WH_ItemMast.UnidadCodigo) as "unidadcodigodescri",   
+         cast(WH_ItemUnidad.RedondeoFlag as varchar) as "redondeoflag",   
+         WH_ItemUnidad.UltimoUsuario as "ultimousuario",   
+         WH_ItemUnidad.UltimaFechaModif as "ultimafechamodif",
+         cast('A' as varchar) as "accion"
+    FROM WH_ItemUnidad,   
+         WH_ItemMast  
+   WHERE ( WH_ItemMast.Item = WH_ItemUnidad.Item ) and  
+         ( ( WH_ItemUnidad.Item = :p_item ) )    
+    </sql-query>
+    
+        <sql-query name="whitemmast.obtenerDtoDetalleKit">
+      SELECT rtrim(WH_ItemKit.Item) as "item",   
+         rtrim(WH_ItemKit.ItemSubordinado) as "itemsubordinado",   
+         cast(WH_ItemKit.TienePrecioFlag as varchar) as "tieneprecioflag",   
+         WH_ItemKit.Cantidad as "cantidad",   
+         rtrim(WH_ItemMast.DescripcionLocal) as "descripcionlocal", 
+          cast('A' as varchar) as "accion"
+    FROM WH_ItemKit,   
+         WH_ItemMast  
+   WHERE ( WH_ItemKit.ItemSubordinado = WH_ItemMast.Item ) and  
+         ( ( WH_ItemKit.Item = :p_item ) )    
+
+    </sql-query>
+    
+
+    <sql-query name="whitemmast.listarPaginadoContar">
+        SELECT count(1)
+    FROM WH_ItemMast
+	left join WH_ClaseLinea on  WH_ItemMast.Linea = WH_ClaseLinea.Linea 
+	left join WH_ClaseFamilia on WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea  and WH_ClaseFamilia.Familia= WH_ItemMast.Familia
+	left join WH_ClaseSubFamilia on WH_ClaseSubFamilia.Linea =WH_ClaseFamilia.Linea and WH_ClaseFamilia.Familia =WH_ClaseSubFamilia.Familia and
+	WH_ClaseSubFamilia.SubFamilia=WH_ItemMast.SubFamilia
+	left join WH_ItemProcedencia on WH_ItemProcedencia.ItemProcedencia = WH_ItemMast.ItemProcedencia 
+	left join WH_ItemTipo on WH_ItemTipo.ItemTipo = WH_ItemMast.ItemTipo
+ 
+	where UPPER(ISNULL(WH_ItemMast.Item,'A')) like '%' + ISNULL(:p_item,UPPER(WH_ItemMast.Item)) + '%' and 
+	UPPER(ISNULL(WH_ItemMast.DescripcionLocal,'A')) like '%' + ISNULL(:p_busqueda,UPPER(WH_ItemMast.DescripcionLocal)) + '%' and
+	ISNULL(WH_ItemMast.NumeroDeParte,'')  >= :p_numero and
+	ISNULL(WH_ItemMast.CodigoInterno,'xxx') = ISNULL(:p_codigo, WH_ItemMast.CodigoInterno) AND
+	WH_ItemMast.Linea = ISNULL(:p_linea, WH_ItemMast.Linea) and
+	WH_ItemMast.Familia = ISNULL(:p_familia, WH_ItemMast.Familia) and
+	WH_ItemMast.SubFamilia = ISNULL(:p_subfamilia, WH_ItemMast.SubFamilia)
+			
+
+    </sql-query>
+
+    <sql-query name="whitemmast.listarPaginadoSentencia">
+		  SELECT WH_ItemMast.Item  as "item",   
+         WH_ItemMast.DescripcionLocal as "descripcionlocal",   
+         cast(WH_ItemMast.ItemTipo as varchar) as "itemtipo",   
+         WH_ItemMast.Linea as "linea",   
+         WH_ItemMast.Familia as "familia",   
+         WH_ItemMast.SubFamilia as "subfamilia",   
+         WH_ItemMast.UnidadCodigo as "unidadcodigo",   
+         WH_ItemMast.NumeroDeParte as "numerodeparte",   
+         WH_ItemMast.CodigoInterno as "codigointerno",   
+         WH_ItemMast.ItemProcedencia as "itemprocedencia",   
+         cast(WH_ItemMast.Estado as  varchar) as "estado",   
+         WH_ClaseLinea.DescripcionLocal as "descripcioningles",   
+         WH_ItemProcedencia.DescripcionLocal as "descripcioncompleta",   
+         WH_ItemTipo.DescripcionLocal  as "codigobarras2",
+         WH_ItemMast.imagefile as "imagefile",
+         WH_ClaseFamilia.DescripcionLocal as "familiadescripcion",
+		 WH_ClaseSubFamilia.DescripcionLocal as "subfamiliadescripcion"
+		 ,case when cast(WH_ItemMast.Estado as varchar) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+    FROM WH_ItemMast
+	left join WH_ClaseLinea on  WH_ItemMast.Linea = WH_ClaseLinea.Linea 
+	left join WH_ClaseFamilia on WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea  and WH_ClaseFamilia.Familia= WH_ItemMast.Familia
+	left join WH_ClaseSubFamilia on WH_ClaseSubFamilia.Linea =WH_ClaseFamilia.Linea and WH_ClaseFamilia.Familia =WH_ClaseSubFamilia.Familia and
+	WH_ClaseSubFamilia.SubFamilia=WH_ItemMast.SubFamilia
+	left join WH_ItemProcedencia on WH_ItemProcedencia.ItemProcedencia = WH_ItemMast.ItemProcedencia 
+	left join WH_ItemTipo on WH_ItemTipo.ItemTipo = WH_ItemMast.ItemTipo
+ 
+	where UPPER(ISNULL(WH_ItemMast.Item,'A')) like '%' + ISNULL(:p_item,UPPER(WH_ItemMast.Item)) + '%' and 
+	UPPER(ISNULL(WH_ItemMast.DescripcionLocal,'A')) like '%' + ISNULL(:p_busqueda,UPPER(WH_ItemMast.DescripcionLocal)) + '%' and
+	ISNULL(WH_ItemMast.NumeroDeParte,'')  >= :p_numero and
+	ISNULL(WH_ItemMast.CodigoInterno,'xxx') = ISNULL(:p_codigo, WH_ItemMast.CodigoInterno) AND
+	WH_ItemMast.Linea = ISNULL(:p_linea, WH_ItemMast.Linea) and
+	WH_ItemMast.Familia = ISNULL(:p_familia, WH_ItemMast.Familia) and
+	WH_ItemMast.SubFamilia = ISNULL(:p_subfamilia, WH_ItemMast.SubFamilia)
+			
+order by WH_ItemMast.Item asc
+    </sql-query>
+
+    <sql-query name="whitemmast.listarDtoCore">
+         select 
+			Item "item"
+			,ItemTipo "itemtipo"
+			,MarcaCodigo "marcacodigo"
+			,Linea "linea"
+			,Familia "familia"
+			,SubFamilia "subfamilia"
+			,DescripcionLocal "descripcionlocal"
+			,DescripcionIngles "descripcioningles"
+			,DescripcionCompleta "descripcioncompleta"
+			,NumeroDeParte "numerodeparte"
+			,CodigoInterno "codigointerno"
+			,UnidadCodigo "unidadcodigo"
+			,UnidadCodigoDoble "unidadcodigodoble"
+			,PartidaArancelaria "partidaarancelaria"
+			,Modelo "modelo"
+			,Color "color"
+			,CodigoBarras "codigobarras"
+			,CodigoBarrasFabricante "codigobarrasfabricante"
+			,MonedaCodigo "monedacodigo"
+			,PrecioCosto "preciocosto"
+			,PrecioUnitarioLocal "preciounitariolocal"
+			,PrecioUnitarioDolares "preciounitariodolares"
+			,ItemPrecioFlag "itemprecioflag"
+			,ItemPrecioCodigo "itempreciocodigo"
+			,DisponibleVentaFlag "disponibleventaflag"
+			,ItemProcedencia "itemprocedencia"
+			,ManejoxLoteFlag "manejoxloteflag"
+			,ManejoxSerieFlag "manejoxserieflag"
+			,ManejoxKitFlag "manejoxkitflag"
+			,AfectoImpuestoVentasFlag "afectoimpuestoventasflag"
+			,AfectoImpuesto2Flag "afectoimpuesto2flag"
+			,RequisicionamientoAutomaticoFl "requisicionamientoautomaticofl"
+			,DisponibleTransferenciaFlag "disponibletransferenciaflag"
+			,DisponibleConsumoFlag "disponibleconsumoflag"
+			,FormularioFlag "formularioflag"
+			,FormularioNroJuegos "formularionrojuegos"
+			,ManejoxUnidadFlag "manejoxunidadflag"
+			,ISOAplicableFlag "isoaplicableflag"
+			,CantidadDobleFlag "cantidaddobleflag"
+			,ISONormaInterna "isonormainterna"
+			,UnidadReplicacion "unidadreplicacion"
+			,ImageFile "imagefile"
+			,MapaFile "mapafile"
+			,CuentaInventario "cuentainventario"
+			,CuentaGasto "cuentagasto"
+			,CuentaInversion "cuentainversion"
+			,CuentaServicioTecnico "cuentaserviciotecnico"
+			,CuentaSalidaTerceros "cuentasalidaterceros"
+			,ElementoGasto "elementogasto"
+			,ElementoInversion "elementoinversion"
+			,PartidaPresupuestal "partidapresupuestal"
+			,FlujodeCaja "flujodecaja"
+			,LotedeCompra "lotedecompra"
+			,LotedeDespacho "lotededespacho"
+			,PeriodicidadCompraMeses "periodicidadcomprameses"
+			,EspecificacionTecnica "especificaciontecnica"
+			,Dimensiones "dimensiones"
+			,FactorEquivalenciaComercial "factorequivalenciacomercial"
+			,ABCCodigo "abccodigo"
+			,InventarioTolerancia "inventariotolerancia"
+			,Estado "estado"
+			,UltimaFechaModif "ultimafechamodif"
+			,UltimoUsuario "ultimousuario"
+			,CuentaVentas "cuentaventas"
+			,UnidadCompra "unidadcompra"
+			,LotedeCompraM3 "lotedecompram3"
+			,LotedeCompraKG "lotedecomprakg"
+			,ControlCalidadFlag "controlcalidadflag"
+			,UnidadEmbalaje "unidadembalaje"
+			,CuentaTransito "cuentatransito"
+			,ManejoxKitSplitFlag "manejoxkitsplitflag"
+			,MapaCodigo "mapacodigo"
+			,CantidadDobleFactor "cantidaddoblefactor"
+			,SubFamiliaInferior "subfamiliainferior"
+			,ClasificacionComercial "clasificacioncomercial"
+			,StockMinimo "stockminimo"
+			,StockMaximo "stockmaximo"
+			,LotedeVenta "lotedeventa"
+			,DescripcionAdicional "descripcionadicional"
+			,CodigoPrecio "codigoprecio"
+			,CaracteristicaValor01 "caracteristicavalor01"
+			,CaracteristicaValor02 "caracteristicavalor02"
+			,CaracteristicaValor03 "caracteristicavalor03"
+			,CaracteristicaValor04 "caracteristicavalor04"
+			,CaracteristicaValor05 "caracteristicavalor05"
+			,ReferenciaFiscal02 "referenciafiscal02"
+			,DetraccionCodigo "detraccioncodigo"
+			,CodigoBarras2 "codigobarras2"
+			,ReferenciaFiscalIngreso02 "referenciafiscalingreso02"
+			,CodigoCatalogo25 "codigocatalogo25"
+			,CodigoGS1 "codigogs1"
+
+         from WH_ITEMMAST
+         where 
+			Item = ISNULL(:p_item, Item)
+			Item = ISNULL(:p_item, Item)
+
+    </sql-query>
+
+    <sql-query name="whitemmast.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="whitemmast.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+    
+    <sql-query name="whitemmast.lstLineas">
+    select
+		 Linea as "linea",
+		 cast('1' as varchar) as nivel,
+		 DescripcionLocal as "descripcion",
+		 cast(Estado as varchar) as "estado"
+		 from 
+		 WH_ClaseLinea
+		 where
+		 UPPER(ISNULL(DescripcionLocal,'A')) like '%' + ISNULL(:p_descripcion,UPPER(DescripcionLocal)) + '%' 
+		 order by Linea asc
+    </sql-query>
+    
+    <sql-query name="whitemmast.lstLineaFamilia">
+   select
+		 Linea as "linea",
+		 Familia as "familia",
+		 cast('2' as varchar) as nivel,
+		 DescripcionLocal as "descripcion",
+		 cast(Estado as varchar) as "estado"
+		 from 
+		 WH_ClaseFamilia
+    </sql-query>
+    
+    <sql-query name="whitemmast.lstLineaFamiliaSubFamilia">
+   select
+		 Linea as "linea",
+		 Familia as "familia",
+		 SubFamilia as "subfamilia",
+		 cast('3' as varchar) as nivel,
+		 DescripcionLocal as "descripcion",
+		 cast(Estado as varchar) as "estado"
+		 from 
+		 WH_ClaseSubFamilia
+    </sql-query>
+
+	<sql-query name="whitemmast.validarCuentasI">
+select account as "codigo",
+cast(status as varchar) as "estadoNombre" 
+from accountmst 
+where account= :p_cuenta 
+
+    
+    </sql-query>
+    
+        <sql-query name="whitemmast.lstFlujoCajanivel1">
+   select rtrim(CashFlowMajor) as "linea",
+   localname as "descripcion",
+   cast( TipoRegistroFlag as varchar) as "tiporegistro",
+   cast(TipoOperacionFlag as varchar) as  "tipooperacion"  ,
+   cast('1' as varchar) as nivel,
+    rtrim(CashFlowMajor) as "codigo"
+   from AC_CashFlowMajor
+    </sql-query>
+    
+    <sql-query name="whitemmast.lstFlujoCajanivel2">
+   select rtrim(CashFlowGroup) as "familia",
+   rtrim(CashFlowMajor) as "linea",
+   localname as "descripcion",
+   cast('2' as varchar) as nivel,
+   rtrim(CashFlowGroup) as "codigo"
+   from AC_CashFlowGroup
+    </sql-query>
+    
+        <sql-query name="whitemmast.lstFlujoCajanivel3">
+   select 
+   rtrim(cashflowcode) as "subfamilia",
+   rtrim(CashFlowGroup) as "familia",
+   rtrim(CashFlowMajor) as "linea",
+   localname as "descripcion",
+   cast('3' as varchar) as nivel,
+   rtrim(cashflowcode) as "codigo"
+   from AC_CashFlowMst
+    </sql-query>
+    
+</hibernate-mapping>

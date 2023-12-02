@@ -1,0 +1,11 @@
+{
+	"aplicacioncodigo":"SN",
+    "captcha.validar":"S",
+    "seguridad.canalcomunicacion":"N",
+    "sid": "SID_DESDE_ANGULAR",
+    "recursos-compania": "cajacusco",
+    "spring-framework-workflow-api": "http://localhost:8082/",
+    "spring-framework-seguridad-api": "http://localhost:8080/",
+    "spring-framework-comun-api": "http://localhost:8081/",
+    "spring-autoservicios-api": "http://localhost:8076/"
+}

@@ -1,0 +1,403 @@
+<!doctype html>
+<html>
+
+
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="google" value="notranslate">
+	<title>Spring Autoservicios</title>
+	<base href="/">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/x-icon" href="favicon.ico">
+	<meta http-equiv="X-UA-Compatible" content="IE=11;IE=EmulateIE7;IE=9;IE=8;IE=edge" />
+	<link id="theme-css" rel="stylesheet" type="text/css" href="assets/theme/blue/theme-light-royal.css">
+	<link id="layout-css" rel="stylesheet" type="text/css" href="assets/layout/css/layout-light.css">
+	<link rel="stylesheet" href="assets\fontawesome\css\all.min.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Google+Sans:wght@100;200;300;400;500;700;900&display=swap">	
+
+	<style>
+		.p-tree.p-tree-horizontal .p-treenode .p-treenode-content:focus {
+			outline: 0 none;
+			outline-offset: 0;
+			box-shadow: 0 0 0 0.2rem #fff !important;
+		}
+
+		input[type="text"]:disabled {
+			background-color: #e4e9ed !important;
+			color: #0d0c0c !important;
+			opacity: 0.9 !important;
+		}
+
+		input:disabled {
+			background-color: #e4e9ed !important;
+			color: #0d0c0c !important;
+			opacity: 0.9 !important;
+		}
+
+		textarea:disabled {
+			background-color: #e4e9ed !important;
+			color: #0d0c0c !important;
+			opacity: 0.9 !important;
+			border-radius: 4px;
+			border: 1px solid #ced4da;
+			font-family: "Nunito", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+			font-size: 1rem;
+		}
+
+		.p-disabled {
+			background-color: #e4e9ed !important;
+			color: #0d0c0c !important;
+			opacity: 0.9 !important;
+		}
+
+		.p-panel-header {
+			background: #343a40 !important;
+			color: #fff !important;
+		}
+
+		.p-blockui-document {
+			z-index: 2;
+		}
+
+		.p-treenode-content {
+			text-align: center !important;
+		}
+	</style>
+
+
+	<style>
+		.gTitulopeque {
+			font-weight: bold;
+		}
+
+		.gEtiqueta {
+			color: blue;
+		}
+
+		.gVDerecha {
+			text-align: right;
+		}
+
+		.gVCentro {
+			text-align: center;
+		}
+
+		table.blueTable {
+			border: 1px solid #1C6EA4;
+			background-color: #EEEEEE;
+			width: 100%;
+			text-align: left;
+			border-collapse: collapse;
+		}
+
+		table.blueTable td,
+		table.blueTable th {
+			border: 1px solid #AAAAAA;
+			padding: 3px 2px;
+		}
+
+		table.blueTable tbody td {
+			font-size: 13px;
+		}
+
+		table.blueTable tfoot td {
+			font-size: 14px;
+		}
+
+		table.blueTable tfoot .links {
+			text-align: right;
+		}
+
+		table.blueTable tfoot .links a {
+			display: inline-block;
+			background: #1C6EA4;
+			color: #FFFFFF;
+			padding: 2px 8px;
+			border-radius: 5px;
+		}
+
+		.cienporciento {
+			width: 100%;
+		}
+
+		table.detalleAzul {
+			border: 1px solid #1C6EA4;
+			background-color: #EEEEEE;
+			width: 100%;
+
+			border-collapse: collapse;
+
+			display: block;
+			overflow-x: auto;
+			white-space: nowrap;
+		}
+
+		table.detalleAzul td,
+		table.detalleAzul th {
+			border: 1px solid #AAAAAA;
+			padding: 3px 2px;
+		}
+
+		table.detalleAzul tbody td {
+			font-size: 13px;
+		}
+
+		table.detalleAzul thead {
+			background: #1C6EA4;
+			background: -moz-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+			background: -webkit-linear-gradient(top, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+			background: linear-gradient(to bottom, #5592bb 0%, #327cad 66%, #1C6EA4 100%);
+			border-bottom: 2px solid #444444;
+		}
+
+		table.detalleAzul thead th {
+			font-size: 15px;
+			font-weight: bold;
+			color: #FFFFFF;
+			border-left: 2px solid #D0E4F5;
+		}
+
+		table.detalleAzul thead th:first-child {
+			border-left: none;
+		}
+
+		table.detalleAzul tfoot td {
+			font-size: 14px;
+		}
+
+		table.detalleAzul tfoot .links {
+			text-align: right;
+		}
+
+		table.detalleAzul tfoot .links a {
+			display: inline-block;
+			background: #1C6EA4;
+			color: #FFFFFF;
+			padding: 2px 8px;
+			border-radius: 5px;
+		}
+	</style>
+	<script>
+		if (this.JSON && !this.JSON.dateParser) {
+
+			var reISO = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})-(\d{2}):(\d{2})$/;
+			var reISONet1 = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})$/;
+			var reISONet2 = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})-(\d{2}):(\d{2})$/;
+			var reISONet3 = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{7})-(\d{2}):(\d{2})$/;
+			var reISONet4 = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2}).(\d{3})$/;
+			var reMsAjax = /^\/Date\((d|-|.*)\)[\/|\\]$/;
+
+			/// <summary>
+			/// set this if you want MS Ajax Dates parsed
+			/// before calling any of the other functions
+			/// </summary>
+			JSON.parseMsAjaxDate = false;
+
+			JSON.useDateParser = function (reset) {
+				/// <summary>
+				/// Globally enables JSON date parsing for JSON.parse().
+				/// replaces the default JSON parser with parse plus dateParser extension 
+				/// </summary>    
+				/// <param name="reset" type="bool">when set restores the original JSON.parse() function</param>
+
+				// if any parameter is passed reset
+				if (typeof reset != "undefined") {
+					if (JSON._parseSaved) {
+						JSON.parse = JSON._parseSaved;
+						JSON._parseSaved = null;
+					}
+				} else {
+					if (!JSON.parseSaved) {
+						JSON._parseSaved = JSON.parse;
+						JSON.parse = JSON.parseWithDate;
+					}
+				}
+			};
+
+			JSON.dateParser = function (key, value) {
+				/// <summary>
+				/// Globally enables JSON date parsing for JSON.parse().
+				/// Replaces the default JSON.parse() method and adds
+				/// the datePaser() extension to the processing chain.
+				/// </summary>    
+				/// <param name="key" type="string">property name that is parsed</param>
+				/// <param name="value" type="any">property value</param>
+				/// <returns type="date">returns date or the original value if not a date string</returns>
+				if (typeof value === 'string') {
+
+					var a = reISO.exec(value);
+
+					if (a) {
+						var d = new Date(a[1], a[2] - 1, a[3], a[4], a[5], a[6], 0);
+						return d;
+					}
+
+					a = reISONet1.exec(value);
+
+					if (a) {
+						var d = new Date(a[1], a[2] - 1, a[3], a[4], a[5], a[6], 0);
+						return d;
+					}
+
+					a = reISONet2.exec(value);
+
+					if (a) {
+						var d = new Date(a[1], a[2] - 1, a[3], a[4], a[5], a[6], 0);
+						return d;
+					}
+
+					a = reISONet3.exec(value);
+
+					if (a) {
+						var d = new Date(a[1], a[2] - 1, a[3], a[4], a[5], a[6], 0);
+						return d;
+					}
+
+					a = reISONet4.exec(value);
+
+					if (a) {
+						var d = new Date(a[1], a[2] - 1, a[3], a[4], a[5], a[6], 0);
+						return d;
+					}
+
+					if (!JSON.parseMsAjaxDate) {
+						return value;
+					}
+
+					a = reMsAjax.exec(value);
+
+					if (a) {
+						var b = a[1].split(/[-+,.]/);
+						return new Date(b[0] ? +b[0] : 0 - +b[1]);
+					}
+				}
+				return value;
+			};
+
+			JSON.parseWithDate = function (json) {
+				/// <summary>
+				/// Wrapper around the JSON.parse() function that adds a date
+				/// filtering extension. Returns all dates as real JavaScript dates.
+				/// </summary>    
+				/// <param name="json" type="string">JSON to be parsed</param>
+				/// <returns type="any">parsed value or object</returns>
+				var parse = JSON._parseSaved ? JSON._parseSaved : JSON.parse;
+				try {
+					var res = parse(json, JSON.dateParser);
+					return res;
+				} catch (e) {
+					// orignal error thrown has no error message so rethrow with message
+					throw new Error("JSON content could not be parsed");
+				}
+			};
+
+			JSON.dateStringToDate = function (dtString, nullDateVal) {
+				/// <summary>
+				/// Converts a JSON ISO or MSAJAX date or real date a date value.
+				/// Supports both JSON encoded dates or plain date formatted strings
+				/// (without the JSON string quotes).
+				/// If you pass a date the date is returned as is. If you pass null
+				/// null or the nullDateVal is returned.
+				/// </summary>    
+				/// <param name="dtString" type="var">Date String in ISO or MSAJAX format</param>
+				/// <param name="nullDateVal" type="var">value to return if date can't be parsed</param>
+				/// <returns type="date">date or the nullDateVal (null by default)</returns> 
+				if (!nullDateVal)
+					nullDateVal = null;
+
+				if (!dtString)
+					return nullDateVal; // empty
+
+				if (dtString.getTime)
+					return dtString; // already a date
+
+				if (dtString[0] === '"' || dtString[0] === "'")
+					// strip off JSON quotes
+					dtString = dtString.substr(1, dtString.length - 2);
+
+				var a = reISO.exec(dtString);
+				if (a)
+					return new Date(dtString);
+
+				if (!JSON.parseMsAjaxDate)
+					return nullDateVal;
+
+				a = reMsAjax.exec(dtString);
+				if (a) {
+					var b = a[1].split(/[-,.]/);
+					return new Date(+b[0]);
+				}
+				return nullDateVal;
+			};
+		}
+	</script>
+
+	<script>
+		// use date parser for all JSON.parse() requests
+		// make sure to call before any JSON conversions
+		JSON.useDateParser();
+	</script>
+
+
+	<style>
+		.tablinkWF {
+			float: left;
+			border: none;
+			outline: none;
+			cursor: pointer;
+			padding: 14px 16px;
+			font-size: 17px;
+		}
+
+		.tablinkWF:hover {
+			background-color: #cae1f4;
+		}
+
+		.tabcontentWF {
+			padding: 60px 20px;
+			height: 100%;
+		}
+	</style>
+
+	<script>
+		function openPage(pageName, linksClass, contentClass) {
+			var i, tabcontent, tablinks;
+			tabcontent = document.getElementsByClassName(contentClass);
+			for (i = 0; i < tabcontent.length; i++) {
+				tabcontent[i].style.display = "none";
+			}
+			tablinks = document.getElementsByClassName(linksClass);
+			for (i = 0; i < tablinks.length; i++) {
+				tablinks[i].style.backgroundColor = "";
+			}
+			document.getElementById(pageName).style.display = "block";
+		}
+	</script>
+
+</head>
+
+<body>
+	<app-root>
+		<div class="loader-container">
+			<div class="loader">
+				<div class="bottom-section">
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+				</div>
+				<div class="top-section">
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+					<div class="bottom"></div>
+				</div>
+				<div class="middle">
+				</div>
+			</div>
+		</div>
+	</app-root>
+</body>
+
+</html>

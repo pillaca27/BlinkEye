@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : astipohorario
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="asperiodo.listar">
+    	select secuencia as "id", nombre as "nombre" 
+    		,estado as "estadoId"
+    	from as_periodo
+    	order by fechadesde desc
+  	</sql-query>
+	
+	<sql-query name="asperiodo.listarActivos">
+    	select secuencia as "id", nombre as "nombre"
+    		,estado as "estadoId" 
+    	from as_periodo where Estado = 'A'
+    	order by fechadesde desc
+  	</sql-query>
+  	
+  	<sql-query name="asperiodo.obtenertabla">
+    	select secuencia as "id", nombre as "nombre" 
+    		,estado as "estadoId"
+    	from as_periodo
+    	where secuencia = :p_secuencia
+  	</sql-query>
+	
+	<sql-query name="asperiodo.obtenerdto">
+    	SELECT A.secuencia AS "secuencia",
+		       A.fechadesde AS "fechadesde",
+		       A.tipo AS "tipo",
+		       A.fechahasta as "fechahasta",
+		       A.nombre as "nombre",       
+		       A.periodoplanilla as "periodoplanilla",
+		       A.tipoplanilla as "tipoplanilla",
+		       A.estado as "estado",
+		       A.ultimafechamodif as "ultimafechamodif",
+		       A.ultimousuario as "ultimousuario"
+		FROM   as_periodo A
+		where A.secuencia = :p_secuencia
+  	</sql-query>
+  	
+  	<sql-query name="asperiodo.listarfiltros">
+    	SELECT A.secuencia AS "secuencia",
+		       A.fechadesde AS "fechadesde",
+		       A.tipo AS "tipo",
+		       A.fechahasta as "fechahasta",
+		       A.nombre as "nombre",       
+		       A.periodoplanilla as "periodoplanilla",
+		       A.tipoplanilla as "tipoplanilla",
+		       A.estado as "estado",
+		       A.ultimafechamodif as "ultimafechamodif",
+		       A.ultimousuario as "ultimousuario"
+		FROM   as_periodo A
+		where 
+			A.secuencia = ISNULL(:p_secuencia,A.secuencia)
+			and UPPER(ISNULL(A.nombre,'xxx')) like '%' || ISNULL(:p_nombre,UPPER(A.nombre)) || '%'			
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		order by fechadesde desc
+  	</sql-query>
+  	
+  	
+</hibernate-mapping>

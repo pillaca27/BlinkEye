@@ -1,0 +1,104 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="filtro.companiacodigo" [style]="{'width':'100%'}" [pKeyFilter]="blockSpecial" pInputText (ngModelChange)="filtro.companiacodigo = $event.toUpperCase()" type="text" maxlength="6" (keypress)="defaultBuscar($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText type="text" class="inputDescripcion" [(ngModel)]="filtro.descripcioncorta" maxlength="40" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.descripcioncorta=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.estado" [options]="lstEstados" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigo">Compañía</th>
+                <th class="tablaHeaderIzquierda">Descripción</th>
+                <th class="tablaHeaderEstado">Estado</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-ri="rowIndex">
+            <tr>
+                <td class="tablaColumnaAccion3"> </td>
+                <td class="tablaColumnaCodigo" *ngIf="rowGroupMetadata[row.tipocompania].index === ri">Tipo Compañía: </td>
+                <td class="tablaColumnaIzquierda" *ngIf="rowGroupMetadata[row.tipocompania].index === ri">
+                    <span class="p-text-bold p-ml-2"> {{row.tipocompania}}</span>
+                </td>
+                <td class="tablaColumnaEstado"> </td>
+            </tr>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text botonGrilla" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text botonGrilla" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" *ngIf="menuSeguridad.flgBorrar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Compañía</span> {{row.companiacodigo}}
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Descripción</span> {{row.descripcioncorta}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="4">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

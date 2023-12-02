@@ -1,0 +1,71 @@
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verSelector" [resizable]="false" modal="modal" showEffect="fade" hideEffect="size" [style]="{'max-width':'850px'}">
+
+        <p-header>            
+            <p style="font-size:16px;display:inline-block; margin-top: 10px;">SELECTOR DE GRUPO - SUB-GRUPO</p>
+        </p-header>
+
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Grupo</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.costcentergroup" (keypress)="preBuscar($event, dtCommodity)" />
+        
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-lg-3">
+                
+            </div>
+            <div class="p-field p-col-12 p-md-12 p-lg-2">
+                               
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-2">
+               
+                
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtCommodity)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dtCommodity [rows]="registrosPorPagina" [lazy]="true" [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" selectionMode="single" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+           (onLazyLoad)="cargarCommodity($event)" [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderCodigo">Grupo</th>
+                    <th class="tablaHeaderIzquierda">Descripción</th>
+                    <th class="tablaHeaderCodigo">Sub-Grupo</th>
+                    <th class="tablaHeaderIzquierda">Descripción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1" > <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text" title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo">{{row.costcentergroup}}</td>
+                    <td class="tablaColumnaIzquierda">{{row.localname}}</td>
+                    <td class="tablaColumnaCodigo">{{row.costcentermajorgroup}}</td>
+                    <td class="tablaColumnaIzquierda">{{row.subgrupo}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="5">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

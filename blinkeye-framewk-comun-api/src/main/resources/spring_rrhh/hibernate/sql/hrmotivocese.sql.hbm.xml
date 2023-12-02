@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+    <sql-query name="hrmotivocese.listar">
+    	select motivo as "id", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from hr_motivocese 
+    	order by descripcion
+	</sql-query>
+	
+	<sql-query name="hrmotivocese.listarActivos">
+    	select motivo as "id", descripcion as "nombre" 
+    			,Estado as "estadoId"
+    	from hr_motivocese where Estado = 'A'
+    	order by descripcion
+	</sql-query>
+	
+	<sql-query name="hrmotivocese.obtenertabla">
+    	select motivo as "id", 
+    			descripcion as "nombre",
+    			Estado as "estadoId" 
+    			from hr_motivocese
+    			where motivo = :p_motivo 
+	</sql-query>
+	
+	<sql-query name="hrmotivocese.listarfiltros">
+    	select motivo as "id", 
+    			descripcion as "nombre",
+    			Estado as "estadoId" 
+    			from hr_motivocese
+    			where  motivo = ISNULL(:p_motivo,motivo)
+				and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+				and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		order by descripcion			
+	</sql-query>
+	
+	<sql-query name="hrmotivocese.contarmotivoceseporfiltro">
+        SELECT COUNT(1)
+		FROM HR_MOTIVOCESE A
+		WHERE 1 = 1
+			AND A.MOTIVO = ISNULL(:p_motivo, A.MOTIVO)
+			AND A.DESCRIPCION like '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+    </sql-query>
+    
+    <sql-query name="hrmotivocese.listarmotivoceseporfiltro">
+		SELECT A.MOTIVO AS "id", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCION))) AS "descripcion", 
+			CAST(A.ESTADO AS VARCHAR) AS "estadoId"
+		FROM HR_MOTIVOCESE A
+		WHERE 1 = 1
+			AND A.MOTIVO = ISNULL(:p_motivo, A.MOTIVO)
+			AND A.DESCRIPCION like '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+		ORDER BY A.DESCRIPCION
+    </sql-query>
+	
+</hibernate-mapping>

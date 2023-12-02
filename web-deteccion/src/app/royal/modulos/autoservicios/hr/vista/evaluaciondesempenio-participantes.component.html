@@ -1,0 +1,188 @@
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-12">
+                <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" #dt1
+                    scrollWidth="100%" [paginator]="true" [totalRecords]="listaParticipantes.length"
+                    [value]="listaParticipantes" [(selection)]="registroSeleccionado" selectionMode="single"
+                    [globalFilterFields]="['empleadoNombre']">
+                    <ng-template pTemplate="caption">
+                        <div class="p-grid">
+                            <div class="p-col-12">
+                                <div class="p-fluid p-formgrid p-grid">
+                                    <div class="p-field p-col-12 p-md-3">
+                                        <input pInputText type="text"
+                                            (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                            placeholder="Buscar por nombre del empleado" />
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-7">
+                                    </div>
+                                    <div class="p-field p-col-12 p-md-2">
+                                        <button pButton pRipple type="button" label="Salir" icon="fad fa-reply"
+                                            class="p-button-outlined p-button-secondary" (click)="salir()"></button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion3">Acciones</th>
+                            <th class="tablaHeaderCodigoChico">Empleado</th>
+                            <th class="tablaHeaderNombreMedio">Nombre</th>
+                            <th class="tablaHeaderFecha">Fecha Evaluación</th>
+                            <th class="tablaHeaderCodigo">Estado</th>
+                            <th class="tablaHeaderCodigo">Tipo de Evaluador</th>
+                            <th class="tablaHeaderMonto">Inc. Crítico</th>
+                            <th class="tablaHeaderMonto">Competencia</th>
+                            <th class="tablaHeaderMonto">Función</th>
+                            <th class="tablaHeaderMonto">Obj. Puesto</th>
+                            <th class="tablaHeaderMonto">Obj. Empleado</th>
+                            <th class="tablaHeaderNombreMedio">Puesto</th>
+                            <th class="tablaHeaderNombreMedio">Categoría</th>
+                            <th class="tablaHeaderNombreMedio">Unidad Operativa</th>
+                            <th class="tablaHeaderNombreMedio">Compañía</th>
+                            <th class="tablaHeaderNombreMedio">Unidad de Negocio</th>
+                            <th class="tablaHeaderNombreMedio">Sucursal</th>
+                            <th class="tablaHeaderCodigo">Tipo de Planilla</th>
+                            <th class="tablaHeaderNombreMedio">Centro de Costo</th>
+                            <th class="tablaHeaderCodigo">Situación Empleado</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr [pSelectableRow]="rowData">
+                            <td class="tablaColumnaAccion3">
+                                <span class="p-column-title">Acciones</span>
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-eye"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                                (click)="ver(rowData)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-print"
+                                                *ngIf="rowData.estado != 'P'"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Imprimir"
+                                                (click)="imprimir(rowData)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                *ngIf="dtoEvaluacion.puedeEvaluar == 'SI' && accion == ACCIONES.EDITAR && rowData.estado != 'V'"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Evaluar"
+                                                (click)="evaluar(rowData)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Empleado</span>
+                                {{rowData.empleado}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Nombre</span>
+                                {{rowData.empleadoNombre}}
+                            </td>
+                            <td class="tablaColumnaFecha">
+                                <span class="p-column-title">Fecha Evaluación</span>
+                                {{rowData.fechaEvaluacion}}
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <span class="p-column-title">Estado</span>
+                                {{rowData.estadoEvaluacion}}
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <span class="p-column-title">Tipo de Evaluador</span>
+                                {{rowData.tipoEvaluadorNombre}}
+                            </td>
+                            <td class="tablaColumnaMonto">
+                                <span class="p-column-title">Inc. Crítico</span>
+                                {{rowData.ptjCritico | number : '1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaMonto">
+                                <span class="p-column-title">Competencia</span>
+                                {{rowData.ptjCompetencia | number : '1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaMonto">
+                                <span class="p-column-title">Función</span>
+                                {{rowData.ptjFuncion | number : '1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaMonto">
+                                <span class="p-column-title">Obj. Puesto</span>
+                                {{rowData.ptjObjPuesto | number : '1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaMonto">
+                                <span class="p-column-title">Obj. Empleado</span>
+                                {{rowData.ptjObjEmpleado | number : '1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Puesto</span>
+                                {{rowData.puestoNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Categoría</span>
+                                {{rowData.categoriaNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Unidad Operativa</span>
+                                {{rowData.unidadOperativaNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Compañía</span>
+                                {{rowData.empleadoCompaniaNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Unidad de Negocio</span>
+                                {{rowData.unidadNegocioNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Sucursal</span>
+                                {{rowData.sucursalNombre}}
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <span class="p-column-title">Tipo de Planilla</span>
+                                {{rowData.tipoPlanillaNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Centro de Costo</span>
+                                {{rowData.centroCostoNombre}}
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <span class="p-column-title">Situación Empleado</span>
+                                {{rowData.situacionEmpleadoNombre}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="20">
+                                No existen registros para mostrar
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+    </div>
+</div>
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalPDF" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size"
+        header="REPORTE INTEGRAL DE EVALUACIÓN" [style]="{'width':'900px'}" [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-12" style="height: 480px;">
+                <br>
+                <ng2-pdfjs-viewer #vReporte>
+                </ng2-pdfjs-viewer>
+            </div>
+        </div>
+    </p-dialog>
+</div>

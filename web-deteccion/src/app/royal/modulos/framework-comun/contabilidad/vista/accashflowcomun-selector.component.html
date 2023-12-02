@@ -1,0 +1,90 @@
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verSelector" [resizable]="false" modal="modal" showEffect="fade" hideEffect="size" [style]="{'max-width':'1200px'}">
+
+        <p-header>            
+            <p style="font-size:16px;display:inline-block; margin-top: 10px;">SELECTOR CASH FLOW</p>
+        </p-header>
+
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-3 p-lg-3">
+                <span>Tipo Transacción</span>
+                <p-dropdown [options]="lstTiporegistro" [(ngModel)]="filtro.tiporegistro" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-3">
+                <span>Flujo de efectivo</span>
+                <p-dropdown [options]="lstTipooperacion" [(ngModel)]="filtro.tipooperacion" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-3 p-lg-3">
+                <span>Grupo</span>
+                <p-dropdown [options]="lstMajor" [(ngModel)]="filtro.grupoflujo" [style]="{'width':'100%'}">
+                </p-dropdown>
+            </div>                   
+
+           <!--  <div class="p-col-12 p-md-4 p-lg-2">
+                <span>Código</span>
+                <input pInputText type="text"  style="width: 100%;" [(ngModel)]="filtro.codigo" (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div>
+            <div class="p-col-12 p-md-8 p-lg-4">
+                <span>Descripción</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.descripcion" (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div> -->
+
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtUbicacionGeo)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dtUbicacionGeo [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [value]="filtro.paginacion.paginacionListaResultado" 
+            [lazy]="true" (onLazyLoad)="coreBuscar($event)" [paginator]="true" selectionMode="single" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+            [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acciones</th>
+                    <th class="tablaHeaderCodigo">Código</th>
+                    <th class="tablaHeaderIzquierda">Descripción</th>
+                    <th class="tablaHeaderCodigoChico">Tipo Transacción</th>
+                    <th class="tablaHeaderCodigoChico">Flujo de Efectivo</th>
+                    <th class="tablaHeaderCodigoChico">Cod.</th>
+                    <th class="tablaHeaderCodigo">Grupo Mayor</th>
+                    <th class="tablaHeaderCodigo">Cod.</th>
+                    <th class="tablaHeaderIzquierda">Grupo</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text" title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo">{{row.cashflowcode}}</td>
+                    <td class="tablaColumnaIzquierda">{{row.localname2}}</td>
+                    <td class="tablaColumnaCodigoChico">{{row.tiporegistroflag}}</td>
+                    <td class="tablaColumnaCodigoChico">{{row.tipooperacionflag}}</td>
+                    <td class="tablaColumnaCodigoChico">{{row.cashflowmajor}}</td>
+                    <td class="tablaColumnaCodigo">{{row.localname}}</td>
+                    <td class="tablaColumnaCodigo">{{row.cashflowgroup}}</td>
+                    <td class="tablaColumnaIzquierda">{{row.localname1}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="9">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

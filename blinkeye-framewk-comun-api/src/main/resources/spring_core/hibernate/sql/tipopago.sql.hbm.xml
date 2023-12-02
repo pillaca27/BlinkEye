@@ -1,0 +1,212 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="tipopago.listar">
+	    <![CDATA[
+	        select tipopago as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from tipopago	        
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="tipopago.listarActivos">
+	    <![CDATA[
+	        select tipopago as "codigo", descripcion as "nombre", CAST(Estado as varchar)  as "estadoId" 
+	        from tipopago
+	        where Estado = 'A'
+	        order by descripcion
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="tipopago.obtenerTabla">
+	    <![CDATA[
+	        select tipopago as "codigo", descripcion as "nombre", CAST(Estado as varchar)  as "estadoId" 
+	        from tipopago
+			where tipopago = :p_tipopago
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="tipopago.listarfiltros">
+    	select tipopago as "codigo", descripcion as "nombre"
+    			,CAST(Estado as varchar) as "estadoId" 
+    	from tipopago 
+    	where  tipopago = ISNULL(:p_tipopago,tipopago)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+<!-- 	<sql-query name="tipopago.obtenerDto"> -->
+<!--            select  -->
+<!-- 			TIPOPAGO "tipopago" -->
+<!-- 			,DESCRIPCION "descripcion" -->
+<!-- 			,RESTRINGIDOFLAG "restringidoflag" -->
+<!-- 			,CARTAFLAG "cartaflag" -->
+<!-- 			,GENERARNUMERACIONFLAG "generarnumeracionflag" -->
+<!-- 			,ENTREGABLEFLAG "entregableflag" -->
+<!-- 			,ULTIMOUSUARIO "ultimousuario" -->
+<!-- 			,ULTIMAFECHAMODIF "ultimafechamodif" -->
+<!-- 			,CAST(Estado as varchar) "estado" -->
+<!-- 			,VOUCHERSUMARIZADOFLAG "vouchersumarizadoflag" -->
+<!-- 			,DISPONIBLEFEEDERFLAG "disponiblefeederflag" -->
+<!-- 			,CODIGOSIAF "codigosiaf" -->
+<!-- 			,DESCRIPCIONINGLES "descripcioningles" -->
+<!-- 			,GENERARCOMISIONFLAG "generarcomisionflag" -->
+<!-- 			,CUENTACOMISION "cuentacomision" -->
+<!-- 			,MONTOCOMISIONLOCAL "montocomisionlocal" -->
+<!-- 			,MONTOCOMISIONEXTRANJERA "montocomisionextranjera" -->
+<!-- 			,GENERARINTERFASEFLAG "generarinterfaseflag" -->
+<!-- 			,TIPOPAGORTPS "tipopagortps" -->
+<!-- 			,CODIGOFISCAL "codigofiscal" -->
+<!--          from TIPOPAGO -->
+<!--          where  -->
+<!-- 			TIPOPAGO = :p_tipopago -->
+<!--     </sql-query> -->
+    
+    <sql-query name="tipopago.listardtofiltros">
+          select 
+			TIPOPAGO "tipopago"
+			,DESCRIPCION "descripcion"
+			,RESTRINGIDOFLAG "restringidoflag"
+			,CARTAFLAG "cartaflag"
+			,GENERARNUMERACIONFLAG "generarnumeracionflag"
+			,ENTREGABLEFLAG "entregableflag"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CAST(Estado as varchar) "estado"
+			,VOUCHERSUMARIZADOFLAG "vouchersumarizadoflag"
+			,DISPONIBLEFEEDERFLAG "disponiblefeederflag"
+			,CODIGOSIAF "codigosiaf"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,GENERARCOMISIONFLAG "generarcomisionflag"
+			,CUENTACOMISION "cuentacomision"
+			,MONTOCOMISIONLOCAL "montocomisionlocal"
+			,MONTOCOMISIONEXTRANJERA "montocomisionextranjera"
+			,GENERARINTERFASEFLAG "generarinterfaseflag"
+			,TIPOPAGORTPS "tipopagortps"
+			,CODIGOFISCAL "codigofiscal"
+			,UUID "uuid"
+         from TIPOPAGO
+         where 
+				TIPOPAGO = ISNULL(:p_tipopago,TIPOPAGO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+    <sql-query name="tipopago.contartipopagoporfiltro">
+         select count(1)
+          from TIPOPAGO
+         where 
+             TipoPago = ISNULL(:p_tipopago, TipoPago)
+			AND Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%'
+			AND Estado = ISNULL(:p_estado, Estado)
+    </sql-query>
+
+    <sql-query name="tipopago.listartipopagoporfiltro">
+         select 
+			TipoPago "tipopago"
+			,Descripcion "descripcion"		
+			,cast(Estado as varchar) "estado"
+         from TIPOPAGO
+         where 
+             TipoPago = ISNULL(:p_tipopago, TipoPago)
+			AND Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%'
+			AND Estado = ISNULL(:p_estado, Estado)
+    </sql-query>
+    
+    <!--     MANTENIMIENTO -->
+
+    <sql-query name="tipopago.listarPaginadoContar">
+         select count(1)
+          from TIPOPAGO
+         where 
+             (ISNULL(:p_tipopago, '-') = '-' OR  TipoPago like '%' + ISNULL(:p_tipopago, TipoPago) + '%')
+			AND (ISNULL(:p_descripcion, '-') = '-' OR  Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%')
+			AND (ISNULL(:p_estado, '-') = '-' OR Estado = :p_estado)
+
+
+    </sql-query>
+
+    <sql-query name="tipopago.listarPaginadoSentencia">
+         select 
+			TipoPago "tipopago"
+			,Descripcion "descripcion"		
+			,cast(Estado as varchar) "estado"
+			,case when cast(Estado as varchar(1)) = 'A' THEN 'Activo' else 'Inactivo' end AS "estadodescripcion" 
+			,UUID "uuid"
+         from TIPOPAGO
+         where 
+             (ISNULL(:p_tipopago, '-') = '-' OR  TipoPago like '%' + ISNULL(:p_tipopago, TipoPago) + '%')
+			AND (ISNULL(:p_descripcion, '-') = '-' OR  Descripcion like '%' + ISNULL(:p_descripcion, Descripcion) + '%')
+			AND (ISNULL(:p_estado, '-') = '-' OR Estado = :p_estado)
+
+    </sql-query>
+    
+        <sql-query name="tipopago.listarDtoCore">
+         select 
+			TipoPago "tipopago"
+			,Descripcion "descripcion"
+			,RestringidoFlag "restringidoflag"
+			,CartaFlag "cartaflag"
+			,GenerarNumeracionFlag "generarnumeracionflag"
+			,EntregableFlag "entregableflag"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,Timestamp "timestamp"
+			,Estado "estado"
+			,VoucherSumarizadoFlag "vouchersumarizadoflag"
+			,DisponibleFeederFlag "disponiblefeederflag"
+			,DescripcionIngles "descripcioningles"
+			,CodigoSIAF "codigosiaf"
+			,CodigoFiscal "codigofiscal"
+			,tipopagortps "tipopagortps"
+			,UUID "uuid"
+         from TIPOPAGO
+         where 
+			TipoPago = ISNULL(:p_tipopago, TipoPago)
+			TipoPago = ISNULL(:p_tipopago, TipoPago)
+
+    </sql-query>
+    
+        <sql-query name="tipopago.obtenerDto">
+         select 
+			TipoPago "tipopago"
+			,rtrim(Descripcion) "descripcion"
+			,cast(RestringidoFlag as varchar) "restringidoflag"
+			,cast(GenerarNumeracionFlag as varchar) "generarnumeracionflag"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,cast(Estado as varchar) "estado"
+			,cast(VoucherSumarizadoFlag as varchar) "vouchersumarizadoflag"
+			,UUID "uuid"
+         from TIPOPAGO
+         where 
+			TipoPago = :p_tipopago
+
+    </sql-query>
+    
+        <sql-query name="tipopago.obtenerDtoPorUuid">
+         select 
+			TipoPago "tipopago"
+			,rtrim(Descripcion) "descripcion"
+			,cast(RestringidoFlag as varchar) "restringidoflag"
+			,cast(GenerarNumeracionFlag as varchar) "generarnumeracionflag"
+			,UltimoUsuario "ultimousuario"
+			,UltimaFechaModif "ultimafechamodif"
+			,cast(Estado as varchar) "estado"
+			,cast(VoucherSumarizadoFlag as varchar) "vouchersumarizadoflag"
+			,UUID "uuid"
+         from TIPOPAGO
+         where 
+			UUID = :p_uuid
+    </sql-query>
+    
+</hibernate-mapping>

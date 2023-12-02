@@ -1,0 +1,293 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-md-8">
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton type="button" icon="fa fa-check" style="width:100%;" label="Aceptar"
+                        *ngIf="accion!=ACCIONES.WORKFLOW" class="ui-button-raised  ui-button-rounded ui-button-success"
+                        [disabled]="verBoton" (click)="coreGuardar()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton label="Salir" icon="fad fa-reply" type="button"
+                        class="ui-button-raised  ui-button-rounded ui-button-secondary" (click)="salir()"
+                        style="width:100%"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-5">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-field p-col-12 p-md-12">
+                                    <span>Solicitante</span>
+                                    <div class="p-inputgroup">
+                                        <input pInputText type="text" disabled
+                                            [(ngModel)]="autorizacion.nombrecompleto" />
+                                    </div>
+                                </div>
+                                <div class="p-field p-col-12 p-md-12">
+                                    <span>Estado</span>
+                                    <input pInputText type="text" disabled value="Solicitado" style="width: 100%;"
+                                        *ngIf="autorizacion.estado==='S'" />
+                                    <input pInputText type="text" disabled value="Aprobado" style="width: 100%;"
+                                        *ngIf="autorizacion.estado==='A'" />
+                                    <input pInputText type="text" disabled value="Visado" style="width: 100%;"
+                                        *ngIf="autorizacion.estado==='V'" />
+                                    <input pInputText type="text" disabled value="Rechazado" style="width: 100%;"
+                                        *ngIf="autorizacion.estado==='R'" />
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label style="font-weight: bolder;font-size: 14px;">Eventos</label>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-12">
+                                    <div *ngFor="let even of autorizacion.dw_eventos">
+                                        <div class="ui-g" style="margin-bottom:10px">
+                                            <p-radioButton name="{{even.indice}}" value="{{even.conceptoacceso}}"
+                                                (onClick)="itemchanged($event,'categoriaautorizacion')" label="{{even.nombrelargo}}"
+                                                [disabled]="!puedeEditar"
+                                                [(ngModel)]="autorizacion.categoriaautorizacion" inputId="opt1">
+                                            </p-radioButton>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-12"  *ngIf="autorizacion.categoriaautorizacion=='COMP' || autorizacion.categoriaautorizacion == 'OTRO'">
+                                    <span>Concepto</span>
+                                    <p-dropdown [options]="dwc_conceptoaccesofiltrado"
+                                        [(ngModel)]="autorizacion.conceptoacceso" filter="true"
+                                        (onChange)="itemchanged($event,'conceptoacceso')" [disabled]="!puedeEditar">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-6">
+                                    <span>Fecha</span>
+                                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" [locale]="es"
+                                        yearRange="1940:2200" placeholder="Del" [showIcon]="true"
+                                        (onSelect)="itemchanged($event,'fecha')" dateFormat="dd/mm/yy"
+                                        [(ngModel)]="autorizacion.fecha" [disabled]="!puedeEditar"></p-calendar>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6">
+                                    <span>.</span>
+                                    <p-calendar
+                                        [monthNavigator]="true" [yearNavigator]="true" [locale]="es"
+                                        yearRange="1940:2200" (onSelect)="itemchanged($event,'fechafin')" placeholder="Al"
+                                        [showIcon]="true" dateFormat="dd/mm/yy" [(ngModel)]="autorizacion.fechafin"
+                                        [disabled]="autorizacion.categoriaautorizacion == 'OMIS' || !puedeEditar">
+                                    </p-calendar>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-6" *ngIf="autorizacion.opciones.ismostrardesde1">
+                                    <span>Intervalo (Formato 24 Horas)</span>
+                                    <p-calendar [locale]="es" placeholder="00:00" [timeOnly]="true"
+                                        [(ngModel)]="autorizacion.desde" (onBlur)="itemchanged($event,'desde')"
+                                        dateFormat="HH:mm"
+                                        [disabled]="!autorizacion.opciones.ishabilitardesde1 || !puedeEditar">
+                                    </p-calendar>
+                                </div>
+                                <div class="p-field p-col-12 p-md-6" *ngIf="autorizacion.opciones.ismostrarhasta1">
+                                    <span>.</span>
+                                    <p-calendar [locale]="es" placeholder="00:00" [timeOnly]="true"
+                                        [(ngModel)]="autorizacion.hasta" (onBlur)="itemchanged($event,'hasta')"
+                                        [disabled]="!autorizacion.opciones.ishabilitarhasta1 || !puedeEditar">
+                                    </p-calendar>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-7">
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <div class="p-fluid p-formgrid p-grid">
+
+                                <div class="p-field p-col-12 p-md-6" *ngIf="autorizacion.categoriaautorizacion=='SOBR'">
+                                    <span>Comportamiento</span>
+                                    <p-dropdown [options]="lstComportamiento"
+                                        [(ngModel)]="autorizacion.comportamientosobretiempo" filter="true"
+                                        [disabled]="!puedeEditar">
+                                    </p-dropdown>
+                                </div>
+
+                                <div class="p-field p-col-12 p-md-12">
+                                    <span>Observación</span>
+                                    <textarea pInputTextarea type="text " [(ngModel)]="autorizacion.observacion"
+                                        style="width:100% " [disabled]="!puedeEditar" maxlength="100 "></textarea>
+                                </div>
+
+                                <div class="p-col-12 p-md-12">
+                                    <div class="p-fluid p-formgrid p-grid">
+                                        <div class="p-field p-col-12 p-md-12">
+                                            <p-fieldset legend="Auditoría">
+                                                <div class="p-fluid">
+                                                    <div class="p-field p-grid formularioFila">
+                                                        <div class="p-field p-col-12 p-md-6">
+                                                            <label>Solicitado Por</label>
+                                                            <div class="p-inputgroup">
+                                                                <input pInputText type="text"
+                                                                    [ngModel]="autorizacion.solicitadopor" disabled
+                                                                    style="flex: 1;" />
+                                                                <div style="flex: 1;">
+                                                                    <p-calendar [locale]="es" [style]="{'width':'100%'}"
+                                                                        [inputStyle]="{'width':'90%'}"
+                                                                        [(ngModel)]="autorizacion.fechasolicitud"
+                                                                        [disabled]="true" [showIcon]="true"
+                                                                        dateFormat="dd/mm/yy"> </p-calendar>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-field p-col-12 p-md-6">
+                                                            <label>Autorizado Por</label>
+                                                            <div class="p-inputgroup">
+                                                                <input pInputText type="text"
+                                                                    [ngModel]="autorizacion.autorizadopor" disabled
+                                                                    style="flex: 1;" />
+                                                                <div style="flex: 1;">
+                                                                    <p-calendar [locale]="es" [style]="{'width':'100%'}"
+                                                                        [inputStyle]="{'width':'90%'}"
+                                                                        [(ngModel)]="autorizacion.fechaautorizacion"
+                                                                        [disabled]="true" [showIcon]="true"
+                                                                        dateFormat="dd/mm/yy"> </p-calendar>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                        <div class="p-field p-col-12 p-md-6">
+                                                            <label>Usuario Modificación</label>
+                                                            <div class="p-inputgroup">
+                                                                <input pInputText type="text"
+                                                                    [ngModel]="autorizacion.ultimousuario" disabled
+                                                                    style="flex: 1;" />
+                                                                <div style="flex: 1;">
+                                                                    <p-calendar [locale]="es" [style]="{'width':'100%'}"
+                                                                        [inputStyle]="{'width':'90%'}"
+                                                                        [(ngModel)]="autorizacion.ultimafechamodif"
+                                                                        [disabled]="true" [showIcon]="true"
+                                                                        dateFormat="dd/mm/yy"> </p-calendar>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </p-fieldset>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-grid">
+                        <div class="p-col-12">
+                            <div class="p-fluid p-formgrid p-grid" style="padding: 20px;">
+                                <div class="p-field p-col-12 p-md-12">
+                                    <label style="font-weight: bolder;font-size: 14px;">Horario </label>
+                                </div>
+
+                                <p-table [responsive]="true" [value]="autorizacion.dw_detail">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th></th>
+                                            <th>Fecha</th>
+                                            <th>Hora Inicio</th>
+                                            <th>Hora Fin</th>
+                                            <th></th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-marcas>
+                                        <tr>
+                                            <td>
+                                                <span class="p-column-title">Fecha :</span>
+                                                {{marcas.diasemana}}
+                                            </td>
+
+                                            <td>
+                                                <span class="p-column-title">Fecha :</span>
+                                                {{marcas.fecha | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                            <td>
+                                                <span class="p-column-title">Hora Inicio:</span>
+                                                {{marcas.horainicio | date:'HH:mm'}}
+                                            </td>
+                                            <td>
+                                                <span class="p-column-title">Hora Fin:</span>
+                                                {{marcas.horafin | date:'HH:mm'}}
+                                            </td>
+                                            <td>
+                                                <span class="p-column-title"></span>
+                                                {{marcas.desde | date:'dd/MM/yyyy'}}
+                                            </td>
+                                            <td>
+                                                <span class="p-column-title"></span>
+                                                {{marcas.hasta | date:'dd/MM/yyyy'}}
+                                            </td>
+                                            <td>
+                                                <span class="p-column-title"></span>
+                                                {{(marcas.desde >= marcas.horainicio && marcas.desde <= marcas.horafin) && (marcas.hasta >= marcas.horainicio && marcas.hasta <= marcas.horafin) ?'Dentro Intervalo':'Fuera Intervalo'}}
+                                            </td>
+
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-5">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="font-weight: bolder;font-size: 14px;">Marcas </label>
+                        <label>{{autorizacion.opciones.st_tipodia}}</label>
+                    </div>
+
+                    <p-table [responsive]="true" [value]="autorizacion.dw_2">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th>Fecha</th>
+                                <th>Hora</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-marcas>
+                            <tr>
+                                <td>
+                                    <span class="p-column-title">Fecha :</span>
+                                    {{marcas.fecha | date: 'dd/MM/yyyy'}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Hora :</span>
+                                    {{marcas.hora | date:'HH:mm'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-personacomun-selector></app-personacomun-selector>
+</p-card>
+
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>

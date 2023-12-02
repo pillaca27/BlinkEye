@@ -1,0 +1,109 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Código</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="filtro.codigo" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-5">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="filtro.descripcion" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton pRipple type="button" label="Nuevo" icon="fad fa-layer-plus" class="p-button-outlined" (click)="coreNuevo()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <input #photoInputDlgMail type="file" class="form-control" style="display:none" (change)="importar(photoInputDlgMail)">
+                    <input #photoInputDlgMail2 type="file" class="form-control" style="display:none" (change)="importarPlantillasFile(photoInputDlgMail2)">
+                    <button pButton pRipple type="button" label="Importar" icon="fad fa-download" style="width: 100%;" class="p-button-outlined" (click)="photoInputDlgMail.click()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton pRipple type="button" label="Buscar" icon="fad fa-binoculars" class="p-button-outlined" (click)="coreBuscar()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-table [style]="{ width:'100%' }" [responsive]="true" [value]="lst">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion6">Acción</th>
+                <th class="tablaHeaderCodigo">Código</th>
+                <th class="tablaHeaderNombre">Descripción</th>
+                <th class="tablaHeaderNombre">Aplicación</th>
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion6">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" (click)="editar(rowData.uuid)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-upload" class="p-button-rounded p-button-text" title="Exportar" (click)="exportar(rowData.uuid)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-copy" class="p-button-rounded p-button-text" title="Nueva Version" (click)="copiarVersion(rowData.uuid)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-check" class="p-button-rounded p-button-text" title="Ver Correos" (click)="verListadoCorreos(rowData.uuid)"></button>
+
+                    <button pButton pRipple type="button" icon="fad fa-file-download" class="p-button-rounded p-button-text" title="Exportar Plantillas" (click)="exportarPlantillas(rowData.aplicacion, rowData.proceso)"></button>
+
+                    <button pButton pRipple type="button" icon="fad fa-file-upload" class="p-button-rounded p-button-text" title="Importar Plantillas" (click)="importarPlantillas(rowData.aplicacion, rowData.proceso);photoInputDlgMail2.click();"></button>
+
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Código</span> {{rowData.proceso}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Descripción</span> {{rowData.descripcion}} - V.{{rowData.version}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Aplicación</span> {{rowData.aplicacionAux}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="rowData.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="rowData.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="5">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog header="Confirmación" icon="fa fa-question-circle" [style]="{ width:'300px' }" #cd>
+    <p-footer>
+        <div class="p-grid">
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd.accept()"></button>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fad fa-times" label="No" (click)="cd.reject()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-confirmDialog>
+
+<transaccion-chat></transaccion-chat>

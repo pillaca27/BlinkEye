@@ -1,0 +1,104 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Fecha</label>
+                    <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" yearRange="2000:2030"
+                        [disabled]="accionnuevo" [(ngModel)]="dto.fechacambio" dateFormat="dd/mm/yy"
+                        [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="2000:2030" [readonlyInput]="true">
+                    </p-calendar>
+                </div>
+                <div class="p-field p-col-12 p-md-9" style="margin-top: 20px;">
+                    <p-divider align="left">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Tipo de Cambio Oficial (Diario)</b>
+                        </div>
+                    </p-divider>
+                </div>
+
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">De</label>
+                    <p-dropdown [(ngModel)]="dto.monedacodigo" [options]="lstmonedacodigo" [disabled]="true"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label> Compra</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.factorcompra" mode="decimal" [style]="{'width':'100%'}"
+                        (onBlur)="calcularPromedio()" (keypress)="onKeypressEvent($event)"
+                        [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="3"></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>SBS</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.factorcomprasbs" mode="decimal" [style]="{'width':'100%'}"
+                        [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="3"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">a</label>
+                    <p-dropdown [(ngModel)]="dto.monedacambiocodigo" [options]="lstmonedadolarcodigo" [disabled]="true"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label> Venta</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.factorventa" mode="decimal" [style]="{'width':'100%'}"
+                        (onBlur)="calcularPromedio()" (keypress)="onKeypressEvent($event)"
+                        [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="3"></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>SBS</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.factorventasbs" mode="decimal" [style]="{'width':'100%'}"
+                        [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="3"></p-inputNumber>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label> Otros</label>
+                    <p-inputNumber [locale]="locale" [(ngModel)]="dto.factorpromedio" mode="decimal" [style]="{'width':'100%'}"
+                        [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="3"></p-inputNumber>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+    [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

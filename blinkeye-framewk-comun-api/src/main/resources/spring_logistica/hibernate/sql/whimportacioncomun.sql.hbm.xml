@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.whimportacion
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="whimportacioncomun.DwWhImportacionSelect">
+	  <![CDATA[
+		     SELECT WH_IMPORTACION.CARPETANUMERO as "carpetanumero",   
+		         WH_IMPORTACION.POLIZAIMPORTACION as "polizaimportacion",   
+		         PERSONAMAST.BUSQUEDA as "busqueda",   
+		         WH_ORDENCOMPRA.CARPETANUMERO as "carpetanumero_1",   
+		         WH_ORDENCOMPRA.PROVEEDOR as "proveedor",   
+		         WH_ORDENCOMPRA.MONTOTOTAL as "montototal",   
+		         SY_CAMPOCALCULADO.MONTO01 as "monto01",
+		         cast('N' as varchar2(1)) as "seleccion",
+		         rownum as "rowkey"
+		    FROM WH_IMPORTACION,   
+		         PERSONAMAST,   
+		         WH_ORDENCOMPRA,   
+		         SY_CAMPOCALCULADO  
+		   WHERE ( WH_IMPORTACION.COMPANIASOCIO = WH_ORDENCOMPRA.COMPANIASOCIO ) and  
+		         ( WH_IMPORTACION.CARPETANUMERO = WH_ORDENCOMPRA.NUMEROORDEN ) and  
+		         ( WH_ORDENCOMPRA.PROVEEDOR = PERSONAMAST.PERSONA ) and  
+		         ( ( WH_Importacion.CompaniaSocio = :companiasocio ) AND 
+		         ( WH_Importacion.Estado = 'AP' ) AND  
+		         ( WH_Importacion.Situacion <> '0' ) AND  
+		         ( SY_CampoCalculado.RegistroNumero = 1 ) )   
+		    ORDER BY WH_IMPORTACION.CARPETANUMERO ASC   
+ 		]]>
+	</sql-query>
+	
+	
+	<sql-query name="whimportacioncomun.DwWhImportacionSelectDetalle">
+	  <![CDATA[
+			SELECT WH_TransaccionDetalle.Item as "item",
+		         WH_TransaccionDetalle.Condicion as "condicion",   
+		         WH_ItemMast.DescripcionLocal as "descripcionlocal",
+		         WH_TransaccionDetalle.Cantidad as "cantidad",
+		         WH_TransaccionDetalle.UnidadCodigo as "unidadcodigo", 
+		         WH_TransaccionDetalle.Secuencia as "secuencia",
+		         WH_TransaccionDetalle.CompaniaSocio as "companiasocio", 
+		         WH_TransaccionDetalle.NumeroDocumento as "numerodocumento",
+		         WH_TransaccionDetalle.TipoDocumento as "tipodocumento",
+		         WH_TransaccionDetalle.ReferenciaNumeroDocumento as "referencianumerodocumento",
+		         WH_TransaccionDetalle.ReferenciaSecuencia as "referenciasecuencia",
+		         WH_OrdenCompraDetalle.PrecioUnitario as "preciounitario"
+		    FROM WH_TransaccionDetalle,   
+		         WH_ItemMast,   
+		         WH_TransaccionHeader,   
+		         WH_OrdenCompraDetalle  
+		   WHERE ( WH_ItemMast.Item = WH_TransaccionDetalle.Item ) and  
+		         ( WH_TransaccionHeader.CompaniaSocio = WH_TransaccionDetalle.CompaniaSocio ) and  
+		         ( WH_TransaccionHeader.TipoDocumento = WH_TransaccionDetalle.TipoDocumento ) and  
+		         ( WH_TransaccionHeader.NumeroDocumento = WH_TransaccionDetalle.NumeroDocumento ) and  
+		         ( WH_TransaccionDetalle.ReferenciaCompaniaSocio = WH_OrdenCompraDetalle.CompaniaSocio ) and  
+		         ( WH_TransaccionDetalle.ReferenciaNumeroDocumento = WH_OrdenCompraDetalle.NumeroOrden ) and  
+		         ( WH_TransaccionDetalle.ReferenciaSecuencia = WH_OrdenCompraDetalle.Secuencia ) and  
+		         ( ( WH_TransaccionDetalle.CompaniaSocio = :companiaSocio ) AND  
+		         ( WH_TransaccionHeader.TransaccionCodigo = 'MIT' ) AND  
+		         ( WH_TransaccionHeader.Estado = 'PR' ) AND  
+		         ( WH_TransaccionHeader.ValorizacionPendienteFlag = 'S' ) AND  
+		         ( WH_TransaccionDetalle.ReferenciaNumeroDocumento = :numeroorden ) AND  
+		         ( WH_TransaccionDetalle.ReferenciaTipoDocumento = 'OC' ) )    
+	]]>
+	</sql-query>
+	
+
+
+<sql-query name="whimportacioncomun.DwWhImportacionSelectBl">
+<![CDATA[
+		SELECT
+		WH_BILLOFLADING.COMPANIASOCIO as "companiasocio",
+		WH_BILLOFLADING.BLNUMERO as "blnumero",
+		WH_BILLOFLADING.TRANSPORTEDOCUMENTO as "transportedocumento",
+		WH_BILLOFLADING.EXPORTADORDOCUMENTO as "exportadordocumento",
+		SY_CAMPOCALCULADO.MONTO01 as "monto01",
+		SY_CAMPOCALCULADO.MONTO02 as "monto02",
+		cast('N' as varchar2(1)) as "seleccion",
+		sum(AP_Documentos.MontoTotal) as "montototal",
+		sum(MontoFlete) as "montoflete",
+		sum( MontoFlete + AP_Documentos.MontoTotal) as "sumatotal",
+		rownum as "rowkey"
+		FROM WH_BILLOFLADING,
+		WH_BILLOFLADINGDETALLE,
+		AP_DOCUMENTOS,
+		WH_IMPORTACION,
+		SY_CAMPOCALCULADO
+		WHERE ( WH_BILLOFLADINGDETALLE.COMPANIASOCIO =
+		WH_BILLOFLADING.COMPANIASOCIO ) and
+		( WH_BILLOFLADINGDETALLE.BLNUMERO = WH_BILLOFLADING.BLNUMERO ) and
+		( WH_BILLOFLADINGDETALLE.DOCUMENTOCLASIFICACION =
+		AP_DOCUMENTOS.DOCUMENTOCLASIFICACION ) and
+		( WH_BILLOFLADINGDETALLE.DOCUMENTOCLASIFICACION =
+		AP_DOCUMENTOS.DOCUMENTOCLASIFICACION ) and
+		( WH_BILLOFLADINGDETALLE.DOCUMENTOREFERENCIA =
+		AP_DOCUMENTOS.DOCUMENTOREFERENCIA ) and
+		( WH_BILLOFLADING.COMPANIASOCIO = WH_IMPORTACION.COMPANIASOCIO ) and
+		( WH_BILLOFLADINGDETALLE.PROVEEDOR = AP_DOCUMENTOS.PROVEEDOR ) and
+		( WH_BILLOFLADINGDETALLE.PROVEEDOR = AP_DOCUMENTOS.PROVEEDOR ) and
+		( WH_IMPORTACION.CARPETANUMERO =
+		AP_DOCUMENTOS.REFERENCIANUMERODOCUMENTO ) and
+		( ( WH_BillofLading.CompaniaSocio = :companiasocio ) AND
+		( SY_CampoCalculado.RegistroNumero = 1 ) AND
+		( WH_BillofLading.Estado = 'AP' ) AND
+		( WH_Importacion.Estado = 'AP' ) )
+		GROUP BY WH_BILLOFLADING.COMPANIASOCIO,
+		WH_BILLOFLADING.BLNUMERO,
+		WH_BILLOFLADING.EXPORTADORDOCUMENTO,
+		WH_BILLOFLADING.TRANSPORTEDOCUMENTO,
+		SY_CAMPOCALCULADO.MONTO01,
+		SY_CAMPOCALCULADO.MONTO02,
+		rownum
+		]]>
+	</sql-query>
+	
+	<sql-query name="whimportacioncomun.DwWhImportacionSelectBlDetalle">
+<![CDATA[
+		SELECT WH_BillofLading.CompaniaSocio as "companiasocio",   
+	         WH_BillofLading.BLNumero as "blnumero",
+	         AP_Documentos.ReferenciaNumeroDocumento as "referencianumerodocumento",   
+	         AP_Documentos.DocumentoReferencia as "documentoreferencia",
+	         AP_Documentos.MontoTotal as "montototal",
+	         AP_Documentos.ObligacionTipoDocumento as "obligaciontipodocumento",
+	         AP_Documentos.ObligacionNumeroDocumento as "obligacionnumerodocumento",
+	         WH_BillofLadingDetalle.MontoFlete as "montoflete",
+	         PersonaMast.Busqueda as "busqueda",
+	         WH_BillofLadingDetalle.Proveedor as "proveedor",   
+	         AP_Documentos.TransaccionNumeroDocumento as "transaccionnumerodocumento"  
+	    FROM WH_BillofLading,   
+	         WH_BillofLadingDetalle,   
+	         AP_Documentos,   
+	         WH_Importacion,   
+	         PersonaMast  
+	   WHERE ( WH_BillofLadingDetalle.CompaniaSocio = WH_BillofLading.CompaniaSocio ) and  
+	         ( WH_BillofLadingDetalle.BLNumero = WH_BillofLading.BLNumero ) and  
+	         ( WH_BillofLadingDetalle.DocumentoClasificacion = AP_Documentos.DocumentoClasificacion ) and  
+	         ( WH_BillofLadingDetalle.DocumentoReferencia = AP_Documentos.DocumentoReferencia ) and  
+	         ( WH_Importacion.CarpetaNumero = AP_Documentos.ReferenciaNumeroDocumento ) and  
+	         ( WH_BillofLading.CompaniaSocio = WH_Importacion.CompaniaSocio ) and  
+	         ( WH_BillofLadingDetalle.Proveedor = PersonaMast.Persona ) and  
+	         ( WH_BillofLadingDetalle.Proveedor = AP_Documentos.Proveedor ) and  
+	         ( ( WH_BillofLading.CompaniaSocio = :companiaSocio ) AND  
+	         ( WH_Importacion.Estado = 'AP' ) AND  
+	         ( WH_BillofLading.BLNumero = :blnumero ) )
+         ]]>  
+	</sql-query>
+	
+	
+    
+</hibernate-mapping>

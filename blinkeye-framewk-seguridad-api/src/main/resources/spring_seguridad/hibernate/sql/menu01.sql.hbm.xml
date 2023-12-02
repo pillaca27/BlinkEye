@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : .Parametrosmast -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <!-- INCIO: 	CRYSTAL -->
+	<sql-query name="menu01.usuarioEsAdministradorDeAplicacion">
+     	<![CDATA[
+		 	SELECT  AplicacionCodigo AS "codigo" 
+			FROM SeguridadAutorizaciones 
+			WHERE AplicacionCodigo = :p_aplicacion
+			AND Grupo = 'SYSTEM'
+			AND Concepto = 'SYSADM'
+			AND Usuario IN (SELECT spu.Perfil FROM SeguridadPerfilUsuario spu 
+							WHERE spu.Usuario = :p_usuario and spu.Estado='A'						
+							)
+			AND ESTADO = 'A'
+       ]]>
+	</sql-query>
+	
+	<sql-query name="menu01.listarDtoAutorizacionesPorAdministrador">
+		select 
+			 b.APLICACIONCODIGO "aplicacionId"
+			,d.GRUPO "contenedorId"
+			,d.Concepto "componenteId"
+			,null "usuarioId"
+			,'S' "flgNuevo"
+			,'S' "flgEditar"
+			,'S' "flgEliminar"
+			,'S' "flgAprobar"
+			,'A' "estadoId"
+			,null "modificacionUsuario"
+			,null "modificacionFecha"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+			,d.Descripcion 'auxComponenteNombre'
+			,d.orden 'auxComponenteOrden'
+			,d.imagen 'auxComponenteImagen'
+			,d.WebPage 'auxComponenteRutaWeb'
+			,RTRIM(d.WebAction) 'auxComponenteAction'
+         from AplicacionesMast b
+         	INNER JOIN SeguridadGrupo c
+         		on 	B.APLICACIONCODIGO = c.APLICACIONCODIGO
+         	INNER JOIN SeguridadConcepto d
+         		on 	c.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and c.GRUPO = d.GRUPO 
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	c.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND b.APLICACIONCODIGO = :p_aplicacionid
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)			
+		 order by isnull(d.orden,0), isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion, d.Descripcion
+	</sql-query>
+	
+	<sql-query name="menu01.listarDtoAutorizacionesGruposPorAplicacion">
+		select 
+			 c.APLICACIONCODIGO "aplicacionId"
+			,c.GRUPO "contenedorId"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+         from AplicacionesMast b
+         	INNER JOIN SeguridadGrupo c
+         		on 	b.APLICACIONCODIGO = c.APLICACIONCODIGO
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	c.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND c.APLICACIONCODIGO = :p_aplicacionid
+		 order by isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion
+	</sql-query>
+	
+	<sql-query name="menu01.listarDtoAutorizacionesDuplicadasPorUsuarioYPerfil">
+		select 
+			 a.APLICACIONCODIGO "aplicacionId"
+			,a.GRUPO "contenedorId"
+			,a.Concepto "componenteId"
+			,a.USUARIO "usuarioId"
+			,cast(a.OpcionAgregarFlag as varchar(10)) "flgNuevo"
+			,cast(a.OpcionModificarFlag as varchar(10)) "flgEditar"
+			,cast(a.OpcionBorrarFlag as varchar(10)) "flgEliminar"
+			,cast(a.OpcionAprobarFlag as varchar(10)) "flgAprobar"
+			,cast(a.ESTADO as varchar(10)) "estadoId"
+			,a.UltimoUsuario "modificacionUsuario"
+			,a.UltimaFechaModif "modificacionFecha"
+		
+			,b.DescripcionCorta 'auxAplicacionNombre'
+			,b.orden 'auxAplicacionOrden'
+			,b.imagen 'auxAplicacionImagen'
+			
+			,c.Descripcion 'auxContenedorNombre'
+			,c.orden 'auxContenedorOrden'
+			,c.imagen 'auxContenedorImagen'
+			
+			,c.grupopadre 'auxContenedorPadreId'
+			,cp.Descripcion 'auxContenedorPadreNombre'
+			,cp.orden  'auxContenedorPadreOrden'
+			,cp.imagen 'auxContenedorPadreImagen'
+			
+			,d.Descripcion 'auxComponenteNombre'
+			,d.orden 'auxComponenteOrden'
+			,d.imagen 'auxComponenteImagen'
+			,d.WebPage 'auxComponenteRutaWeb'
+			,RTRIM(d.WebAction) 'auxComponenteAction'
+         from SeguridadAutorizaciones a
+         	INNER JOIN AplicacionesMast b
+         		on 	a.APLICACIONCODIGO = b.APLICACIONCODIGO 
+         	INNER JOIN SeguridadGrupo c
+         		on 	a.APLICACIONCODIGO = c.APLICACIONCODIGO
+         		and a.GRUPO = c.GRUPO 
+         	INNER JOIN SeguridadConcepto d
+         		on 	a.APLICACIONCODIGO = d.APLICACIONCODIGO
+         		and a.GRUPO = d.GRUPO 
+         		and a.Concepto = d.Concepto
+         	LEFT JOIN SeguridadGrupo cp
+         		on 	a.APLICACIONCODIGO = cp.APLICACIONCODIGO
+         		and c.GrupoPadre = cp.GRUPO 
+         where 1=1
+			AND a.APLICACIONCODIGO = :p_aplicacionid
+			AND a.USUARIO in (SELECT :p_usuarioid UNION ALL
+							  SELECT spu.Perfil FROM SeguridadPerfilUsuario spu WHERE spu.Usuario = :p_usuarioid and spu.Estado='A')
+			AND a.ESTADO = 'A'			
+			AND b.ESTADO = 'A'
+			AND d.visibleflag = 'S'
+		    AND d.webflag = 'S'
+			AND (d.WebPage is not null OR d.WebAction is not null)			
+		 order by isnull(d.orden,0), isnull(b.orden,0), b.DescripcionCorta, isnull(c.orden,0), c.Descripcion, d.Descripcion
+	</sql-query>
+	
+	<!-- FIN: 	CRYSTAL -->
+
+</hibernate-mapping>

@@ -1,0 +1,70 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Departamento</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.department" maxlength="3" type="text" [disabled]="accionnuevo" (ngModelChange)="dto.department = $event.toUpperCase()" [pKeyFilter]="blockSpecial" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.description" maxlength="80" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-11">
+                    <p-fieldset legend="Disponible para :">
+                        <div class="p-fluid seccionAuditoria">
+
+                            <div class="p-field p-col-12 p-md-3">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.contabilidadcheck" binary="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<label for="ny">Contabilidad (Vouchers)</label>
+                            </div>
+
+                            <div class="p-field p-col-12 p-md-6">
+                                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.logisticacheck" binary="true" inputId="binary"></p-checkbox>
+                                &nbsp;&nbsp;<label for="ny">Logística (Requisiciones y Transacciones)</label>
+                            </div>
+
+                        </div>
+
+                    </p-fieldset>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.status" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.lastuser" [modificacionFecha]="dto.lastdate">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

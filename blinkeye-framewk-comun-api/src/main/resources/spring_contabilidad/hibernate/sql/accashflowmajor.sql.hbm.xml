@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="accashflowmajor.listar">
+	    <![CDATA[
+	        select cashflowmajor as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_CASHFLOWMAJOR	        
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accashflowmajor.listarActivos">
+	    <![CDATA[
+	        select cashflowmajor as "codigo", localname as "nombre"
+	        from AC_CASHFLOWMAJOR
+	        where status = 'A'
+	        order by CashFlowMajor 
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accashflowmajor.obtenerTabla">
+	    <![CDATA[
+	        select cashflowmajor as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_CASHFLOWMAJOR
+			where cashflowmajor = :p_cashflowmajor
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="accashflowmajor.listarfiltros">
+    	select cashflowmajor as "codigo", localname as "nombre"
+    			,status as "estadoId" 
+    	from AC_CASHFLOWMAJOR 
+    	where  cashflowmajor = ISNULL(:p_cashflowmajor,cashflowmajor)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))			
+		order by localname	    	
+	</sql-query>
+	
+	<sql-query name="accashflowmajor.obtenerDto">
+          select 
+			CASHFLOWMAJOR "cashflowmajor"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,TIPOREGISTROFLAG "tiporegistroflag"
+			,TIPOOPERACIONFLAG "tipooperacionflag"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_CASHFLOWMAJOR
+         where 
+			cashflowmajor = :p_cashflowmajor
+    </sql-query>
+    
+    <sql-query name="accashflowmajor.listardtofiltros">
+          select 
+			CASHFLOWMAJOR "cashflowmajor"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,TIPOREGISTROFLAG "tiporegistroflag"
+			,TIPOOPERACIONFLAG "tipooperacionflag"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+
+         from AC_CASHFLOWMAJOR
+         where 
+				CASHFLOWMAJOR = ISNULL(:p_cashflowmajor,CASHFLOWMAJOR)						
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and status = ISNULL(:p_status,status)
+		order by localname
+    </sql-query>
+    
+</hibernate-mapping>

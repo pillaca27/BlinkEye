@@ -1,0 +1,1200 @@
+<div hidden>
+    <app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+    </app-botones-mantenimiento>
+</div>
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="p-fluid p-grid formularioFila botonesSeccion">
+            <div class="p-col-12 p-md-2" *ngIf="objetoTitulo.puedeEditar">
+                <button pButton pRipple type="button" label="Guardar Cambios" icon="fad fa-save"
+                    class="p-button-outlined" (click)="coreGuardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-2" *ngIf="objetoTitulo.puedeEditar">
+                <button pButton pRipple type="button" label="Terminar Evaluación" icon="fad fa-save"
+                    class="p-button-outlined" (click)="terminarEvaluacion()"></button>
+            </div>
+            <div class="p-col-12 p-md-2">
+                <button pButton pRipple type="button" label="Salir" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="coreSalir()"></button>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-4">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <br>
+                        <img [src]="dtoBean.auxFotoBase64" style="width: 100%;">
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-12">
+                                <label>Desde</label>
+                                <input pInputText disabled style="width:100%;"
+                                    [(ngModel)]="dtoBean.auxFechaHoraInicio" />
+                            </div>
+                            <div class="p-field p-col-12 p-md-12">
+                                <label>Hasta</label>
+                                <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxFechaHoraFin" />
+                            </div>
+                            <div class="p-field p-col-12 p-md-12">
+                                <label>Estado</label>
+                                <input pInputText disabled style="width:100%;"
+                                    [(ngModel)]="dtoBean.auxEstadoEvaluacion" />
+                            </div>
+                            <div class="p-field p-col-12 p-md-12">
+                                <label>Fec. Evaluac.</label>
+                                <input pInputText disabled style="width:100%;"
+                                    [(ngModel)]="dtoBean.auxFechaEvaluacion" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="text-decoration: underline;font-weight: bolder;">Resultados</label>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Competencias</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.puntoscompetencia" [disabled]="true"
+                            mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Funciones</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.puntosfuncion" [disabled]="true"
+                            mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Obj. Puesto</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.puntosobjpuesto" [disabled]="true"
+                            mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Obj. Empleado</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.puntosobjempleado" [disabled]="true"
+                            mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6" *ngIf="dtoBean.auxTipoEvaluadorCodigo=='JI'">
+                        <label>Inc. Críticos</label>
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dtoBean.puntosinccritico" [disabled]="true"
+                            mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                        </p-inputNumber>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="text-decoration: underline;font-weight: bolder;">Datos del
+                            Evaluado</label>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Empleado</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.empleado" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Nombre</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEmpleadoNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Compañía</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxCompaniaNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>U. Negocio</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxUnidadNegocioNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Sucursal</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxSucursalNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>U. Operativa</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxUnidadOperativaNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>T. Planilla</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxTipoPlanillaNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Centro Costo</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxCentroCostoNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Puesto</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxPuestoNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Comentario</label>
+                        <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.empleadocomentario"
+                            [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="text-decoration: underline;font-weight: bolder;">Datos del
+                            Evaluador</label>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Evaluador</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.evaluador" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <label>Tipo</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxTipoEvaluadorNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Nombre</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEvaluadorNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Puesto</label>
+                        <input pInputText disabled style="width:100%;" [(ngModel)]="dtoBean.auxEvaluadorPuestoNombre" />
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label>Comentario</label>
+                        <textarea pInputTextarea style="width:100%" [(ngModel)]="dtoBean.evaluadorcomentario"
+                            [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-col-12">
+        <br>
+        <p-tabView>
+            <p-tabPanel header="Competencia" *ngIf="dtoBean.auxUIVerTabCompetencias=='S'">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <div class="p-fluid p-formgrid p-grid" style="padding: 10px 10px 10px 10px !important;">
+                            <div class="p-col-12 p-md-6">
+                                <label style="font-weight:bolder;">
+                                    Descripción y Explicación, Total Reg. {{dtoBean.listaCompetencias.length}}
+                                </label><br>
+                                <label>"Click" en el Puntaje para Responder o Ver el detalle de la Competencia</label>
+                            </div>
+                            <div class="p-col-12 p-md-1" style="font-weight:bolder;">
+                                <label>Puntaje</label><br>
+                                <label>({{sumarPuntajeCompetencia() | number:'1.2-2'}})</label>
+                            </div>
+                            <div class="p-col-12 p-md-5" style="font-weight:bolder;">
+                                Escala de Calificación
+                            </div>
+                        </div>
+                    </div>
+                    <ng-template ngFor let-row [ngForOf]="dtoBean.listaCompetencias" let-i="index">
+                        <div class="p-field p-col-12 p-md-12">
+                            <p-card>
+                                <div class="p-fluid p-formgrid p-grid" style="padding: 10px 10px 10px 10px !important;">
+                                    <div class="p-col-12 p-md-12" style="color:#800000;font-weight:bolder">
+                                        {{i+1}}.- {{row.auxCompetenciaNombre}}
+                                    </div>
+                                    <div class="p-col-12 p-md-6">
+                                        <textarea pInputTextarea style="width:100%"
+                                            [(ngModel)]="row.auxCompetenciaExplicacion" [disabled]="true"></textarea>
+                                    </div>
+                                    <div class="p-col-12 p-md-1" (click)="evaluarCompetencia(row)"
+                                        style="color:#800000;font-weight:bolder;font-size: 22px;text-align: center;border: 1px solid ;padding: 0.1px !important;cursor: pointer;">
+                                        {{row.calificacion | number : '1.2-2'}}
+                                    </div>
+                                    <div class="p-col-12 p-md-5" style="font-weight:bolder">
+                                        <div class="p-fluid p-formgrid p-grid" style="margin-left: 0px;">
+                                            <div class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: left ;padding: 0.1px !important">
+                                                {{row.calificaciondesde | number : '1.2-2'}}
+                                            </div>
+                                            <div *ngIf="row.calificacionhasta>0" class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: center;padding: 0.1px !important">
+                                                {{(row.calificacionhasta) ==
+                                                null?'0':(row.calificacionhasta/2).toLocaleString('th-TH',{minimumFractionDigits:
+                                                2,
+                                                maximumFractionDigits: 2})}}
+                                            </div>
+                                            <div class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: right;padding: 0.1px !important">
+                                                {{row.calificacionhasta | number : '1.2-2'}}
+                                            </div>
+                                            <div class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: left;padding: 0.1px !important">
+                                                {{row.auxCalfDesdeNombre}}
+                                            </div>
+                                            <div class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: center;padding: 0.1px !important">
+                                            </div>
+                                            <div class="p-col-12 p-md-4"
+                                                style="font-size: 14px;text-align: right;padding: 0.1px!important">
+                                                {{row.auxCalfHastaNombre}}
+                                            </div>
+                                        </div>
+
+                                        <div [ngStyle]="{'width.%' : row.auxValorRequerido*100/row.calificacionhasta}"
+                                            style="background-color:rgb(216, 30, 36); font-size: 14px;text-align: center;height:20px;color: white;BORDER: 2px solid black;border-radius: 4px;">
+                                            <label style="text-align: center;"
+                                                *ngIf="row.auxValorRequerido>0">Requerido:
+                                                {{row.auxValorRequerido | number : '1.2-2'}}</label>
+                                        </div>
+
+                                        <div *ngIf="row.calificacion*100/row.calificacionhasta!==0"
+                                            [ngStyle]="{'width.%' : row.calificacion*100/row.calificacionhasta}"
+                                            style=" font-size: 14px;text-align: center;height:20px;background-color:rgb(19, 19, 158);color: white; BORDER: 2px solid black;border-radius: 4px;">
+                                            <label style="text-align: center;">Obtenido:
+                                                {{row.calificacion | number : '1.2-2'}}</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-card>
+                            <br>
+                        </div>
+                    </ng-template>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Funciones" *ngIf="dtoBean.auxUIVerTabFunciones=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaFunciones" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">Función</th>
+                                            <th class="tablaHeaderCodigo">% Cumplimiento</th>
+                                            <th class="tablaHeaderCodigo">Peso</th>
+                                            <th class="tablaHeaderCodigo">Resultado</th>
+                                            <th class="tablaHeaderNombreMedio">Comentario</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">
+                                                Total Reg. {{dtoBean.listaFunciones.length}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarCumplimientoAvg(dtoBean.listaFunciones) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarPeso(dtoBean.listaFunciones) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarResultado(dtoBean.listaFunciones) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderNombreMedio"></th>
+                                            <th class="tablaHeaderUsuario"></th>
+                                            <th class="tablaHeaderFecha"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr style="background-color: rgb(223, 223, 223);">
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Función</span>
+                                                <label style="font-weight: bolder;">{{row.auxFuncionNombre}}</label>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Descripción</span>
+                                                {{row.descripcion}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">% Cumplimiento</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.calificacion"
+                                                    mode="decimal" [min]="0" [max]="100"
+                                                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                                                    [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Peso</span>
+                                                {{row.peso | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Resultado</span>
+                                                {{resultadoObjEmpleado(row) | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Comentario</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.comentario" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Objetivos del Puesto" *ngIf="dtoBean.auxUIVerTabObjPuesto=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaObjPuesto" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">Objetivo</th>
+                                            <th class="tablaHeaderCodigo">% Cumplimiento</th>
+                                            <th class="tablaHeaderCodigo">Peso</th>
+                                            <th class="tablaHeaderCodigo">Resultado</th>
+                                            <th class="tablaHeaderNombreMedio">Comentario</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">
+                                                Total Reg. {{dtoBean.listaObjPuesto.length}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarCumplimiento(dtoBean.listaObjPuesto) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarPeso(dtoBean.listaObjPuesto) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarResultado(dtoBean.listaObjPuesto) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderNombreMedio"></th>
+                                            <th class="tablaHeaderUsuario"></th>
+                                            <th class="tablaHeaderFecha"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Objetivo</span>
+                                                {{row.descripcion}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">% Cumplimiento</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.calificacion"
+                                                    mode="decimal" [min]="0" [max]="100"
+                                                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                                                    [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Peso</span>
+                                                {{row.peso | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Resultado</span>
+                                                {{resultadoObjEmpleado(row) | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Comentario</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.comentario" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Objetivos del Empleado" *ngIf="dtoBean.auxUIVerTabObjEmpleado=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaObjEmpleado" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">Objetivo</th>
+                                            <th class="tablaHeaderCodigo">% Cumplimiento</th>
+                                            <th class="tablaHeaderCodigo">Peso</th>
+                                            <th class="tablaHeaderCodigo">Resultado</th>
+                                            <th class="tablaHeaderNombreMedio">Comentario</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="tablaHeaderNombreMedio">
+                                                Total Reg. {{dtoBean.listaObjEmpleado.length}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarCumplimiento(dtoBean.listaObjEmpleado) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarPeso(dtoBean.listaObjEmpleado) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderCodigo">
+                                                {{sumarResultado(dtoBean.listaObjEmpleado) | number:'1.2-2'}}</th>
+                                            <th class="tablaHeaderNombreMedio"></th>
+                                            <th class="tablaHeaderUsuario"></th>
+                                            <th class="tablaHeaderFecha"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Objetivo</span>
+                                                {{row.descripcion}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">% Cumplimiento</span>
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="row.calificacion"
+                                                    mode="decimal" [min]="0" [max]="100"
+                                                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                                                    [maxFractionDigits]="2" [minFractionDigits]="2">
+                                                </p-inputNumber>
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Peso</span>
+                                                {{row.peso | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Resultado</span>
+                                                {{resultadoObjEmpleado(row) | number:'1.2-2'}}
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Comentario</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.comentario" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Incidentes Críticos" *ngIf="dtoBean.auxUIVerTabIncidentes=='S'">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="text-decoration: underline;font-weight: bolder;">MERITOS</label>
+                        <br>
+                    </div>
+                    <ng-template ngFor let-row [ngForOf]="dtoBean.listaIncidentes1" let-i="index">
+                        <p-card>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-3">
+                                    <label>Tipo Incidente</label>
+                                    <input pInputText type="text" style="width: 100%;"
+                                        [(ngModel)]="row.auxTipoIncidenteNombre" disabled />
+                                </div>
+                                <div class="p-col-12 p-md-2">
+                                    <label>Fecha</label>
+                                    <p-calendar appendTo="body" dateFormat="dd/mm/yy " [(ngModel)]="row.fecha"
+                                        [disabled]="true">
+                                    </p-calendar>
+                                </div>
+                                <div class="p-col-12 p-md-3">
+                                    <label>Documento</label>
+                                    <input pInputText type="text" style="width: 100%;" [(ngModel)]="row.documento"
+                                        disabled />
+                                </div>
+                                <div class="p-col-12 p-md-3">
+                                    <label>Periodo Suspensión (Desde - Hasta - Días)</label>
+                                    <input pInputText type="text" style="width: 100%;"
+                                        [(ngModel)]="row.auxPeriodoSuspension" disabled />
+                                </div>
+                                <div class=" p-col-12 p-md-1">
+                                    <label>Peso</label>
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="row.auxPeso" [disabled]="true"
+                                        mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                        [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                                <div class="p-col-12 p-md-12">
+                                    <label>Descripción</label>
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="row.descripcion"
+                                        [disabled]="true" maxlength="4000"></textarea>
+                                </div>
+                            </div>
+                        </p-card>
+                    </ng-template>
+                    <div class="p-field p-col-12 p-md-12">
+                        <label style="text-decoration: underline;font-weight: bolder;">DEMERITOS</label>
+                        <br>
+                    </div>
+                    <ng-template ngFor let-row [ngForOf]="dtoBean.listaIncidentes2" let-i="index">
+                        <p-card>
+                            <div class="p-fluid p-formgrid p-grid">
+                                <div class="p-col-12 p-md-3">
+                                    <label>Tipo Incidente</label>
+                                    <input pInputText type="text" style="width: 100%;"
+                                        [(ngModel)]="row.auxTipoIncidenteNombre" disabled />
+                                </div>
+                                <div class="p-col-12 p-md-2">
+                                    <label>Fecha</label>
+                                    <p-calendar appendTo="body" dateFormat="dd/mm/yy " [(ngModel)]="row.fecha"
+                                        [disabled]="true">
+                                    </p-calendar>
+                                </div>
+                                <div class="p-col-12 p-md-3">
+                                    <label>Documento</label>
+                                    <input pInputText type="text" style="width: 100%;" [(ngModel)]="row.documento"
+                                        disabled />
+                                </div>
+                                <div class="p-col-12 p-md-3">
+                                    <label>Periodo Suspensión (Desde - Hasta - Días)</label>
+                                    <input pInputText type="text" style="width: 100%;"
+                                        [(ngModel)]="row.auxPeriodoSuspension" disabled />
+                                </div>
+                                <div class=" p-col-12 p-md-1">
+                                    <label>Peso</label>
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="row.auxPeso" [disabled]="true"
+                                        mode="decimal" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                                        [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                                <div class="p-col-12 p-md-12">
+                                    <label>Descripción</label>
+                                    <textarea pInputTextarea style="width:100%" [(ngModel)]="row.descripcion"
+                                        [disabled]="true" maxlength="4000"></textarea>
+                                </div>
+                            </div>
+                        </p-card>
+                    </ng-template>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Fortalezas y Debilidades" *ngIf="dtoBean.auxUIVerTabFortalezas=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus"
+                                    class="p-button-outlined" (click)="agregarFoda()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaFortalezas" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion1" *ngIf="objetoTitulo.puedeEditar">Eliminar
+                                            </th>
+                                            <th class="tablaHeaderCodigoGrande">Tipo</th>
+                                            <th class="tablaHeaderIzquierda">Descripción</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion1" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Acciones</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times"
+                                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                                title="Eliminar"
+                                                                (click)="eliminarFortaleza(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="tablaColumnaCodigoGrande">
+                                                <span class="p-column-title">Tipo</span>
+                                                <p-dropdown appendTo="body" [disabled]="!objetoTitulo.puedeEditar"
+                                                    [style]="{ 'width': '100%'} " [(ngModel)]="row.tipo"
+                                                    [options]="lstTipoFortalezas">
+                                                </p-dropdown>
+                                            </td>
+                                            <td class="tablaColumnaIzquierda">
+                                                <span class="p-column-title">Descripción</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.descripcion"
+                                                    maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="5">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Necesidades de Capacitación" *ngIf="dtoBean.auxUIVerTabNecesidades=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus"
+                                    class="p-button-outlined" (click)="agregarNecesidad()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaNecesidades" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion2" *ngIf="objetoTitulo.puedeEditar">Acciones
+                                            </th>
+                                            <th class="tablaHeaderNombreMedio">Descripción</th>
+                                            <th class="tablaHeaderNombreMedio">Curso</th>
+                                            <th class="tablaHeaderCodigo">Capacitación</th>
+                                            <th class="tablaHeaderCodigo">Compañía</th>
+                                            <th class="tablaHeaderCodigo">Prioridad</th>
+                                            <th class="tablaHeaderNombreMedio">Objetivo</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion2" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Acciones</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times"
+                                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                                title="Eliminar"
+                                                                (click)="eliminarNecesidad(row)"></button>
+                                                        </th>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-books"
+                                                                class="p-button-rounded p-button-text botonGrilla"
+                                                                title="Seleccionar Curso"
+                                                                (click)="seleccionarCurso(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Descripción</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.descripcion"
+                                                    maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Curso</span>
+                                                {{row.auxCursoNombre}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Capacitación</span>
+                                                {{row.capacitacion}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Compañía</span>
+                                                {{row.capacitacioncompania}}
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Prioridad</span>
+                                                <p-dropdown appendTo="body" [disabled]="!objetoTitulo.puedeEditar"
+                                                    [style]="{ 'width': '100%'} " [(ngModel)]="row.prioridad"
+                                                    [options]="lstPrioridad">
+                                                </p-dropdown>
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Objetivo</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.objetivo" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="9">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Acciones de Mejora" *ngIf="dtoBean.auxUIVerTabMejoras=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12" *ngIf="objetoTitulo.puedeEditar">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <button pButton pRipple type="button" label="Agregar" icon="fad fa-plus"
+                                    class="p-button-outlined" (click)="agregarMejora()"></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaMejoras" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderAccion1" *ngIf="objetoTitulo.puedeEditar">Eliminar
+                                            </th>
+                                            <th class="tablaHeaderNombreMedio">Acción</th>
+                                            <th class="tablaHeaderNombreMedio">Propuesta</th>
+                                            <th class="tablaHeaderNombreMedio">Plazo</th>
+                                            <th class="tablaHeaderCodigo">Cumplió?</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaAccion1" *ngIf="objetoTitulo.puedeEditar">
+                                                <span class="p-column-title">Eliminar</span>
+                                                <table>
+                                                    <tr>
+                                                        <th>
+                                                            <button pButton pRipple type="button" icon="fad fa-times"
+                                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                                title="Eliminar" (click)="eliminarMejora(row)"></button>
+                                                        </th>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Acción</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.accion" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Propuesta</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.propuesta" maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaNombreMedio">
+                                                <span class="p-column-title">Plazo</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.plazo" maxlength="1000" />
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Cumplió?</span>
+                                                {{estadoAccionMejora(row)}}
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="7">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Revisión del Avance de Compromiso" *ngIf="dtoBean.auxUIVerTabRevisiones=='S'">
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-col-12 p-md-12 p-lg-12">
+                                <br>
+                                <p-table [scrollable]="true" [value]="dtoBean.listaRevisiones" [responsive]="true"
+                                    [style]="{ width: '100%'}">
+                                    <ng-template pTemplate="header">
+                                        <tr>
+                                            <th class="tablaHeaderNombre">Descripción</th>
+                                            <th class="tablaHeaderNombre">Observación</th>
+                                            <th class="tablaHeaderCodigo">Cumplió</th>
+                                            <th class="tablaHeaderUsuario">Último Usuario</th>
+                                            <th class="tablaHeaderFecha">Última Modificación</th>
+                                        </tr>
+                                        <tr>
+                                            <th class="tablaHeaderNombre">
+                                                Total Reg. {{dtoBean.listaRevisiones.length}}</th>
+                                            <th class="tablaHeaderNombre">
+                                            </th>
+                                            <th class="tablaHeaderCodigo">
+                                            </th>
+                                            <th class="tablaHeaderUsuario"></th>
+                                            <th class="tablaHeaderFecha"></th>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="body" let-row let-columns="columns">
+                                        <tr>
+                                            <td class="tablaColumnaNombre">
+                                                <span class="p-column-title">Descripción</span>
+                                                {{row.descripcion}}
+                                            </td>
+                                            <td class="tablaColumnaNombre">
+                                                <span class="p-column-title">Observación</span>
+                                                <input pInputText [disabled]="!objetoTitulo.puedeEditar"
+                                                    style="width:100%;" [(ngModel)]="row.observacion"
+                                                    maxlength="4000" />
+                                            </td>
+                                            <td class="tablaColumnaCodigo">
+                                                <span class="p-column-title">Cumplió</span>
+                                                <p-dropdown appendTo="body" [disabled]="!objetoTitulo.puedeEditar"
+                                                    [style]="{ 'width': '100%'} " [(ngModel)]="row.flagcumplio"
+                                                    [options]="lstCumplio">
+                                                </p-dropdown>
+                                            </td>
+                                            <td class="tablaColumnaUsuario">
+                                                <span class="p-column-title">Último Usuario</span>
+                                                {{row.ultimousuario}}
+                                            </td>
+                                            <td class="tablaColumnaFecha">
+                                                <span class="p-column-title">Última Modificación</span>
+                                                {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                    <ng-template pTemplate="emptymessage" let-columns>
+                                        <tr>
+                                            <td [attr.colspan]="5">
+                                                No se encontraron registros
+                                            </td>
+                                        </tr>
+                                    </ng-template>
+                                </p-table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </div>
+</div>
+<p-confirmDialog #c key="c">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-selector-curso></app-selector-curso>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalCalificacionCompetenciaComportamiento" modal="modal" showEffect="fade"
+        [blockScroll]="true" hideEffect="size" header="CALIFICACIÓN DE LA COMPETENCIA" [style]="{'width':'800px'}"
+        [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-6">
+                <label>Descripción</label>
+                <input pInputText disabled style="width:100%;" [(ngModel)]="competenciaNombre" />
+            </div>
+            <div class="p-col-12 p-md-2">
+                <label>Calificación</label>
+                <p-inputNumber [locale]="locale" [ngModel]="competenciaCalificacionSumada()" mode="decimal" [disabled]="true"
+                    [style]="{'width':'100%'}" [maxFractionDigits]="2" [minFractionDigits]="2">
+                </p-inputNumber>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <label>Explicación</label>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="competenciaExplicacion" [disabled]="true"
+                    maxlength="4000"></textarea>
+            </div>
+            <div class="p-col-12 p-md-6">
+                <label>Comentario</label>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="competenciaComentario"
+                    [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <br>
+                <p-table [value]="listaComportamientos" [responsive]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th>Descripción</th>
+                            <th>Explicación</th>
+                            <th class="tablaHeaderMontoPequeno">Calificación</th>
+                            <th class="tablaHeaderAccion1">Valores</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-columns="columns">
+                        <tr>
+                            <td>
+                                {{row.comportamientosecuencia}}.- {{row.auxComportamientoNombre}}
+                            </td>
+                            <td>
+                                {{row.auxComportamientoExplicacion}}
+                            </td>
+                            <td class="tablaColumnaMontoPequeno">
+                                <p-inputNumber [locale]="locale" [(ngModel)]="row.calificacion" mode="decimal"
+                                    [disabled]="!objetoTitulo.puedeEditar" [min]="0" [style]="{'width':'100%'}"
+                                    [maxFractionDigits]="2" [minFractionDigits]="2">
+                                </p-inputNumber>
+                            </td>
+                            <td class="tablaColumnaAccion1">
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-bars"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Valores"
+                                                (click)="verValores(row)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="objetoTitulo.puedeEditar" class="p-button-outlined"
+                    (click)="guardarCalificacionComportamiento()"></button>
+            </div>
+            <div class="p-col-12 p-md-8">
+            </div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary"
+                    (click)="verModalCalificacionCompetenciaComportamiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalCalificacionValores" modal="modal" showEffect="fade" [blockScroll]="true"
+        hideEffect="size" header="VALORES" [style]="{'width':'400px'}" [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-12">
+                <p-table [scrollable]="true" [value]="competenciaSeleccionada.listaOpciones" [responsive]="true"
+                    [style]="{ width: '100%'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderIzquierda">Descripción</th>
+                            <th class="tablaHeaderIzquierda">Explicación</th>
+                            <th class="tablaHeaderCodigoChico">Valor Máximo</th>
+                            <th class="tablaHeaderCodigoChico">Sel.</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-columns="columns">
+                        <tr>
+                            <td class="tablaColumnaIzquierda">
+                                <span class="p-column-title">Descripción</span>
+                                {{row.descripcion}}
+                            </td>
+                            <td class="tablaColumnaIzquierda">
+                                <span class="p-column-title">Explicación</span>
+                                {{row.explicacion}}
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Valor Máximo</span>
+                                {{row.valorMaximo | number:'1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Sel.</span>
+                                <table>
+                                    <tr>
+                                        <th *ngIf="objetoTitulo.puedeEditar">
+                                            <button pButton pRipple type="button" icon="fad fa-check"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Seleccionar"
+                                                (click)="seleccionarValor(row)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="4">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6">
+            </div>
+            <div class="p-col-12 p-md-6">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verModalCalificacionValores=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verModalCalificacionCompetencia" modal="modal" showEffect="fade" [blockScroll]="true"
+        hideEffect="size" header="CALIFICACIÓN DE LA COMPETENCIA" [style]="{'width':'400px'}" [responsive]="true">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-9">
+                <label>Descripción</label>
+                <input pInputText disabled style="width:100%;" [(ngModel)]="competenciaNombre" />
+            </div>
+            <div class="p-col-12 p-md-3">
+                <label>Calificación</label>
+                <p-inputNumber [locale]="locale" [(ngModel)]="competenciaCalificacion" mode="decimal"
+                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" [maxFractionDigits]="2"
+                    [minFractionDigits]="2">
+                </p-inputNumber>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <label>Explicación</label>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="competenciaExplicacion" [disabled]="true"
+                    maxlength="4000"></textarea>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <label>Comentario</label>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="competenciaComentario"
+                    [disabled]="!objetoTitulo.puedeEditar" maxlength="4000"></textarea>
+            </div>
+            <div class="p-col-12 p-md-12">
+                <br>
+                <p-table [scrollable]="true" [value]="listaOpciones" [responsive]="true" [style]="{ width: '100%'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderIzquierda">Descripción</th>
+                            <th class="tablaHeaderIzquierda">Explicación</th>
+                            <th class="tablaHeaderCodigoChico">Valor Máximo</th>
+                            <th class="tablaHeaderCodigoChico">Sel.</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-columns="columns">
+                        <tr>
+                            <td class="tablaColumnaIzquierda">
+                                <span class="p-column-title">Descripción</span>
+                                {{row.descripcion}}
+                            </td>
+                            <td class="tablaColumnaIzquierda">
+                                <span class="p-column-title">Explicación</span>
+                                {{row.explicacion}}
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Valor Máximo</span>
+                                {{row.valorMaximo | number:'1.2-2'}}
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Sel.</span>
+                                <table>
+                                    <tr>
+                                        <th *ngIf="objetoTitulo.puedeEditar">
+                                            <button pButton pRipple type="button" icon="fad fa-check"
+                                                class="p-button-rounded p-button-text botonGrilla" title="Seleccionar"
+                                                (click)="seleccionarValorCompetencia(row)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="3">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-5">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="objetoTitulo.puedeEditar" class="p-button-outlined" (click)="guardarCalificacion()"></button>
+            </div>
+            <div class="p-col-12 p-md-2">
+            </div>
+            <div class="p-col-12 p-md-5">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary"
+                    (click)="verModalCalificacionCompetencia=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

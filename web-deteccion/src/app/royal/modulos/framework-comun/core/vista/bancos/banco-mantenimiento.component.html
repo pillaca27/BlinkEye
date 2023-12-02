@@ -1,0 +1,106 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Banco</label>
+                    <input pInputText [(ngModel)]="dto.banco" maxlength="3" type="text"
+                    (ngModelChange)="dto.banco = $event.toUpperCase()"     [disabled]="accionnuevo" [pKeyFilter]="blockSpecial" />
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <label class="importante">Descripción</label>
+                    <input pInputText [(ngModel)]="dto.descripcioncorta" maxlength="20" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-9">
+                    <label >Descripción Completa</label>
+                    <input pInputText [(ngModel)]="dto.descripcionlarga" maxlength="40" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-12 p-md-5">
+                    <label class="importante">Persona (# en Maestro)</label>
+                    <div class="p-inputgroup">
+                        <input class="importante" pInputText type="text" [readonly]="true" 
+                        [(ngModel)]="dto.persona" disabled
+                          readonly  class="hoverDisabled" style="width:100%" />
+                            <button pButton icon="fa fa-binoculars" [disabled]="!objetoTitulo.puedeEditar "
+                            (click)="mostrarPersona()" type="button" title="Buscar Persona"></button>
+                        <button pButton icon="fa fa-trash" (click)="limpiar()" type="button"
+                            [disabled]="!objetoTitulo.puedeEditar "
+                            title="Limpiar Persona"></button>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <label >Persona (Contacto)</label>
+                    <input pInputText [(ngModel)]="dto.personacontacto" maxlength="30" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3" style="margin-top: 20px;">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.cheque" binary="true"
+                    inputId="binary"></p-checkbox>&nbsp;&nbsp;
+                    <label for="ny">Tiene formato para Cheque</label>
+                </div>
+                <div class="p-field p-col-12 p-md-3" >
+                    <label class="importante"></label>
+                    <input pInputText [(ngModel)]="dto.formatodatawindow" maxlength="50" type="text"
+                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                </div>
+               
+                <div class="p-field p-col-12 p-md-6"></div>
+                
+                <div class="p-field p-col-12 p-md-3" style="margin-top: 15px;">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.concilio" binary="true"
+                    inputId="binary"></p-checkbox>&nbsp;&nbsp;
+                    <label for="ny">Conciliación Automática</label>
+                </div>
+    
+                <div class="p-field p-col-12 p-md-3"  >
+                    <label class="importante"> Formato para la Conciliación</label>
+                    <p-dropdown [(ngModel)]="dto.conciliacionformatoflag" [filter]="true" [options]="lstConciliacion"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+    
+
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label class="importante">Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar"
+                        [style]="{'width':'100%'}">
+                    </p-dropdown>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+[modificacionFecha]="dto.ultimafechamodif" >
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<app-personacomun-selector></app-personacomun-selector>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+

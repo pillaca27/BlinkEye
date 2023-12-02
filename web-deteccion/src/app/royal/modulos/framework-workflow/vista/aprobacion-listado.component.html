@@ -1,0 +1,258 @@
+<p-card>
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="fad fa-filter p-mr-2"></i>
+            <b>Filtros</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="companias" [style]="{'width':'100%'}" [(ngModel)]="filtro.companiaSocio">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proceso</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstProceso" [style]="{'width':'100%'}" [(ngModel)]="filtro.proceso" (onChange)="cargarEstadosProceso()">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstEstadoProceso" [style]="{'width':'100%'}" [(ngModel)]="filtro.estadoProceso">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha Preparación</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [locale]="es" [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [(ngModel)]="filtro.fechaDesde" [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p-calendar [monthNavigator]="true " [yearNavigator]="true " yearRange="1940:2200" [locale]="es" [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [(ngModel)]="filtro.fechaHasta" [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Solicitante</label>
+                        <div class="p-col">
+                            <p-autoComplete [(ngModel)]="solicitante" [suggestions]="filtroSolicitante" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (completeMethod)="filtroSolicitanteSimple($event)" field="nombre" [size]="30" placeholder="Solicitante" [minLength]="3">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Referencia</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.referencia" maxlength="20" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-4" style="display: none;">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Proveedor/Empleado/Cliente/Persona</label>
+                        <div class="p-col">
+                            <p-autoComplete [(ngModel)]="solicitante2" [suggestions]="filtroSolicitante2" [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}" (completeMethod)="filtroSolicitanteSimple2($event)" field="nombre" [size]="30" placeholder="Proveedor/Empleado/Cliente/Persona"
+                                [minLength]="3">
+                            </p-autoComplete>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Monto</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <div style="flex: 1;">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="filtro.montodesde" inputId="locale-us" mode="decimal" locale="en-US" [inputStyle]="{'text-align': 'right'}" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                                <div style="flex: 1;">
+                                    <p-inputNumber [locale]="locale" [(ngModel)]="filtro.montohasta" inputId="locale-us" mode="decimal" locale="en-US" [inputStyle]="{'text-align': 'right'}" [minFractionDigits]="2">
+                                    </p-inputNumber>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!--
+            <div class="p-field p-col-12 p-md-3">
+                <span>Área Revisora</span>
+                <p-dropdown [options]="lstAreaRevisora" [style]="{'width':'100%'}" [(ngModel)]="filtro.area">
+                </p-dropdown>
+            </div>
+            -->
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Aprobar" icon="pi pi-check" style="width: 100%;" class="p-button-outlined p-button-success" (click)="aprobar()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Rechazar" icon="pi pi-times" style="width: 100%;" class="p-button-outlined p-button-danger" (click)="rechazar()"></button>
+                </div>
+                <!-- <div class="p-field p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Devolver" icon="pi pi-arrow-left" style="width: 100%;" class="p-button-outlined p-button-warning" (click)="devolver()"></button>
+                </div> -->
+                <div class="p-field p-col-12 p-md-6"></div>
+                <div class="p-field p-col-12 p-md-2">
+                    <br>
+                    <button pButton pRipple type="button" label="Buscar" icon="pi pi-search" style="width: 100%;" class="p-button-outlined" (click)="coreBuscar()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <br>
+                    <p-table [rows]="30" [responsive]="true" [lazy]="true" [paginator]="true" [value]="paginacion.paginacionListaResultado" (onRowSelect)="onRowSelect()" (onRowUnselect)="onRowUnselect()" [showCurrentPageReport]="true" [totalRecords]="paginacion.paginacionRegistrosEncontrados"
+                        dataKey="uuid" (onLazyLoad)="cargarSolicitudes($event)" [(selection)]="seleccionadosWf">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="tablaHeaderCheckBox">
+                                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                                </th>
+                                <th class="tablaHeaderAccion0">Ver</th>
+                                <th class="tablaHeaderCodigoChico">Transacción</th>
+                                <th class="tablaHeaderNombreMedio">Proceso</th>
+                                <th class="tablaHeaderAccion5">Referencia</th>
+                                <th class="tablaHeaderFecha">F. Preparación</th>
+                                <th class="tablaHeaderEstadoGrande">Estado</th>
+                                <th class="tablaHeaderNombreMedio">Solicitante</th>
+                                <th class="tablaHeaderCodigoChico">Nivel</th>
+                                <!-- <th class="tablaHeaderMonto">Monto</th> -->
+                                <!-- <th class="tablaHeaderNombre">Proveedor / Empleado / Cliente / Persona</th> -->
+                                <!--
+                            <th class="tablaHeaderTexto">Área Revisora</th>
+                            -->
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-columns="columns">
+                            <tr>
+                                <td class="tablaColumnaCheckBox">
+                                    <span class="p-column-title">Marcar</span>
+                                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                                </td>
+                                <td class="tablaColumnaAccion0">
+                                    <span class="p-column-title">Acción</span>
+                                    <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" (click)="verSeleccionado(row)"></button>
+                                </td>
+                                <td class="tablaColumnaCodigoChico">
+                                    <span class="p-column-title">Id</span> {{row.transaccion}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Proceso</span> {{row.procesoFlujoDescripcion}}
+                                </td>
+                                <td class="tablaColumnaAccion5">
+                                    <span class="p-column-title">Referencia</span> {{row.referencia}}
+                                </td>
+                                <td class="tablaColumnaFecha">
+                                    <span class="p-column-title">Fecha</span> {{row.fechaRegistro | date: 'dd/MM/yyyy'}}
+                                </td>
+                                <td class="tablaColumnaEstadoGrande">
+                                    <span class="p-column-title">Estado</span> {{row.estadoDescripcion}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Solicitante</span> {{row.solicitante}}
+                                </td>
+                                <td class="tablaColumnaCodigoChico">
+                                    <span class="p-column-title">Nivel</span>
+                                    <label>{{row.nivelAprobar}}</label>
+                                </td>
+                                <!-- <td class="tablaColumnaMonto">
+                                    <span class="p-column-title">Monto</span> {{row.monto | number:'.2-2'}}
+                                </td> -->
+                                <!-- <td class="tablaColumnaNombre">
+                                <span class="p-column-title">Proveedor / Empleado / Cliente / Persona</span>
+                                {{row.nombrepersonareferencia}}
+                            </td> -->
+
+                                <!--
+                            <td class="tablaColumnaTexto">
+                                <span class="p-column-title">Área Revisora</span>
+                                {{row.areaNombre}}
+                            </td>
+                            -->
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td colspan="10">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<p-dialog [header]="'Motivo de Rechazo ' + headerRechazo" [(visible)]="verMotivoRechazo" [modal]="true" [responsive]="true" [resizable]="false " [blockScroll]="true" [style]="{'max-width':'450px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="motivo" maxlength="2500" style="width:100%"> </textarea>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" label="Aceptar" (click)="aceptarMotivoRechazo()">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [header]="'Motivo ' + headerRechazo" [(visible)]="verMotivoDevolver" [modal]="true" [responsive]="true" [resizable]="false " [blockScroll]="true" [style]="{'max-width':'450px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+    <textarea rows="5" cols="30" pInputTextarea [(ngModel)]="motivo" maxlength="2500" style="width:100%"> </textarea>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" label="Aceptar" (click)="aceptarMotivoDevolver()">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<p-dialog [header]="'Validaciones'" [(visible)]="verValidaciones" [modal]="true " [responsive]="true" [resizable]="false " [blockScroll]="true" [style]="{'max-width':'450px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+    <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="validaciones" [responsive]="true">
+        <ng-template pTemplate="header">
+            <tr>
+                <th>Descripción</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td>{{rowData.mensaje}}</td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <ng-template pTemplate="footer">
+        <p-button icon="pi pi-check" label="Aceptar" (click)="verValidaciones=false">
+        </p-button>
+    </ng-template>
+</p-dialog>
+
+<!--<app-empleadomast-selector (cargarSeleccionEvent)="cargarEmpleado($event)" (block)="bloquearPagina()"
+    (unBlock)="desbloquearPagina()"></app-empleadomast-selector>-->
+
+<solicitud-renovacioncontrato-mantenimiento (volverABuscar)="coreBuscar()">
+</solicitud-renovacioncontrato-mantenimiento>

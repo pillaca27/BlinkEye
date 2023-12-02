@@ -1,0 +1,386 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="whclaselinea.contarLineaFamilia">
+	    <![CDATA[
+	       SELECT count(*)  
+    FROM WH_ClaseFamilia,   
+         WH_ClaseLinea  
+   WHERE ( WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea ) and  
+         ( ( WH_ClaseLinea.Estado = 'A' ) AND  
+         ( WH_ClaseFamilia.Estado = 'A' ) AND  
+         ( 
+          UPPER(ISNULL(WH_ClaseFamilia.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER(WH_ClaseFamilia.DescripcionLocal)) + '%'
+ ) )  
+	    ]]>
+	</sql-query>
+	
+    <sql-query name="whclaselinea.listarLineaFamilia">
+	    <![CDATA[
+	       SELECT WH_ClaseFamilia.Familia as "familia",   
+         WH_ClaseLinea.DescripcionLocal as "descripcionlocal",   
+         WH_ClaseFamilia.Linea as  "linea",   
+         WH_ClaseFamilia.DescripcionLocal as "descripcioningles"  
+    FROM WH_ClaseFamilia,   
+         WH_ClaseLinea  
+   WHERE ( WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea ) and  
+         ( ( WH_ClaseLinea.Estado = 'A' ) AND  
+         ( WH_ClaseFamilia.Estado = 'A' ) AND  
+         ( 
+          UPPER(ISNULL(WH_ClaseFamilia.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER(WH_ClaseFamilia.DescripcionLocal)) + '%'
+ ) )  
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclaselinea.listarLineas">
+	    <![CDATA[
+	          SELECT WH_ClaseLinea.Linea as "linea",   
+         WH_ClaseLinea.DescripcionLocal as "descripcionlocal",  
+         rtrim(WH_ClaseFamilia.Familia) as "familia",
+		  WH_ClaseFamilia.DescripcionLocal as "descripcioningles", 
+        cast(WH_ClaseLinea.Estado as varchar(1))  as "estado" 
+        ,case when cast(WH_ClaseLinea.Estado as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+    FROM WH_ClaseLinea
+   left join WH_ClaseFamilia on WH_ClaseFamilia.Linea= WH_ClaseLinea.Linea
+   WHERE WH_ClaseLinea.Linea >= :p_codigo
+    ORDER BY Linea
+	    ]]>
+	</sql-query>
+	
+		<sql-query name="whclaselinea.contarLineas">
+	    <![CDATA[
+	          SELECT count(*)
+    FROM WH_ClaseLinea
+   left join WH_ClaseFamilia on WH_ClaseFamilia.Linea= WH_ClaseLinea.Linea
+   WHERE WH_ClaseLinea.Linea >= :p_codigo
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclaselinea.listar">
+	    <![CDATA[
+	        select linea as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from wh_claselinea	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclaselinea.listarActivos">
+	    <![CDATA[
+	        select linea as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from wh_claselinea
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclaselinea.obtenerTabla">
+	    <![CDATA[
+	        select linea as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from wh_claselinea
+			where linea = :p_linea
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whclaselinea.listarfiltros">
+    	select linea as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from wh_claselinea 
+    	where  linea = ISNULL(:p_linea,linea)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' + ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal
+	</sql-query>
+	
+    <sql-query name="whclaselinea.obtenerDto">
+         select 
+			LINEA "linea"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,GRUPOLINEA "grupolinea"
+			,MANEJOCOLORSERIEFLAG "manejocolorserieflag"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+			,CENTROCOSTOVALIDA "centrocostovalida"
+         from WH_CLASELINEA
+         where 
+			LINEA = :p_linea
+    </sql-query>
+    
+    
+    <sql-query name="whclaselinea.DwMaWhLineafamiliaSubRetrieve">
+		SELECT
+		WH_ClaseLinea.DescripcionLocal as "descripcionlocal",
+		WH_ClaseSubFamilia.DescripcionLocal as "descripcionlocal_1",
+		WH_ClaseSubFamilia.Linea as "linea",
+		WH_ClaseSubFamilia.Familia as "familia",
+		WH_ClaseFamilia.DescripcionLocal as "descripcionlocal_2",
+		WH_ClaseSubFamilia.SubFamilia as "subfamilia",
+		WH_ClaseSubFamilia.Linea + ' '
+		+WH_ClaseLinea.DescripcionLocal as "lineaCompleta",
+		WH_ClaseSubFamilia.Familia + ' ' +WH_ClaseFamilia.DescripcionLocal
+		as "familiaCompleta",
+		WH_ClaseSubFamilia.SubFamilia + ' ' +WH_ClaseSubFamilia.DescripcionLocal as "subfamiliaCompleta"
+		FROM WH_ClaseFamilia
+		INNER JOIN WH_ClaseLinea
+		ON (WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea)
+		INNER JOIN WH_ClaseSubFamilia
+		ON (WH_ClaseFamilia.Linea = WH_ClaseSubFamilia.Linea AND
+		WH_ClaseFamilia.Familia = WH_ClaseSubFamilia.Familia)
+		WHERE (
+		WH_ClaseLinea.Estado = 'A' )		
+		ORDER BY
+		WH_ClaseSubFamilia.Linea ASC,
+		WH_ClaseSubFamilia.Familia ASC,
+		WH_ClaseSubFamilia.SubFamilia ASC
+	</sql-query>
+	
+	<sql-query
+		name="whclaselinea.DwMaWhLineafamiliaSubRetrieveFiltro2">
+		SELECT distinct
+		WH_ClaseLinea.DescripcionLocal as "descripcionlocal",
+		WH_ClaseSubFamilia.DescripcionLocal as "descripcionlocal_1",
+		WH_ClaseSubFamilia.Linea as "linea",
+		WH_ClaseSubFamilia.Familia as "familia",
+		WH_ClaseFamilia.DescripcionLocal as "descripcionlocal_2",
+		WH_ClaseSubFamilia.SubFamilia as "subfamilia",
+		WH_ClaseSubFamilia.Linea + ' '
+		+WH_ClaseLinea.DescripcionLocal as "lineaCompleta",
+		WH_ClaseSubFamilia.Familia + ' ' +WH_ClaseFamilia.DescripcionLocal
+		as "label",
+		WH_ClaseSubFamilia.SubFamilia + ' ' +WH_ClaseSubFamilia.DescripcionLocal as "subfamiliaCompleta"
+		FROM WH_ClaseFamilia
+		INNER JOIN WH_ClaseLinea
+		ON (WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea)
+		INNER JOIN WH_ClaseSubFamilia
+		ON (WH_ClaseFamilia.Linea = WH_ClaseSubFamilia.Linea AND
+		WH_ClaseFamilia.Familia = WH_ClaseSubFamilia.Familia)
+		WHERE (
+		WH_ClaseLinea.Estado = 'A' ) and
+		to_number(WH_ClaseSubFamilia.Linea) = :lineaNumber
+		ORDER BY
+		WH_ClaseSubFamilia.Familia ASC
+	</sql-query>
+    
+    
+    <sql-query
+		name="whclaselinea.DwMaWhLineafamiliaSubRetrieveFiltro3">
+		SELECT distinct
+		WH_ClaseLinea.DescripcionLocal as "descripcionlocal",
+		WH_ClaseSubFamilia.DescripcionLocal as "descripcionlocal_1",
+		WH_ClaseSubFamilia.Linea as "linea",
+		WH_ClaseSubFamilia.Familia as "familia",
+		WH_ClaseFamilia.DescripcionLocal as "descripcionlocal_2",
+		WH_ClaseSubFamilia.SubFamilia as "subfamilia",
+		WH_ClaseSubFamilia.Linea + ' '
+		+WH_ClaseLinea.DescripcionLocal as "lineaCompleta",
+		WH_ClaseSubFamilia.Familia + ' ' +WH_ClaseFamilia.DescripcionLocal
+		as "familiaCompleta",
+		WH_ClaseSubFamilia.SubFamilia + ' ' +WH_ClaseSubFamilia.DescripcionLocal as "label"
+		FROM WH_ClaseFamilia
+		INNER JOIN WH_ClaseLinea
+		ON (WH_ClaseFamilia.Linea = WH_ClaseLinea.Linea)
+		INNER JOIN WH_ClaseSubFamilia
+		ON (WH_ClaseFamilia.Linea = WH_ClaseSubFamilia.Linea AND
+		WH_ClaseFamilia.Familia = WH_ClaseSubFamilia.Familia)
+		WHERE (
+		WH_ClaseLinea.Estado = 'A' ) and
+		to_number(WH_ClaseSubFamilia.Familia) = :familiaNumber
+		and
+		to_number(WH_ClaseSubFamilia.Linea) = :lineaNumber
+		ORDER BY
+		WH_ClaseSubFamilia.Linea ASC,
+		WH_ClaseSubFamilia.Familia ASC,
+		WH_ClaseSubFamilia.SubFamilia ASC
+	</sql-query>
+    
+    
+    
+    <sql-query name="whclaselinea.obtenerTipoServicio">
+		select DISTINCT commoditygrupolinea as "grupolinea",
+		CASE commoditygrupolinea
+			WHEN 'S' THEN 'Servicios'
+			WHEN 'O' THEN 'Obras'
+			END "label"
+		 from wh_commoditysub where
+		estado='A'
+	</sql-query>
+	
+	<sql-query
+		name="whclaselinea.DwMaWhCommodityLineaFamiliaSubSelect">
+		SELECT
+		WH_CommoditySubFamilia.linea as "linea",
+		WH_CommodityLinea.DescripcionLocal as "lineadescripcion"
+		FROM
+		WH_CommodityFamilia,
+		WH_CommodityLinea,
+		WH_CommoditySubFamilia
+		WHERE
+		( WH_CommodityLinea.GrupoLinea = WH_CommodityFamilia.GrupoLinea) and
+		( WH_CommodityLinea.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.GrupoLinea = WH_CommodityFamilia.GrupoLinea )
+		and
+		( WH_CommoditySubFamilia.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.Familia = WH_CommodityFamilia.Familia ) and
+		( ( WH_CommodityLinea.Estado = 'A' ) AND
+		( WH_CommoditySubFamilia.Estado = 'A' ) ) AND
+		WH_CommodityLinea.GrupoLinea =	ISNULL(:p_grupolinea,WH_CommodityLinea.GrupoLinea)
+		group by
+		WH_CommoditySubFamilia.linea,
+		WH_CommodityLinea.DescripcionLocal
+		order by
+		WH_CommoditySubFamilia.linea
+	</sql-query>
+    
+    
+    <sql-query
+		name="whclaselinea.DwMaWhCommodityLineaFamiliaSubSelect2">
+		SELECT
+		WH_CommoditySubFamilia.linea as "linea",
+		WH_CommodityLinea.DescripcionLocal as "lineadescripcion",
+		WH_CommoditySubFamilia.Familia as "familia",
+		WH_CommodityFamilia.DescripcionLocal as "familiadescripcion"
+		FROM
+		WH_CommodityFamilia,
+		WH_CommodityLinea,
+		WH_CommoditySubFamilia
+		WHERE
+		( WH_CommodityLinea.GrupoLinea = WH_CommodityFamilia.GrupoLinea) and
+		( WH_CommodityLinea.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.GrupoLinea = WH_CommodityFamilia.GrupoLinea )
+		and
+		( WH_CommoditySubFamilia.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.Familia = WH_CommodityFamilia.Familia ) and
+		( ( WH_CommodityLinea.Estado = 'A' ) AND
+		( WH_CommoditySubFamilia.Estado = 'A' ) ) AND
+		WH_CommodityLinea.GrupoLinea =
+		ISNULL(:p_grupolinea,WH_CommodityLinea.GrupoLinea) and
+		WH_CommoditySubFamilia.Linea = :p_linea
+		group by
+		WH_CommoditySubFamilia.linea,
+		WH_CommodityLinea.DescripcionLocal,
+		WH_CommoditySubFamilia.Familia,
+		WH_CommodityFamilia.DescripcionLocal
+		order by
+		WH_CommoditySubFamilia.Familia
+	</sql-query>
+	
+	<sql-query
+		name="whclaselinea.DwMaWhCommodityLineaFamiliaSubSelect3">
+		SELECT
+		WH_CommoditySubFamilia.linea as "linea",
+		WH_CommodityLinea.DescripcionLocal as "lineadescripcion",
+		WH_CommoditySubFamilia.Familia as "familia",
+		WH_CommodityFamilia.DescripcionLocal as "familiadescripcion",
+		WH_CommoditySubFamilia.SubFamilia as "subfamilia",
+		WH_CommoditySubFamilia.DescripcionLocal as "subfamiliadescripcion",
+		WH_CommoditySubFamilia.SubFamilia + '-' + WH_CommoditySubFamilia.DescripcionLocal as "label"
+		FROM
+		WH_CommodityFamilia,
+		WH_CommodityLinea,
+		WH_CommoditySubFamilia
+		WHERE
+		( WH_CommodityLinea.GrupoLinea = WH_CommodityFamilia.GrupoLinea) and
+		( WH_CommodityLinea.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.GrupoLinea = WH_CommodityFamilia.GrupoLinea )
+		and
+		( WH_CommoditySubFamilia.Linea = WH_CommodityFamilia.Linea ) and
+		( WH_CommoditySubFamilia.Familia = WH_CommodityFamilia.Familia ) and
+		( ( WH_CommodityLinea.Estado = 'A' ) AND
+		( WH_CommoditySubFamilia.Estado = 'A' ) ) AND
+		WH_CommodityLinea.GrupoLinea =
+		ISNULL(:p_grupolinea,WH_CommodityLinea.GrupoLinea) and
+		WH_CommoditySubFamilia.Linea = :p_linea and
+		WH_CommoditySubFamilia.Familia = :p_familia
+		group by
+		WH_CommoditySubFamilia.linea,
+		WH_CommodityLinea.DescripcionLocal,
+		WH_CommoditySubFamilia.Familia,
+		WH_CommodityFamilia.DescripcionLocal,
+		WH_CommoditySubFamilia.SubFamilia,
+		WH_CommoditySubFamilia.DescripcionLocal
+		order
+		by WH_CommoditySubFamilia.SubFamilia
+	</sql-query>
+    
+    <sql-query name="whclaselinea.obtenerDtoLineas">
+	    <![CDATA[
+	          SELECT rtrim(WH_ClaseLinea.Linea) as "linea",   
+         WH_ClaseLinea.DescripcionLocal as "descripcionlocal", 
+         WH_ClaseLinea.DescripcionIngles as "descripcioningles",  
+        cast(WH_ClaseLinea.Estado as varchar(1))  as "estado" ,
+         WH_ClaseLinea.UltimaFechaModif as "ultimafechamodif",   
+         WH_ClaseLinea.UltimoUsuario as "ultimousuario"
+    FROM WH_ClaseLinea  
+   WHERE WH_ClaseLinea.Linea = :p_linea
+    ORDER BY Linea
+	    ]]>
+	</sql-query>
+	
+	    <sql-query name="whclaselinea.obtenerDetalleDto">
+	    <![CDATA[
+	            SELECT WH_ClaseFamilia.Linea as "linea",   
+         WH_ClaseFamilia.Familia as "familia",   
+         WH_ClaseFamilia.DescripcionLocal as "descripcionlocal",   
+         WH_ClaseFamilia.DescripcionIngles as "descripcioningles",   
+         WH_ClaseFamilia.DescripcionCompleta as "descripcioncompleta",   
+         WH_ClaseFamilia.CuentaInventario as "cuentainventario",   
+         WH_ClaseFamilia.CuentaGasto as "cuentagasto",   
+         WH_ClaseFamilia.ElementoGasto as "elementogasto",   
+         WH_ClaseFamilia.PartidaPresupuestal as "partidapresupuestal",   
+         WH_ClaseFamilia.FlujodeCaja as "flujodecaja" ,   
+         WH_ClaseFamilia.LineaFamilia as "lineafamilia",   
+          cast(WH_ClaseFamilia.Estado as varchar(1))  as "estado",   
+         WH_ClaseFamilia.UltimoUsuario as "ultimousuario",   
+         WH_ClaseFamilia.UltimaFechaModif as "ultimafechamodif",   
+         WH_ClaseFamilia.CuentaTransito as "cuentatransito",   
+         WH_ClaseFamilia.CuentaVentas as "cuentaventas",   
+         WH_ClaseFamilia.Caracteristica04 as "caracteristica04",   
+         WH_ClaseFamilia.Caracteristica03 as "caracteristica03",   
+         WH_ClaseFamilia.Caracteristica02 as "caracteristica02",   
+         WH_ClaseFamilia.Caracteristica01 as "caracteristica01",   
+         WH_ClaseFamilia.Caracteristica05 as "caracteristica05" ,
+        case when WH_ClaseFamilia.PartidaPresupuestal is not null then 
+         WH_ClaseFamilia.PartidaPresupuestal + ' - ' + AC_BudgetCategoryMst.LocalName 
+         else '' end as "partidapresupuestalDescri"
+    FROM WH_ClaseFamilia  
+    left join AC_BudgetCategoryMst on AC_BudgetCategoryMst.BudgetCategory=WH_ClaseFamilia.PartidaPresupuestal
+   WHERE ( WH_ClaseFamilia.Linea = :p_linea )
+    ORDER BY Familia
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whclaselinea.obtenerDetalleSubFamiliaDto">
+	    <![CDATA[
+	    select
+	              rtrim(WH_ClaseSubFamilia.Linea) as "linea",   
+         rtrim(WH_ClaseSubFamilia.Familia) as "familia",   
+         rtrim(WH_ClaseSubFamilia.SubFamilia) as "subfamilia",   
+         rtrim(WH_ClaseSubFamilia.DescripcionLocal) as "descripcionlocal",   
+         cast(WH_ClaseSubFamilia.Estado as varchar) as "estado",   
+         WH_ClaseSubFamilia.UltimaFechaModif as "ultimafechamodif",   
+         WH_ClaseSubFamilia.UltimoUsuario as "ultimousuario" 
+    FROM WH_ClaseSubFamilia  
+    where WH_ClaseSubFamilia.LINEA = :p_linea
+			AND WH_ClaseSubFamilia.FAMILIA = :p_familia
+	    ]]>
+	</sql-query>
+
+	<sql-query name="whclaselinea.validarCuentasL">
+select account as "codigo",
+cast(status as varchar) as "estadoNombre" 
+from accountmst 
+where account= :p_cuenta 
+
+    
+    </sql-query>
+    
+</hibernate-mapping>

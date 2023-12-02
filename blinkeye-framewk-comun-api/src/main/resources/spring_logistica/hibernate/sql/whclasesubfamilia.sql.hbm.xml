@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="whclasesubfamilia.obtenerDto">
+         select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,SUBFAMILIA "subfamilia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,ITEMTIPO "itemtipo"
+			,TRANSACCIONOPERACION "transaccionoperacion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+         from WH_CLASESUBFAMILIA
+         where 
+			LINEA = :p_linea
+			AND FAMILIA = :p_familia
+
+    </sql-query>
+    
+    <sql-query name="whclasesubfamilia.listardtofiltros">
+          select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,SUBFAMILIA "subfamilia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,ITEMTIPO "itemtipo"
+			,TRANSACCIONOPERACION "transaccionoperacion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+         from WH_CLASESUBFAMILIA
+         where 
+				LINEA = ISNULL(:p_linea,LINEA)
+			AND FAMILIA = ISNULL(:p_familia,FAMILIA)
+			AND SUBFAMILIA = ISNULL(:p_subfamilia,SUBFAMILIA)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+    <sql-query name="whclasesubfamilia.listarDtoPorFamilia">
+          select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,SUBFAMILIA "subfamilia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,ITEMTIPO "itemtipo"
+			,TRANSACCIONOPERACION "transaccionoperacion"
+			,ESTADO "estado"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ULTIMOUSUARIO "ultimousuario"
+
+         from WH_CLASESUBFAMILIA
+         where 
+				LINEA = :p_linea
+			AND FAMILIA = :p_familia
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

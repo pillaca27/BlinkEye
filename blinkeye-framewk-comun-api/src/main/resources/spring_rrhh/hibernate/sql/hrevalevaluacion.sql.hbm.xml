@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : gth.HrEvalevaluacion
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="hrevalevaluacion.obtenerDto">
+         select 
+			a.CompanyOwner "companyowner"
+			,a.Evaluacion "evaluacion"
+			,a.UnidadNegocio "unidadnegocio"
+			,a.Periodo "periodo"
+			,a.SolicitanteCompania "solicitantecompania"
+			,a.Solicitante "solicitante"
+			,a.Descripcion "descripcion"
+			,a.PlantillaCriterio "plantillacriterio"
+			,a.FlagEvaluacionCompetencia "flagevaluacioncompetencia"
+			,a.FlagResultado "flagresultado"
+			,a.FechaInicio "fechainicio"
+			,a.FechaFin "fechafin"
+			,a.FechaPlanInicio "fechaplaninicio"
+			,a.FechaPlanFin "fechaplanfin"
+			,a.FechaRealInicio "fecharealinicio"
+			,a.FechaRealFin "fecharealfin"
+			,a.RevCompromisoCompanyOwner "revcompromisocompanyowner"
+			,a.RevCompromisoEvaluacion "revcompromisoevaluacion"
+			,a.CorreoAsunto "correoasunto"
+			,a.CorreoDetalle "correodetalle"
+			,a.CorreoAdjunto "correoadjunto"
+			,a.CorreoCopia "correocopia"
+			,a.CorreoIncluirUsuario "correoincluirusuario"
+			,a.CodigoProceso "codigoproceso"
+			,a.NumeroProceso "numeroproceso"
+			,a.NivelAprobacion "nivelaprobacion"
+			,a.Motivo_Anulado "motivoAnulado"
+			,a.Motivo_Suspendido "motivoSuspendido"
+			,a.Motivo_NoSuspendido "motivoNosuspendido"
+			,a.Estado_Suspendido "estadoSuspendido"
+			,a.Motivo_Rechazo "motivoRechazo"
+			,a.Estado "estado"
+			,a.UltimoUsuario "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from HR_EVALEVALUACION a
+         where 
+			a.CompanyOwner = :p_companyowner
+			AND a.Evaluacion = :p_evaluacion
+
+    </sql-query>
+
+    <sql-query name="hrevalevaluacion.listarPaginadoContar">
+    	<![CDATA[
+         SELECT COUNT(1)
+			FROM HR_EVALEVALUACION A
+			INNER JOIN COMPANYOWNER B ON A.COMPANYOWNER = B.COMPANYOWNER
+			INNER JOIN MA_UNIDADNEGOCIO C ON A.UNIDADNEGOCIO = C.UNIDADNEGOCIO
+			WHERE 1 = 1
+			AND A.COMPANYOWNER IN (SELECT Valor FROM FN_HR_ObtenerSeguridadCompania (:p_usuario)) 
+			AND ( :p_compania IS NOT NULL AND (A.ESTADO = 'TE' AND A.COMPANYOWNER = :p_compania 
+						AND A.EVALUACION <> :p_evaluacion AND A.PLANTILLACRITERIO = :p_plantilla AND A.FLAGEVALUACIONCOMPETENCIA = :p_flagcomp)
+				 OR :p_compania IS NULL )
+			AND A.EVALUACION = ISNULL(:p_codigo, A.EVALUACION)
+			AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		]]>
+    </sql-query>
+
+    <sql-query name="hrevalevaluacion.listarPaginadoSentencia">
+    	<![CDATA[
+         SELECT A.COMPANYOWNER as "companyowner", 
+				LTRIM(RTRIM(UPPER(B.DESCRIPTION))) AS "compania_desc", 
+				LTRIM(RTRIM(UPPER(C.DESCRIPCIONLOCAL))) AS "unidadnegocio_desc", 
+				A.EVALUACION as "evaluacion", 
+				A.PERIODO as "periodo", 
+				LEFT(A.PERIODO,4) + '-' + RIGHT(A.PERIODO,2) AS "periodo_desc", 
+				A.DESCRIPCION as "descripcion", 
+				A.FECHAINICIO as "fechainicio", 
+				A.FECHAFIN as "fechafin", 
+				A.FECHAPLANINICIO as "fechaplaninicio", 
+				A.FECHAPLANFIN as "fechaplanfin", 
+				A.FECHAREALINICIO as "fecharealinicio", 
+				A.FECHAREALFIN as "fecharealfin", 
+				A.PLANTILLACRITERIO as "plantillacriterio", 
+				CASE A.PLANTILLACRITERIO 
+					WHEN 'PU' THEN 'PUESTO' 
+					WHEN 'CA' THEN 'NIVEL SALARIAL' 
+				END AS "planillacriterio_Desc", 
+				CAST(A.FLAGEVALUACIONCOMPETENCIA AS VARCHAR) as "flagevaluacioncompetencia", 
+				CASE A.FLAGEVALUACIONCOMPETENCIA 
+					WHEN 'V' THEN 'POR VALOR' 
+					WHEN 'C' THEN 'POR COMPORTAMIENTO' 
+				END AS "evaluacioncompetencia_desc", 
+				CAST(A.FLAGRESULTADO AS VARCHAR) as "flagresultado", 
+				CASE A.FLAGRESULTADO
+					WHEN 'E' THEN 'TIPO DE EVALUADOR' 
+					WHEN 'C' THEN 'CRITERIO DE TIPO EVALUADOR' 
+				END AS "resultado_desc", 
+				A.ESTADO as "estado", 
+				CASE A.ESTADO 
+					WHEN 'P' THEN 'EN PREPARACIÓN'
+					WHEN 'A' THEN 'APROBADO'
+					WHEN 'J' THEN 'EJECUTADO'
+					WHEN 'E' THEN 'EN EVALUACIÓN'	
+					WHEN 'V' THEN 'EVALUADO'
+					WHEN 'N' THEN 'ANULADO'
+					WHEN 'S' THEN 'SUSPENDIDO'
+					WHEN 'T' THEN 'TERMINADO'
+				END AS "estado_desc", 
+				A.NIVELAPROBACION as "nivelaprobacion", 
+				A.NUMEROPROCESO as "numeroproceso", 
+				A.MOTIVO_SUSPENDIDO as "motivoSuspendido", 
+				A.MOTIVO_NOSUSPENDIDO as "motivoNosuspendido", 
+				A.ESTADO_SUSPENDIDO as "estadoSuspendido", 
+				A.MOTIVO_ANULADO as "motivoAnulado", 
+				A.ULTIMOUSUARIO as "ultimousuario", 
+				A.ULTIMAFECHAMODIF as "ultimafechamodif", 
+				(	SELECT COUNT(1) 
+					FROM HR_EVALEMPEVALUADOEVALUACION 
+					WHERE COMPANYOWNER = A.COMPANYOWNER 
+						AND EVALUACION = A.EVALUACION 
+						AND ESTADO IN('P','E')) AS "enproceso" 
+			FROM HR_EVALEVALUACION A
+			INNER JOIN COMPANYOWNER B ON A.COMPANYOWNER = B.COMPANYOWNER
+			INNER JOIN MA_UNIDADNEGOCIO C ON A.UNIDADNEGOCIO = C.UNIDADNEGOCIO
+			WHERE 1 = 1
+			AND A.COMPANYOWNER IN (SELECT Valor FROM FN_HR_ObtenerSeguridadCompania (:p_usuario)) 
+			AND ( :p_compania IS NOT NULL AND (A.ESTADO = 'TE' AND A.COMPANYOWNER = :p_compania 
+						AND A.EVALUACION <> :p_evaluacion AND A.PLANTILLACRITERIO = :p_plantilla AND A.FLAGEVALUACIONCOMPETENCIA = :p_flagcomp)
+				 OR :p_compania IS NULL )
+			AND A.EVALUACION = ISNULL(:p_codigo, A.EVALUACION)
+			AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		]]>
+    </sql-query>
+    
+    <sql-query name="hrevalevaluacion.listarPlantPaginadoContar">
+    	<![CDATA[
+         SELECT COUNT(1)
+			FROM HR_EVALPLANTILLA A
+			INNER JOIN HR_EVALEVALUACION B ON A.COMPANYOWNER = B.COMPANYOWNER AND A.EVALUACION = B.EVALUACION
+			INNER JOIN COMPANYOWNER C ON A.COMPANYOWNER = C.COMPANYOWNER
+			WHERE 1 = 1
+			AND A.PLANTILLA = ISNULL(:p_codigo, A.PLANTILLA)
+			AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		]]>
+    </sql-query>
+    
+    <sql-query name="hrevalevaluacion.listarPlantPaginadoSentencia">
+    	<![CDATA[
+        	SELECT A.COMPANYOWNER as "companyowner", 
+				A.EVALUACION as "evaluacion", 
+				A.PLANTILLA as "plantilla", 
+				A.DESCRIPCION as "descripcion", 
+				'DESEMPENO' AS "auxMaestro", 
+				LTRIM(RTRIM(UPPER(C.DESCRIPTION))) AS "auxCompaniaNombre", 
+				B.FECHAINICIO as "auxFechainicio", 
+				B.FECHAFIN as "auxFechafin" 
+			FROM HR_EVALPLANTILLA A
+			INNER JOIN HR_EVALEVALUACION B ON A.COMPANYOWNER = B.COMPANYOWNER AND A.EVALUACION = B.EVALUACION
+			INNER JOIN COMPANYOWNER C ON A.COMPANYOWNER = C.COMPANYOWNER
+			WHERE 1 = 1
+			AND A.PLANTILLA = ISNULL(:p_codigo, A.PLANTILLA)
+			AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+		]]>
+    </sql-query>
+    
+    <sql-query name="hrevalevaluacion.listarCompetencias">
+    	<![CDATA[
+         	SELECT A.COMPETENCIA as "competencia", 
+				A.DESCRIPCION as "descripcion", 
+				A.DESCRIPCIONINGLES as "descripcioningles", 
+				A.EXPLICACION as "explicacion", 
+				A.AREA as "area", 
+				LTRIM(RTRIM(UPPER(B.DESCRIPCIONLOCAL))) AS "auxAreaNombre",
+				CAST(A.FLAGDESEMPENO AS VARCHAR) as "flagdesempeno", 
+				CAST(A.FLAGSELECCION AS VARCHAR) as "flagseleccion", 
+				CAST(A.TIPOCALIFICACION AS VARCHAR) as "tipocalificacion", 
+				CASE A.TIPOCALIFICACION
+					WHEN 'N' THEN 'NUMÉRICO' 
+					WHEN 'C' THEN 'COMENTARIO' 
+					WHEN 'A' THEN 'NUMÉRICO Y COMENTARIO' 
+				END AS "auxTipoCalifNombre", 
+				CAST(A.FLAGEVALUACION AS VARCHAR) as "flagevaluacion", 
+				A.VALORMINIMO as "valorminimo", 
+				A.VALORMAXIMO as "valormaximo", 
+				A.VALORREQUERIDO as "valorrequerido", 
+				A.COMPANYOWNER as "companyowner", 
+				A.MAESTROPLANTILLA as "maestroplantilla", 
+				CAST(A.ESTADO AS VARCHAR) as "estado", 
+				A.ULTIMOUSUARIO as "ultimousuario", 
+				A.ULTIMAFECHAMODIF as "ultimafechamodif" 
+			FROM HR_COMPETENCIA A
+			LEFT JOIN MA_MISCELANEOSDETALLE B ON B.APLICACIONCODIGO = 'HR' AND B.COMPANIA = '999999' 
+			AND B.CODIGOTABLA = 'GRUPOCOMPE' AND A.AREA = B.CODIGOELEMENTO
+			WHERE A.ESTADO = 'A' 
+				AND A.MAESTROPLANTILLA IS NULL
+				AND A.MAESTRO = :p_maestro AND A.FLAGEVALUACION = :p_flageval
+				AND ( :p_maestro = 'SELECCION' AND A.FLAGSELECCION = 'S'
+				OR :p_maestro = 'DESEMPENO' AND A.FLAGDESEMPENO = 'S' )
+				AND A.COMPETENCIA = ISNULL(:p_codigo, A.COMPETENCIA)
+				AND A.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, A.DESCRIPCION) + '%'
+			ORDER BY A.AREA
+		]]>
+    </sql-query>
+    
+    <sql-query name="hrevalevaluacion.listarComportamientos">
+    	<![CDATA[
+        	 SELECT B.DESCRIPCION as "descripcion", 
+				B.COMPORTAMIENTO as "comportamiento", 
+				B.COMPETENCIA as "competencia", 
+				B.ORDEN as "orden", 
+				A.MAESTROPLANTILLA as "auxMaestroPlantilla", 
+				CAST(A.FLAGEVALUACION AS VARCHAR) as "auxFlagEvaluacion", 
+				CAST(A.FLAGDESEMPENO AS VARCHAR) as "auxFlagDesempeno", 
+				CAST(A.FLAGSELECCION AS VARCHAR) as "auxFlagSeleccion" 
+			FROM HR_COMPETENCIACOMPORTAMIENTO B
+			INNER JOIN HR_COMPETENCIA A ON B.COMPETENCIA = A.COMPETENCIA
+			WHERE B.ESTADO = 'A'
+				AND A.ESTADO = 'A' 
+				AND A.MAESTROPLANTILLA IS NULL
+				AND A.MAESTRO = :p_maestro AND A.FLAGEVALUACION = :p_flageval
+				AND ( :p_maestro = 'SELECCION' AND A.FLAGSELECCION = 'S'
+				OR :p_maestro = 'DESEMPENO' AND A.FLAGDESEMPENO = 'S' )
+				AND B.COMPETENCIA = :p_competen
+				AND B.COMPORTAMIENTO = ISNULL(:p_codigo, B.COMPORTAMIENTO)
+				AND B.DESCRIPCION LIKE '%' + ISNULL(:p_descripcion, B.DESCRIPCION) + '%'
+		]]>
+    </sql-query>
+
+</hibernate-mapping>

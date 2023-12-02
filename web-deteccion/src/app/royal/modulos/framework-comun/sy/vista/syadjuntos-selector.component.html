@@ -1,0 +1,140 @@
+<div class="ui-fluid">
+    <p-dialog [(visible)]="verSelector" [resizable]="false" modal="modal" showEffect="fade" hideEffect="size" [style]="{'max-width':'1200px', 'left':'15px', 'right':'15px' }">
+
+        <p-header>            
+            <p style="font-size:16px;display:inline-block; margin-top: 10px;">ADJUNTAR ARCHIVOS</p>
+        </p-header>
+
+        <div class="p-grid" style="margin-top: 10px;">
+            <div class="p-col-12 p-md-12 p-lg-12">                    
+
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <button pButton label="Nuevo" style="width: 100%;" icon="fad fa-plus" type="button" (click)="coreNuevo()" [disabled]="!puedeEditar" class="p-button-outlined p-button-secondary"></button>
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <!-- <button pButton label="Buscar" style="font-size: 14px;" icon="fa fa-binoculars" type="button" (click)="coreBuscar(dtUbicacionGeo)" class="ui-button ui-button-rounded"></button> -->
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6"></div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <button pButton label="Salir" style="width: 100%;" icon="fad fa-times" type="button" (click)="coreSalir()" class="p-button-outlined p-button-secondary"></button>
+                    </div>
+                </div>
+
+                <br>
+        
+                <p-table #dtUbicacionGeo [rows]="50" [value]="listado" selectionMode="single" [totalRecords]="cantidad"
+                    [responsive]="true" [style]="{'width':'100%'}">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion3">Acción</th>
+                            <th class="tablaHeaderNombre">Descripción</th>
+                            <th class="tablaHeaderNombre">Archivo</th>
+                            <th class="tablaHeaderCodigo">Último Usuario</th>
+                            <th class="tablaHeaderCodigo">Última Fecha</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-row let-columns="columns">
+                        <tr>
+                            <td class="tablaColumnaAccion3"> <span class="p-column-title">Acción</span>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" [disabled]="!puedeEditar"
+                                    title="Editar" (click)="coreEditar(row)"></button>
+                                <button pButton pRipple type="button" icon="fad fa-trash" class="p-button-rounded p-button-text" [disabled]="!puedeEditar"
+                                    title="Eliminar" (click)="eliminar(row)"></button>
+                                <button pButton pRipple type="button" icon="fad fa-download" class="p-button-rounded p-button-text"
+                                    title="Descargar" (click)="bajarArchivo(row)"></button>
+                                <!-- <button pButton pRipple type="button" icon="fal fa-trash-alt"
+                                    class="p-button-rounded p-button-danger p-button-text" title="Anular"
+                                    (click)="coreAnular(row)"></button> -->
+                            </td>
+                            <td class="tablaColumnaNombre">{{row.comentario}}</td>
+                            <td class="tablaColumnaNombre">{{row.archivo}}</td>
+                            <td class="tablaColumnaCodigo">{{row.ultimousuario}}</td>
+                            <td class="tablaColumnaCodigo">{{row.ultimafechamodif | date: 'dd/mm/yyy'}}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="5">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+                
+            </div>
+        </div>
+    </p-dialog>
+
+    <p-dialog [(visible)]="verSelectorMantenimiento" [resizable]="false" modal="modal" showEffect="fade" hideEffect="size" [style]="{'max-width':'800px', 'left':'15px', 'right':'15px' }">
+
+        <p-header>
+            <p style="font-size:16px;display:inline-block; margin-top: 10px;">ADJUNTAR ARCHIVOS</p>
+        </p-header>
+
+        <div class="p-grid" style="margin-top:10px">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <div class="p-grid">
+
+
+                    <div class="p-field p-col-12">
+                        <label class="importante" for="funrpfuncionario">Descripción</label>                        
+                        <input pInputText type="text" [(ngModel)]="bean.comentario" class="hoverDisabled" style="width:100%" />
+                    </div>
+
+                    <div class="p-field p-col-12">
+                        <label class="importante" for="funrpfuncionario">Archivo</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" [(ngModel)]="bean.archivo" disabled class="hoverDisabled" style="width:100%" />                            
+                            <input #fileUpload type="file" class="form-control" style="display:none" (change)="cargarArchivo(fileUpload)" >
+                            <button pButton pRipple type="button" icon="fa fa-upload" class="ui-button-rounded p-button-text" title="Subir Archivo"  (click)="subirArchivo(bean, fileUpload)"></button>
+                            <button pButton pRipple type="button" icon="fa fa-download" class="ui-button-rounded  p-button-text" title="Descargar" (click)="bajarArchivo(bean)"></button>
+                        </div>
+                    </div>
+
+
+                    <div class="p-col-4">
+                        <label for="funrpfuncionario">Fecha Modificación</label>
+                    </div>
+
+                    <div class="p-col-4">                                            
+                        <div class="p-inputgroup">                            
+                            <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'100%'}"
+                                [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true"
+                                dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="bean.ultimafechamodif">
+                            </p-calendar>
+                        </div>    
+                    </div>
+
+                    <div class="p-col-4">
+                        <label for="funrpfuncionario">Último Usuario</label>
+                    </div>
+
+                    <div class="p-col-4">                                            
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="bean.ultimousuario" class="hoverDisabled" style="width:100%" />
+                        </div>    
+                    </div>
+
+                    <div class="p-col-12 p-md-6 p-lg-2">
+                        <button pButton label="Guardar" style="font-size: 14px;" icon="fa fa-save" type="button" (click)="coreGuardar()" class="ui-button ui-button-rounded"></button>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-8"></div>
+                    <div class="p-col-12 p-md-6 p-lg-2">
+                        <button pButton label="Salir" style="font-size: 14px;" icon="fad fa-times" class="ui-button-warning ui-button-rounded" type="button" (click)="salirAd()"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+
+
+
+</div>
+
+<p-confirmDialog #c key="confirmad">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+        <button type="button" pButton icon="fa fa-close" label="No" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

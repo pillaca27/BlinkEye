@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : apcajachica
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<sql-query name="apadelantoheadercomun.contar">
+	<![CDATA[
+         SELECT    
+			count(*)
+		FROM    AP_AdelantoHeader
+		            INNER JOIN AC_CostCenterMst    ON
+		                ( AP_AdelantoHeader.CentroCosto    = AC_CostCenterMst.CostCenter )
+		            INNER JOIN PersonaMast ON
+		                ( AP_AdelantoHeader.PreparadoPor = PersonaMast.Persona )
+		WHERE    ( AP_AdelantoHeader.CompaniaSocio = :p_companiasocio )
+		    And    ( AP_AdelantoHeader.TipoGasto        <> :p_tipo)
+		    And    ( AP_AdelantoHeader.Clasificacion    = :p_clasificacion    )
+		    And    ( AP_AdelantoHeader.Estado    = :p_estado    )
+		 ]]>
+    </sql-query>
+	
+	<sql-query name="apadelantoheadercomun.listarpaginado">
+	<![CDATA[
+         SELECT    AP_AdelantoHeader.Periodo as "periodo", 
+		        AP_AdelantoHeader.Moneda as "moneda", 
+		        AP_AdelantoHeader.CompaniaSocio as "companiasocio", 
+		        AP_AdelantoHeader.TipoGasto as "tipogasto", 
+		        AP_AdelantoHeader.NumeroProceso as "numeroproceso", 
+		        AP_AdelantoHeader.FechaProceso as "fechaproceso", 
+		        AP_AdelantoHeader.FechaEntrega as "fechaentrega", 
+		        AP_AdelantoHeader.CentroCosto as "centrocosto", 
+		        AP_AdelantoHeader.PreparadoPor as "preparadopor", 
+		        AP_AdelantoHeader.MontoAdelanto as "montoadelanto", 
+		        AP_AdelantoHeader.MontoSustento as "montosustento", 
+		        AP_AdelantoHeader.Observaciones as "observaciones",
+		        AP_AdelantoHeader.ReferenciaFiscal01 as "referenciafiscal01",    
+		        PersonaMast.Busqueda as "busqueda", 
+		        AC_CostCenterMst.LocalName as "localname" 
+		FROM    AP_AdelantoHeader
+		            INNER JOIN AC_CostCenterMst    ON
+		                ( AP_AdelantoHeader.CentroCosto    = AC_CostCenterMst.CostCenter )
+		            INNER JOIN PersonaMast ON
+		                ( AP_AdelantoHeader.PreparadoPor = PersonaMast.Persona )
+		WHERE    ( AP_AdelantoHeader.CompaniaSocio = :p_companiasocio )
+		    And    ( AP_AdelantoHeader.TipoGasto        <> :p_tipo)
+		    And    ( AP_AdelantoHeader.Clasificacion    = :p_clasificacion    )
+		    And    ( AP_AdelantoHeader.Estado    = :p_estado    )
+		 ]]>
+    </sql-query>
+    
+</hibernate-mapping>

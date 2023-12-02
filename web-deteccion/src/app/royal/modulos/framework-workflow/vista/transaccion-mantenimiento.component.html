@@ -1,0 +1,215 @@
+<p-card>
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Información Transacción</b>
+        </div>
+    </p-divider>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <aprobacion-formulario [innerHTML]="contenidoFormulario" [clase]="resumen.tamanio" [attr.width]="'100%'" [claseTres]=" resumen.altura" *ngIf="contenidoFormulario!=null">
+                </aprobacion-formulario>
+                <ng-template ngFor let-row [ngForOf]="lstHTML" *ngIf="!puedeEditar">
+                    <iframe [attr.src]="row.inner | safe" [attr.type]="'application/pdf'" [attr.width]="'100%'" [attr.height]="'500px'">
+                    </iframe>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Proceso</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstProcesos" disabled='true' [style]="{'width':'100%'}" [disabled]="!puedeEditar" [(ngModel)]="bean.proceso"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Referencia</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.referencia" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Transacción Origen</label>
+                        <div class="p-col">
+                            <input pInputText type="number" style="width:100%" [(ngModel)]="bean.origenTransaccion" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-3"></div>
+
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">CompaniaId</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.companiaid" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">SucursalId</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.sucursalid" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">ProyectoId</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.proyectoid" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">MonedaId</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.monedaid" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">AreaId</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.areaid" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Monto</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%" [(ngModel)]="bean.monto" [disabled]="!puedeEditar" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid" *ngIf="puedeEditar">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton label="Nuevo" type="button" (click)="cargarFolioPre()" icon="fad fa-plus" class="p-button-outlined"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-10"></div>
+            </div>
+        </div>
+    </div>
+
+    <p-table [responsive]="true" [value]="bean.adjuntos" [style]="{'width': '100%'}">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaColumnaAccion2" *ngIf="puedeEditar">Acción</th>
+                <th class="tablaColumnaTexto">Documento</th>
+                <th class="tablaColumnaTexto">Tipo</th>
+                <th class="tablaColumnaFechaHora">Última Modificación</th>
+                <th class="tablaHeaderEstadoComboBox">Mostrar Adjunto</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion2" *ngIf="puedeEditar">
+                    <span class="p-column-title">Acción</span>
+                    <button pButton type="button" icon="fad fa-cloud-download" class="p-button-rounded p-button-text" title="Descargar" (click)="descargarDocumento(row.secuencia)"></button>
+                    <button pButton type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminarDocumento(row)"></button>
+                </td>
+                <td class="tablaColumnaTexto">
+                    <span class="p-column-title">Documento</span> {{row.archivonombre}}
+                </td>
+                <td class="tablaColumnaTexto">
+                    <span class="p-column-title">Tipo</span> {{row.tipodocumento | labelFromItem:lstTipoDocumento}}
+                </td>
+                <td class="tablaColumnaFechaHora">
+                    <span class="p-column-title">Última Modificación</span> {{row.fecha | date: 'dd/MM/yyyy HH:mm:ss'}}
+                </td>
+                <td class="tablaHeaderEstadoComboBox" pEditableColumn>
+                    <span class="p-column-title">Mostrar Adjunto</span>
+                    <p-dropdown [options]="lstEsHeader" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="row.flagVer">
+                    </p-dropdown>
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td>
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+    <br>
+</p-card>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>
+<br>
+<transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="salir()">
+</transaccion-botones>
+<br>
+<transaccion-seguimiento></transaccion-seguimiento>
+<br>
+<transaccion-planificacion></transaccion-planificacion>
+<br>
+<transaccion-documentosxusuario></transaccion-documentosxusuario>
+
+<p-dialog header="Tipo Documento" [(visible)]="verModalTipoDocumento" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Tipo</span>
+                    <p-dropdown [options]="lstTipoDocumento" [style]="{'width':'100%'}" [(ngModel)]="tipoDocumento" [filter]="true" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton type="button" label="Aceptar" (click)="photoInput.click()" icon="pi pi-check" class="p-button-outlined"></button>
+                    <input #photoInput type="file" class="form-control" style="display:none" (change)="cargarFolio(photoInput)">
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton type="button" label="Cancelar" (click)="cancelarTipoDoc()" icon="pi pi-arrow-left" class="p-button-outlined p-button-secondary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Aprobador" [(visible)]="verModalAprobadores" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+
+                <div class="p-field p-col-12 p-md-12">
+                    <span>Empleado</span>
+                    <p-autoComplete [(ngModel)]="empleadoBuscadorA" [suggestions]="sugerenciasEmpleadoA" (completeMethod)="filtroSugerenciaEmpleadoA($event)" field="nombre" [size]="30" appendTo="body" [style]="{'width':'100%'}" [minLength]="3"></p-autoComplete>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton type="button" label="Aceptar" (click)="aceptarAprobadores()" icon="pi pi-check" class="p-button-outlined"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton type="button" label="Cancelar" (click)="verModalAprobadores=false" icon="pi pi-arrow-left" class="p-button-outlined p-button-secondary"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

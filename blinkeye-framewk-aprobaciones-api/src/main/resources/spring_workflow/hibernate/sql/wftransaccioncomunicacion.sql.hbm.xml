@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : core.WfTransaccion -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="wftransaccioncomunicacion.obtenerEmisores">
+    <![CDATA[
+		select 
+		distinct
+		a.EMISOR_ID as "id", 
+		rtrim(b.Busqueda) as "nombre"
+		from 
+		sgworkflowsys.wf_transaccion_comunicacion a
+		left join PersonaMast b on a.EMISOR_ID = b.persona
+		where TRANSACCION_ID = :p_transaccion
+		and COMUNICACION_PADRE_ID is null
+    ]]>
+	</sql-query>
+</hibernate-mapping>

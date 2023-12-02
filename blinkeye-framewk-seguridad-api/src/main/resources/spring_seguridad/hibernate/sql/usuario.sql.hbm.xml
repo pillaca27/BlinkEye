@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : .Parametrosmast -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+	<!--INICIO: CRYSTAL // SE USARA SOLO ESTOS METODOS -->
+		<sql-query name="usuario.listarCompanias">
+			SELECT
+				 companyowner.companyowner as"codigo",
+				 companyowner.description as "nombre",
+				 cast(isnull(CompaniaMast.Estado, '') as varchar(1)) as "estadoId"
+			FROM
+			companyowner
+			INNER JOIN CompaniaMast ON (companyowner.company = CompaniaMast.CompaniaCodigo)
+			INNER JOIN SY_SeguridadAutorizaciones ON (companyowner.companyowner = SY_SeguridadAutorizaciones.Concepto)
+			WHERE ( CompaniaMast.Estado = 'A' )
+			AND
+			( SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' ) AND
+			( SY_SeguridadAutorizaciones.Grupo = 'COMPANIASOCIO' ) AND
+			( SY_SeguridadAutorizaciones.Estado = 'A' ) AND
+			( LOWER(SY_SeguridadAutorizaciones.Usuario) = (SELECT PERFIL FROM SeguridadPerfilUsuario spu WHERE spu.Usuario = LOWER(:p_usuario)))
+			ORDER
+			BY
+			companyowner.companyowner ASC
+		</sql-query>
+		
+		<sql-query name="usuario.obtenerParametros">
+			SELECT
+			ParametrosMast.Texto "texto",
+			ParametrosMast.DescripcionParametro "descripcionparametro",
+			ParametrosMast.Numero "numero",
+			ParametrosMast.Explicacion "explicacion"
+			FROM ParametrosMast
+			WHERE (
+			ParametrosMast.CompaniaCodigo =
+			:par_company ) AND
+			(
+			ParametrosMast.AplicacionCodigo = :par_application
+			) AND
+			(
+			ParametrosMast.ParametroClave = :par_key )
+		</sql-query>
+		
+	    <sql-query name="usuario.obtenerTipoUsuario">
+			SELECT LTRIM(RTRIM(t.DescripcionLocal)) as "codigo"
+			FROM Usuario u
+			INNER JOIN EMPLEADOMAST e ON e.CODIGOUSUARIO = u.USUARIO
+			INNER JOIN TipoTrabajador t ON e.TipoTrabajador = t.TipoTrabajador
+			WHERE LTRIM(RTRIM(UPPER(u.Usuario))) = LTRIM(RTRIM(UPPER(:p_usuario)))
+		</sql-query>
+		
+		<sql-query name="usuario.obtenerEmpleadoEstados">
+    	<![CDATA[
+            SELECT 
+					EMP.EMPLEADO AS "idEmpleado"
+					,cast(EMP.ESTADO as varchar(2)) as "idEstado"
+				    ,EMP.CodigoUsuario as "codigoUsuario"
+					,SY_SeguridadAutorizaciones.Concepto as "idCompaniaSocio"
+			FROM EMPLEADOMAST EMP
+			JOIN Personamast PER ON PER.persona = EMP.EMPLEADO
+			LEFT JOIN SY_SeguridadAutorizaciones ON SY_SeguridadAutorizaciones.AplicacionCodigo = 'SY' AND SY_SeguridadAutorizaciones.Grupo = 'COMPANIASOCIO' AND SY_SeguridadAutorizaciones.Estado = 'A' AND LOWER(LTRIM(RTRIM(SY_SeguridadAutorizaciones.Usuario))) = LOWER(LTRIM(RTRIM(EMP.CodigoUsuario)))
+			WHERE EMP.codigousuario = :p_codigo_usuario
+		]]>
+		</sql-query>
+		
+		<sql-query name="usuario.obtenerDatosEmpleadoPorUsuario">
+    	<![CDATA[
+          select 
+         	emp.Empleado as "personaId",
+				EMP.CompaniaSocio AS "companiaCodigo"
+				,COM.description AS "companiaNombre"
+				,EMP.CodigoUsuario AS  "usuario"
+				,cast(PER.TIPODOCUMENTO as varchar(50)) AS "personaTipoDocumentoId"
+				,PER.DOCUMENTO AS "personaNroDocumento"
+				,cast(PER.NOMBRECOMPLETO as varchar(200)) AS "personaNombreCompleto"
+				,PER.NOMBRES AS "personaNombres"
+				,RTRIM( CONCAT( ISNULL(PER.APELLIDOPATERNO,'') ,  CONCAT( ' ', ISNULL(PER.APELLIDOMATERNO,'')   )  ) ) AS "personaApellidos"
+				,PER.APELLIDOPATERNO AS "personaApellidoPaterno"
+				,PER.APELLIDOMATERNO AS "personaApellidoMaterno"
+			from EmpleadoMast EMP
+				INNER JOIN PersonaMast PER
+					ON PER.PERSONA=EMP.EMPLEADO
+				LEFT JOIN companyowner COM
+					ON EMP.COMPANIASOCIO = COM.COMPANYOWNER
+			where EMP.CompaniaSocio = isnull(:p_id_compania ,EMP.CompaniaSocio)
+			and EMP.codigousuario = :p_codigo_usuario
+		]]>
+	</sql-query>
+	<sql-query name="usuario.obtenerParametroFotos">
+	<![CDATA[
+		select '1' as "codigo"
+		,(select Texto from ParametrosMast where ParametroClave='EXTARCHFOT') as "extension"
+		,(select Texto from ParametrosMast where ParametroClave='BMPCODIGO') as "tipo"
+		,(select DescripcionParametro from ParametrosMast where ParametroClave='PATHBITMAP') as "ruta"
+		,(select DescripcionParametro from ParametrosMast where ParametroClave='WEBRBITMAP') as "rutaweb" 
+	]]>
+	</sql-query>
+	<!--FIN: CRYSTAL -->
+						
+</hibernate-mapping>

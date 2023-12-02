@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- * * @author : desarrollo * @powerbuilder : core.Accountmst -->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	<sql-query name="maselectors.listarUnidadNegocio">
+		select UnidadNegocio as "codigo",
+		DescripcionLocal as "nombre"
+		,CAST(Estado AS varchar) as "estadoId"
+		from MA_UnidadNegocio where Estado = 'A'
+		order by DescripcionLocal
+	</sql-query>
+	<sql-query name="maselectors.listarMonedas">
+		SELECT MonedaMast.MonedaCodigo as "codigo",
+		MonedaMast.Sigla as "descripcion",
+		MonedaMast.DescripcionCorta as
+		"nombre"
+		FROM MonedaMast
+		WHERE MonedaMast.Estado = 'A' AND
+		MonedaCodigo
+		IN ('LO','EX')
+	</sql-query>
+	<sql-query name="maselectors.listarDepartamentos">
+		SELECT departmentmst.description as "nombre",
+		departmentmst.department as "codigo"
+		FROM departmentmst
+		WHERE (
+		departmentmst.status = 'A' )
+		ORDER BY departmentmst.description ASC
+	</sql-query>
+	<sql-query name="maselectors.listarLibro">
+		SELECT rtrim(LedgerMst.Ledger) as "codigo",
+		LedgerMst.LocalName as "nombre"
+		FROM LedgerMst
+		WHERE Status='A'
+	</sql-query>
+	<sql-query name="maselectors.listarVoucherSource">
+		select rtrim(vouchersource) as "codigo",
+		localname as "nombre" from vouchersourcemst
+		where status ='A'
+	</sql-query>
+	<sql-query name="maselectors.listarTipoVoucher">
+		SELECT VoucherManualMst.VoucherManual as
+		"codigo",
+		VoucherManualMst.Description as "nombre"
+		FROM VoucherManualMst
+		WHERE VoucherManualMst.Status = 'A'
+	</sql-query>
+	<sql-query name="maselectors.listarSucusal">
+		SELECT AC_Sucursal.DescripcionLocal as
+		"nombre",
+		AC_Sucursal.Sucursal as "codigo"
+		FROM AC_Sucursal
+		WHERE
+		AC_Sucursal.Estado = 'A'
+	</sql-query>
+	<sql-query name="maselectors.listarCostoDestino">
+		SELECT
+		AC_CostCenterDestination.CostCenterDestination as "codigo",
+		AC_CostCenterDestination.LocalName as "nombre"
+		FROM
+		AC_CostCenterDestination
+		WHERE AC_CostCenterDestination.Status = 'A'
+	</sql-query>
+	<sql-query name="maselectors.listarTipoDocumento">
+		SELECT TipoDocumentoCXP.TipoDocumento as
+		"codigo",
+		TipoDocumentoCXP.Descripcion as "nombre",
+		cast(TipoDocumentoCXP.RegimenFiscal as varchar(1)) as "descripcion"
+		FROM TipoDocumentoCXP
+		WHERE ( TipoDocumentoCXP.Estado = 'A' ) AND
+		(TipoDocumentoCXP.Clasificacion = 'OB' OR
+		TipoDocumentoCXP.Clasificacion = 'FE' OR
+		TipoDocumentoCXP.Clasificacion = 'OT')
+		ORDER BY
+		TipoDocumentoCXP.TipoDocumento ASC
+	</sql-query>
+	<sql-query name="maselectors.f_sql_get_rate">
+		SELECT cast(TipoCambioMast.Factor as money) as "factor",
+		cast(TipoCambioMast.FactorCompra as money) as "factorcompra",
+		cast(TipoCambioMast.FactorVenta as money) as "factorventa",
+		cast(TipoCambioMast.FactorCompraSBS as money) as "factorcomprasbs",
+		cast(TipoCambioMast.FactorVentaSBS as money) as "factorventasbs",
+		cast(TipoCambioMast.FactorPromedio as money) as "factorpromedio"
+		FROM TipoCambioMast
+		WHERE TipoCambioMast.MonedaCodigo = 'EX' AND
+		TipoCambioMast.MonedaCambioCodigo= 'LO' AND
+		TipoCambioMast.FechaCambioString= :p_fecha
+	</sql-query>
+</hibernate-mapping>

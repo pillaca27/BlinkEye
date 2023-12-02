@@ -1,0 +1,65 @@
+<p-blockUI #pnl [blocked]="blocked">
+    <div class="ui-g"
+        style="position: absolute;top: 0;bottom: 0;left: 0;right: 0;margin: auto;width:100px;height: 100px;">
+        <div class="ui-g-12 ui-md-12 ui-lg-12">
+            <i class="pi pi-spin pi-spinner" style="color:white; margin: 0 auto;font-size: 5rem"></i>
+        </div>
+        <br>
+        <div class="ui-g-12 ui-md-12 ui-lg-12" style="color:white; margin: 0 auto;">
+            <strong>Procesando</strong>
+        </div>
+    </div>
+</p-blockUI>
+
+<div class="login-body">
+    <div class="login-wrapper">
+        <div class="login-panel">
+            <img [src]="logo" class="logo" alt="diamond-layout" />
+            <div class="login-form">
+                <h2 style="text-align: center;">Iniciar Sesión</h2>
+                <div class="p-inputgroup">
+                    <p-dropdown [options]="lstDocumentos" [(ngModel)]="usuario.companiaCodigo"
+                        [style]="{'width':'216px','height':'2rem'}">
+                    </p-dropdown>
+                    <span class="p-inputgroup-addon"><i class="fad fa-id-card"></i></span>
+                </div>
+                <br>
+                <div class="p-inputgroup">
+                    <input pInputText placeholder="Documento" [(ngModel)]="usuario.usuario" style="width: 100%;" />
+                    <span class="p-inputgroup-addon"><i class="fad fa-user"></i></span>
+                </div>
+                <br>
+                <div class="p-inputgroup">
+                    <input type="password" pPassword placeholder="Password" placeholder="Clave"
+                        [(ngModel)]="usuario.clave" [feedback]="false" style="width: 100%;" />
+                    <span class="p-inputgroup-addon"><i class="fad fa-key"></i></span>
+                </div>
+                <br>
+                <button pButton label="Ingresar" type="button" style="width: 100%;" (click)="login()"></button>
+                <br>
+                <br>
+                <button pButton label="Registrarse" type="button" style="width: 100%;margin: 5px;" (click)="registrarse()"></button>
+            </div>
+
+            <p><a href="#"></a></p>
+        </div>
+        <div class="login-image">
+            <div class="login-image-content" style="text-align: center;">
+                <h1>Spring Postulantes</h1>
+                <br>
+                <br>
+                <img [src]="img" class="logo" alt="diamond-layout" style="width: 28rem;" />
+            </div>
+            <div class="image-footer">
+                <img [src]="img2" class="logo" alt="diamond-layout" style="width: 15rem;" />
+            </div>
+        </div>
+    </div>
+</div>
+
+<p-dialog header="Advertencia" [(visible)]="verMensaje" [modal]="true" [responsive]="true" [baseZIndex]="10000">
+    <label>{{mensajeAMostrar}}</label>
+    <p-footer>
+        <button type="button" pButton icon="pi pi-check" (click)="ingresarAlSistema()" label="Ok"></button>
+    </p-footer>
+</p-dialog>

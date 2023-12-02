@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	
+	<sql-query name="whlicitacionmotivo.obtenerDto">
+          select 
+			TIPOMOTIVO "tipomotivo"
+			,MOTIVO "motivo"
+			,DESCRIPCION "descripcion"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ESTADO "estado"
+			,ORDEN "orden"
+			,CODIGOSEACE "codigoseace"
+
+         from WH_LICITACIONMOTIVO
+         where 
+			TIPOMOTIVO = :p_tipomotivo
+			AND MOTIVO = :p_motivo
+
+    </sql-query>
+    
+    <sql-query name="whlicitacionmotivo.listardtofiltros">
+           select 
+			TIPOMOTIVO "tipomotivo"
+			,MOTIVO "motivo"
+			,DESCRIPCION "descripcion"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,ESTADO "estado"
+			,ORDEN "orden"
+			,CODIGOSEACE "codigoseace"
+
+         from WH_LICITACIONMOTIVO
+         where 
+				TIPOMOTIVO = ISNULL(:p_tipomotivo,TIPOMOTIVO)
+			AND MOTIVO = ISNULL(:p_motivo,MOTIVO)  
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcion
+    </sql-query>
+    
+    <sql-query name="whlicitacionmotivo.listar">
+    SELECT  
+  		CAST( WH_LicitacionMotivo.TipoMotivo AS VARCHAR) "nombre",
+        CAST( WH_LicitacionMotivo.Motivo AS VARCHAR) "codigo",   
+        CAST( WH_LicitacionMotivo.Descripcion AS VARCHAR) "descripcion" 
+    FROM WH_LicitacionMotivo  
+   	WHERE WH_LicitacionMotivo.Estado = 'A' 
+   	AND TIPOMOTIVO = ISNULL(:p_tipomotivo,TIPOMOTIVO)  
+   	
+    </sql-query>
+
+</hibernate-mapping>

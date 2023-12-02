@@ -1,0 +1,256 @@
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2" *ngIf="accionPadre == ACCIONES.EDITAR">
+        <br>
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%"
+            [paginator]="true" [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion3">Acciones</th>
+                    <th class="tablaHeaderNombreMedio">Grado de Instrucción</th>
+                    <th class="tablaHeaderNombreMedio">Centro de Estudios</th>
+                    <th class="tablaHeaderNombreMedio">Profesión / Carrera</th>
+                    <th class="tablaHeaderFecha">Inicio</th>
+                    <th class="tablaHeaderFecha">Término</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="tablaColumnaAccion3">
+                        <span class="p-column-title">Acciones</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                        (click)="editar(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                        (click)="ver(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-times" *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                        title="Eliminar" (click)="eliminar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Grado de Instrucción</span>
+                        {{rowData.auxGradoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Centro de Estudios</span>
+                        {{rowData.auxCentroNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Profesión / Carrera</span>
+                        {{rowData.auxCarreraNombre}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Inicio</span>
+                        {{rowData.fechadesde | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Término</span>
+                        {{rowData.fechahasta | date: 'dd/MM/yyyy'}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+
+<div class="p-fluid">
+    <p-dialog [(visible)]="verMantenimiento" [modal]="true" [responsive]="true" [resizable]="false" [draggable]="true"
+        header="INSTRUCCIÓN SUPERIOR : {{accion==ACCIONES.NUEVO? 'Nuevo': accion==ACCIONES.EDITAR? 'Editar': 'Vista Previa'}}"
+        [closable]="true" [closeOnEscape]="true" showEffect="size " hideEffect="size"
+        [style]="{'width':'800px', 'left':'15px', 'right':'15px'}">
+        <p-tabView>
+            <p-tabPanel header="Datos Generales">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-8 p-lg-8">
+                        <span class="importante">Grado Instrucción</span>
+                        <p-dropdown appendTo="body" [disabled]="accion==ACCIONES.VER" [style]="{ 'width': '100%'} "
+                            (onChange)="cargarGradoPorNivel()" [(ngModel)]="dto.gradoinstruccion" [options]="grados">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <br>
+                        <p-checkbox label="Último grado ({{dto.auxFlagultimogrado? 'Si': 'No'}})" binary="true"
+                            [(ngModel)]="dto.auxFlagultimogrado" [disabled]="accion==ACCIONES.VER">
+                        </p-checkbox> <label><span style="color:red">*</span></label>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Centro Estudio?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagCentroEstudios=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagCentroEstudios!='S'" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Fecha Término?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagtermino=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagtermino!='S'" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Carrera?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagTieneCarrera=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagTieneCarrera!='S'" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span *ngIf="flagCentroEstudios === 'S'" class="importante">
+                            Centro de Estudios
+                        </span>
+                        <span *ngIf="flagCentroEstudios !== 'S'">
+                            Centro de Estudios
+                        </span>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="dto.centroestudio" style="flex: 5;" />
+                            <input pInputText type="text" disabled [(ngModel)]="dto.auxCentroNombre"
+                                style="flex: 15;" />
+                            <button pButton icon="fa fa-binoculars" [disabled]="accion==ACCIONES.VER" class="p-button"
+                                style="flex: 1;" type="button" (click)="mostrarSelectorCentroEstudio()"
+                                title="Buscar"></button>
+                            <button pButton icon="fa fa-trash" [disabled]="accion==ACCIONES.VER" class="p-button"
+                                type="button" style="flex: 1;" (click)="limpiarCentroEstudios()"
+                                title="Limpiar"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <br>
+                        <span style="margin-right:10%;">Otro Centro Estudios</span>
+                        <p-checkbox binary="true" [(ngModel)]="dto.auxFlagotrocentroestudio"
+                            (onChange)="cambioSegunFlagCentro()" [disabled]="accion==ACCIONES.VER">
+                        </p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-9 p-lg-9">
+                        <br>
+                        <input pInputText type="text" maxlength="500" [(ngModel)]="dto.otrocentroestudio"
+                            [disabled]="accion==ACCIONES.VER || !dto.auxFlagotrocentroestudio">
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span class="importante">Inicio</span>
+                        <p-calendar [yearNavigator]="true " [monthNavigator]="true " firstDayOfWeek="1"
+                            yearRange="1990:2500 " appendTo="body" [showIcon]="true " dateFormat="dd/mm/yy "
+                            [(ngModel)]="dto.fechadesde " [disabled]="accion==ACCIONES.VER">
+                        </p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span *ngIf="flagtermino === 'S'" class="importante">Termino</span>
+                        <span *ngIf="flagtermino !== 'S'">Año Termino</span>
+                        <p-calendar [yearNavigator]="true " [monthNavigator]="true " yearRange="1990:2500 "
+                            appendTo="body" [showIcon]="true " firstDayOfWeek="1" dateFormat="dd/mm/yy "
+                            [(ngModel)]="dto.fechahasta " [disabled]="accion==ACCIONES.VER || flagtermino !== 'S'">
+                        </p-calendar>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-12">
+                        <span>Área</span>
+                        <input pInputText type="text" [(ngModel)]="dto.auxAreaNombre" [disabled]="true">
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span *ngIf="flagTieneCarrera === 'S'" class="importante">Profesión/Carrera</span>
+                        <span *ngIf="flagTieneCarrera !== 'S'">Profesión/Carrera</span>
+                        <input pInputText type="text" [(ngModel)]="dto.auxCarreraNombre" [disabled]="true">
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-3">
+                        <span>N° Créditos</span>
+                        <input pInputText type="text" pKeyFilter="int" [(ngModel)]="dto.numerocreditos" maxlength="4"
+                            [disabled]="accion==ACCIONES.VER" />
+
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-3">
+                        <br>
+                        <p-checkbox label="Prácticas ({{dto.auxFlagpracticas? 'Si': 'No'}}) " binary="true"
+                            [(ngModel)]="dto.auxFlagpracticas " [disabled]="accion==ACCIONES.VER"></p-checkbox>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-8 ">
+                        <span>Col. Profesional</span>
+                        <p-dropdown appendTo="body" [disabled]="accion==ACCIONES.VER" [style]="{ 'width': '100%'}"
+                            [(ngModel)]="dto.colegioprofesional" [options]="colegiosprofesionales">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Nro Colegiatura</span>
+                        <input pInputText type="text" [disabled]="accion==ACCIONES.VER"
+                            [(ngModel)]="dto.colegioprofesionalpadron" maxlength="20" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-12">
+                        <span>Observación</span>
+                        <textarea pInputTextarea style="width:100%" [(ngModel)]="dto.observaciones"
+                            [disabled]="accion==ACCIONES.VER" maxlength="500"></textarea>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <label>Adjunto</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="dto.rutadocumento" style="flex: 15;" />
+                            <input #photoInput2 type="file" class="form-control" style="display:none"
+                                (change)="cargarFormacion(photoInput2)" [disabled]="accion==ACCIONES.VER">
+                            <button pButton icon="fa fa-plus" class="p-button" type="button" style="flex: 1;"
+                                (click)="photoInput2.click()" [disabled]="accion==ACCIONES.VER"></button>
+                            <button pButton icon="fa fa-download" class="p-button" type="button" style="flex: 1;"
+                                (click)="descargarFormacion()"></button>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="accion!=ACCIONES.VER" class="p-button-outlined" (click)="guardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verMantenimiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<app-centro-estudios-selector-carrera></app-centro-estudios-selector-carrera>

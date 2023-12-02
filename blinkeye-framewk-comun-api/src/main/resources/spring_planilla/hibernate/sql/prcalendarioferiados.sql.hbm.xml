@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prcalendarioferiados
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="prcalendarioferiados.listar">
+    	select feriado as "codigo", Descripcion as "nombre"
+    			,estado as "estadoId" 
+    	from PR_CALENDARIOFERIADOS
+    	ORDER BY Descripcion
+  	</sql-query>
+  	
+  	 <sql-query name="prcalendarioferiados.obtenerDiaFeriado">
+       select COUNT(1) from PR_CALENDARIOFERIADOS where fechamesdia=:p_fechamesdia
+    </sql-query>
+	
+	<sql-query name="prcalendarioferiados.listarActivos">
+    	select feriado as "codigo", Descripcion as "nombre"
+    		,estado as "estadoId" 
+    	from PR_CALENDARIOFERIADOS where Estado = 'A'
+    	ORDER BY Descripcion
+  	</sql-query>
+  	
+  	<sql-query name="prcalendarioferiados.obtenerTabla">
+	    <![CDATA[
+	        select feriado as "codigo", descripcion as "nombre", Estado as "estadoId" 
+	        from PR_CALENDARIOFERIADOS
+			where feriado = :p_feriado
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="prcalendarioferiados.listarfiltros">
+    	select feriado as "codigo", descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from PR_CALENDARIOFERIADOS 
+    	where  feriado = ISNULL(:p_feriado,feriado)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcion
+	</sql-query>
+	
+	<sql-query name="prcalendarioferiados.obtenerDto">
+             select 
+			FECHAMESDIA "fechamesdia"
+			,FERIADOCOMPLETOFLAG "feriadocompletoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,DESCRIPCION "descripcion"
+			,ALLSUCURSAL "allsucursal"
+			,ALLTIPOPLANILLA "alltipoplanilla"
+			,FECHAFINCOMPENSABLE "fechafincompensable"
+			,FECHAINICIOCOMPENSABLE "fechainiciocompensable"
+			,FLAGCOMPENSABLE "flagcompensable"
+			,INICIOCOMPENSABLE "iniciocompensable"
+			,INICIOCOMPENSABLEFECHA "iniciocompensablefecha"
+			,PERIODOADESCONTAR "periodoadescontar"
+			,SUCURSAL "sucursal"
+			,TIPOPLANILLA "tipoplanilla"
+			,TOPEDIASCOMPENSAR "topediascompensar"
+			,FERIADO "feriado"
+
+         from PR_CALENDARIOFERIADOS
+         where 
+			FERIADO = :p_feriado
+    </sql-query>
+    
+    <sql-query name="prcalendarioferiados.listardtofiltros">
+           select 
+			FECHAMESDIA "fechamesdia"
+			,FERIADOCOMPLETOFLAG "feriadocompletoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,DESCRIPCION "descripcion"
+			,ALLSUCURSAL "allsucursal"
+			,ALLTIPOPLANILLA "alltipoplanilla"
+			,FECHAFINCOMPENSABLE "fechafincompensable"
+			,FECHAINICIOCOMPENSABLE "fechainiciocompensable"
+			,FLAGCOMPENSABLE "flagcompensable"
+			,INICIOCOMPENSABLE "iniciocompensable"
+			,INICIOCOMPENSABLEFECHA "iniciocompensablefecha"
+			,PERIODOADESCONTAR "periodoadescontar"
+			,SUCURSAL "sucursal"
+			,TIPOPLANILLA "tipoplanilla"
+			,TOPEDIASCOMPENSAR "topediascompensar"
+			,FERIADO "feriado"
+
+         from PR_CALENDARIOFERIADOS
+         where 
+			    FERIADO = ISNULL(:p_feriado,FERIADO)
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		 order by descripcion
+    </sql-query>
+    
+    <sql-query name="prcalendarioferiados.listardto">
+           select 
+			FECHAMESDIA "fechamesdia"
+			,FERIADOCOMPLETOFLAG "feriadocompletoflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,DESCRIPCION "descripcion"
+			,ALLSUCURSAL "allsucursal"
+			,ALLTIPOPLANILLA "alltipoplanilla"
+			,FECHAFINCOMPENSABLE "fechafincompensable"
+			,FECHAINICIOCOMPENSABLE "fechainiciocompensable"
+			,FLAGCOMPENSABLE "flagcompensable"
+			,INICIOCOMPENSABLE "iniciocompensable"
+			,INICIOCOMPENSABLEFECHA "iniciocompensablefecha"
+			,PERIODOADESCONTAR "periodoadescontar"
+			,SUCURSAL "sucursal"
+			,TIPOPLANILLA "tipoplanilla"
+			,TOPEDIASCOMPENSAR "topediascompensar"
+			,FERIADO "feriado"
+         from PR_CALENDARIOFERIADOS
+         where 
+			    1=1
+		 order by fechamesdia ASC
+    </sql-query>
+    
+</hibernate-mapping>

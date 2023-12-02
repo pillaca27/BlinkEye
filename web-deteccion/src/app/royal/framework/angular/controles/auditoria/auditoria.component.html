@@ -1,0 +1,87 @@
+<div class="ui-g ui-fluid" *ngIf="tipoAuditoria == ''"> </div>
+
+<p-fieldset legend="Auditoría" *ngIf="tipoAuditoria == TIPOSAUDITORIA.BAS2C">
+    <div class="p-fluid seccionAuditoria">
+        <div class="p-field p-grid formularioFila">
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Usuario Modificación</label>
+                    <div class="p-col">
+                        <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="modificacionUsuario" disabled />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-2"></div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Fecha Modificación</label>
+                    <div class="p-col">
+                        <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true" dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="modificacionFecha">
+                        </p-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-fieldset>
+
+<p-fieldset legend="Auditoría" *ngIf="tipoAuditoria == 'PERSONALIZADO'">
+    <div class="p-fluid seccionAuditoria">
+        <div class="p-field p-grid formularioFila">
+            <!-- <div class="p-col-12 p-md-2">
+				<label for="txtNombre">Usuario Modificación</label>
+			</div> -->
+            <div class="p-col-12 p-md-6">
+                <label for="txtNombre">Usuario Modificación</label>
+                <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="modificacionUsuario" disabled />
+            </div>
+            <!-- <div class="p-col-12 p-md-2">
+				<label for="txtNombre">Fecha Modificación</label>
+			</div> -->
+            <div class="p-col-12 p-md-6">
+                <label for="txtNombre">Fecha Modificación</label>
+                <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true" dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="modificacionFecha">
+                </p-calendar>
+            </div>
+        </div>
+    </div>
+
+</p-fieldset>
+
+<p-fieldset legend="Auditoría" *ngIf="tipoAuditoria == ''">
+    <div class="p-fluid">
+        <div class="p-field p-grid formularioFila">
+            <div class="p-col-12 p-md-2">
+                <label for="txtNombre">Usuario Creación</label>
+            </div>
+            <div class="p-col-12 p-md-2">
+                <input pInputText type="text" [style]="{'width':'100%'}" style="width:100%" [(ngModel)]="creacionUsuario" disabled /> </div>
+            <div class="p-col-12 p-md-2"></div>
+            <div class="p-col-12 p-md-2">
+                <label for="txtNombre">Usuario Modificación</label>
+            </div>
+            <div class="p-col-12 p-md-2">
+                <input pInputText type="text" [style]="{'width':'100%'}" [(ngModel)]="modificacionUsuario" disabled />
+            </div>
+            <div class="p-col-12 p-md-2"></div>
+        </div>
+        <div class="p-field p-grid formularioFila">
+            <div class="p-col-12 p-md-2">
+                <label for="txtNombre">Fecha Creación</label>
+            </div>
+            <div class="p-col-12 p-md-2">
+                <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true" dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="creacionFecha"></p-calendar>
+            </div>
+            <div class="p-col-12 p-md-2"></div>
+            <div class="p-col-12 p-md-2">
+                <label for="txtNombre">Fecha Modificación</label>
+            </div>
+            <div class="p-col-12 p-md-2">
+                <p-calendar [monthNavigator]="true " [style]="{'width':'100%'}" [inputStyle]="{'width':'90%'}" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" appendTo="body" [showIcon]="true" dateFormat="dd/mm/yy" [showTime]="true" disabled [(ngModel)]="modificacionFecha">
+                </p-calendar>
+            </div>
+            <div class="p-col-12 p-md-2"></div>
+        </div>
+    </div>
+
+</p-fieldset>

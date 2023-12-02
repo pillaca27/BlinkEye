@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="whcommoditysub.obtenerDto">
+          select 
+			COMMODITY01 "commodity01"
+			,COMMODITY02 "commodity02"
+			,COMMODITY "commodity"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,UNIDADPORDEFECTO "unidadpordefecto"
+			,CUENTACONTABLEGASTO "cuentacontablegasto"
+			,ELEMENTOGASTO "elementogasto"
+			,PARTIDAPRESUPUESTAL "partidapresupuestal"
+			,FLUJODECAJA "flujodecaja"
+			,CLASIFICACIONACTIVO "clasificacionactivo"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,MONTOREFERENCIAL "montoreferencial"
+			,MONTOREFERENCIALMONEDA "montoreferencialmoneda"
+			,COMMODITYFAMILIA "commodityfamilia"
+			,COMMODITYLINEA "commoditylinea"
+			,COMMODITYSUBFAMILIA "commoditysubfamilia"
+			,DETRACCIONCODIGO "detraccioncodigo"
+			,PARTIDAARANCELARIA "partidaarancelaria"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,REVISIONFLUJOCODIGO "revisionflujocodigo"
+			,COMMODITYGRUPOLINEA "commoditygrupolinea"
+		from WH_COMMODITYSUB
+         where 
+			COMMODITY01 = :p_commodity01
+			AND COMMODITY02 = :p_commodity02
+    </sql-query>
+    
+    <sql-query name="whcommoditysub.listardtofiltros">
+            select 
+			COMMODITY01 "commodity01"
+			,COMMODITY02 "commodity02"
+			,COMMODITY "commodity"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,UNIDADPORDEFECTO "unidadpordefecto"
+			,CUENTACONTABLEGASTO "cuentacontablegasto"
+			,ELEMENTOGASTO "elementogasto"
+			,PARTIDAPRESUPUESTAL "partidapresupuestal"
+			,FLUJODECAJA "flujodecaja"
+			,CLASIFICACIONACTIVO "clasificacionactivo"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,MONTOREFERENCIAL "montoreferencial"
+			,MONTOREFERENCIALMONEDA "montoreferencialmoneda"
+			,COMMODITYFAMILIA "commodityfamilia"
+			,COMMODITYLINEA "commoditylinea"
+			,COMMODITYSUBFAMILIA "commoditysubfamilia"
+			,DETRACCIONCODIGO "detraccioncodigo"
+			,PARTIDAARANCELARIA "partidaarancelaria"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,REVISIONFLUJOCODIGO "revisionflujocodigo"
+			,COMMODITYGRUPOLINEA "commoditygrupolinea"
+			
+
+         from WH_COMMODITYSUB
+         where 
+				COMMODITY01 = ISNULL(:p_commodity01,COMMODITY01)
+			AND COMMODITY02 = ISNULL(:p_commodity02,COMMODITY02)
+							
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+	
+	<sql-query name="whcommoditysub.listardtoporcommodity">
+         select 
+			CAST(COMMODITY01 as VARCHAR(2)) "commodity01"
+			,CAST(COMMODITY02  as VARCHAR(3)) "commodity02"
+			,CAST(COMMODITY  as VARCHAR(5)) "commodity"
+			,CAST(DESCRIPCIONLOCAL  as VARCHAR(50)) "descripcionlocal"
+			,CAST(DESCRIPCIONINGLES  as VARCHAR(50)) "descripcioningles"
+			,CAST(UNIDADPORDEFECTO  as VARCHAR(6)) "unidadpordefecto"
+			,CAST(CUENTACONTABLEGASTO  as VARCHAR(20)) "cuentacontablegasto"
+			,CAST(ELEMENTOGASTO  as VARCHAR(6)) "elementogasto"
+			,CAST(PARTIDAPRESUPUESTAL  as VARCHAR(4)) "partidapresupuestal"
+			,CAST(FLUJODECAJA  as VARCHAR(4)) "flujodecaja"
+			,CAST(CLASIFICACIONACTIVO  as VARCHAR(15)) "clasificacionactivo"
+			,CAST(ESTADO  as VARCHAR(1))"estado"
+			,CAST(ULTIMOUSUARIO  as VARCHAR(10)) "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,MONTOREFERENCIAL "montoreferencial"
+			,CAST(MONTOREFERENCIALMONEDA  as VARCHAR(2)) "montoreferencialmoneda"
+			,CAST(COMMODITYFAMILIA  as VARCHAR(6)) "commodityfamilia"
+			,CAST(COMMODITYLINEA  as VARCHAR(6)) "commoditylinea"
+			,CAST(COMMODITYSUBFAMILIA  as VARCHAR(6))"commoditysubfamilia"
+			,CAST(DETRACCIONCODIGO  as VARCHAR(4)) "detraccioncodigo"
+			,CAST(PARTIDAARANCELARIA  as VARCHAR(10)) "partidaarancelaria"
+			,CAST(REFERENCIAFISCAL02  as VARCHAR(20)) "referenciafiscal02"
+			,CAST(REVISIONFLUJOCODIGO  as VARCHAR(6)) "revisionflujocodigo"
+			,CAST(COMMODITYGRUPOLINEA  as VARCHAR(3)) "commoditygrupolinea"
+
+         from WH_COMMODITYSUB
+         where 
+				commodity = :p_commodity
+		order by descripcionlocal
+    </sql-query>
+        
+        <sql-query name="whcommoditysub.listarCommoditySub">
+		    SELECT WH_CommoditySub.Commodity01 as "commodity01",   
+         WH_CommoditySub.Commodity02 as "commodity02",   
+         WH_CommoditySub.Commodity as "commodity",   
+         WH_CommoditySub.DescripcionLocal as "descripcionlocal",   
+         WH_Commodity.DescripcionLocal as "descripcioningles",
+         WH_CommoditySub.UnidadporDefecto as "unidadpordefecto"
+    FROM WH_Commodity,   
+         WH_CommoditySub  
+   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and  
+         ( ( WH_Commodity.Estado = 'A' ) AND  
+         ( WH_CommoditySub.Estado = 'A' ) )   AND
+		 UPPER(ISNULL( WH_CommoditySub.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER( WH_CommoditySub.DescripcionLocal)) + '%'
+		AND UPPER(ISNULL(  WH_Commodity.Clasificacion,'xxx')) like '%' + ISNULL(:p_clasificacion,UPPER( WH_Commodity.Clasificacion)) + '%'+ '%'
+        
+ORDER BY
+         WH_CommoditySub.Commodity01, WH_CommoditySub.DescripcionLocal ASC   
+    </sql-query>
+    
+            <sql-query name="whcommoditysub.contarCommoditySub">
+             <![CDATA[
+		    SELECT count(*)
+    FROM WH_Commodity,   
+         WH_CommoditySub  
+   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and  
+         ( ( WH_Commodity.Estado = 'A' ) AND  
+         ( WH_CommoditySub.Estado = 'A' ) )   AND
+		 UPPER(ISNULL( WH_CommoditySub.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER( WH_CommoditySub.DescripcionLocal)) + '%'
+		AND UPPER(ISNULL(  WH_Commodity.Clasificacion,'xxx')) like '%' + ISNULL(:p_clasificacion,UPPER( WH_Commodity.Clasificacion)) + '%'+ '%'
+        
+ ]]>
+    </sql-query>
+    
+            <sql-query name="whcommoditysub.listarCommoditySubSER">
+             <![CDATA[
+		    SELECT WH_CommoditySub.Commodity01 as "commodity01",   
+         WH_CommoditySub.Commodity02 as "commodity02",   
+         WH_CommoditySub.Commodity as "commodity",   
+         WH_CommoditySub.DescripcionLocal as "descripcionlocal",   
+         WH_Commodity.DescripcionLocal as "descripcioningles",
+         WH_CommoditySub.UnidadporDefecto as "unidadpordefecto"
+    FROM WH_Commodity,   
+         WH_CommoditySub  
+   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and  
+         ( ( WH_Commodity.Estado = 'A' ) AND  
+         ( WH_CommoditySub.Estado = 'A' ) )   AND
+		 UPPER(ISNULL( WH_CommoditySub.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER( WH_CommoditySub.DescripcionLocal)) + '%'
+		AND  WH_Commodity.Clasificacion <> :p_clasificacion
+        
+ORDER BY
+         WH_CommoditySub.Commodity01, WH_CommoditySub.DescripcionLocal ASC   
+          ]]>
+    </sql-query>
+    
+            <sql-query name="whcommoditysub.contarCommoditySubSER">
+             <![CDATA[
+		    SELECT count(*)
+    FROM WH_Commodity,   
+         WH_CommoditySub  
+   WHERE ( WH_Commodity.Commodity01 = WH_CommoditySub.Commodity01 ) and  
+         ( ( WH_Commodity.Estado = 'A' ) AND  
+         ( WH_CommoditySub.Estado = 'A' ) )   AND
+		 UPPER(ISNULL( WH_CommoditySub.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descri,UPPER( WH_CommoditySub.DescripcionLocal)) + '%'
+		AND  WH_Commodity.Clasificacion <> :p_clasificacion
+        
+ ]]>
+    </sql-query>
+    
+      <sql-query name="whcommoditysub.contarCommodity">
+             <![CDATA[
+		   SELECT count(*)
+    FROM WH_Commodity,   
+         WH_CommodityClasificacion  
+   WHERE ( WH_CommodityClasificacion.Clasificacion = WH_Commodity.Clasificacion ) and
+             ( ( WH_Commodity.Commodity01 =ISNULL(:p_codigo,WH_Commodity.Commodity01)  ) ) and
+             UPPER(ISNULL( WH_Commodity.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descripcion,UPPER( WH_Commodity.DescripcionLocal)) + '%'
+
+        
+ ]]>
+    </sql-query>
+    
+    <sql-query name="whcommoditysub.listarCommodity">
+             <![CDATA[
+		  SELECT WH_Commodity.Commodity01 as "commodity01",   
+         WH_Commodity.DescripcionLocal as "descripcionlocal",   
+         cast(WH_Commodity.Estado as varchar(1))  as "estado",   
+         WH_Commodity.Clasificacion as "clasificacionactivo",   
+         WH_CommodityClasificacion.DescripcionLocal   as "descripcioningles"
+    FROM WH_Commodity,   
+         WH_CommodityClasificacion  
+   WHERE ( WH_CommodityClasificacion.Clasificacion = WH_Commodity.Clasificacion ) and
+             ( ( WH_Commodity.Commodity01 =ISNULL(:p_codigo,WH_Commodity.Commodity01)  ) ) 
+             and  UPPER(ISNULL( WH_Commodity.DescripcionLocal,'xxx')) like '%' + ISNULL(:p_descripcion,UPPER( WH_Commodity.DescripcionLocal)) + '%'
+ORDER BY WH_CommodityClasificacion.DescripcionLocal ASC,   
+         WH_Commodity.Commodity01 ASC  
+        
+ ]]>
+    </sql-query>
+    
+
+    
+      <sql-query name="whcommoditysub.contarCommodityClasificacion">
+             <![CDATA[
+		 SELECT count(*)
+    FROM FA_Clasificacion  
+   WHERE FA_Clasificacion.Clasificacion >= :p_codigo 
+
+        
+ ]]>
+    </sql-query>
+    
+        <sql-query name="whcommoditysub.listarCommodityClasificacion">
+             <![CDATA[
+		   SELECT FA_Clasificacion.Clasificacion as "codigo",   
+         FA_Clasificacion.NumeroDigitos as "id",   
+         FA_Clasificacion.DescripcionLocal as "nombre" 
+    FROM FA_Clasificacion  
+   WHERE FA_Clasificacion.Clasificacion >= :p_codigo    
+order by FA_Clasificacion.Clasificacion asc
+        
+ ]]>
+    </sql-query>
+    
+</hibernate-mapping>

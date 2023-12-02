@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrcentroestudios
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    <sql-query name="hrcentroestudios.listar">
+    	select Centro as "id", Descripcion as "nombre" 
+    	from HR_CentroEstudios
+    	order by Descripcion
+  	</sql-query>
+  	
+  	<sql-query name="hrcentroestudios.obtenertabla">
+    	select Centro as "id", Descripcion as "nombre" 
+    	from HR_CentroEstudios
+		where Centro = :p_centro
+  	</sql-query>
+	  	
+  	<sql-query name="hrcentroestudios.listarpaginacionContar">
+	    <![CDATA[
+	         select	count(1)
+					from Hr_Centroestudios ce
+				where ce.Centro = ISNULL(:p_id_centro_estudios,ce.centro)
+				and ce.Descripcion like '%' + ISNULL(UPPER(:p_nombre),ce.descripcion) + '%'
+			]]>
+  	</sql-query>
+
+  	<sql-query name="hrcentroestudios.listarpaginacionSql">
+	    <![CDATA[
+	         select ce.Centro as "id"
+					,ce.Descripcion as "nombre"
+					,CAST(ce.Estado AS VARCHAR) as "estadoId"
+				from Hr_Centroestudios ce
+				where ce.Centro = ISNULL(:p_id_centro_estudios,ce.centro)
+				and ce.Descripcion like '%' + ISNULL(UPPER(:p_nombre),ce.descripcion) + '%'
+				--and ISNULL(ce.Estado,'A') = ISNULL(:p_id_estado,ISNULL(ce.estado,'A'))
+				ORDER BY ce.Descripcion
+			]]>
+  	</sql-query>
+  	
+	<sql-query name="hrcentroestudios.listarfiltros">
+	    <![CDATA[
+	         select ce.Centro as "id"
+					,ce.Descripcion as "nombre"
+				from Hr_Centroestudios ce
+				where ce.Centro = ISNULL(:p_centro,ce.centro)
+				and ce.Descripcion like '%' + ISNULL(UPPER(:p_descripcion),ce.descripcion) + '%'
+				ORDER BY ce.Descripcion
+			]]>
+  	</sql-query>
+  	
+  	<sql-query name="hrcentroestudios.listarPaginacionCarreraContar">
+	    <![CDATA[
+	         SELECT COUNT(1)
+			FROM HR_CENTROESTUDIOS A
+			LEFT JOIN MA_MISCELANEOSDETALLE B ON A.TIPOINSTITUCION = B.CODIGOELEMENTO AND APLICACIONCODIGO = 'PR' 
+			AND CODIGOTABLA = 'TIPOINST' AND COMPANIA = '999999'
+			WHERE A.ESTADO = 'A'
+			AND CAST(A.CENTRO AS VARCHAR) LIKE '%' + CAST(ISNULL(:p_centro, A.CENTRO) AS VARCHAR) + '%'
+			AND ISNULL(A.DESCRIPCION, '-') LIKE '%' + ISNULL(:p_descripcion, ISNULL(A.DESCRIPCION, '-')) + '%'
+			AND ISNULL(A.REGIMEN, '-') = ISNULL(:p_regimen, ISNULL(A.REGIMEN, '-'))
+			AND ISNULL(A.TIPOINSTITUCION, '-') = ISNULL(:p_tipo, ISNULL(A.TIPOINSTITUCION, '-'))
+			]]>
+  	</sql-query>
+  	
+  	<sql-query name="hrcentroestudios.listarPaginacionCarreraSql">
+	    <![CDATA[
+			SELECT A.CENTRO as "centro",   
+				A.DESCRIPCION as "descripcion",
+				A.REGIMEN as "regimen", 
+				CASE 
+					WHEN A.REGIMEN = '1' THEN 'Pública'
+					WHEN A.REGIMEN = '2' THEN 'Privada'
+					ELSE ''
+				END as "regimenDescripcion", 
+				A.REPRESENTANTE as "representante",
+				A.REPRESENTANTEDOC as "representantedoc",
+				B.VALORCODIGO1 as "tipo", 
+				A.CODIGORTPS as "rtps"
+			FROM HR_CENTROESTUDIOS A
+			LEFT JOIN MA_MISCELANEOSDETALLE B ON A.TIPOINSTITUCION = B.CODIGOELEMENTO AND APLICACIONCODIGO = 'PR' 
+			AND CODIGOTABLA = 'TIPOINST' AND COMPANIA = '999999'
+			WHERE A.ESTADO = 'A'
+			AND CAST(A.CENTRO AS VARCHAR) LIKE '%' + CAST(ISNULL(:p_centro, A.CENTRO) AS VARCHAR) + '%'
+			AND ISNULL(A.DESCRIPCION, '-') LIKE '%' + ISNULL(:p_descripcion, ISNULL(A.DESCRIPCION, '-')) + '%'
+			AND ISNULL(A.REGIMEN, '-') = ISNULL(:p_regimen, ISNULL(A.REGIMEN, '-'))
+			AND ISNULL(A.TIPOINSTITUCION, '-') = ISNULL(:p_tipo, ISNULL(A.TIPOINSTITUCION, '-'))
+			ORDER BY A.DESCRIPCION ASC
+			]]>
+  	</sql-query>
+  	
+  	<sql-query name="hrcentroestudios.listarCarrerasPorCentro">
+	    <![CDATA[
+			SELECT HR_CentroEstudiosProfesion.Centro AS "centro",   
+				HR_CentroEstudiosProfesion.Profesion AS "profesion",   
+				HR_Profesion.Descripcion AS "profesionDescripcion",   
+				HR_CentroEstudiosProfesion.CodigoRTPS AS "profesionRtps",
+				HR_Profesion.Area AS "profesionArea",
+				UPPER(RTRIM(MISC.DescripcionLocal)) as "profesionAreaDescripcion"
+			FROM HR_Profesion 
+			INNER JOIN HR_CentroEstudiosProfesion
+				ON HR_Profesion.Profesion = HR_CentroEstudiosProfesion.Profesion
+			LEFT JOIN MA_MISCELANEOSDETALLE MISC ON HR_Profesion.Area = MISC.CODIGOELEMENTO AND MISC.APLICACIONCODIGO = 'HR' 
+				AND MISC.CODIGOTABLA = 'AREAS' AND MISC.COMPANIA = '999999'
+			WHERE HR_CentroEstudiosProfesion.Centro = :p_centro
+			ORDER BY HR_Profesion.Descripcion ASC   
+			]]>
+  	</sql-query>
+</hibernate-mapping>

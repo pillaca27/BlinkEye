@@ -1,0 +1,87 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Aplicación Código</label>
+                        <div class="p-col">
+                            <p-dropdown #myAplicacioncodigo title="Aplicación Código" [(ngModel)]="dto.aplicacioncodigo" [disabled]="!objetoTitulo.puedeEditarPk" required [filter]="true" [options]="lstAplicaciones" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Grupo</label>
+                        <div class="p-col">
+                            <input #myGrupo title="Grupo" pInputText [(ngModel)]="dto.grupo" maxlength="6" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}" (ngModelChange)="dto.grupo=$event.toUpperCase()" required />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4"></div>
+                <div class="p-col-12 p-md-8">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input #myDescripciOn title="Descripción" class="inputDescripcion" pInputText [(ngModel)]="dto.descripcion" maxlength="100" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4"></div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Orden</label>
+                        <div class="p-col">
+                            <p-inputNumber [(ngModel)]="dto.orden" inputId="locale-us" mode="decimal" locale="en-US" [minFractionDigits]="0" [disabled]="!objetoTitulo.puedeEditar"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Web Grupo</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.webgrupo" maxlength="10" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Web Grupo Secuencia</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.webgruposecuencia" maxlength="10" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.webgruposecuencia=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Imagen</label>
+                        <div class="p-col">
+                            <input class="inputDescripcion" pInputText [(ngModel)]="dto.imagen" maxlength="200" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="p-col-12 p-md-4">
+                    <label>Uuid</label>
+                    <input pInputText [(ngModel)]="dto.uuid" maxlength="36" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.uuid=$event.toUpperCase()" />
+                </div>
+                <div class="p-col-12 p-md-8"></div> -->
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Grupo Padre</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.grupopadre" maxlength="6" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" (ngModelChange)="dto.grupopadre=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>

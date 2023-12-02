@@ -1,0 +1,85 @@
+<div class="ui-fluid" #frm>
+
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2N">
+    </app-botones-listado>
+
+
+    <p-table #dt [rows]="20" [paginator]="true" [lazy]="true" (onLazyLoad)="cargar($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [value]="filtro.paginacion.paginacionListaResultado" [responsive]="true" [style]="{width:'100%', height:'auto'}"
+        scrollWidth="100%" [resizableColumns]="true">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion4">Acción</th>
+                <th class="tablaHeaderCodigoGrande">Aplicación</th>
+                <th class="tablaHeaderCodigo">Código</th>
+                <th class="tablaHeaderCodigo">Compañía</th>
+                <th class="tablaHeaderCodigo">Periodo</th>
+                <th class="tablaHeaderCodigo">Versión</th>
+                <th class="tablaHeaderEstado">Nombre</th>
+                <th class="tablaHeaderEstado">Estado</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion4">
+                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" (click)="editar(rowData)"></button>
+                    <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminar(rowData)"></button>
+                    <input #fileUpload type="file" class="form-control" style="display:none" (change)="cargarArchivo(fileUpload)" accept="text/html">
+                    <button pButton pRipple type="button" icon="fa fa-upload" class="ui-button-rounded p-button-text" title="Subir Archivo" (click)="subirArchivo(rowData, fileUpload)"></button>
+                    <button pButton pRipple type="button" icon="fa fa-download" class="ui-button-rounded  p-button-text" title="Descargar" (click)="bajarArchivo(rowData)"></button>
+                </td>
+
+                <td class="tablaColumnaCodigoGrande">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Aplicación</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.aplicacionDescripcion}}</div>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Código</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.reportecodigo}}</div>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Compañía</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.companiasocio}}</div>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Periodo</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.periodo}}</div>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Versión</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.version}}</div>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Nombre</span>
+                    </div>
+                    <div class="ui-g-8 ui-lg-12">{{rowData.nombre}}</div>
+                </td>
+                <td class="tablaColumnaEstado">{{ rowData.estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+
+    <p-confirmDialog #c>
+        <p-footer>
+            <button type="button" pButton icon="fa fa-check" label="Si" (click)="c.accept()"></button>
+            <button type="button" pButton icon="fad fa-times" label="No" (click)="c.reject()"></button>
+        </p-footer>
+    </p-confirmDialog>
+</div>
+
+<app-popsyreportedetalle (cargarSeleccionEvent)="listar()"></app-popsyreportedetalle>
+<app-syreportearchivo></app-syreportearchivo>

@@ -1,0 +1,76 @@
+<p-card *ngIf="!cargando&&planificacion.config.puedeVer=='S'">
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Planificación</b>
+        </div>
+    </p-divider>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-2"
+                    *ngIf="planificacion.config.puedeEditar=='S'&&planificacion.config.puedeActualizar=='S'">
+                    <button pButton type="button" icon="fad fa-save" label="Actualizar" class="p-button-outlined"
+                        (click)="actualizarPlanificacion()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <p-table [scrollable]="true" [style]="{'width': '100%'}" [value]="planificacion.lstEtapas"
+                        [responsive]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderCodigoChico">Nivel</th>
+                                <th>Nombre</th>
+                                <th class="tablaHeaderFechaHora">Inicio</th>
+                                <th class="tablaHeaderFechaHora">Fin</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr>
+                                <td class="tablaColumnaCodigoChico">
+                                    <span class="p-column-title">Nivel</span>
+                                    {{rowData.nivel}}
+                                </td>
+                                <td>
+                                    <span class="p-column-title">Nombre</span>
+                                    {{rowData.nombre}}
+                                </td>
+                                <td class="tablaColumnaFechaHora" pEditableColumn
+                                    *ngIf="planificacion.config.puedeEditar=='S'">
+                                    <span class="p-column-title">Inicio</span>
+                                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200"
+                                        [locale]="es" [style]="{'width':'100%'}" [showTime]="true" appendTo="body"
+                                        [(ngModel)]="rowData.inicio" [showIcon]="true" dateFormat="dd/mm/yy">
+                                    </p-calendar>
+                                </td>
+                                <td class="tablaColumnaFechaHora" pEditableColumn
+                                    *ngIf="planificacion.config.puedeEditar=='S'">
+                                    <span class="p-column-title">Fin</span>
+                                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200"
+                                        [locale]="es" [style]="{'width':'100%'}" [showTime]="true" appendTo="body"
+                                        [(ngModel)]="rowData.fin" [showIcon]="true" dateFormat="dd/mm/yy"> </p-calendar>
+                                </td>
+
+                                <td class="tablaColumnaFechaHora" *ngIf="planificacion.config.puedeEditar=='N'">
+                                    <span class="p-column-title">Inicio</span>
+                                    {{rowData.inicio | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                </td>
+                                <td class="tablaColumnaFechaHora" *ngIf="planificacion.config.puedeEditar=='N'">
+                                    <span class="p-column-title">Fin</span>
+                                    {{rowData.fin | date: 'dd/MM/yyyy HH:mm:ss'}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="4">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-card>

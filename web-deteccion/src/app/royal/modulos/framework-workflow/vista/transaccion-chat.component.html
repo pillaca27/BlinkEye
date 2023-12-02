@@ -1,0 +1,84 @@
+<p-dialog [header]="tituloComponente" [(visible)]="verSelector" modal="modal" showEffect="fade" [blockScroll]="true"
+    hideEffect="size" [style]="{width: '900px'}" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden',
+        'max-height': '85vh'}">
+
+    <div class="p-grid">
+        <div class="p-field p-col-12 p-md-12">
+            <span>Una vez escrito el mensaje, presione el ícono <i class="pi pi-send"></i> para que se envíe. Si desea
+                enviar un adjunto presione el ícono <i class="pi pi-paperclip"></i>
+            </span>
+        </div>
+        <div class="p-field p-col-12 p-md-12" *ngIf="verEmisores">
+            <span>Emisor</span>
+            <p-dropdown [options]="lstEmisores" [style]="{'width':'100%'}" [(ngModel)]="emisorId" appendTo="body"
+                (onChange)="buscarConversacion()">
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-12">
+            <p-panel styleClass="chat" header="Chat">
+                <ul>
+                    <ng-template ngFor let-ch [ngForOf]="lstChat">
+                        <li class="message-from" *ngIf="ch.posicion=='D'">
+                            <div class="message-meta">
+                                <span class="name">{{ch.nombre}}</span>
+                                <span class="time">{{ch.fecha | date: 'dd/MM/yyyy'}}<br>{{ch.fecha | date:
+                                    'HH:mm:ss'}}</span>
+                            </div>
+                            <div class="message" *ngIf="ch.seleccionado != 'S'">
+                                <span *ngIf="ch.tipo=='TXT'">{{ch.mensaje}}</span>
+                                <span *ngIf="ch.tipo=='ADJ'"
+                                    style="text-decoration: underline; color: blue;cursor: pointer;"
+                                    (click)="descargarAdjunto(ch)">{{ch.mensaje}}</span>
+                                <i *ngIf="tipo == 'EMPL'" class="pi pi-send" title="Responder"
+                                    (click)="seleccionarParaResponder(ch)" style="float: right;"></i>
+                            </div>
+                            <div class="message" style="background-color: #9de18a;" *ngIf="ch.seleccionado == 'S'">
+                                <span *ngIf="ch.tipo=='TXT'"
+                                    style="font-weight: bold; color: brown;">{{ch.mensaje}}</span>
+                                <span *ngIf="ch.tipo=='ADJ'"
+                                    style="font-weight: bold; color: brown;text-decoration: underline;cursor: pointer;">{{ch.mensaje}}</span>
+                                <i class="pi pi-send" (click)="desSeleccionarParaResponder(ch)"
+                                    style="float: right;font-weight: bold; color: brown;"></i>
+                            </div>
+                        </li>
+                        <li class="message-own" *ngIf="ch.posicion=='I'">
+                            <div class="message">
+                                <span *ngIf="ch.tipo=='TXT'">{{ch.mensaje}}</span>
+                                <span *ngIf="ch.tipo=='ADJ'"
+                                    style="text-decoration: underline; color: blue;cursor: pointer;"
+                                    (click)="descargarAdjunto(ch)">{{ch.mensaje}}</span>
+                            </div>
+                            <div class="message-meta" *ngIf="ch.posicion=='I'" style="text-align: right;">
+                                <span class="name">{{ch.nombre}}</span>
+                                <span class="time">{{ch.fecha | date: 'dd/MM/yyyy'}}<br>{{ch.fecha | date:
+                                    'HH:mm:ss'}}</span>
+                            </div>
+                        </li>
+                    </ng-template>
+                </ul>
+
+                <input #photoInput type="file" class="form-control" style="display:none"
+                    (change)="cargarAdjunto(photoInput)">
+
+                <div class="write-message" *ngIf="mensajeSeleccionado==null">
+
+                    <i class="pi pi-paperclip i1" *ngIf="tipo=='PROV'" (click)="photoInput.click()"
+                        title="Enviar Adjunto"></i>
+                    <i class="pi pi-paperclip i1" *ngIf="tipo=='EMPL'" (click)="photoInput.click()"
+                        title="Enviar Adjunto"></i>
+
+                    <i class="pi pi-send i2" (click)="enviarPregunta()" title="Enviar mensaje"></i>
+                    <input pInputText type="text" [(ngModel)]="mensaje" placeholder="Ingrese su mensaje"
+                        title="Enviar Mensaje" maxlength="4000" />
+                </div>
+
+                <div class="write-message" *ngIf="mensajeSeleccionado!=null">
+                    <i class="pi pi-paperclip i1" (click)="photoInput.click()" title="Enviar Adjunto"></i>
+                    <i class="pi pi-send i2" (click)="enviarRespuesta()" title="Enviar mensaje"></i>
+                    <input pInputText type="text" [(ngModel)]="mensaje" placeholder="Ingrese su respuesta"
+                        title="Enviar respuesta" maxlength="4000" />
+                </div>
+            </p-panel>
+        </div>
+    </div>
+</p-dialog>

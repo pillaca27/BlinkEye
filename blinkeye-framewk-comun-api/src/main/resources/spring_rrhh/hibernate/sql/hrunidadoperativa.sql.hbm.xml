@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+    <sql-query name="hrunidadoperativa.listar">
+    	select unidadoperativa as "codigo", Descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from hr_unidadoperativa 
+    	order by Descripcion
+	</sql-query>
+	
+	<sql-query name="hrunidadoperativa.listarActivos">
+    	select unidadoperativa as "codigo", Descripcion as "nombre"
+    			,Estado as "estadoId" 
+    	from hr_unidadoperativa where Estado = 'A'
+    	order by Descripcion
+	</sql-query>
+	
+	<sql-query name="hrunidadoperativa.obtenertabla">
+    	select unidadoperativa as "codigo", 
+    			Descripcion as "nombre",
+    			Estado as "estadoId" 
+    			from hr_unidadoperativa
+    			where unidadoperativa = :p_unidadoperativa 
+	</sql-query>
+	
+	<sql-query name="hrunidadoperativa.obtenerdto">
+    	select 
+			UNIDADOPERATIVA "unidadoperativa"
+			,DESCRIPCION "descripcion"
+			,RESPONSABLE "responsable"
+			,UNIDADOPERATIVA_SUPERIOR "unidadoperativaSuperior"
+			,RESPONSABLECONTRATOS "responsablecontratos"
+			,RESPONSABLECOMPANIA "responsablecompania"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from HR_UNIDADOPERATIVA
+         where 
+			UNIDADOPERATIVA = :p_unidadoperativa
+	</sql-query>
+	
+	<sql-query name="hrunidadoperativa.listardtofiltros">
+	select 
+			UNIDADOPERATIVA "unidadoperativa"
+			,DESCRIPCION "descripcion"
+			,RESPONSABLE "responsable"
+			,UNIDADOPERATIVA_SUPERIOR "unidadoperativaSuperior"
+			,RESPONSABLECONTRATOS "responsablecontratos"
+			,RESPONSABLECOMPANIA "responsablecompania"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from HR_UNIDADOPERATIVA
+         where 
+				UNIDADOPERATIVA = ISNULL(:p_unidadoperativa,UNIDADOPERATIVA)			
+			and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			 
+         order by Descripcion
+  </sql-query>
+  
+  <sql-query name="hrunidadoperativa.contarunidadoperativaporfiltro">
+  		SELECT 
+		 count(*)
+		FROM HR_UNIDADOPERATIVA 
+		LEFT JOIN PERSONAMAST ON HR_UNIDADOPERATIVA.RESPONSABLE = PERSONAMAST.PERSONA
+		LEFT JOIN COMPANYOWNER ON HR_UNIDADOPERATIVA.RESPONSABLECOMPANIA = COMPANYOWNER.COMPANYOWNER
+		WHERE ( 
+			EXISTS (	SELECT * 
+						FROM HR_SEGURIDAD 
+						WHERE HR_UNIDADOPERATIVA.UNIDADOPERATIVA = HR_SEGURIDAD.VALORTEXTO 
+							AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUO' 
+							AND HR_SEGURIDAD.USUARIO = :p_usuario )
+			OR						
+			(	SELECT COUNT(1) 
+				FROM HR_SEGURIDAD 
+				WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDOPE' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+			)
+			OR
+			(	SELECT COUNT(1) 
+				FROM SEGURIDADAUTORIZACIONES 
+				WHERE APLICACIONCODIGO = 'HR' 
+					AND GRUPO = 'SYSTEM' 
+					AND CONCEPTO = 'SYSADM'
+					AND USUARIO = :p_usuario ) > 0
+		AND (ISNULL(:p_unidadoperativa, '-') = '-' OR HR_UNIDADOPERATIVA.UNIDADOPERATIVA = :p_unidadoperativa)
+		AND (ISNULL(:p_descripcion, '-') = '-' OR HR_UNIDADOPERATIVA.DESCRIPCION LIKE '%'+isnull(:p_descripcion, HR_UNIDADOPERATIVA.DESCRIPCION)+'%')				
+		 
+    </sql-query>
+    
+    <sql-query name="hrunidadoperativa.listarunidadoperativaporfiltro">
+		SELECT 
+			CAST(HR_UNIDADOPERATIVA.UNIDADOPERATIVA AS VARCHAR) AS unidadoperativa, 
+			LTRIM(RTRIM(UPPER(HR_UNIDADOPERATIVA.DESCRIPCION))) AS descripcion,
+			CAST(HR_UNIDADOPERATIVA.ESTADO AS VARCHAR) AS estado, 
+			HR_UNIDADOPERATIVA.RESPONSABLE AS responsable,
+			CAST(PERSONAMAST.NOMBRECOMPLETO AS VARCHAR(200)) AS responsablenombre,
+			CAST(HR_UNIDADOPERATIVA.RESPONSABLECOMPANIA AS VARCHAR) AS responsablecompania, 
+			LTRIM(RTRIM(UPPER(COMPANYOWNER.DESCRIPTION))) AS responsablecompanianombre 
+		FROM HR_UNIDADOPERATIVA 
+		LEFT JOIN PERSONAMAST ON HR_UNIDADOPERATIVA.RESPONSABLE = PERSONAMAST.PERSONA
+		LEFT JOIN COMPANYOWNER ON HR_UNIDADOPERATIVA.RESPONSABLECOMPANIA = COMPANYOWNER.COMPANYOWNER
+		WHERE ( 
+			EXISTS (	SELECT * 
+						FROM HR_SEGURIDAD 
+						WHERE HR_UNIDADOPERATIVA.UNIDADOPERATIVA = HR_SEGURIDAD.VALORTEXTO 
+							AND HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'TIPOUO' 
+							AND HR_SEGURIDAD.USUARIO = :p_usuario )
+			OR						
+			(	SELECT COUNT(1) 
+				FROM HR_SEGURIDAD 
+				WHERE HR_SEGURIDAD.CONCEPTOSEGURIDAD = 'ALLUNIDOPE' 
+					AND HR_SEGURIDAD.USUARIO = :p_usuario ) > 0
+			)
+			OR
+			(	SELECT COUNT(1) 
+				FROM SEGURIDADAUTORIZACIONES 
+				WHERE APLICACIONCODIGO = 'HR' 
+					AND GRUPO = 'SYSTEM' 
+					AND CONCEPTO = 'SYSADM'
+					AND USUARIO = :p_usuario ) > 0
+		AND (ISNULL(:p_unidadoperativa, '-') = '-' OR HR_UNIDADOPERATIVA.UNIDADOPERATIVA = :p_unidadoperativa)
+		AND (ISNULL(:p_descripcion, '-') = '-' OR HR_UNIDADOPERATIVA.DESCRIPCION LIKE '%'+isnull(:p_descripcion, HR_UNIDADOPERATIVA.DESCRIPCION)+'%')				
+		ORDER BY HR_UNIDADOPERATIVA.DESCRIPCION
+    </sql-query>
+
+</hibernate-mapping>

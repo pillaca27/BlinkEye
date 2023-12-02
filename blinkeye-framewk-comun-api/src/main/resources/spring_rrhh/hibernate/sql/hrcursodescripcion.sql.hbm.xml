@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrcursodescripcion
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+  
+    <sql-query name="hrcursodescripcion.obtenerdto">
+    <![CDATA[
+    	SELECT 
+  		    H.CURSO as "curso"
+           ,H.DESCRIPCION as "descripcion"
+           ,H.TIPO as "tipo"
+           ,H.AREA as "area"
+           ,H.ESTADO as "estado"           
+           ,H.unidadnegocio as "unidadnegocio"
+           ,H.nivelacademico as "nivelacademico"
+           ,H.carrera as "carrera"
+           ,H.costoestimado as "costoestimado"  
+        	from Hr_CURSODESCRIPCION H
+        	WHERE H.CURSO = :p_curso
+	]]>				
+  	</sql-query>
+  	
+  	<sql-query name="hrcursodescripcion.listarfiltros">
+    <![CDATA[
+    	SELECT 
+  		    H.CURSO as "curso"
+           ,H.DESCRIPCION as "descripcion"
+           ,H.TIPO as "tipo"
+           ,H.AREA as "area"
+           ,H.ESTADO as "estado"           
+           ,H.unidadnegocio as "unidadnegocio"
+           ,H.nivelacademico as "nivelacademico"
+           ,H.carrera as "carrera"
+           ,H.costoestimado as "costoestimado"  
+        	from Hr_CURSODESCRIPCION H
+        	where   curso = ISNULL(:p_curso,curso)
+				and UPPER(ISNULL(descripcion,'xxx')) like '%' || ISNULL(:p_descripcion,UPPER(descripcion)) || '%'
+				and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+				and tipo = ISNULL(:p_tipo,tipo)	
+				and area = ISNULL(:p_area,area)
+			order by H.DESCRIPCION				
+	]]>				
+  	</sql-query>
+  	
+  <sql-query name="hrcursodescripcion.obtenertabla">
+    select Curso as "id"
+    		,Descripcion as "nombre"
+    		,Estado as "estadoId" 
+    		,Area as "Descripcion"
+    		from HR_CursoDescripcion
+    		Where Curso = :p_curso 
+  </sql-query>
+  
+  <sql-query name="hrcursodescripcion.listar">
+    select Curso as "id", Descripcion as "nombre",Estado as "estadoId" 
+    from HR_CursoDescripcion
+    order by DESCRIPCION
+  </sql-query>
+  
+  <sql-query name="hrcursodescripcion.listarActivos">
+    select 	Curso as "id", Descripcion as "nombre" 
+    		,Estado as "estadoId"
+    		from HR_CursoDescripcion
+    where Estado = 'A'
+    order by DESCRIPCION
+  </sql-query>
+  
+  <sql-query name="hrcursodescripcion.listarCursosContar">
+	    <![CDATA[
+	         select	count(1)
+					from Hr_CURSODESCRIPCION H
+					WHERE H.CURSO = ISNULL(:p_id_curso,H.CURSO)
+					AND UPPER(H.DESCRIPCION) like '%' || UPPER(ISNULL(:p_nombre,H.DESCRIPCION)) || '%'
+					AND ISNULL(H.TIPO,'TTTT') = ISNULL(:p_id_tipo,ISNULL(H.TIPO,'TTTT'))
+					AND ISNULL(H.AREA,'AAAA') = ISNULL(:p_id_area,ISNULL(H.AREA,'AAAA'))
+					AND H.ESTADO = ISNULL(:p_id_estado,H.ESTADO)
+			]]>
+  	</sql-query>
+
+  	<sql-query name="hrcursodescripcion.listarCursosPaginacion">
+	    <![CDATA[
+	      SELECT 
+				   H.CURSO as "curso"
+				   ,H.DESCRIPCION as "descripcion"
+				   ,H.TIPO as "tipo"
+				   ,H.AREA as "area"
+				   ,M.DESCRIPCIONLOCAL as "areaNombre"
+				   ,H.ESTADO as "estado"
+				   
+				   ,H.unidadnegocio as "unidadnegocio"
+					,H.nivelacademico as "nivelacademico"
+					,H.carrera as "carrera"
+					,H.costoestimado as "costoestimado"
+	
+				from Hr_CURSODESCRIPCION H
+				LEFT JOIN MA_MiscelaneosDetalle M ON M.CODIGOELEMENTO = H.AREA AND M.COMPANIA = '999999' 
+	      			AND APLICACIONCODIGO = 'HR'  and m.CodigoTabla = 'AREACURSO'
+				WHERE H.CURSO = ISNULL(:p_id_curso,H.CURSO)
+				    AND UPPER(H.DESCRIPCION) like '%' || UPPER(ISNULL(:p_nombre,H.DESCRIPCION)) || '%'
+					AND ISNULL(H.TIPO,'TTTT') = ISNULL(:p_id_tipo,ISNULL(H.TIPO,'TTTT'))
+					AND ISNULL(H.AREA,'AAAA') = ISNULL(:p_id_area,ISNULL(H.AREA,'AAAA'))
+					AND H.ESTADO = ISNULL(:p_id_estado,H.ESTADO)
+		  ORDER BY H.CURSO
+			]]>
+  	</sql-query>
+  	
+  	<sql-query name="hrcursodescripcion.listarpordescripciontipo">
+    <![CDATA[
+        SELECT 
+				   H.CURSO as "idOracle"
+				  ,H.DESCRIPCION as "nombre"
+				from Hr_CURSODESCRIPCION H
+				LEFT JOIN MA_MiscelaneosDetalle M ON M.CODIGOELEMENTO = H.AREA AND M.COMPANIA = '999999' 
+	      			AND APLICACIONCODIGO = 'HR'  and m.CodigoTabla = 'AREACURSO'
+				WHERE H.CURSO = ISNULL(:p_id_curso,H.CURSO)
+				    AND H.DESCRIPCION like '%' || ISNULL(:p_nombre,H.DESCRIPCION) || '%'
+					AND ISNULL(H.TIPO,'TTTT') = ISNULL(:p_id_tipo,ISNULL(H.TIPO,'TTTT'))
+					AND ISNULL(H.AREA,'AAAA') = ISNULL(:p_id_area,ISNULL(H.AREA,'AAAA'))
+					AND H.ESTADO = ISNULL(:p_id_estado,H.ESTADO)
+		  ORDER BY H.CURSO
+			]]>
+  	</sql-query>
+  
+  <sql-query name="hrcursodescripcion.listarcursoporfiltro">
+    <![CDATA[
+		SELECT  
+		A.CURSO as curso, 
+		A.DESCRIPCION as descripcion, 
+		LTRIM(RTRIM(UPPER(A.AREA))) AS area, 
+		LTRIM(RTRIM(UPPER(AC.DESCRIPCIONLOCAL)))  AS areaNombre, 
+		LTRIM(RTRIM(UPPER(A.TIPO))) AS tipo, 
+		LTRIM(RTRIM(UPPER(TC.DESCRIPCIONLOCAL)))  AS tiponombre, 
+		CAST(A.ESTADO AS VARCHAR) as estado
+		FROM HR_CURSODESCRIPCION A
+		LEFT JOIN MA_MISCELANEOSDETALLE AC ON AC.APLICACIONCODIGO = 'HR' AND AC.COMPANIA = '999999' AND AC.CODIGOTABLA = 'AREACURSO' AND AC.CODIGOELEMENTO = A.AREA
+		LEFT JOIN MA_MISCELANEOSDETALLE TC ON TC.APLICACIONCODIGO = 'HR' AND TC.COMPANIA = '999999' AND TC.CODIGOTABLA = 'TIPOCURSO' AND TC.CODIGOELEMENTO = A.TIPO
+		WHERE 1 = 1
+		AND (ISNULL(:p_curso, 0) = 0 OR A.CURSO = :p_curso)
+		AND (ISNULL(:p_descripcion, '-') = '-' OR A.DESCRIPCION LIKE '%'+isnull(:p_descripcion,A.DESCRIPCION)+'%')
+		AND (ISNULL(:p_tipomaestro, '-') = '-' OR A.TIPOMAESTRO = :p_tipomaestro)
+		ORDER BY A.Area ,A.DESCRIPCION ASC
+			]]>
+  	</sql-query>
+  	
+  	<sql-query name="hrcursodescripcion.contarcursoporfiltro">
+    <![CDATA[
+		SELECT  
+		count(*)
+		FROM HR_CURSODESCRIPCION A
+		LEFT JOIN MA_MISCELANEOSDETALLE AC ON AC.APLICACIONCODIGO = 'HR' AND AC.COMPANIA = '999999' AND AC.CODIGOTABLA = 'AREACURSO' AND AC.CODIGOELEMENTO = A.AREA
+		LEFT JOIN MA_MISCELANEOSDETALLE TC ON TC.APLICACIONCODIGO = 'HR' AND TC.COMPANIA = '999999' AND TC.CODIGOTABLA = 'TIPOCURSO' AND TC.CODIGOELEMENTO = A.TIPO
+		WHERE 1 = 1
+		AND (ISNULL(:p_curso, 0) = 0 OR A.CURSO = :p_curso)
+		AND (ISNULL(:p_descripcion, '-') = '-' OR A.DESCRIPCION LIKE '%'+isnull(:p_descripcion,A.DESCRIPCION)+'%')
+		AND (ISNULL(:p_tipomaestro, '-') = '-' OR A.TIPOMAESTRO = :p_tipomaestro)
+			]]>
+  	</sql-query>
+
+</hibernate-mapping>

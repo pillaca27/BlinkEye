@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+	<sql-query name="whcondicion.listar">
+	    <![CDATA[
+	        select condicion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CONDICION	        
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whcondicion.listarActivos">
+	    <![CDATA[
+	        select condicion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CONDICION
+	        where Estado = 'A'
+	        order by descripcionlocal
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="whcondicion.obtenerTabla">
+	    <![CDATA[
+	        select condicion as "codigo", descripcionlocal as "nombre", Estado as "estadoId" 
+	        from WH_CONDICION
+			where condicion = :p_condicion
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="whcondicion.listarfiltros">
+    	select condicion as "codigo", descripcionlocal as "nombre"
+    			,Estado as "estadoId" 
+    	from WH_CONDICION 
+    	where  condicion = ISNULL(:p_condicion,condicion)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by descripcionlocal	    	
+	</sql-query>
+	
+	<sql-query name="whcondicion.obtenerDto">
+         select 
+			CONDICION "condicion"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,PORCENTAJE "porcentaje"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NOCONTROLABLEFLAG "nocontrolableflag"
+
+         from WH_CONDICION
+         where 
+			CONDICION = :p_condicion
+    </sql-query>
+    
+    <sql-query name="whcondicion.listardtofiltros">
+          select 
+			CONDICION "condicion"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,PORCENTAJE "porcentaje"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CUENTAINVENTARIO "cuentainventario"
+			,NOCONTROLABLEFLAG "nocontrolableflag"
+
+         from WH_CONDICION
+         where 
+				CONDICION = ISNULL(:p_condicion,CONDICION)         
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

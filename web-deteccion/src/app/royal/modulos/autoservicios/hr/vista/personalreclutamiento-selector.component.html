@@ -1,0 +1,193 @@
+<div class="ui-fluid">
+
+    <p-dialog header="SELECTOR DE PERSONAL DE RECLUTAMIENTO" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        hideEffect="size" [style]="{'width':'700px'}">
+
+        <div class="p-grid">
+            <div class="p-field p-col-12 p-md-4">
+                <label>Compañía</label>
+                <div class="p-inputgroup">
+                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCompaniaNombre" />
+                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania()"
+                        [style]="{'flex': '1'}"></button>
+                    <button pButton icon="fa fa-trash" type="button" title="Limpiar"
+                        (click)="filtro.auxCompaniaNombre=null;filtro.compania=null;" [style]="{'flex': '1'}"></button>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-4">
+                <label>Tipo Planilla</label>
+                <div class="p-inputgroup">
+                    <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxTipoPlanillaNombre" />
+                    <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarTipoPlanilla()"
+                        [style]="{'flex': '1'}"></button>
+                    <button pButton icon="fa fa-trash" type="button" title="Limpiar"
+                        (click)="filtro.auxTipoPlanillaNombre=null;filtro.tipoPlanilla=null;"
+                        [style]="{'flex': '1'}"></button>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <span>Código</span>
+                <input pInputText type="number" style="width: 100%;" [(ngModel)]="filtro.empleado"
+                    (keypress)="preBuscar($event, dtPuesto)" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Descripción</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.nombre"
+                    (keypress)="preBuscar($event, dtPuesto)" />
+            </div>
+        </div>
+
+        <br>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion">
+                    <div class="p-field p-col-12 p-md-4">
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtPuesto)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-table #dtPuesto [rows]="registrosPorPagina" [lazy]="true" [scrollable]="true" scrollWidth="100%"
+            [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" selectionMode="single"
+            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPuesto($event)"
+            [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderCodigo">Empleado</th>
+                    <th class="tablaHeaderNombreMedio">Nombre</th>
+                    <th class="tablaHeaderNombreMedio">Compañía</th>
+                    <th class="tablaHeaderNombreMedio">Unidad de Negocio</th>
+                    <th class="tablaHeaderNombreMedio">Sucursal</th>
+                    <th class="tablaHeaderNombreMedio">Unidad Operativa</th>
+                    <th class="tablaHeaderNombreMedio">Tipo de Planilla</th>
+                    <th class="tablaHeaderNombreMedio">Centro de Costo</th>
+                    <th class="tablaHeaderNombreMedio">Puesto</th>
+                    <th class="tablaHeaderNombreMedio">Unidad de Organigrama</th>
+                    <th class="tablaHeaderNombreMedio">Categoría</th>
+                    <th class="tablaHeaderNombreMedio">Grado Salario</th>
+                    <th class="tablaHeaderNombreMedio">Tipo de Contrato</th>
+                    <th class="tablaHeaderFecha">Inicio Contrato</th>
+                    <th class="tablaHeaderFecha">Fin Contrato</th>
+                    <th class="tablaHeaderNombreMedio">Correo Interno</th>
+                    <th class="tablaHeaderCodigo">Moneda Pago</th>
+                    <th class="tablaHeaderNombreMedio">Jefe Responsable</th>
+                    <th class="tablaHeaderNombreMedio">Jefe Responsable Compañía</th>
+                    <th class="tablaHeaderNombreMedio">Proyecto</th>
+                    <th class="tablaHeaderNombreMedio">Tipo Trabajador</th>
+                    <th class="tablaHeaderNombreMedio">Tipo Horario</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text"
+                            title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Empleado</span>
+                        {{row.empleado}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Nombre</span>
+                        {{row.nombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Compañía</span>
+                        {{row.companiaNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Unidad de Negocio</span>
+                        {{row.unidadNegocioNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Sucursal</span>
+                        {{row.sucursalNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Unidad Operativa</span>
+                        {{row.unidadOperativaNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Tipo de Planilla</span>
+                        {{row.tipoPlanillaNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Centro de Costo</span>
+                        {{row.centrocostoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Puesto</span>
+                        {{row.puestoNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Unidad de Organigrama</span>
+                        {{row.unidadOrganigramaNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Categoría</span>
+                        {{row.categoriaNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Grado Salario</span>
+                        {{row.gradoSalarioNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Tipo de Contrato</span>
+                        {{row.tipoContratoNombre}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Inicio Contrato</span>
+                        {{row.inicioContrato}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Fin Contrato</span>
+                        {{row.finContrato}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Correo Interno</span>
+                        {{row.correoInterno}}
+                    </td>
+                    <td class="tablaColumnaCodigo">
+                        <span class="p-column-title">Moneda Pago</span>
+                        {{row.monedaPago}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Jefe Responsable</span>
+                        {{row.jefeResponsable}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Jefe Responsable Compañía</span>
+                        {{row.jefeResponsableCompania}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Proyecto</span>
+                        {{row.proyecto}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Tipo Trabajador</span>
+                        {{row.tipoTrabajadorNombre}}
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Tipo Horario</span>
+                        {{row.tipoHorarioNombre}}
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="23">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>
+<app-selector-compania></app-selector-compania>
+<app-selector-tipoplanilla></app-selector-tipoplanilla>

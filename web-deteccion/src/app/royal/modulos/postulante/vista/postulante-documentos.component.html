@@ -1,0 +1,171 @@
+<div class="p-fluid p-grid formularioFila">
+    <div class="p-col-12 p-md-2" *ngIf="accionPadre == ACCIONES.EDITAR">
+        <br>
+        <button pButton pRipple type="button" label="Nuevo" icon="fa fa-plus" (click)="nuevo()"></button>
+    </div>
+    <div class="p-col-12 p-md-12">
+        <br>
+        <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%"
+            [paginator]="true" [totalRecords]="lista.length" [value]="lista" [(selection)]="registroSeleccionado"
+            [showCurrentPageReport]="true"
+            currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" selectionMode="single">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion3">Acciones</th>
+                    <th class="tablaHeaderNombreMedio">Documento</th>
+                    <th class="tablaHeaderFecha">Fecha</th>
+                    <th class="tablaHeaderFecha">Fecha Vencimiento</th>
+                    <th class="tablaHeaderCheckBox">Presentó?</th>
+                    <th class="tablaHeaderAccion1">Descargar</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                <tr [pSelectableRow]="rowData">
+                    <td class="tablaColumnaAccion3">
+                        <span class="p-column-title">Acciones</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                        (click)="editar(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                        (click)="ver(rowData)"></button>
+                                </th>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-times" *ngIf="accionPadre == ACCIONES.EDITAR"
+                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                        title="Eliminar" (click)="eliminar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                    <td class="tablaColumnaNombreMedio">
+                        <span class="p-column-title">Documento</span>
+                        {{rowData.auxNombreTipoDocumento}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Fecha</span>
+                        {{rowData.fecha | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td class="tablaColumnaFecha">
+                        <span class="p-column-title">Fecha Vencimiento</span>
+                        {{rowData.fechavencimiento | date: 'dd/MM/yyyy'}}
+                    </td>
+                    <td class="tablaColumnaCheckBox">
+                        <span class="p-column-title">Presentó?</span>
+                        {{rowData.auxPresentoNombre}}
+                    </td>
+                    <td class="tablaColumnaAccion1">
+                        <span class="p-column-title">Descargar</span>
+                        <table>
+                            <tr>
+                                <th>
+                                    <button pButton pRipple type="button" icon="fad fa-download"
+                                        class="p-button-rounded p-button-text botonGrilla" title="Descargar"
+                                        (click)="descargar(rowData)"></button>
+                                </th>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="6">
+                        No existen registros para mostrar
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+    </div>
+</div>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="p-fluid">
+    <p-dialog
+        header="DOCUMENTO : {{accion==ACCIONES.NUEVO? 'Nuevo': accion==ACCIONES.EDITAR? 'Editar': 'Vista Previa'}}"
+        [(visible)]="verMantenimiento" [modal]="true" [responsive]="true" [resizable]="false" [draggable]="true"
+        [closable]="true" [closeOnEscape]="true" hideEffect="size "
+        [style]="{'max-width':'800px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <label class="importante">Tipo de Documento</label>
+                <p-dropdown appendTo="body" [style]="{'width': '100%'}" [disabled]="accion==ACCIONES.VER"
+                    [options]="lstTipoDoc" [(ngModel)]="dto.documento" filter="filter" [resetFilterOnHide]="true">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <label>Tiene Vencimiento</label>
+                <input pInputText type="text" value="{{tieneVencimiento(dto.documento)}}" disabled />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <label>N° Meses Vencimiento</label>
+                <input pInputText type="text" value="{{mesesVencimiento(dto.documento)}}" disabled />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <label class="importante">Fecha</label>
+                <input pInputText type="text" value=" {{dto.fecha | date: 'dd/MM/yyyy'}} " disabled />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <label *ngIf="tieneVencimiento(dto.documento)=='Si'" class="importante">Fecha venc.</label>
+                <p-calendar appendTo="body" [monthNavigator]="true" [yearNavigator]="true"
+                    *ngIf="tieneVencimiento(dto.documento)=='Si'" yearRange="1940:2200" firstDayOfWeek="1"
+                    [showIcon]="true" [disabled]="accion==ACCIONES.VER" dateFormat="dd/mm/yy"
+                    [(ngModel)]="dto.fechavencimiento">
+                </p-calendar>
+            </div>
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <br>
+                <p-checkbox label="¿Presentó?" [(ngModel)]="dto.auxFlagPresento" binary="true"
+                    [disabled]="accion==ACCIONES.VER"></p-checkbox>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <label>Observaciones</label>
+                <textarea pInputTextarea style="width:100%" [(ngModel)]="dto.descripcion"
+                    [disabled]="accion==ACCIONES.VER" maxlength="500"></textarea>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <label>Adjunto ({{folioMaxSizeMb}} mb)</label>
+                <div class="p-inputgroup">
+                    <input pInputText type="text" disabled [(ngModel)]="dto.rutadocumento" style="flex: 15;" />
+                    <input #photoInputDoc type="file" class="form-control" style="display:none"
+                        (change)="cargarFolio(photoInputDoc)">
+                    <button pButton icon="fa fa-plus" class="p-button" type="button" style="flex: 1;"
+                        (click)="photoInputDoc.click()" [disabled]="accion==ACCIONES.VER"></button>
+                    <button pButton icon="fa fa-download" class="p-button" type="button" style="flex: 1;"
+                        (click)="descargarDocumento2()"></button>
+                </div>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="accion!=ACCIONES.VER" class="p-button-outlined" (click)="guardar()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verMantenimiento=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

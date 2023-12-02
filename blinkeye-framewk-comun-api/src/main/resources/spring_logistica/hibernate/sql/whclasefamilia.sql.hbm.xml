@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Tipocambiomast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    	
+	<sql-query name="whclasefamilia.obtenerDto">
+        select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,CUENTAINVENTARIO "cuentainventario"
+			,CUENTAGASTO "cuentagasto"
+			,ELEMENTOGASTO "elementogasto"
+			,PARTIDAPRESUPUESTAL "partidapresupuestal"
+			,FLUJODECAJA "flujodecaja"
+			,LINEAFAMILIA "lineafamilia"
+			,LOTEVALIDACIONFLAG "lotevalidacionflag"
+			,MEDICINAGRUPOAFLAG "medicinagrupoaflag"
+			,MEDICINAGRUPOHFLAG "medicinagrupohflag"
+			,MEDICINAGRUPOEFLAG "medicinagrupoeflag"
+			,MEDICINAGRUPORFLAG "medicinagruporflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CARACTERISTICA01 "caracteristica01"
+			,CARACTERISTICA02 "caracteristica02"
+			,CARACTERISTICA03 "caracteristica03"
+			,CARACTERISTICA04 "caracteristica04"
+			,CARACTERISTICA05 "caracteristica05"
+			,CONTACTOEMAIL "contactoemail"
+			,CONTACTOFAX "contactofax"
+			,CONTACTONOMBRE "contactonombre"
+			,CONTACTOTELEFONO "contactotelefono"
+			,CUENTATRANSITO "cuentatransito"
+			,CUENTAVENTAS "cuentaventas"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			
+         from WH_CLASEFAMILIA
+         where 
+			LINEA = :p_linea
+			AND FAMILIA = :p_familia
+    </sql-query>
+    
+    <sql-query name="whclasefamilia.listardtofiltros">
+         select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,CUENTAINVENTARIO "cuentainventario"
+			,CUENTAGASTO "cuentagasto"
+			,ELEMENTOGASTO "elementogasto"
+			,PARTIDAPRESUPUESTAL "partidapresupuestal"
+			,FLUJODECAJA "flujodecaja"
+			,LINEAFAMILIA "lineafamilia"
+			,LOTEVALIDACIONFLAG "lotevalidacionflag"
+			,MEDICINAGRUPOAFLAG "medicinagrupoaflag"
+			,MEDICINAGRUPOHFLAG "medicinagrupohflag"
+			,MEDICINAGRUPOEFLAG "medicinagrupoeflag"
+			,MEDICINAGRUPORFLAG "medicinagruporflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CARACTERISTICA01 "caracteristica01"
+			,CARACTERISTICA02 "caracteristica02"
+			,CARACTERISTICA03 "caracteristica03"
+			,CARACTERISTICA04 "caracteristica04"
+			,CARACTERISTICA05 "caracteristica05"
+			,CONTACTOEMAIL "contactoemail"
+			,CONTACTOFAX "contactofax"
+			,CONTACTONOMBRE "contactonombre"
+			,CONTACTOTELEFONO "contactotelefono"
+			,CUENTATRANSITO "cuentatransito"
+			,CUENTAVENTAS "cuentaventas"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,REFERENCIAFICAL02 "referenciafical02"
+			,CUENTACOSTOVENTAS "cuentacostoventas"
+			,CUENTASALIDATERCEROS "cuentasalidaterceros"
+
+         from WH_CLASEFAMILIA
+         where 
+				LINEA = ISNULL(:p_linea,LINEA)
+			AND FAMILIA = ISNULL(:p_familia,FAMILIA)
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+    <sql-query name="whclasefamilia.listardtoporlinea">
+         select 
+			LINEA "linea"
+			,FAMILIA "familia"
+			,DESCRIPCIONLOCAL "descripcionlocal"
+			,DESCRIPCIONINGLES "descripcioningles"
+			,DESCRIPCIONCOMPLETA "descripcioncompleta"
+			,CUENTAINVENTARIO "cuentainventario"
+			,CUENTAGASTO "cuentagasto"
+			,ELEMENTOGASTO "elementogasto"
+			,PARTIDAPRESUPUESTAL "partidapresupuestal"
+			,FLUJODECAJA "flujodecaja"
+			,LINEAFAMILIA "lineafamilia"
+			,LOTEVALIDACIONFLAG "lotevalidacionflag"
+			,MEDICINAGRUPOAFLAG "medicinagrupoaflag"
+			,MEDICINAGRUPOHFLAG "medicinagrupohflag"
+			,MEDICINAGRUPOEFLAG "medicinagrupoeflag"
+			,MEDICINAGRUPORFLAG "medicinagruporflag"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,CARACTERISTICA01 "caracteristica01"
+			,CARACTERISTICA02 "caracteristica02"
+			,CARACTERISTICA03 "caracteristica03"
+			,CARACTERISTICA04 "caracteristica04"
+			,CARACTERISTICA05 "caracteristica05"
+			,CONTACTOEMAIL "contactoemail"
+			,CONTACTOFAX "contactofax"
+			,CONTACTONOMBRE "contactonombre"
+			,CONTACTOTELEFONO "contactotelefono"
+			,CUENTATRANSITO "cuentatransito"
+			,CUENTAVENTAS "cuentaventas"
+			,REFERENCIAFISCAL02 "referenciafiscal02"
+			,REFERENCIAFICAL02 "referenciafical02"
+			,CUENTACOSTOVENTAS "cuentacostoventas"
+			,CUENTASALIDATERCEROS "cuentasalidaterceros"
+
+         from WH_CLASEFAMILIA
+         where 
+				LINEA = :p_linea
+			and UPPER(ISNULL(descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(descripcionlocal)) || '%'
+			and estado = ISNULL(:p_estado,estado)
+		order by descripcionlocal
+    </sql-query>
+    
+</hibernate-mapping>

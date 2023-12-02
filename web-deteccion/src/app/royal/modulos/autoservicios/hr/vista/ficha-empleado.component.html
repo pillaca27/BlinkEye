@@ -1,0 +1,2929 @@
+<style>
+    h1 {
+        padding: 0px;
+        margin: 0px;
+    }
+
+    .colorNuevo-hightliting {
+        background-color: #effffd;
+    }
+
+    .colorEliminado-hightliting {
+        background-color: #e27166;
+    }
+
+    .colorModificado-hightliting {
+        background-color: #7fe0a8;
+    }
+</style>
+
+<div class="p-grid">
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-3 p-lg-2">
+                <img src="{{fichaEmpleado.auxFotoString}}" width="100%" class="bordedImage" />
+            </div>
+            <div class="p-col-12 p-md-9 p-lg-8">
+                <h1>{{fichaEmpleado.personamast.nombrecompleto}}</h1>
+            </div>
+        </div>
+    </div>
+    <div class="p-col-12"
+        *ngIf="fichaEmpleado.estado==null||fichaEmpleado.estado==undefined||fichaEmpleado.estado=='GUAR'">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <br>
+                <input #photoInputFoto type="file" class="form-control" style="display:none"
+                    (change)="cargarFoto(photoInputFoto)" id="upload">
+                <button pButton label="Foto ({{fotoMaxSizeMb}} mb)" icon="fa fa-plus" class="p-button-outlined"
+                    type="button" [disabled]="fichaEmpleado.estado=='REGI'" (click)="photoInputFoto.click()"></button>
+            </div>
+        </div>
+    </div>
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <br>
+                <button pButton label="Guardar" icon="fa fa-save" type="button" class="p-button-outlined"
+                    (click)='guardar()'
+                    *ngIf="fichaEmpleado.estado==null||fichaEmpleado.estado==undefined||fichaEmpleado.estado=='GUAR'"></button>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <br>
+                <button pButton label="Enviar" icon="fas fa-paper-plane" class="p-button-outlined p-button-warning"
+                    *ngIf="fichaEmpleado.estado==null||fichaEmpleado.estado==undefined||fichaEmpleado.estado=='GUAR'"
+                    type="button" (click)='enviar()'></button>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <br>
+                <button pButton label="Anular" icon="fa fa-ban" class="p-button-outlined p-button-danger" type="button"
+                    *ngIf="puedeAnular" (click)='anular()'></button>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <label>Nuevo</label>
+                <input pInputText type="text" class="colorNuevo-hightliting" readonly />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <label>Modificado</label>
+                <input pInputText type="text" class="colorModificado-hightliting" readonly />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-2">
+                <label>Eliminado</label>
+                <input pInputText type="text" class="colorEliminado-hightliting" readonly />
+            </div>
+        </div>
+    </div>
+</div>
+<!-- CUERPO DE LA FICHA -->
+<br>
+<p-tabView>
+    <p-tabPanel header="Datos Personales" *ngIf="verTabA">
+        <p-panel header="Información General " [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Nombre</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.nombres}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.personamasttemp.nombres" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Apellido Paterno</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.apellidopaterno}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.personamasttemp.apellidopaterno"
+                        style="width: 100%;" disabled />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Apellido Materno</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.apellidomaterno}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.personamasttemp.apellidomaterno"
+                        style="width: 100%;" disabled />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Fecha de Nacimiento</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.fechanacimiento | date :
+                        'dd/MM/yyyy'}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <p-calendar [monthNavigator]="true" [yearNavigator]="true" yearRange="1940:2200" firstDayOfWeek="1"
+                        [showIcon]="false" [disabled]="true" dateFormat="dd/mm/yy" [style]="{ 'width': '100%'}"
+                        [ngModel]="fichaEmpleado.personamasttemp.fechanacimiento "></p-calendar>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Edad</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.fechanacimiento | edadCompleta}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" style="width: 100%;"
+                        value="{{fichaEmpleado.personamasttemp.fechanacimiento | edadCompleta}}" maxlength="40"
+                        [disabled]="true" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Sexo</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlySexoNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColorCombo(fichaEmpleado.personamasttemp.sexo,fichaEmpleado.auxReadOnlySexoNombre,listaSexo)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="listaSexo" [(ngModel)]="fichaEmpleado.personamasttemp.sexo "></p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Grupo Sanguíneo</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.hrEmpleado.gruposanguineo |
+                        labelFromItem:gruposanguineo}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.gruposanguineo,fichaEmpleado.hrEmpleado.gruposanguineo)}">
+                    <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [(ngModel)]="fichaEmpleado.hrEmpleadotemp.gruposanguineo" [options]="gruposanguineo">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label class="importante">Estado Civil</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyEstadoCivilNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColorCombo(fichaEmpleado.personamasttemp.estadocivil,fichaEmpleado.auxReadOnlyEstadoCivilNombre,estadoCivil)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="estadoCivil" (onChange)="evaluarEstadoCivil()"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.estadocivil">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Apellido Casado(a)</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.hrEmpleado.apellidocasada}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.apellidocasada,fichaEmpleado.hrEmpleado.apellidocasada)}">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.apellidocasada "
+                        maxlength="40" style="width: 100%;"
+                        [disabled]="fichaEmpleado.estado=='REGI'||fichaEmpleado.personamasttemp.estadocivil!='C'" />
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Documentos" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>D.N.I</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.documento}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.personamasttemp.documento" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Correo Coorporativo</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.empleadomast.correointerno}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <input pInputText type="text" disabled [(ngModel)]="fichaEmpleado.empleadomasttemp.correointerno"
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Pasaporte</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.pasaporte}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.pasaporte,fichaEmpleado.personamast.pasaporte)}">
+                    <input pInputText type="text" maxlength="18" [(ngModel)]="fichaEmpleado.personamasttemp.pasaporte"
+                        style="width: 100%;" [disabled]="fichaEmpleado.estado=='REGI'" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Brevete</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.brevete}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.brevete,fichaEmpleado.personamast.brevete)}">
+                    <input pInputText type="text" maxlength="18" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.brevete" style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Categoría Brevete</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.tipobrevete |
+                        labelFromItem:tipoBrevetes}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.tipobrevete,fichaEmpleado.personamast.tipobrevete)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="tipoBrevetes" [(ngModel)]="fichaEmpleado.personamasttemp.tipobrevete">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Fecha Vencimiento Brevete</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.breveteFecvcto | date :
+                        'dd/MM/yyyy'}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColorFechas(fichaEmpleado.personamasttemp.breveteFecvcto,fichaEmpleado.personamast.breveteFecvcto)}">
+                    <p-calendar [monthNavigator]="true" [disabled]="fichaEmpleado.estado=='REGI'" firstDayOfWeek="1"
+                        [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.breveteFecvcto">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label class="importante">Correo Personal</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.correoelectronico}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.correoelectronico,fichaEmpleado.personamast.correoelectronico)}">
+                    <input pInputText type="text" maxlength="50" [disabled]="fichaEmpleado.estado=='REGI'"
+                        style="width: 100%;" [(ngModel)]="fichaEmpleado.personamasttemp.correoelectronico " />
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Lugar de Nacimiento" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>País Nacimiento</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyPaisNacimientoNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.paisnacimiento,fichaEmpleado.hrEmpleado.paisnacimiento)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" (onChange)="cargarDepartamentosPorPais()"
+                        [options]="paises" filter="filter" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.paisnacimiento"
+                        [disabled]="fichaEmpleado.estado=='REGI'">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Dep. Nacimiento</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyDepartamentoNacimientoNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.departamentonacimiento,fichaEmpleado.hrEmpleado.departamentonacimiento)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" filter="filter" [resetFilterOnHide]="true"
+                        (onChange)="cargarProvinciasPorDepartamento()" [options]="departamentosNacimiento"
+                        [(ngModel)]="this.fichaEmpleado.hrEmpleadotemp.departamentonacimiento"
+                        [disabled]="fichaEmpleado.estado=='REGI'">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Prov. Nacimiento</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyProvinciaNacimientoNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.provincianacimiento,fichaEmpleado.hrEmpleado.provincianacimiento)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                        (onChange)="cargarDistritosPorProvincia()"
+                        [(ngModel)]="this.fichaEmpleado.hrEmpleadotemp.provincianacimiento"
+                        [options]="provinciasNacimiento" [disabled]="fichaEmpleado.estado=='REGI'">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Distrito Nacimiento</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyDistritoNacimientoNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.distritonacimiento,fichaEmpleado.hrEmpleado.distritonacimiento)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                        [disabled]="fichaEmpleado.estado=='REGI'" [options]="distritosNacimiento"
+                        [(ngModel)]="fichaEmpleado.hrEmpleadotemp.distritonacimiento">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Nacionalidad</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyNacionalidadNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.nacionalidad,fichaEmpleado.personamast.nacionalidad)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                        [disabled]="fichaEmpleado.estado=='REGI'" [options]="nacionalidades"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.nacionalidad"></p-dropdown>
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Domicilio Local" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-4 p-lg-2">
+                    <label class="importante">Dirección</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.direccion}}</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.direccion,fichaEmpleado.personamast.direccion)}">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.personamasttemp.direccion" maxlength="80"
+                        style="width: 100%;" [disabled]="fichaEmpleado.estado=='REGI'" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-4 p-lg-2">
+                    <label class="importante">País</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyPaisLocalNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.pais,fichaEmpleado.personamast.pais)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" (onChange)="cargarDepartamentoPorPaisLocal()"
+                        [options]="paisesL" filter="filter" [(ngModel)]="fichaEmpleado.personamasttemp.pais"
+                        [disabled]="fichaEmpleado.estado=='REGI'">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-4 p-lg-2">
+                    <label>Departamento</label>
+                </div>
+                <div class="p-col-12 p-md-4 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyDepartamentoLocalNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.departamento,fichaEmpleado.personamast.departamento)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " (onChange)="cargarProvinciasPorDepartamentoLocal()"
+                        filter="filter" [options]="departamentosLocal" [resetFilterOnHide]="true"
+                        [disabled]="fichaEmpleado.estado=='REGI'"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.departamento"></p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Provincia</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyProvinciaLocalNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.provincia,fichaEmpleado.personamast.provincia)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                        [options]="provinciasLocal" (onChange)="cargarDistritosPorProvinciaLocal()"
+                        [disabled]="fichaEmpleado.estado=='REGI'" [(ngModel)]="fichaEmpleado.personamasttemp.provincia">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Distrito</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyDistritoLocalNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.codigopostal,fichaEmpleado.personamast.codigopostal)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" filter="filter" [resetFilterOnHide]="true"
+                        [options]="distritosLocal" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [(ngModel)]="fichaEmpleado.personamasttemp.codigopostal">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Teléfono Casa</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.telefono}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.telefono,fichaEmpleado.personamast.telefono)}">
+                    <input pInputText type="text" pKeyFilter="int" [(ngModel)]="fichaEmpleado.personamasttemp.telefono"
+                        style="width: 100%;" [disabled]="fichaEmpleado.estado=='REGI'" maxlength="15" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label class="importante">Celular</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.personamast.celular}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.celular,fichaEmpleado.personamast.celular)}">
+                    <input pInputText type="text" pKeyFilter="int" [(ngModel)]="fichaEmpleado.personamasttemp.celular"
+                        style="width: 100%;" [disabled]="fichaEmpleado.estado=='REGI'" maxlength="15" />
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Domicilio Extranjero" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Dirección</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.hrEmpleado.direccionextranjera}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.direccionextranjera,fichaEmpleado.hrEmpleado.direccionextranjera)}">
+                    <input pInputText type="text" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.direccionextranjera"
+                        style="width: 100%;" maxlength="100" [disabled]="fichaEmpleado.estado=='REGI'" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>País</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.auxReadOnlyPaisExtranjeroNombre}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.paisextranjero,fichaEmpleado.hrEmpleado.paisextranjero)}">
+                    <p-dropdown [style]="{ 'width': '100%'} " [options]="paises " filter="filter"
+                        [resetFilterOnHide]="true" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.paisextranjero"
+                        [disabled]="fichaEmpleado.estado=='REGI'">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Teléfono</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.hrEmpleado.telefonoextranjero}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.telefonoextranjero,fichaEmpleado.hrEmpleado.telefonoextranjero)}">
+                    <input pInputText type="text" pKeyFilter="int" style="width: 100%;"
+                        [(ngModel)]="fichaEmpleado.hrEmpleadotemp.telefonoextranjero"
+                        [disabled]="fichaEmpleado.estado=='REGI'" maxlength="15" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-2">
+                    <label>Celular</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-4">
+                    <label style="color: gray;">{{fichaEmpleado.hrEmpleado.celularextranjero}}</label>
+                </div>
+                <div class="p-col-12 p-md-6 p-lg-2"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.celularextranjero,fichaEmpleado.hrEmpleado.celularextranjero)}">
+                    <input pInputText type="text" pKeyFilter="int" style="width: 100%;"
+                        [(ngModel)]="fichaEmpleado.hrEmpleadotemp.celularextranjero"
+                        [disabled]="fichaEmpleado.estado=='REGI'" maxlength="15" />
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Contactos de Emergencia" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <p-fieldset legend="Contacto N° 1">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Nombre</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.personamast.nombreemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.nombreemergencia,fichaEmpleado.personamast.nombreemergencia)}">
+                                <input pInputText type="text" maxlength="50" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;" [(ngModel)]="fichaEmpleado.personamasttemp.nombreemergencia" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Dirección</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.personamast.direccionemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.direccionemergencia,fichaEmpleado.personamast.direccionemergencia)}">
+                                <input pInputText type="text" maxlength="60" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;"
+                                    [(ngModel)]="fichaEmpleado.personamasttemp.direccionemergencia" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Parentesco</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.personamast.parentescoemergencia |
+                                labelFromItem:parentescos}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.parentescoemergencia,fichaEmpleado.personamast.parentescoemergencia)}">
+                                <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                                    [disabled]="fichaEmpleado.estado=='REGI'" [options]="parentescos"
+                                    [(ngModel)]="fichaEmpleado.personamasttemp.parentescoemergencia">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Teléfono</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.personamast.telefonoemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.telefonoemergencia,fichaEmpleado.personamast.telefonoemergencia)}">
+                                <input pInputText type="text" maxlength="15" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;"
+                                    [(ngModel)]="fichaEmpleado.personamasttemp.telefonoemergencia" />
+                            </div>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Celular</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.personamast.celularemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.personamasttemp.celularemergencia,fichaEmpleado.personamast.celularemergencia)}">
+                                <input pInputText type="text" maxlength="15" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;"
+                                    [(ngModel)]="fichaEmpleado.personamasttemp.celularemergencia" />
+                            </div>
+
+                        </div>
+                    </p-fieldset>
+                </div>
+
+                <div class="p-col-12 p-md-6 p-lg-6">
+                    <p-fieldset legend="Contacto N° 2">
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Nombre</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.hrEmpleado.nombreemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.nombreemergencia,fichaEmpleado.hrEmpleado.nombreemergencia)}">
+                                <input pInputText type="text" maxlength="50" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.nombreemergencia" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Dirección</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.hrEmpleado.direccionemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.direccionemergencia,fichaEmpleado.hrEmpleado.direccionemergencia)}">
+                                <input pInputText type="text" maxlength="60" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;"
+                                    [(ngModel)]="fichaEmpleado.hrEmpleadotemp.direccionemergencia" />
+                            </div>
+                        </div>
+
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Parentesco</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.hrEmpleado.parentescoemergencia |
+                                labelFromItem:parentescos}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.parentescoemergencia,fichaEmpleado.hrEmpleado.parentescoemergencia)}">
+                                <p-dropdown [style]="{ 'width': '100%'} " filter="filter" [resetFilterOnHide]="true"
+                                    [disabled]="fichaEmpleado.estado=='REGI'" [options]="parentescos"
+                                    [(ngModel)]="fichaEmpleado.hrEmpleadotemp.parentescoemergencia"></p-dropdown>
+                            </div>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Teléfono</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.hrEmpleado.telefonoemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.telefonoemergencia,fichaEmpleado.hrEmpleado.telefonoemergencia)}">
+                                <input pInputText type="text" maxlength="60" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;"
+                                    [(ngModel)]="fichaEmpleado.hrEmpleadotemp.telefonoemergencia" />
+                            </div>
+                        </div>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-6 p-lg-4">
+                                <label>Celular</label>
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4" style="color: gray;">
+                                {{fichaEmpleado.hrEmpleado.celularemergencia}}
+                            </div>
+                            <div class="p-col-12 p-md-6 p-lg-4"
+                                [ngStyle]="{'background':cambiarColor(fichaEmpleado.hrEmpleadotemp.celularemergencia,fichaEmpleado.hrEmpleado.celularemergencia)}">
+                                <input pInputText type="text" maxlength="15" [disabled]="fichaEmpleado.estado=='REGI'"
+                                    style="width: 100%;" [(ngModel)]="fichaEmpleado.hrEmpleadotemp.celularemergencia" />
+                            </div>
+                        </div>
+                    </p-fieldset>
+                </div>
+            </div>
+        </p-panel>
+    </p-tabPanel>
+    <p-tabPanel header="Direcciones" *ngIf="verTabB">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <br>
+                <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                    (click)='nuevoDireccion()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <p-table #tblDireccion [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                    [value]="fichaEmpleado.listaDirecciones" [responsive]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion3">Acción</th>
+                            <th class="tablaHeaderNombre">Tipo Vía</th>
+                            <th class="tablaHeaderNombre">Nombre Vía</th>
+                            <th class="tablaHeaderCodigoCorto">N°</th>
+                            <th class="tablaHeaderCodigoCorto">Interior</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr
+                            [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado ==='S'?'modificado':''">
+                            <td class="tablaColumnaAccion3">
+                                <span class="p-column-title">Acción</span>
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                title="Editar" class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="editarDireccion(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-search" title="Ver"
+                                                class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="rowData.flageliminado != 'S'"
+                                                (click)="verDireccion(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-times" title="Eliminar"
+                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="eliminarDireccion(rowData.pk.secuencia)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="tablaColumnaNombre"> <span class="p-column-title">Tipo Vía</span>
+                                {{rowData.auxPdttipocalleNombre}}</td>
+                            <td class="tablaColumnaNombre"> <span class="p-column-title">Dirección</span>
+                                {{rowData.direccion}}</td>
+                            <td class="tablaColumnaCodigoCorto"> <span class="p-column-title">N°</span>
+                                {{rowData.numero}}</td>
+                            <td class="tablaColumnaCodigoCorto"> <span class="p-column-title">Interior</span>
+                                {{rowData.interior}}</td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="5">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-fluid">
+            <p-dialog [(visible)]="verModalDireccion" [modal]="true" [responsive]="true" [resizable]="false"
+                header="DIRECCIÓN : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size" [responsive]="true"
+                [breakpoint]="850" [style]="{'max-width':'850px', 'left':'15px', 'right':'15px'}">
+
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span class="importante">Tipo Vía</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [disabled]="!editaDireccion"
+                            [(ngModel)]="empDir.pdttipocalle" [options]="tipovias"></p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-5 p-lg-5">
+                        <span class="importante">Dirección</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.direccion" maxlength="200"
+                            [disabled]="!editaDireccion" />
+                    </div>
+
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>N°</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.numero" maxlength="5"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Interior</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.interior" maxlength="5"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Departamento</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.numdep" maxlength="5"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Manzana</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.manzana" maxlength="5"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Lote</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.lote" maxlength="5"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Km.</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.kilometro" maxlength="4"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Block</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.sector" maxlength="4"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Etapa</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.etapa" maxlength="4"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span class="importante">Ubicación Geográfica</span>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled style="width:100%;flex: 5;"
+                                [ngModel]="empDir.auxUbigeoNombre" />
+                            <button pButton icon="fa fa-binoculars " [disabled]="!editaDireccion" class="p-button"
+                                [style]="{'flex': '1'}" type="button " (click)="mostrarSelectorUbigeo() "
+                                title="Buscar "></button>
+                            <button pButton icon="fa fa-trash " [disabled]="!editaDireccion" class="p-button"
+                                [style]="{'flex': '1'}" type="button " (click)="limpiarUbigeo()"
+                                title="Limpiar "></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <span>Tipo de Zona</span>
+                        <p-dropdown appendTo="body" [style]="{'width': '100%'} " [disabled]="!editaDireccion"
+                            [(ngModel)]="empDir.pdttipozona" [options]="zonas"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span>Zona</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.pdtzona " maxlength="20"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span>Referencia</span>
+                        <input pInputText type="text" [(ngModel)]="empDir.referenciasdireccion " maxlength="60"
+                            [disabled]="!editaDireccion" />
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <label>Indicador Centro Essalud</label>
+                        <table style="width: 100%;">
+                            <tr>
+                                <td>
+                                    <p-radioButton name="groupname" value="S" [(ngModel)]="empDir.flagcentroessalud"
+                                        label="Si" [disabled]="!editaDireccion"></p-radioButton>
+                                </td>
+                                <td>
+                                    <p-radioButton name="groupname" value="N" [(ngModel)]="empDir.flagcentroessalud"
+                                        label="No" [disabled]="!editaDireccion"></p-radioButton>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                            *ngIf="editaFamiliar" class="p-button-outlined" (click)="guardarDireccion()"></button>
+                    </div>
+                    <div class="p-col-12 p-md-8"></div>
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                            class="p-button-outlined p-button-secondary" (click)="verModalDireccion=false"></button>
+                    </div>
+                </div>
+            </p-dialog>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Derecho Habiente" *ngIf="verTabC">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <br>
+                <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                    (click)='nuevoFamiliar()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <p-table #tblFamiliar [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                    [value]="fichaEmpleado.listaDependientes" [responsive]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion3">Acción</th>
+                            <th class="tablaHeaderCodigo">Parentesco</th>
+                            <th class="tablaHeaderNombreMedio">Nombre</th>
+                            <th class="tablaHeaderNombreMedio">Apellido Paterno</th>
+                            <th class="tablaHeaderNombreMedio">Apellido Materno</th>
+                            <th class="tablaHeaderFecha">Fecha Nacimiento</th>
+                            <th class="tablaHeaderCodigoChico">Sexo</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr
+                            [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado ==='S'?'modificado':''">
+                            <td class="tablaColumnaAccion3">
+                                <span class="p-column-title">Acción</span>
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                title="Editar" class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="editarFamiliar(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-search" title="Ver"
+                                                class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="rowData.flageliminado != 'S'"
+                                                (click)="verFamiliar(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-times" title="Eliminar"
+                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="eliminarFamiliar(rowData.pk.secuencia)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <span class="p-column-title">Parentesco</span>
+                                {{rowData.auxTipodependienteNombre}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Nombre</span>
+                                {{rowData.nombres}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Apellido Paterno</span>
+                                {{rowData.apellidopaterno}}
+                            </td>
+                            <td class="tablaColumnaNombreMedio">
+                                <span class="p-column-title">Apellido Materno</span>
+                                {{rowData.apellidomaterno}}
+                            </td>
+                            <td class="tablaColumnaFecha">
+                                <span class="p-column-title">Fecha Nacimiento</span>
+                                {{rowData.fechanacimiento | date : 'dd/MM/yyyy'}}
+                            </td>
+                            <td class="tablaColumnaCodigoChico">
+                                <span class="p-column-title">Sexo</span>
+                                {{rowData.sexo =='F'?'Femenino':rowData.sexo =='M'?'Masculino':''}}
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="7">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+        <div class="p-fluid">
+            <p-dialog [(visible)]="verModalFamiliar" [resizable]="false" [modal]="true" [responsive]="true"
+                header="DERECHO HABIENTE : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                [resizable]="false" [draggable]="true" [closable]="true" [closeOnEscape]="true"
+                [style]="{'width':'1000px', 'left':'15px', 'right':'15px'}">
+
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Parentesco</span>
+                        <p-dropdown appendTo="body" [style]="{'width': '100%'}" [disabled]="!editaFamiliar"
+                            (onChange)="cambiarSegunParentesco()" [(ngModel)]="empFam.tipodependiente"
+                            [options]="parentescosSel"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Nombre</span>
+                        <input pInputText type="text" [(ngModel)]="empFam.nombres" maxlength="25"
+                            [disabled]="!editaFamiliar" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Apellido Paterno</span>
+                        <input pInputText type="text" [(ngModel)]="empFam.apellidopaterno" maxlength="25"
+                            [disabled]="!editaFamiliar" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Apellido Materno</span>
+                        <input pInputText type="text" [disabled]="!editaFamiliar" [(ngModel)]="empFam.apellidomaterno"
+                            maxlength="25" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Tipo Doc. Identidad</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.tipodocumentoidentidad" [options]="tipodocumento ">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">N° Doc. Identidad</span>
+                        <input pInputText type="text" [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.documentoidentidad" maxlength="15" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span class="importante">Fecha Nacimiento</span>
+                        <p-calendar appendTo="body" [monthNavigator]="true" [disabled]="!editaFamiliar"
+                            [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" firstDayOfWeek="1"
+                            dateFormat="dd/mm/yy" (onSelect)="transfromarFechaNacimiento()"
+                            (onBlur)="transfromarFechaNacimiento()" (onChange)="transfromarFechaNacimiento()"
+                            [(ngModel)]="empFam.fechanacimiento"></p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Edad</span>
+                        <input pInputText type="text" disabled value="{{ edadFamiliar }}" maxlength="40" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Grupo Sanguíneo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.tiposangre" [options]="gruposanguineo "></p-dropdown>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span class="importante">Sexo</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.sexo" [options]="listaSexo"></p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Pais Emisor</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.paisemisor" [options]="paisemisor" filter="filter"
+                            [resetFilterOnHide]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span *ngIf="!flagVinculo">Tipo Vínculo Pais Emisor</span>
+                        <span *ngIf="flagVinculo" class="importante">Tipo Vínculo Pais Emisor</span>
+                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [(ngModel)]="empFam.tipovinculo" [options]="tipovinculo"></p-dropdown>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span *ngIf="!flagVinculo">Tipo Acredita</span>
+                        <span *ngIf="flagVinculo" class="importante">Tipo Acredita</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar" appendTo="body"
+                            [options]="tipodocumentoacreditado" [(ngModel)]="empFam.tipodocumentopaternidad">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <br>
+                        <input pInputText type="text" [(ngModel)]="empFam.nrodocumentopaternidad" maxlength="20"
+                            [disabled]="!editaFamiliar">
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Correo Electrónico</span>
+                        <input pInputText type="text" [(ngModel)]="empFam.correoelectronico" maxlength="50"
+                            [disabled]="!editaFamiliar">
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Codigo Postal</span>
+                        <p-dropdown [style]="{ 'width': '100%'}" filter="filter" [resetFilterOnHide]="true"
+                            appendTo="body" [disabled]="!editaFamiliar" [options]="listaCodigoPostal"
+                            [(ngModel)]="empFam.codigopostal">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span *ngIf="estaVacio(empFam.codigopostal)">Teléfono</span>
+                        <span *ngIf="!estaVacio(empFam.codigopostal)" class="importante">Teléfono</span>
+                        <input pInputText type="text" [(ngModel)]="empFam.telefono" maxlength="15" pKeyFilter="int"
+                            [disabled]="!editaFamiliar">
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Centro EsSalud</span>
+                        <p-dropdown [style]="{ 'width': '100%'} " [disabled]="!editaFamiliar"
+                            [options]="listaCentrosSalud" [(ngModel)]="empFam.flagcentroasistencia">
+                        </p-dropdown>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <span>Lugar de Trabajo</span>
+                        <input pInputText type="text" [disabled]="!editaFamiliar" [(ngModel)]="empFam.empresa"
+                            maxlength="40" />
+                    </div>
+
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <span>Ocupación</span>
+                        <input pInputText type="text" [disabled]="!editaFamiliar" [(ngModel)]="empFam.ocupacion"
+                            maxlength="20" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="empFam.flagsmfB" label="Afiliado al Seguro Médico Fam."
+                            [disabled]="!editaFamiliar" binary="true"></p-checkbox>
+                    </div>
+
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="empFam.flagbeneficioB" label="Con Beneficios Sociales"
+                            [disabled]="!editaFamiliar" binary="true"></p-checkbox>
+                    </div>
+
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <br>
+                        <p-checkbox [(ngModel)]="empFam.flagviveconempleadoB" label="Vive con el Empleado"
+                            [disabled]="!editaFamiliar" binary="true"></p-checkbox>
+                    </div>
+                </div>
+
+                <div *ngIf="flagCheck" class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <br>
+                        <p-checkbox [(ngModel)]="empFam.flagviveparejaB"
+                            label="¿Actualmente vive con su esposa o conviviente?" [disabled]="!editaFamiliar"
+                            binary="true"></p-checkbox>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                            *ngIf="editaFamiliar" class="p-button-outlined" (click)="guardarFamiliar()"></button>
+                    </div>
+                    <div class="p-col-12 p-md-8"></div>
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                            class="p-button-outlined p-button-secondary" (click)="verModalFamiliar=false"></button>
+                    </div>
+                </div>
+            </p-dialog>
+        </div>
+    </p-tabPanel>
+    <p-tabPanel header="Educación" *ngIf="verTabD||verTabE||verTabF||verTabG||verTabH">
+        <p-tabView>
+            <p-tabPanel header="Instrucción Basica" *ngIf="verTabD">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                            (click)='nuevaFormacion()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <p-table #tblFormacion [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                            [value]="fichaEmpleado.listaInstruccionesBasica" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderNombreMedio">Nivel Académico</th>
+                                    <th class="tablaHeaderNombreMedio">Centro de Estudios</th>
+                                    <th class="tablaHeaderCodigoChico">Año Inicio</th>
+                                    <th class="tablaHeaderCodigoChico">Año Fin</th>
+                                    <th class="tablaHeaderCodigoChico">Último Grado</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr
+                                    [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                    <td class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                        title="Editar"
+                                                        class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="editarFormacion(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                                        title="Ver" class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="rowData.flageliminado != 'S'"
+                                                        (click)="verFormacion(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        title="Eliminar"
+                                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="eliminarFormacion(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Nivel Académico</span>
+                                        {{rowData.auxGradoinstruccionNombre}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Centro de Estudios</span>
+                                        {{rowData.centroestudio==null?rowData.otrocentroestudio:rowData.auxCentroestudiosNombre}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Año Inicio</span>
+                                        {{rowData.fechadesde | date : 'yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Año Fin</span>
+                                        {{rowData.fechahasta | date : 'yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Último Grado</span>
+                                        {{rowData.flagultimogrado == 'S'?'Si':'No'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="6">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Instrucción Superior" *ngIf="verTabE">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                            (click)='nuevaFormacionSuperior()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <p-table [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                            [value]="fichaEmpleado.listaInstruccionesSuperior" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderNombreMedio">Nivel Académico</th>
+                                    <th class="tablaHeaderNombreMedio">Centro de Estudios</th>
+                                    <th class="tablaHeaderCodigoChico">Año Inicio</th>
+                                    <th class="tablaHeaderCodigoChico">Año Fin</th>
+                                    <th class="tablaHeaderCodigoChico">Para Prácticas</th>
+                                    <th class="tablaHeaderCodigoChico">Último Grado</th>
+                                    <th class="tablaHeaderCodigoChico">Colegiatura Habilitada</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr
+                                    [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                    <td class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                        title="Editar"
+                                                        class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="editarFormacionSuperior(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                                        title="Ver" class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="rowData.flageliminado != 'S'"
+                                                        (click)="verFormacionSuperior(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        title="Eliminar"
+                                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="eliminarFormacionSuperior(rowData.pk.secuencia, rowData.pk.tipomaestro)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Nivel Académico</span>
+                                        {{rowData.auxGradoinstruccionNombre}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Centro de Estudios</span>
+                                        {{rowData.centroestudio==null?rowData.otrocentroestudio:rowData.auxCentroestudiosNombre}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Año Inicio</span>
+                                        {{rowData.fechadesde | date : 'yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Año Fin</span>
+                                        {{rowData.fechahasta | date : 'yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Para Prácticas</span>
+                                        {{rowData.flagpracticas == 'S'?'Si':'No'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Último Grado</span>
+                                        {{rowData.flagultimogrado == 'S'?'Si':'No'}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Colegiatura Habilitada</span>
+                                        {{!estaVacio(rowData.colegioprofesionalpadron)?'Si':'No'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="8">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Cursos" *ngIf="verTabF">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                            (click)='nuevaEspecializacion()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <p-table #tblEspecializacion [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                            [value]="fichaEmpleado.listaCursos" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderNombreMedio">Curso</th>
+                                    <th class="tablaHeaderNombreMedio">Centro de Estudios</th>
+                                    <th class="tablaHeaderFecha">Fecha Inicio</th>
+                                    <th class="tablaHeaderFecha">Fecha Fin</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr
+                                    [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                    <td class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                        title="Editar"
+                                                        class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="editarEspecializacion(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                                        title="Ver" class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="rowData.flageliminado != 'S'"
+                                                        (click)="verEspecializacion(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        title="Eliminar"
+                                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="eliminarEspecializacion(rowData.pk.secuencia)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Curso</span>
+                                        {{rowData.auxCursoNombre}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Centro de Estudios</span>
+                                        {{rowData.centroestudio==null?rowData.otrocentroestudio:rowData.auxCentroestudioNombre}}
+                                    </td>
+                                    <td class="tablaColumnaFecha">
+                                        <span class="p-column-title">Fecha Inicio</span>
+                                        {{rowData.fechadesde | date : 'dd/MM/yyyy'}}
+                                    </td>
+                                    <td class="tablaColumnaFecha">
+                                        <span class="p-column-title">Fecha Fin</span>
+                                        {{rowData.fechahasta | date : 'dd/MM/yyyy'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="p-fluid">
+                    <p-dialog [(visible)]="verModalEspecializaciones" [modal]="true" [responsive]="true"
+                        header="CURSO : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                        [resizable]="false" [draggable]="true" [closable]="true" [closeOnEscape]="true"
+                        showEffect="size" hideEffect="size" [style]="{'width':'700px', 'left':'15px', 'right':'15px'}">
+
+                        <p-tabView>
+                            <p-tabPanel header="Datos Generales">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <span class="importante">Curso</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaEspecializacion" [options]="cursos"
+                                            [(ngModel)]="empEsp.curso"></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <span class="importante">Centro Estudios</span>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled [(ngModel)]="empEsp.centroestudio"
+                                                style="flex: 5;" />
+                                            <input pInputText type="text" disabled style="flex: 15;"
+                                                [(ngModel)]="empEsp.auxCentroestudioNombre" />
+                                            <button pButton icon="fa fa-binoculars" [disabled]="!editaEspecializacion"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="mostrarSelectorCentroEstudioEspecializacion()"
+                                                title="Buscar"></button>
+                                            <button pButton icon="fa fa-trash" [disabled]="!editaEspecializacion"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="limpiarCentroEstudiosEspecializacion()"
+                                                title="Limpiar"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Tipo</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaEspecializacion" [options]="tipo"
+                                            [(ngModel)]="empEsp.tipocurso"></p-dropdown>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6"><br>
+                                        <label>¿La empresa auspicia la
+                                            instrucción?&nbsp;&nbsp;({{empEsp.auxFlagauspicioempresa?'Si':'No'}})&nbsp;&nbsp;
+                                        </label>
+                                        <p-checkbox name="group1" [disabled]="!editaEspecializacion" binary="true"
+                                            [(ngModel)]="empEsp.auxFlagauspicioempresa"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">Fecha Inicio</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true "
+                                            [disabled]="!editaEspecializacion" [monthNavigator]="true "
+                                            firstDayOfWeek="1" yearRange="1990:2500" [showIcon]="true "
+                                            dateFormat="dd/mm/yy " [(ngModel)]="empEsp.fechadesde">
+                                        </p-calendar>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Fecha Fin</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true "
+                                            [disabled]="!editaEspecializacion" [monthNavigator]="true "
+                                            firstDayOfWeek="1" yearRange="1990:2500" [showIcon]="true "
+                                            dateFormat="dd/mm/yy " [(ngModel)]="empEsp.fechahasta">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+
+                            <p-tabPanel header="Información Adicional">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Total Horas</span>
+                                        <input pInputText type="text" pKeyFilter="num" placeholder="0.00"
+                                            [(ngModel)]="empEsp.horas" maxlength="6"
+                                            [disabled]="!editaEspecializacion" />
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Años Vigencia</span>
+                                        <input pInputText type="text" pKeyFilter="int" [(ngModel)]="empEsp.anosvigencia"
+                                            maxlength="4" [disabled]="!editaEspecializacion" />
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Calificación</span>
+                                        <input pInputText type="number" [(ngModel)]="empEsp.nota" placeholder="0.00"
+                                            maxlength="5 " [disabled]="!editaEspecializacion" />
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nº Días</span>
+                                        <input pInputText type="number" [(ngModel)]="empEsp.dias" maxlength="5"
+                                            [disabled]="!editaEspecializacion" />
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <span>Observaciones</span>
+                                        <textarea pInputTextarea type="text" style="width:100% "
+                                            [disabled]="!editaEspecializacion" [(ngModel)]="empEsp.observaciones"
+                                            maxlength="500"></textarea>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <label>Adjunto</label>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled
+                                                [(ngModel)]="empEsp.auxDocumentoNombre" style="flex: 15;" />
+                                            <input #photoInputC1 type="file" class="form-control" style="display:none"
+                                                (change)="cargarEspecializacion(photoInputC1)">
+                                            <button pButton icon="fa fa-plus" class="p-button" type="button"
+                                                style="flex: 1;" (click)="photoInputC1.click()"
+                                                [disabled]="!editaEspecializacion"></button>
+                                            <button pButton icon="fa fa-download" class="p-button" type="button"
+                                                style="flex: 1;" (click)="descargarEspecializacion()"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                        </p-tabView>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Guardar" style="width:100%;"
+                                    icon="fad fa-save" *ngIf="editaEspecializacion" class="p-button-outlined"
+                                    (click)="guardarEspecializacion()"></button>
+                            </div>
+                            <div class="p-col-12 p-md-8"></div>
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Salir" style="width:100%;"
+                                    icon="fad fa-reply" class="p-button-outlined p-button-secondary"
+                                    (click)="verModalEspecializaciones=false"></button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Idiomas" *ngIf="verTabG">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                            (click)='nuevoIdioma()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <p-table #tblIdiomas [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                            [value]="fichaEmpleado.listaCursosIdioma" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderTexto">Idioma</th>
+                                    <th class="tablaHeaderCodigo">General</th>
+                                    <th class="tablaHeaderCodigo">Lectura</th>
+                                    <th class="tablaHeaderCodigo">Hablado</th>
+                                    <th class="tablaHeaderCodigo">Escrito</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr
+                                    [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                    <td class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                        title="Editar"
+                                                        class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="editarIdioma(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                                        title="Ver" class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="rowData.flageliminado != 'S'"
+                                                        (click)="verIdioma(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        title="Eliminar"
+                                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="eliminarIdioma(rowData.pk.secuencia)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaTexto">
+                                        <span class="p-column-title">Idioma</span>
+                                        {{rowData.auxCursoNombre}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">General</span>
+                                        {{rowData.nivelgeneral | labelFromItem: idiomaNivel}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Lectura</span>
+                                        {{rowData.idiomanivellectura | labelFromItem: idiomaNivel}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Hablado</span>
+                                        {{rowData.idiomaniveloral | labelFromItem: idiomaNivel}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Escrito</span>
+                                        {{rowData.idiomanivelescritura | labelFromItem: idiomaNivel}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="6">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <!-- DIALOG IDIOMA -->
+                <div class="p-fluid ">
+                    <p-dialog [(visible)]="verModalIdioma" [modal]="true" [responsive]="true" [resizable]="false"
+                        header="IDIOMA : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                        [draggable]="true" [closable]="true" [closeOnEscape]="true" hideEffect="size"
+                        [style]="{'width':'700px', 'left':'15px', 'right':'15px' }">
+                        <p-tabView>
+                            <p-tabPanel header="Datos Generales">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">Idioma</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaIdioma" [options]="idiomas" [(ngModel)]="empIdio.curso">
+                                        </p-dropdown>
+                                    </div>
+
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">General</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaIdioma" [options]="idiomaNivel"
+                                            [(ngModel)]="empIdio.nivelgeneral"></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <span class="importante">Centro Estudios</span>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled [(ngModel)]="empIdio.centroestudio"
+                                                style="flex: 5;" />
+                                            <input pInputText type="text" disabled style="flex: 15;"
+                                                [(ngModel)]="empIdio.auxCentroestudioNombre" />
+                                            <button pButton icon="fa fa-binoculars" [disabled]="!editaIdioma"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="mostrarSelectorCentroEstudioIdioma()" title="Buscar"></button>
+                                            <button pButton icon="fa fa-trash" [disabled]="!editaIdioma"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="limpiarCentroEstudiosIdioma()" title="Limpiar"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Tipo</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaIdioma" [options]="tipo" [(ngModel)]="empIdio.tipocurso">
+                                        </p-dropdown>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6"><br>
+                                        <label>¿La empresa auspicia la
+                                            instrucción?&nbsp;&nbsp;({{empIdio.auxFlagauspicioempresa?'Si':'No'}})&nbsp;&nbsp;
+                                        </label>
+                                        <p-checkbox name="group1" [disabled]="!editaIdioma" binary="true "
+                                            [(ngModel)]="empIdio.auxFlagauspicioempresa"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">Fecha Inicio</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true " [disabled]="!editaIdioma"
+                                            [monthNavigator]="true " yearRange="1990:2500" firstDayOfWeek="1"
+                                            [showIcon]="true " dateFormat="dd/mm/yy " [(ngModel)]="empIdio.fechadesde ">
+                                        </p-calendar>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Fecha Fin</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true " [disabled]="!editaIdioma"
+                                            firstDayOfWeek="1" [monthNavigator]="true " yearRange="1990:2500"
+                                            [showIcon]="true " dateFormat="dd/mm/yy " [(ngModel)]="empIdio.fechahasta ">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Lectura</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaIdioma" [options]="idiomaNivel"
+                                            [(ngModel)]="empIdio.idiomanivellectura "></p-dropdown>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Hablado</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaIdioma" [options]="idiomaNivel"
+                                            [(ngModel)]="empIdio.idiomaniveloral "></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Escrito</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'}"
+                                            [disabled]="!editaIdioma" [options]="idiomaNivel"
+                                            [(ngModel)]="empIdio.idiomanivelescritura "></p-dropdown>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Información Adicional">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nº Horas</span>
+                                        <input pInputText type="text" pKeyFilter="num" placeholder="0.00"
+                                            [(ngModel)]="empIdio.horas" maxlength="6" [disabled]="!editaIdioma" />
+                                    </div>
+
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Años Vigencia</span>
+                                        <input pInputText type="text" pKeyFilter="int"
+                                            [(ngModel)]="empIdio.anosvigencia" maxlength="4"
+                                            [disabled]="!editaIdioma" />
+                                    </div>
+
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nota</span>
+                                        <input pInputText type="number" [(ngModel)]="empIdio.nota" placeholder="0.00"
+                                            maxlength="5 " [disabled]="!editaIdioma" />
+                                    </div>
+
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nº Días</span>
+                                        <input pInputText type="number" [(ngModel)]="empIdio.dias" maxlength="5"
+                                            [disabled]="!editaIdioma" />
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <label>Adjunto</label>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled
+                                                [(ngModel)]="empIdio.auxDocumentoNombre" style="flex: 15;" />
+                                            <input #photoInputIdioma type="file" class="form-control"
+                                                style="display:none" (change)="cargarIdioma(photoInputIdioma)"
+                                                [disabled]="!editaIdioma">
+                                            <button pButton icon="fa fa-plus" class="p-button" type="button"
+                                                style="flex: 1;" (click)="photoInputIdioma.click()"
+                                                [disabled]="!editaIdioma"></button>
+                                            <button pButton icon="fa fa-download" class="p-button" type="button"
+                                                style="flex: 1;" (click)="descargarIdioma()"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                        </p-tabView>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Guardar" style="width:100%;"
+                                    icon="fad fa-save" *ngIf="editaIdioma" class="p-button-outlined"
+                                    (click)="guardarIdioma()"></button>
+                            </div>
+                            <div class="p-col-12 p-md-8"></div>
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Salir" style="width:100%;"
+                                    icon="fad fa-reply" class="p-button-outlined p-button-secondary"
+                                    (click)="verModalIdioma=false"></button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Informática" *ngIf="verTabH">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                            (click)='nuevoInformatica()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <br>
+                        <p-table #tblInformatica [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                            [value]="fichaEmpleado.listaCursosInformatica" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderNombreMedio">C. Informática</th>
+                                    <th class="tablaHeaderNombreMedio">Centro de Estudios</th>
+                                    <th class="tablaHeaderCodigo">Nivel</th>
+                                    <th class="tablaHeaderFecha">Fecha Término</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr
+                                    [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                    <td class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                        title="Editar"
+                                                        class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="editarInformatica(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-search"
+                                                        title="Ver" class="p-button-rounded p-button-text botonGrilla"
+                                                        *ngIf="rowData.flageliminado != 'S'"
+                                                        (click)="verInformatica(rowData.pk.secuencia)"></button>
+                                                </th>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        title="Eliminar"
+                                                        class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                        *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                        (click)="eliminarInformatica(rowData.pk.secuencia)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">C. Informática</span>
+                                        {{rowData.auxCursoNombre}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Centro de Estudios</span>
+                                        {{rowData.auxCentroestudioNombre}}
+                                    </td>
+                                    <td class="tablaColumnaCodigo">
+                                        <span class="p-column-title">Nivel</span>
+                                        {{rowData.nivelgeneral | labelFromItem:infomaticaNivel }}
+                                    </td>
+                                    <td class="tablaColumnaFecha">
+                                        <span class="p-column-title">Fecha Término</span>
+                                        {{rowData.fechahasta | date : 'dd/MM/yyyy'}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+                <div class="p-fluid">
+                    <p-dialog [(visible)]="verModalInformatica" [modal]="true" [responsive]="true" [resizable]="false"
+                        header="CURSO INFORMÁTICO : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                        [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size" hideEffect="size"
+                        [style]="{'width':'700px', 'left':'15px', 'right':'15px'}">
+                        <p-tabView>
+                            <p-tabPanel header="Datos Generales">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">Curso Informático</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [options]="cursosinformatica" [(ngModel)]="empInf.curso" filter="filter"
+                                            [resetFilterOnHide]="true" [disabled]="!editaInformatica"></p-dropdown>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Nivel General</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'}"
+                                            [options]="infomaticaNivel" [(ngModel)]="empInf.nivelgeneral"
+                                            [disabled]="!editaInformatica"></p-dropdown>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <span class="importante">Centro Estudios</span>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled [(ngModel)]="empInf.centroestudio"
+                                                style="flex: 5;" />
+                                            <input pInputText type="text" disabled style="flex: 15;"
+                                                [(ngModel)]="empInf.auxCentroestudioNombre" />
+                                            <button pButton icon="fa fa-binoculars" [disabled]="!editaInformatica"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="mostrarSelectorCentroEstudioInfo()" title="Buscar"></button>
+                                            <button pButton icon="fa fa-trash" [disabled]="!editaInformatica"
+                                                class="p-button" type="button" style="flex: 1;"
+                                                (click)="limpiarCentroEstudiosInfo()" title="Limpiar"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Tipo</span>
+                                        <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                            [disabled]="!editaInformatica" [options]="tipo"
+                                            [(ngModel)]="empInf.tipocurso"></p-dropdown>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6"><br>
+                                        <label>¿La empresa auspicia la
+                                            instrucción?&nbsp;&nbsp;({{empInf.auxFlagauspicioempresa?'Si':'No'}})&nbsp;&nbsp;
+                                        </label>
+                                        <p-checkbox name="group1" [disabled]="!editaInformatica" binary="true"
+                                            [(ngModel)]="empInf.auxFlagauspicioempresa"></p-checkbox>
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span class="importante">Fecha Inicio</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true "
+                                            [disabled]="!editaInformatica" [monthNavigator]="true "
+                                            yearRange="1990:2500" firstDayOfWeek="1" [showIcon]="true "
+                                            dateFormat="dd/mm/yy " [(ngModel)]="empInf.fechadesde">
+                                        </p-calendar>
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-6">
+                                        <span>Fecha Fin</span>
+                                        <p-calendar appendTo="body" [yearNavigator]="true "
+                                            [disabled]="!editaInformatica" [monthNavigator]="true "
+                                            yearRange="1990:2500" firstDayOfWeek="1" [showIcon]="true "
+                                            dateFormat="dd/mm/yy " [(ngModel)]="empInf.fechahasta">
+                                        </p-calendar>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                            <p-tabPanel header="Información Adicional">
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nº Horas</span>
+                                        <input pInputText type="text" pKeyFilter="num" placeholder="0.00"
+                                            [(ngModel)]="empInf.horas" maxlength="6" [disabled]="!editaInformatica" />
+                                    </div>
+
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Años Vigencia</span>
+                                        <input pInputText type="text" pKeyFilter="int" [(ngModel)]="empInf.anosvigencia"
+                                            maxlength="4" [disabled]="!editaInformatica" />
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nota</span>
+                                        <input pInputText type="number" [(ngModel)]="empInf.nota" placeholder="0.00"
+                                            maxlength="5 " [disabled]="!editaInformatica" />
+                                    </div>
+                                    <div class="p-col-12 p-md-6 p-lg-3">
+                                        <span>Nº Días</span>
+                                        <input pInputText type="number" [(ngModel)]="empInf.dias" maxlength="5"
+                                            [disabled]="!editaInformatica" />
+                                    </div>
+                                </div>
+                                <div class="p-grid">
+                                    <div class="p-col-12 p-md-12 p-lg-12">
+                                        <label>Adjunto</label>
+                                        <div class="p-inputgroup">
+                                            <input pInputText type="text" disabled
+                                                [(ngModel)]="empInf.auxDocumentoNombre" style="flex: 15;" />
+                                            <input #photoInputInfor type="file" class="form-control"
+                                                style="display:none" (change)="cargarInformatica(photoInputInfor)"
+                                                [disabled]="!editaInformatica">
+                                            <button pButton icon="fa fa-plus" class="p-button" type="button"
+                                                style="flex: 1;" (click)="photoInputInfor.click()"
+                                                [disabled]="!editaInformatica"></button>
+                                            <button pButton icon="fa fa-download" class="p-button" type="button"
+                                                style="flex: 1;" (click)="descargarInformatica()"></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </p-tabPanel>
+                        </p-tabView>
+                        <div class="p-grid">
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Guardar" style="width:100%;"
+                                    icon="fad fa-save" *ngIf="editaInformatica" class="p-button-outlined"
+                                    (click)="guardarInformatica()"></button>
+                            </div>
+                            <div class="p-col-12 p-md-8"></div>
+                            <div class="p-col-12 p-md-2">
+                                <br>
+                                <button pButton pRipple type="button" label="Salir" style="width:100%;"
+                                    icon="fad fa-reply" class="p-button-outlined p-button-secondary"
+                                    (click)="verModalInformatica=false"></button>
+                            </div>
+                        </div>
+                    </p-dialog>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+    </p-tabPanel>
+    <p-tabPanel header="Laboral" *ngIf="verTabI">
+        <p-panel header="Información Laboral Actual" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Fecha Ingreso</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" style="width: 100%;"
+                        value="{{fichaEmpleado.empleadomast.fechaingreso | date : 'dd/MM/yyyy'}}" disabled />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Puesto</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" disabled value="{{fichaEmpleado.auxReadOnlyPuestoNombre}}"
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Tipo Trabajador</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlyTipoTrabajadorNombre}}" disabled
+                        style="width: 100%;" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Tipo Contrato Trabajo</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlyTipoContratoNombre}}" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Centro de Costos</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" disabled value="{{fichaEmpleado.auxReadOnlyCentroCostosNombre}}"
+                        style="width: 100%;" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Responsable C.C.</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.empleadomast.responsablejefe}}" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Indicador Discapacidad</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text"
+                        value="{{fichaEmpleado.empleadomast.flagdiscapacidad=='1' ? 'Si': 'No'}}" disabled
+                        style="width: 100%;" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Situación EPS</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlySituacionepsNombre}}" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Categoría</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlyCargoNombre}} " disabled
+                        style="width: 100%;" />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>¿Trabajador Pensionista?</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="Si" disabled style="width: 100%;"
+                        *ngIf="fichaEmpleado.empleadomast.flagtrabajadorpensionista=='1'" />
+                    <input pInputText type="text" value="No" disabled style="width: 100%;"
+                        *ngIf="fichaEmpleado.empleadomast.flagtrabajadorpensionista!='1'" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Banco Moneda Local</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlyBancomonedalocalNombre}}"
+                        style="width: 100%;" disabled />
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Tipo Cuenta Moneda Local</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.auxReadOnlyCuentaLocalNombre}}" disabled
+                        style="width: 100%;" />
+                </div>
+            </div>
+
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>N° Cuenta Moneda Local</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <input pInputText type="text" value="{{fichaEmpleado.personamasttemp.cuentamonedalocal}}"
+                        style="width: 100%;" disabled />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Banco CTS</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomasttemp.bancocts,fichaEmpleado.empleadomast.bancocts)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="true" [options]="lstbancos"
+                        [(ngModel)]="fichaEmpleado.empleadomasttemp.bancocts"></p-dropdown>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Tipo de Cuenta CTS</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomast.tipocuentacts,fichaEmpleado.empleadomast.tipocuentacts)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="true" [options]="tipocuentacts"
+                        [(ngModel)]="fichaEmpleado.empleadomast.tipocuentacts"></p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Moneda CTS</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomasttemp.tipomonedacts,fichaEmpleado.empleadomast.tipomonedacts)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="true" [options]="monedas"
+                        [(ngModel)]="fichaEmpleado.empleadomasttemp.tipomonedacts"></p-dropdown>
+                </div>
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Cuenta CTS</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomast.numerocuentacts,fichaEmpleado.empleadomast.numerocuentacts)}">
+                    <input pInputText type="text" maxlength="30"
+                        [(ngModel)]="fichaEmpleado.empleadomast.numerocuentacts" disabled style="width: 100%" />
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Pensión" [toggleable]="true">
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Sistema de Pensión</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label style="color: gray;">
+                        {{fichaEmpleado.empleadomast.tipopension | labelFromItem:lstpensiones}}
+                    </label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomasttemp.tipopension,fichaEmpleado.empleadomast.tipopension)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="lstpensiones" [(ngModel)]="fichaEmpleado.empleadomasttemp.tipopension">
+                    </p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Fecha Desde</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label style="color: gray;">{{fichaEmpleado.empleadomast.fechainiciopension | date :
+                        'dd/MM/yyyy'}}</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColorFechas(fichaEmpleado.empleadomasttemp.fechainiciopension,fichaEmpleado.empleadomast.fechainiciopension)}">
+                    <p-calendar [monthNavigator]="true" [disabled]="fichaEmpleado.estado=='REGI'" firstDayOfWeek="1"
+                        [yearNavigator]="true" yearRange="1940:2200" [showIcon]="true" dateFormat="dd/mm/yy"
+                        [style]="{ 'width': '100%'}" [(ngModel)]="fichaEmpleado.empleadomasttemp.fechainiciopension">
+                    </p-calendar>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>AFP</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label style="color: gray;">{{fichaEmpleado.empleadomast.codigoafp |
+                        labelFromItem:lstafp}}</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomasttemp.codigoafp,fichaEmpleado.empleadomast.codigoafp)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="lstafp" [(ngModel)]="fichaEmpleado.empleadomasttemp.codigoafp"></p-dropdown>
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Nro. AFP</label>
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label style="color: gray;">{{fichaEmpleado.empleadomast.numeroafp}}</label>
+                </div>
+
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomast.numeroafp,fichaEmpleado.empleadomast.numeroafp)}">
+                    <input pInputText type="text" maxlength="20" [(ngModel)]="fichaEmpleado.empleadomasttemp.numeroafp"
+                        style="width: 100%;" [disabled]="fichaEmpleado.estado=='REGI'" />
+                </div>
+            </div>
+            <div class="p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <label>Tipo de Comisión</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3">
+                    <label style="color: gray;">{{fichaEmpleado.empleadomast.tipocomisionafp |
+                        labelFromItem:tipocomision}}</label>
+                </div>
+                <div class="p-col-12 p-md-3 p-lg-3"
+                    [ngStyle]="{'background':cambiarColor(fichaEmpleado.empleadomasttemp.tipocomisionafp,fichaEmpleado.empleadomast.tipocomisionafp)}">
+                    <p-dropdown [style]="{ 'width': '100%'}" [disabled]="fichaEmpleado.estado=='REGI'"
+                        [options]="tipocomision" [(ngModel)]="fichaEmpleado.empleadomasttemp.tipocomisionafp">
+                    </p-dropdown>
+                </div>
+            </div>
+        </p-panel>
+        <p-panel header="Experiencia Laboral" [toggleable]="true">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <br>
+                    <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                        (click)='nuevaExperienciaLaboral()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <br>
+                    <p-table #tblExperienciaLaboral [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                        [value]="fichaEmpleado.listaExperiencias" [responsive]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderAccion3">Acción</th>
+                                <th class="tablaHeaderNombreMedio">Empresa</th>
+                                <th class="tablaHeaderNombreMedio">Giro</th>
+                                <th class="tablaHeaderNombreMedio">Cargo</th>
+                                <th class="tablaHeaderNombreMedio">Función</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr
+                                [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                <td class="tablaColumnaAccion3">
+                                    <span class="p-column-title">Acción</span>
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                    title="Editar" class="p-button-rounded p-button-text botonGrilla"
+                                                    *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                    (click)="editarExperienciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-search" title="Ver"
+                                                    class="p-button-rounded p-button-text botonGrilla"
+                                                    *ngIf="rowData.flageliminado != 'S'"
+                                                    (click)="verExperienciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-times"
+                                                    title="Eliminar"
+                                                    class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                    *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                    (click)="eliminarExperienciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Empresa</span>
+                                    {{rowData.empresa}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Giro</span>
+                                    {{rowData.giroempresa}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Cargo</span>
+                                    {{rowData.cargo}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Función</span>
+                                    {{rowData.funciones}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="5">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+            <!-- DIALOG EXPERIENCIA LABORAL -->
+            <div class="p-fluid">
+                <p-dialog [(visible)]="verModalExperienciaLaboral" [modal]="true" [responsive]="true"
+                    header="EXPERIENCIA LABORAL : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                    [resizable]="false" [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size"
+                    hideEffect="size" [style]="{'width':'750px', 'left':'15px', 'right':'15px'}">
+
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span class="importante">Empresa</span>
+                            <input type="text" pInputText maxlength="500" [(ngModel)]="empExp.empresa"
+                                [disabled]="!editaExperienciaLaboral" />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Desde</span>
+                            <p-calendar appendTo="body" (onBlur)="calcular()" (onSelect)="calcular()"
+                                [yearNavigator]="true" firstDayOfWeek="1" [monthNavigator]="true"
+                                [disabled]="!editaExperienciaLaboral" yearRange="1990:2500" [showIcon]="true"
+                                dateFormat="dd/mm/yy" [(ngModel)]="empExp.fechadesde" readonlyInput="readonlyInput ">
+                            </p-calendar>
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Hasta</span>
+                            <p-calendar appendTo="body" (onBlur)="calcular()" (onSelect)="calcular()"
+                                [yearNavigator]="true" firstDayOfWeek="1" [disabled]="!editaExperienciaLaboral"
+                                [monthNavigator]="true" yearRange="1990:2500" [showIcon]="true" dateFormat="dd/mm/yy"
+                                [(ngModel)]="empExp.fechahasta" readonlyInput="readonlyInput "></p-calendar>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span>Tipo Contrato</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="empExp.tipocontrato"
+                                [options]="tipoContratos " [disabled]="!editaExperienciaLaboral">
+                            </p-dropdown>
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span>Años de Experiencia</span>
+                            <input pInputText type="text" [(ngModel)]="empExp.ano" disabled>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span class="importante">Motivo de Cese</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'} " [(ngModel)]="empExp.motivocese"
+                                [options]="motivoretiro " [disabled]="!editaExperienciaLaboral">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span>Sueldo</span>
+                            <input #d pInputText type="number" [disabled]="!editaExperienciaLaboral" maxlength="8"
+                                (blur)="validaSueldo(d)" [(ngModel)]="empExp.sueldo" min="0" max="999999" />
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span>Moneda</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                [disabled]="!editaExperienciaLaboral" [(ngModel)]="empExp.moneda" [options]="monedas ">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span>Giro de la Empresa</span>
+                            <input pInputText type="text" maxlength="500" [(ngModel)]="empExp.giroempresa "
+                                [disabled]="!editaExperienciaLaboral" />
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span class="importante">Tipo Experiencia</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                [(ngModel)]="empExp.tipoexperiencia" [options]="tiposdeexperiencia "
+                                [disabled]="!editaExperienciaLaboral"></p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-4">
+                            <span>Área de Exp.</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'} "
+                                [(ngModel)]="empExp.areaexperiencia" [options]="areasdeexperiencia "
+                                [disabled]="!editaExperienciaLaboral"></p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-6">
+                            <span>Tipo Entidad</span>
+                            <p-dropdown appendTo="body" [style]="{ 'width': '100%'}" [(ngModel)]="empExp.tipoentidad"
+                                [options]="tiposdeentidad " [disabled]="!editaExperienciaLaboral">
+                            </p-dropdown>
+                        </div>
+                        <div class="p-col-12 p-md-4 p-lg-6">
+                            <span>Cargo Ocupado</span>
+                            <input pInputText type="text" maxlength="500" [(ngModel)]="empExp.cargo"
+                                [disabled]="!editaExperienciaLaboral" />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span>Funciones</span>
+                            <input pInputText type="text" maxlength="500" [(ngModel)]="empExp.funciones "
+                                [disabled]="!editaExperienciaLaboral" />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-2">
+                            <br>
+                            <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                                *ngIf="editaExperienciaLaboral" class="p-button-outlined"
+                                (click)="guardarExperienciaLaboral()"></button>
+                        </div>
+                        <div class="p-col-12 p-md-8"></div>
+                        <div class="p-col-12 p-md-2">
+                            <br>
+                            <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                                class="p-button-outlined p-button-secondary"
+                                (click)="verModalExperienciaLaboral=false"></button>
+                        </div>
+                    </div>
+                </p-dialog>
+            </div>
+        </p-panel>
+        <p-panel header="Referencia Laboral" [toggleable]="true">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-2 p-lg-2">
+                    <br>
+                    <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                        (click)='nuevaReferenciaLaboral()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+                </div>
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <br>
+                    <p-table #tblReferenciaLaboral [rows]="10" [scrollable]="true" [style]="{'width': '100%'}"
+                        [value]="fichaEmpleado.listaReferencias" [responsive]="true">
+                        <ng-template pTemplate="header">
+                            <tr>
+                                <th class="tablaHeaderAccion3">Acción</th>
+                                <th class="tablaHeaderNombreMedio">Nombre Trabajador</th>
+                                <th class="tablaHeaderNombreMedio">Organización</th>
+                                <th class="tablaHeaderNombreMedio">Cargo</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-rowData let-columns="columns">
+                            <tr
+                                [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                                <td class="tablaColumnaAccion3">
+                                    <span class="p-column-title">Acción</span>
+                                    <table>
+                                        <tr>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                    title="Editar" class="p-button-rounded p-button-text botonGrilla"
+                                                    *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                    (click)="editarReferenciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-search" title="Ver"
+                                                    class="p-button-rounded p-button-text botonGrilla"
+                                                    *ngIf="rowData.flageliminado != 'S'"
+                                                    (click)="verReferenciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                            <th>
+                                                <button pButton pRipple type="button" icon="fad fa-times"
+                                                    title="Eliminar"
+                                                    class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                    *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                    (click)="eliminarReferenciaLaboral(rowData.pk.secuencia)"></button>
+                                            </th>
+                                        </tr>
+                                    </table>
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Nombre Trabajador</span>
+                                    {{rowData.nombre}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Organización</span>
+                                    {{rowData.empresa}}
+                                </td>
+                                <td class="tablaColumnaNombreMedio">
+                                    <span class="p-column-title">Cargo</span>
+                                    {{rowData.cargo}}
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="4">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+            </div>
+            <div class="p-fluid">
+                <p-dialog [(visible)]="verModalReferenciaLaboral" [modal]="true" [responsive]="true" [resizable]="false"
+                    header="REFERENCIA LABORAL : {{accion == ACCIONES.NUEVO?'Nuevo':accion == ACCIONES.EDITAR?'Editar':'Vista Previa'}}"
+                    [draggable]="true" [closable]="true" [closeOnEscape]="true" showEffect="size" hideEffect="size"
+                    [style]="{'width':'800px'}">
+                    <div class=" p-grid">
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Nombre</span>
+                            <input pInputText type="text" [(ngModel)]="empRef.nombre" maxlength="500"
+                                [disabled]="!editaReferenciaLaboral" />
+                        </div>
+
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Teléfono</span>
+                            <input pInputText type="text" [(ngModel)]="empRef.telefono" pKeyFilter="int" maxlength="50"
+                                [disabled]="!editaReferenciaLaboral" />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Organización</span>
+                            <input pInputText type="text" [(ngModel)]="empRef.empresa" maxlength="500"
+                                [disabled]="!editaReferenciaLaboral" />
+                        </div>
+                        <div class="p-col-12 p-md-6 p-lg-6">
+                            <span class="importante">Cargo</span>
+                            <input pInputText type="text" [(ngModel)]="empRef.cargo" maxlength="500"
+                                [disabled]="!editaReferenciaLaboral" />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span class="importante">Dirección</span>
+                            <input pInputText type="text" [(ngModel)]="empRef.direccion " maxlength="500"
+                                [disabled]="!editaReferenciaLaboral " />
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-12 p-lg-12">
+                            <span>Observaciones</span>
+                            <textarea [(ngModel)]="empRef.observaciones " maxlength="1000" style="width:100% "
+                                [disabled]="!editaReferenciaLaboral "></textarea>
+                        </div>
+                    </div>
+                    <div class="p-grid">
+                        <div class="p-col-12 p-md-2">
+                            <br>
+                            <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                                *ngIf="editaReferenciaLaboral" class="p-button-outlined"
+                                (click)="guardarReferenciaLaboral()"></button>
+                        </div>
+                        <div class="p-col-12 p-md-8"></div>
+                        <div class="p-col-12 p-md-2">
+                            <br>
+                            <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                                class="p-button-outlined p-button-secondary"
+                                (click)="verModalReferenciaLaboral=false"></button>
+                        </div>
+                    </div>
+                </p-dialog>
+            </div>
+        </p-panel>
+    </p-tabPanel>
+    <p-tabPanel header="Documentos" *ngIf="verTabJ">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <br>
+                <button pButton label="Nuevo" icon="fa fa-plus" type="button" class="p-button-outlined"
+                    (click)='nuevoDocumento()' *ngIf="fichaEmpleado.estado!='REGI'"></button>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-12">
+                <br>
+                <p-table [scrollable]="true" [style]="{'width': '100%'}" [value]="fichaEmpleado.listaDocumentos"
+                    [responsive]="true">
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion3">Acción</th>
+                            <th class="tablaHeaderNombre">Documento</th>
+                            <th class="tablaHeaderFecha">Fecha</th>
+                            <th class="tablaHeaderNombre">Ruta Documento</th>
+                            <th class="tablaHeaderAccion1">Descargar</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr
+                            [ngClass]="rowData.flageliminado === 'S'?'eliminado':rowData.flagnuevo==='S'?'nuevo':rowData.flagmodificado==='S'?'modificado':''">
+                            <td class="tablaColumnaAccion3">
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                                title="Editar" class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="editarDocumento(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-search" title="Ver"
+                                                class="p-button-rounded p-button-text botonGrilla"
+                                                *ngIf="rowData.flageliminado != 'S'"
+                                                (click)="verDocumento(rowData.pk.secuencia)"></button>
+                                        </th>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-times" title="Eliminar"
+                                                class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                                *ngIf="fichaEmpleado.estado!='REGI'&&rowData.flageliminado != 'S'"
+                                                (click)="eliminarDocumento(rowData.pk.secuencia)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                            <td class="tablaColumnaNombre">
+                                {{rowData.auxTipoDocumentoNombre}}
+                            </td>
+                            <td class="tablaColumnaFecha">
+                                {{rowData.fecha | date: 'dd/MM/yyyy'}}
+                            </td>
+                            <td class="tablaColumnaNombre">
+                                {{rowData.auxDocumentoNombre}}
+                            </td>
+                            <td class="tablaColumnaAccion1">
+                                <table>
+                                    <tr>
+                                        <th>
+                                            <button pButton pRipple type="button" icon="fad fa-download"
+                                                title="Descargar" class="p-button-rounded p-button-text botonGrilla"
+                                                (click)="descargarDocumento(rowData.pk.secuencia)"></button>
+                                        </th>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="5">
+                                No se encontraron registros
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+            </div>
+        </div>
+
+        <div class="p-fluid">
+            <p-dialog
+                header="DOCUMENTO : {{accion==ACCIONES.NUEVO? 'Nuevo': accion==ACCIONES.EDITAR? 'Editar': 'Vista Previa'}}"
+                [(visible)]="verModalFolio" [modal]="true" [responsive]="true" [resizable]="false" [draggable]="true"
+                [closable]="true" [closeOnEscape]="true" hideEffect="size "
+                [style]="{'max-width':'800px', 'left':'15px', 'right':'15px', 'margin-top':'25px'}">
+
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <label class="importante">Tipo de Documento</label>
+                        <p-dropdown appendTo="body" [style]="{'width': '100%'}" [disabled]="!editaDocumento"
+                            [options]="lstTipoDoc" [(ngModel)]="empDoc.documento" filter="filter"
+                            [resetFilterOnHide]="true">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <label>Tiene Vencimiento</label>
+                        <input pInputText type="text" value="{{tieneVencimiento(empDoc.documento)}}" disabled />
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <label>N° Meses Vencimiento</label>
+                        <input pInputText type="text" value="{{mesesVencimiento(empDoc.documento)}}" disabled />
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-6">
+                        <label class="importante">Fecha</label>
+                        <input pInputText type="text" value=" {{empDoc.fecha | date: 'dd/MM/yyyy'}} " disabled />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <label *ngIf="tieneVencimiento(empDoc.documento)=='Si'" class="importante">Fecha venc.</label>
+                        <p-calendar appendTo="body" [monthNavigator]="true" [yearNavigator]="true"
+                            *ngIf="tieneVencimiento(empDoc.documento)=='Si'" yearRange="1940:2200" firstDayOfWeek="1"
+                            [showIcon]="true" [disabled]="!editaDocumento" dateFormat="dd/mm/yy"
+                            [(ngModel)]="empDoc.fechavencimiento">
+                        </p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-2 p-lg-2">
+                        <br>
+                        <p-checkbox label="¿Presentó?" [(ngModel)]="empDoc.presentoB" binary="true"
+                            [disabled]="!editaDocumento"></p-checkbox>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <label>Observaciones</label>
+                        <textarea pInputTextarea style="width:100%" [(ngModel)]="empDoc.descripcion"
+                            [disabled]="!editaDocumento" maxlength="500"></textarea>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <label>Adjunto ({{folioMaxSizeMb}} mb)</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="empDoc.auxDocumentoNombre"
+                                style="flex: 15;" />
+                            <input #photoInputDoc type="file" class="form-control" style="display:none"
+                                (change)="cargarFolio(photoInputDoc)" [disabled]="!editaDocumento">
+                            <button pButton icon="fa fa-plus" class="p-button" type="button" style="flex: 1;"
+                                (click)="photoInputDoc.click()" [disabled]="!editaDocumento"></button>
+                            <button pButton icon="fa fa-download" class="p-button" type="button" style="flex: 1;"
+                                (click)="descargarDocumento2()"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                            *ngIf="editaDocumento" class="p-button-outlined" (click)="guardarFolio()"></button>
+                    </div>
+                    <div class="p-col-12 p-md-8"></div>
+                    <div class="p-col-12 p-md-2">
+                        <br>
+                        <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                            class="p-button-outlined p-button-secondary" (click)="verModalFolio=false"></button>
+                    </div>
+                </div>
+            </p-dialog>
+        </div>
+    </p-tabPanel>
+</p-tabView>
+
+<p-confirmDialog #cd0 key="cd0" [closable]="false " [closeOnEscape]="false ">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd0.accept()"></button>
+        <button type="button" pButton icon="fas fa-times" label="No" (click)="cd0.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-confirmDialog #cd key="cd" [closable]="false " [closeOnEscape]="false ">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd.accept()"></button>
+        <button type="button" pButton icon="fas fa-times" label="No" (click)="cd.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-confirmDialog #cd2 key="cd2" [closable]="false" [closeOnEscape]="false">
+    <p-footer>
+        <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd2.accept()"></button>
+        <button type="button" pButton icon="fas fa-times" label="No" (click)="cd2.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-confirmDialog #cd1 key="aceptDialog" [closable]="false">
+    <p-footer>
+        <div class="p-grid">
+            <div class="p-col-6 p-md-6 p-lg-5"></div>
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fa fa-check" label="Ok" (click)="cd1.accept()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-confirmDialog>
+
+<div class="p-fluid">
+    <p-dialog [(visible)]="verModalFormacion" [modal]="true" [responsive]="true" [resizable]="false" [draggable]="true"
+        header="INSTRUCCIÓN  {{empFor.pk.tipomaestro=='B'? 'BÁSICA ': 'SUPERIOR'}} : {{accion==ACCIONES.NUEVO? 'Nuevo': accion==ACCIONES.EDITAR? 'Editar': 'Vista Previa'}}"
+        [closable]="true" [closeOnEscape]="true" showEffect="size " hideEffect="size"
+        [style]="{'width':'800px', 'left':'15px', 'right':'15px'}">
+        <p-tabView>
+            <p-tabPanel header="Datos Generales">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-8 p-lg-8">
+                        <span class="importante">Grado Instrucción</span>
+                        <p-dropdown appendTo="body" [disabled]="!editaFormacion" [style]="{ 'width': '100%'} "
+                            (onChange)="cargarGradoPorNivel()" [(ngModel)]="empFor.gradoinstruccion" [options]="grados">
+                        </p-dropdown>
+                    </div>
+
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <br>
+                        <p-checkbox label="Último grado ({{empFor.auxFlagultimogrado? 'Si': 'No'}})" binary="true"
+                            [(ngModel)]="empFor.auxFlagultimogrado" [disabled]="!editaFormacion">
+                        </p-checkbox> <label><span style="color:red">*</span></label>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Centro Estudio?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagCentroEstudios=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagCentroEstudios!='S'" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Fecha Término?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagtermino=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagtermino!='S'" />
+                    </div>
+                    <div class="p-col-12 p-md-4 p-lg-4">
+                        <span>Usa Carrera?</span>
+                        <input pInputText type="text" disabled value="Si" *ngIf="flagTieneCarrera=='S'" />
+                        <input pInputText type="text" disabled value="No" *ngIf="flagTieneCarrera!='S'" />
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span *ngIf="flagCentroEstudios === 'S'" class="importante">
+                            Centro de Estudios
+                        </span>
+                        <span *ngIf="flagCentroEstudios !== 'S'">
+                            Centro de Estudios
+                        </span>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="empFor.centroestudio"
+                                style="flex: 5;" />
+                            <input pInputText type="text" disabled [(ngModel)]="empFor.auxCentroestudiosNombre"
+                                style="flex: 15;" />
+                            <button pButton icon="fa fa-binoculars" [disabled]="!editaFormacion" class="p-button"
+                                style="flex: 1;" type="button" (click)="mostrarSelectorCentroEstudio()"
+                                title="Buscar"></button>
+                            <button pButton icon="fa fa-trash" [disabled]="!editaFormacion" class="p-button"
+                                type="button" style="flex: 1;" (click)="limpiarCentroEstudios()"
+                                title="Limpiar"></button>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <br>
+                        <span style="margin-right:10%;">Otro Centro Estudios</span>
+                        <p-checkbox binary="true" [(ngModel)]="empFor.auxFlagotrocentroestudio"
+                            (onChange)="cambioSegunFlagCentro()" [disabled]="!editaFormacion">
+                        </p-checkbox>
+                    </div>
+                    <div class="p-col-12 p-md-9 p-lg-9">
+                        <br>
+                        <input pInputText type="text" maxlength="500" [(ngModel)]="empFor.otrocentroestudio"
+                            [disabled]="!editaFormacion || !verOtrocentro">
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span class="importante">Inicio</span>
+                        <p-calendar [yearNavigator]="true " [monthNavigator]="true " firstDayOfWeek="1"
+                            yearRange="1990:2500 " appendTo="body" [showIcon]="true " dateFormat="dd/mm/yy "
+                            [(ngModel)]="empFor.fechadesde " [disabled]="!editaFormacion">
+                        </p-calendar>
+                    </div>
+                    <div class="p-col-12 p-md-3 p-lg-3">
+                        <span *ngIf="flagtermino === 'S'" class="importante">Termino</span>
+                        <span *ngIf="flagtermino !== 'S'">Año Termino</span>
+                        <p-calendar [yearNavigator]="true " [monthNavigator]="true " yearRange="1990:2500 "
+                            appendTo="body" [showIcon]="true " firstDayOfWeek="1" dateFormat="dd/mm/yy "
+                            [(ngModel)]="empFor.fechahasta " [disabled]="!editaFormacion || flagtermino !== 'S'">
+                        </p-calendar>
+                    </div>
+                </div>
+                <div class="p-grid" *ngIf="empFor.pk.tipomaestro=='S'">
+                    <div class="p-col-12 p-md-6 p-lg-12"
+                        *ngIf="empFor.nivelacademico!=='PRI' && empFor.nivelacademico!=='SEC'">
+                        <span>Área</span>
+                        <input pInputText type="text" [(ngModel)]="empFor.auxArea" [disabled]="true">
+                    </div>
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <span *ngIf="flagTieneCarrera === 'S'" class="importante">Profesión/Carrera</span>
+                        <span *ngIf="flagTieneCarrera !== 'S'">Profesión/Carrera</span>
+                        <input pInputText type="text" [(ngModel)]="empFor.auxCarrera" [disabled]="true">
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-3">
+                        <span>N° Créditos</span>
+                        <input pInputText type="text" pKeyFilter="int" [(ngModel)]="empFor.numerocreditos "
+                            maxlength="4" [disabled]="!editaFormacion" />
+
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-3">
+                        <br>
+                        <p-checkbox label="Prácticas ({{empFor.auxFlagpracticas? 'Si': 'No'}}) " binary="true"
+                            [(ngModel)]="empFor.auxFlagpracticas " [disabled]="!editaFormacion"></p-checkbox>
+                    </div>
+                </div>
+                <div class="p-grid" *ngIf="empFor.pk.tipomaestro=='S'">
+                    <div class="p-col-12 p-md-6 p-lg-8 ">
+                        <span>Col. Profesional</span>
+                        <p-dropdown appendTo="body" [disabled]="!editaFormacion " [style]="{ 'width': '100%'}"
+                            [(ngModel)]="empFor.colegioprofesional " [options]="colegiosprofesionales ">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-col-12 p-md-6 p-lg-4">
+                        <span>Nro Colegiatura</span>
+                        <input pInputText type="text" [disabled]="!editaFormacion "
+                            [(ngModel)]="empFor.colegioprofesionalpadron" maxlength="20" />
+                    </div>
+                </div>
+            </p-tabPanel>
+            <p-tabPanel header="Información Adicional">
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-6 p-lg-12">
+                        <span>Observación</span>
+                        <textarea pInputTextarea style="width:100%" [(ngModel)]="empFor.observaciones"
+                            [disabled]="!editaFormacion" maxlength="500"></textarea>
+                    </div>
+                </div>
+                <div class="p-grid">
+                    <div class="p-col-12 p-md-12 p-lg-12">
+                        <label>Adjunto</label>
+                        <div class="p-inputgroup">
+                            <input pInputText type="text" disabled [(ngModel)]="empFor.auxDocumentoNombre"
+                                style="flex: 15;" />
+                            <input #photoInput2 type="file" class="form-control" style="display:none"
+                                (change)="cargarFormacion(photoInput2)" [disabled]="!editaFormacion">
+                            <button pButton icon="fa fa-plus" class="p-button" type="button" style="flex: 1;"
+                                (click)="photoInput2.click()" [disabled]="!editaFormacion"></button>
+                            <button pButton icon="fa fa-download" class="p-button" type="button" style="flex: 1;"
+                                (click)="descargarFormacion()"></button>
+                        </div>
+                    </div>
+                </div>
+            </p-tabPanel>
+        </p-tabView>
+
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Guardar" style="width:100%;" icon="fad fa-save"
+                    *ngIf="editaFormacion" class="p-button-outlined" (click)="guardarFormacion()"></button>
+            </div>
+            <div class="p-col-12 p-md-8"></div>
+            <div class="p-col-12 p-md-2">
+                <br>
+                <button pButton pRipple type="button" label="Salir" style="width:100%;" icon="fad fa-reply"
+                    class="p-button-outlined p-button-secondary" (click)="verModalFormacion=false"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+<div class="ui-fluid">
+    <transaccion-botones (block)="bloquearPagina()" (unBlock)="desbloquearPagina()" (cargarDataEvent)="coreSalir()">
+    </transaccion-botones>
+    <br>
+    <transaccion-seguimiento></transaccion-seguimiento>
+</div>
+<app-selector-ubicaciongeografica></app-selector-ubicaciongeografica>
+<app-centro-estudios-selector></app-centro-estudios-selector>
+<app-selector-curso></app-selector-curso>
+<app-centro-estudios-selector-carrera></app-centro-estudios-selector-carrera>

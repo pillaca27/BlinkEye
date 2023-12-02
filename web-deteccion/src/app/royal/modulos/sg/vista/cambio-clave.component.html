@@ -1,0 +1,102 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Usuario</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="usuario" [disabled]='verUsuario' />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Clave Anterior</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="clave" pPassword class="ui-inputtext ui-widget" style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Clave Nueva</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="clave1" pPassword class="ui-inputtext ui-widget" style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Repetir Clave</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="clave2" pPassword class="ui-inputtext ui-widget" style="height: 23px; font-size: 15px !important;" type="password" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-grid" *ngIf="mensajeAMostrar">
+                <div class="p-col-12 p-md-12 p-lg-12">
+                    <label style="color:#ff0000;font-weight: bolder;font-size: 13px;">{{mensajeAMostrar}}</label>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<!-- <div class="p-grid">
+    <div class="p-fluid p-formgrid p-grid">
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-10">
+            <span>Usuario</span>
+            <input pInputText [(ngModel)]="usuario" [disabled]='verUsuario' />
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-10">
+            <span style="color:#ff0000">Clave Anterior</span>
+            <input [(ngModel)]="clave" pPassword class="ui-inputtext ui-widget"
+                style="height: 23px; font-size: 15px !important;" type="password" />
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-10">
+            <span style="color:#ff0000">Clave Nueva</span>
+            <input [(ngModel)]="clave1" pPassword class="ui-inputtext ui-widget"
+                style="height: 23px; font-size: 15px !important;" type="password" />
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+        <div class="p-col-12 p-md-12 p-lg-10">
+            <span style="color:#ff0000">Repetir Clave</span>
+            <input [(ngModel)]="clave2" pPassword class="ui-inputtext ui-widget"
+                style="height: 23px; font-size: 15px !important;" type="password" />
+        </div>
+        <div class="p-col-12 p-md-12 p-lg-1"></div>
+    </div>
+</div>
+ -->
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS1M">
+</app-botones-mantenimiento>
+
+<!-- <br> -->
+
+<!-- <div class="p-grid">
+    <div class="p-col-12 p-md-12 p-lg-1"></div>
+    <div class="p-col-12 p-md-12 p-lg-4">
+        <button pButton pRipple type="button" label="Guardar" icon="fad fa-save" class="p-button-outlined"
+            (click)="guardar()"></button>
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-2"></div>
+    <div class="p-col-12 p-md-12 p-lg-4">
+      
+    </div>
+    <div class="p-col-12 p-md-12 p-lg-1"></div>
+</div> -->

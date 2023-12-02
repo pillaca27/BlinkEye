@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : acreferenciafiscal
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<sql-query name="accostcenterdestination.listar">
+	    <![CDATA[
+	        select costcenterdestination as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_COSTCENTERDESTINATION	        
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accostcenterdestination.listarActivos">
+	    <![CDATA[
+	        select costcenterdestination as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_COSTCENTERDESTINATION
+	        where status = 'A'
+	        order by localname
+	    ]]>
+	</sql-query>
+	
+	<sql-query name="accostcenterdestination.obtenerTabla">
+	    <![CDATA[
+	        select costcenterdestination as "codigo", localname as "nombre", status as "estadoId" 
+	        from AC_COSTCENTERDESTINATION
+			where costcenterdestination = :p_costcenterdestination
+	    ]]>
+	 </sql-query>
+	 
+	 <sql-query name="accostcenterdestination.listarfiltros">
+    	select costcenterdestination as "codigo", localname as "nombre"
+    			,STATUS as "estadoId" 
+    	from AC_COSTCENTERDESTINATION 
+    	where  costcenterdestination = ISNULL(:p_costcenterdestination,costcenterdestination)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))			
+		order by localname   	
+	</sql-query>
+	
+	<sql-query name="accostcenterdestination.obtenerDto">
+         select 
+			COSTCENTERDESTINATION "costcenterdestination"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+         from AC_COSTCENTERDESTINATION
+         where 
+			COSTCENTERDESTINATION = :p_costcenterdestination
+    </sql-query>
+    
+  	
+  	<sql-query name="accostcenterdestination.listardtofiltros">
+    	select 
+			COSTCENTERDESTINATION "costcenterdestination"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,STATUS "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+         from AC_COSTCENTERDESTINATION
+         where 
+				COSTCENTERDESTINATION = ISNULL(:p_costcenterdestination,costcenterdestination)
+			and UPPER(ISNULL(localname,'xxx')) like '%' || ISNULL(:p_localname,UPPER(localname)) || '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))
+		order by localname
+  	</sql-query>
+  	
+</hibernate-mapping>

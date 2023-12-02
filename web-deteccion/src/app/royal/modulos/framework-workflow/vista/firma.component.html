@@ -1,0 +1,82 @@
+<div class="ui-fluid">
+    <p-dialog header="Firma de documentos" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        [blockScroll]="true" hideEffect="size" [style]="{width: '650px', height: '600px'}" [contentStyle]="{'overflow-y': 'auto', 'overflow-x': 'hidden',
+    'max-height': '85vh','min-height':'600px'}">
+
+        <div class="p-grid" style="margin-top: 10px;">
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <button pButton type="button" label="Imagen" (click)="photoInput.click()" style="width: 100%;"></button>
+                <input #photoInput type="file" class="form-control" style="display:none"
+                    (change)="cargarFolio(photoInput)">
+            </div>
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <button pButton type="button" label="Dibujar" (click)="mostrarCuadroImagen()"
+                    style="width: 100%;"></button>
+            </div>
+            <div class="p-col-12 p-md-1 p-lg-1">
+                <button pButton type="button" icon="pi pi-briefcase" (click)="mostrarCuadroTam()"
+                    style="width: 100%;"></button>
+            </div>
+
+            <div class="p-md-5 p-lg-5">
+            </div>
+
+            <div class="p-col-12 p-md-2 p-lg-2">
+                <button pButton type="button" label="Aceptar" (click)="aceptarPosicion()" style="width: 100%;"></button>
+            </div>
+
+            <div class="p-col-12 p-md-12 p-lg-12" style="position: relative;border: 1px solid;">
+
+                <p-scrollPanel [style]="{width:'100%', height:'525px'}" styleClass="custombarFirma">
+                    <app-canvas #cIMG (refresh)="refresh()" [canDrag]="true" [absolute]="false"></app-canvas>
+                    <app-canvas #cPDF></app-canvas>
+                </p-scrollPanel>
+
+            </div>
+
+        </div>
+    </p-dialog>
+
+
+    <p-dialog header="Dibujar" [(visible)]="verSelectorFirma" modal="modal" showEffect="fade" [blockScroll]="true"
+        hideEffect="size" [style]="{width: '350px'}">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-12" style="height: 100px;">
+                <app-canvas #cREN [dibujar]='true' [width]="310" [height]="80"></app-canvas>
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <button pButton type="button" label="Aceptar" style="width: 100%;"
+                    (click)="aceptarCuadroImagen()"></button>
+            </div>
+            <div class="p-md-4 p-lg-4">
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <button pButton type="button" label="Cancelar" style="width: 100%;"
+                    (click)="cancelarCuadroImagen()"></button>
+            </div>
+        </div>
+    </p-dialog>
+    <p-dialog header="Tamaño" [(visible)]="verSelectorTam" modal="modal" showEffect="fade" [blockScroll]="true"
+        hideEffect="size" [style]="{width: '350px'}">
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Ancho</span>
+                <input pInputText type="number" style="width:100%" [(ngModel)]="w" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-6">
+                <span>Alto</span>
+                <input pInputText type="number" style="width:100%" [(ngModel)]="h" />
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <button pButton type="button" label="Aceptar" (click)="aceptarCuadroTam()"
+                    style="width: 100%;"></button>
+            </div>
+            <div class="p-md-4 p-lg-4">
+            </div>
+            <div class="p-col-12 p-md-4 p-lg-4">
+                <button pButton type="button" label="Cancelar" (click)="cancelarCuadroTam()"
+                    style="width: 100%;"></button>
+            </div>
+        </div>
+    </p-dialog>
+</div>

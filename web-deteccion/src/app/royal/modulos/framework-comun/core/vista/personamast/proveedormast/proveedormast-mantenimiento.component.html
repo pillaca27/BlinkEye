@@ -1,0 +1,267 @@
+<div class="p-grid">
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Información de Pagos</b>
+        </div>
+    </p-divider>
+
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Tipo Documento</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.tipodocumentodefault" [filter]="true" [options]="lstTipoDocumento" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Tipo de Pago</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.tipopago" [filter]="true" [options]="lstTipoPago" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Tipo de Servicio</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.tiposervicio" [filter]="true" [options]="lstTipoServicio" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Moneda de Pago</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.monedapago" [filter]="true" [options]="lstMonedas" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Días para Pago</label>
+                    <div class="p-col">
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dto.numerodiaspago" mode="decimal" [style]="{'width':'100%'}" maxlength="20" [disabled]="!objetoTitulo.puedeEditar" [useGrouping]="false"></p-inputNumber>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-field p-col-12 p-md-12">
+                <p-fieldset legend="Para el caso de cheques, Girar a :">
+                    <div class="p-fluid seccionAuditoria">
+
+                        <div class="p-col-12 p-md-12">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Nombre</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.pagaranombre" maxlength="70" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-3">
+                            <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="checheNo" binary="true" inputId="binary"></p-checkbox>
+                            &nbsp;&nbsp;<label for="ny">Cheque NO Negociable</label>
+                        </div>
+
+                        <div class="p-field p-col-12 p-md-6">
+                            <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="retenerPago" binary="true" inputId="binary"></p-checkbox>
+                            &nbsp;&nbsp;<label for="ny">Retener Pagos (Lista Beneficiados)</label>
+                        </div>
+
+                    </div>
+
+                </p-fieldset>
+            </div>
+        </div>
+    </div>
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Información Adicional</b>
+        </div>
+    </p-divider>
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Nacionalidad</label>
+                    <div class="p-col">
+                        <div class="p-inputgroup">
+                            <div class="p-field-checkbox">
+                                <p-radioButton name="rbaceptacion" [disabled]="!objetoTitulo.puedeEditar" label="Extranjero" value="E" [(ngModel)]="dto.suspensionfonaviflag" inputId="rbaceptacion">
+                                </p-radioButton>
+                            </div>&nbsp;&nbsp;&nbsp;
+                            <div class="p-field-checkbox">&nbsp;
+                                <p-radioButton name="rbaceptacion" [disabled]="!objetoTitulo.puedeEditar" label="Nacional" value="N" [(ngModel)]="dto.suspensionfonaviflag" inputId="rbaceptacion">
+                                </p-radioButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Contacto/Vendedor</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.personacontacto" maxlength="50" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Representante Legal</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.representantelegal" maxlength="50" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Registro Público</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.registropublico" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Licencia Municipal</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.licenciamunicipal" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Fecha Constitución</label>
+                    <div class="p-col">
+                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.fechaconstitucion" dateFormat="dd/mm/yy" [readonlyInput]="true" [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Experiencia en el Ramo</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.experienciatiempo" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Información de Compras</b>
+        </div>
+    </p-divider>
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Forma de Pago</label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.formadepago" [filter]="true" [options]="lstFormaPago" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Días Entrega</label>
+                    <div class="p-col">
+                        <p-inputNumber [locale]="locale" [(ngModel)]="dto.numerodiasentrega" mode="decimal" [style]="{'width':'100%'}" maxlength="20" [disabled]="!objetoTitulo.puedeEditar" [useGrouping]="false"></p-inputNumber>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-4"></div>
+            <div class="p-col-12 p-md-9">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Observaciones</label>
+                    <div class="p-col">
+                        <textarea pInputTextarea rows="2" [(ngModel)]="dto.comentarioservicio" maxlength="100" (keyup)="observacionesKey()" [disabled]="!objetoTitulo.puedeEditar" style="width: 100%; max-width: 100%;"> </textarea>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-3"></div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Observ. Usuario</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.comentariousuario" maxlength="20" type="text" [disabled]="true" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+            <div class="p-col-12 p-md-4">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label">Observ. Fecha</label>
+                    <div class="p-col">
+                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [disabled]="true" [(ngModel)]="dto.comentariofecha" dateFormat="dd/mm/yy" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <p-divider align="left">
+        <div class="p-d-inline-flex p-ai-center">
+            <i class="pi pi-bars p-mr-2"></i>
+            <b>Información Fiscal</b>
+        </div>
+    </p-divider>
+    <div class="p-col-12">
+        <div class="p-fluid p-formgrid p-grid">
+            <div class="p-field p-col-12 p-md-3">
+                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="checExonerado" binary="true" inputId="binary"></p-checkbox>
+                &nbsp;&nbsp;<label for="ny">Exonerado de Renta</label>
+            </div>
+
+            <div class="p-col-12 p-md-3" *ngIf="checExonerado">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Fecha</label>
+                    <div class="p-col">
+                        <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true" [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.exoneradofechafinal" dateFormat="dd/mm/yy" [ngStyle]="{'width': '100%'}" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                    </div>
+                </div>
+            </div>
+            <div class="p-field p-col-12 p-md-3" *ngIf="!checExonerado"></div>
+            <div class="p-field p-col-12 p-md-6"></div>
+
+            <div class="p-field p-col-12 p-md-3">
+                <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="checkDetraccion" binary="true" inputId="binary"></p-checkbox>
+                &nbsp;&nbsp;<label for="ny">Afecto a Detracción</label>
+            </div>
+
+            <div class="p-col-12 p-md-3" *ngIf="checkDetraccion">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label"></label>
+                    <div class="p-col">
+                        <p-dropdown [(ngModel)]="dto.detraccioncodigo" [filter]="true" [options]="lstDestracciones" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-col-12 p-md-3" *ngIf="checkDetraccion">
+                <div class="p-field p-grid">
+                    <label class="p-col-fixed label importante">Cuenta Detracción</label>
+                    <div class="p-col">
+                        <input pInputText [(ngModel)]="dto.detraccioncuentabancaria" maxlength="20" type="text" pKeyFilter="num" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : workflow.WfMacroProcesoDetalle
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="wfmacroprocesodetalle.obtenerDtoPorId">
+         select 
+			MACRO_PROCESO_ID "macroProcesoId"
+			,PROCESO_ORIGEN_ID "procesoOrigenId"
+			,PROCESO_DESTINO_ID "procesoDestinoId"
+			,ORDEN "orden"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE
+         where 
+			MACRO_PROCESO_ID = :p_macroprocesoid
+			AND PROCESO_ORIGEN_ID = :p_procesoorigenid
+			AND PROCESO_DESTINO_ID = :p_procesodestinoid
+
+    </sql-query>
+
+    <sql-query name="wfmacroprocesodetalle.listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE
+    </sql-query>
+
+    <sql-query name="wfmacroprocesodetalle.listarPaginadoSentencia">
+         select 
+			MACRO_PROCESO_ID "macroProcesoId"
+			,PROCESO_ORIGEN_ID "procesoOrigenId"
+			,PROCESO_DESTINO_ID "procesoDestinoId"
+			,ORDEN "orden"
+			,CREACION_USUARIO "creacionUsuario"
+			,CREACION_FECHA "creacionFecha"
+			,MODIFICACION_USUARIO "modificacionUsuario"
+			,MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE
+    </sql-query>
+
+    <sql-query name="wfmacroprocesodetalle.obtenerDto">
+         select 
+			a.MACRO_PROCESO_ID "macroProcesoId"
+			,a.PROCESO_ORIGEN_ID "procesoOrigenId"
+			,a.PROCESO_DESTINO_ID "procesoDestinoId"
+			,a.ORDEN "orden"
+			,a.CREACION_USUARIO "creacionUsuario"
+			,a.CREACION_FECHA "creacionFecha"
+			,a.MODIFICACION_USUARIO "modificacionUsuario"
+			,a.MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE a
+         where 
+			a.MACRO_PROCESO_ID = :p_macroprocesoid
+			AND a.PROCESO_ORIGEN_ID = :p_procesoorigenid
+			AND a.PROCESO_DESTINO_ID = :p_procesodestinoid
+
+    </sql-query>
+    
+      <sql-query name="wfmacroprocesodetalle.L_listarPaginadoContar">
+         select count(1)
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE a
+         where 
+			a.MACRO_PROCESO_ID = ISNULL(:p_macroprocesoid, a.MACRO_PROCESO_ID)
+			AND a.PROCESO_ORIGEN_ID = ISNULL(:p_procesoorigenid, a.PROCESO_ORIGEN_ID)
+			AND a.PROCESO_DESTINO_ID = ISNULL(:p_procesodestinoid, a.PROCESO_DESTINO_ID)
+
+    </sql-query>
+
+    <sql-query name="wfmacroprocesodetalle.L_listarPaginadoSentencia">
+         select 
+			a.MACRO_PROCESO_ID "macroProcesoId"
+			,a.PROCESO_ORIGEN_ID "procesoOrigenId"
+			,a.PROCESO_DESTINO_ID "procesoDestinoId"
+			,a.ORDEN "orden"
+			,a.CREACION_USUARIO "creacionUsuario"
+			,a.CREACION_FECHA "creacionFecha"
+			,a.MODIFICACION_USUARIO "modificacionUsuario"
+			,a.MODIFICACION_FECHA "modificacionFecha"
+
+         from sgworkflowsys.WF_MACRO_PROCESO_DETALLE a
+         where 
+			a.MACRO_PROCESO_ID = ISNULL(:p_macroprocesoid, a.MACRO_PROCESO_ID)
+			AND a.PROCESO_ORIGEN_ID = ISNULL(:p_procesoorigenid, a.PROCESO_ORIGEN_ID)
+			AND a.PROCESO_DESTINO_ID = ISNULL(:p_procesodestinoid, a.PROCESO_DESTINO_ID)
+
+    </sql-query>
+</hibernate-mapping>

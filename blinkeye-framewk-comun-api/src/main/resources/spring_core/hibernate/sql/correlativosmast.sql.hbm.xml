@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : core.Correlativosmast
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="correlativosmast.obtenerDtoPorId">
+         select 
+			COMPANIACODIGO "companiacodigo"
+			,TIPOCOMPROBANTE "tipocomprobante"
+			,SERIE "serie"
+			,DESCRIPCION "descripcion"
+			,cast(CORRELATIVONUMERO as money) as "correlativonumero"
+			,cast(CORRELATIVODESDE as money) as "correlativodesde"
+			,cast(CORRELATIVOHASTA as money) as "correlativohasta"
+			,ALMACENCODIGO "almacencodigo"
+			,cast (Estado as varchar(1)) as "estado"   
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			,FEFLAG "feflag"
+			,FEENVIO "feenvio"
+			,FETIPOCOMPROBANTEREF "fetipocomprobanteref"
+
+         from CORRELATIVOSMAST
+         where 
+			COMPANIACODIGO = :p_companiacodigo
+			AND TIPOCOMPROBANTE = :p_tipocomprobante
+			AND SERIE = :p_serie
+
+    </sql-query>
+
+    <sql-query name="correlativosmast.obtenerDto">
+         select 
+			COMPANIACODIGO "companiacodigo"
+			,TIPOCOMPROBANTE "tipocomprobante"
+			,SERIE "serie"
+			,DESCRIPCION "descripcion"
+			,ALMACENCODIGO "almacencodigo"
+
+         from CORRELATIVOSMAST
+         where 
+			COMPANIACODIGO = :p_companiacodigo
+			AND TIPOCOMPROBANTE = :p_tipocomprobante
+			AND SERIE = :p_serie
+
+    </sql-query>
+    
+    <sql-query name="correlativosmast.listarPaginadoContar">
+     <![CDATA[
+         select count(*)
+         from CORRELATIVOSMAST
+           where COMPANIACODIGO= ISNULL(:p_companiacodigo,COMPANIACODIGO) AND
+          TIPOCOMPROBANTE= ISNULL(:p_tipocomprobante,TIPOCOMPROBANTE) AND
+          UPPER(ISNULL(SERIE,'xxx')) like '%' + ISNULL(:p_serie,UPPER(SERIE)) + '%'
+           ]]>
+    </sql-query>
+
+    <sql-query name="correlativosmast.listarPaginadoSentencia">
+    <![CDATA[
+         select 
+			COMPANIACODIGO "companiacodigo"
+			,TIPOCOMPROBANTE "tipocomprobante"
+			,SERIE "serie"
+			,DESCRIPCION "descripcion"
+			,cast(CORRELATIVONUMERO as int) as "correlativonumero"
+			,cast(CORRELATIVODESDE as int) as "correlativodesde"
+			,cast(CORRELATIVOHASTA as int) as "correlativohasta"
+			,ALMACENCODIGO "almacencodigo"
+			,cast (Estado as varchar(1)) as "estado"  
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+			, case when cast(ESTADO as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+         from CORRELATIVOSMAST
+          where COMPANIACODIGO= ISNULL(:p_companiacodigo,COMPANIACODIGO) AND
+          TIPOCOMPROBANTE= ISNULL(:p_tipocomprobante,TIPOCOMPROBANTE) AND
+          UPPER(ISNULL(SERIE,'xxx')) like '%' + ISNULL(:p_serie,UPPER(SERIE)) + '%'
+          
+          ORDER BY TIPOCOMPROBANTE,SERIE,COMPANIACODIGO ASC
+           ]]>
+    </sql-query>
+    
+    
+        <sql-query name="correlativosmast.listarTipos">
+	    <![CDATA[
+	SELECT TipoComprobanteMast.TipoComprobante as "codigo",   
+         TipoComprobanteMast.DescripcionCorta as "nombre"
+    FROM TipoComprobanteMast  
+   WHERE TipoComprobanteMast.Estado = 'A'
+ORDER BY TipoCOmprobante    
+
+	    ]]>
+	</sql-query>
+	
+	
+	
+
+</hibernate-mapping>

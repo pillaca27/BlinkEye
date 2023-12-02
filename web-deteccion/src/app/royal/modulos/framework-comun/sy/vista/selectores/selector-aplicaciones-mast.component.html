@@ -1,0 +1,69 @@
+<div class="ui-fluid">
+
+    <p-dialog header="SELECTOR DE APLICACIONESMAST" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        hideEffect="size" [style]="{'width':'700px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Aplicación Código</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.aplicacioncodigo"
+                    (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <span>Descripción</span>
+                <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.descripcioncorta"
+                    (keypress)="preBuscar($event, dtUbicacionGeo)" />
+            </div>
+
+            <div class="p-col-12 p-md-6 p-lg-3">
+                <span>Estado</span><br>
+                <!--   <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtro.estado" (keypress)="preBuscar($event, dtUbicacionGeo)" /> -->
+                <p-dropdown [options]="lstEstados" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}"
+                    [disabled]="true"></p-dropdown>
+            </div>
+
+            <div class="p-col-12 p-md-6 p-lg-2">
+                <span></span><br>
+                <div class="p-fluid p-formgrid p-grid" style="margin-right: 0 !important;
+                margin-left: 0 !important;">
+                    <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                        (click)="coreBuscar(dtUbicacionGeo)" [style]="{'width':'100%'}"
+                        class="ui-button ui-button-rounded"></button>
+                </div>
+            </div>
+        </div>
+        <br>
+        <p-table #dtUbicacionGeo [rows]="registrosPorPagina" [lazy]="true"
+            [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" selectionMode="single"
+            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarPuesto($event)"
+            [(selection)]="registroSeleccionado" [responsive]="true" [style]="{'width':'100%'}">
+            <ng-template pTemplate="header">
+                <tr>
+                    <th class="tablaHeaderAccion1">Acción</th>
+                    <th class="tablaHeaderCodigo">Aplicación Código</th>
+                    <th class="tablaHeaderIzquierda">Descripción</th>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="body" let-row let-columns="columns">
+                <tr>
+                    <td class="tablaColumnaAccion1"> <span class="p-column-title">Acción</span>
+                        <button pButton pRipple type="button" icon="fa fa-check" class="p-button-rounded p-button-text"
+                            title="Seleccionar" (click)="coreSeleccionar(row)"></button>
+                    </td>
+                    <td class="tablaColumnaCodigo"><span class="p-column-title">Código</span>{{row.aplicacioncodigo}}
+                    </td>
+                    <td class="tablaColumnaIzquierda"><span
+                            class="p-column-title">Descripción</span>{{row.descripcioncorta}}</td>
+                </tr>
+            </ng-template>
+            <ng-template pTemplate="emptymessage" let-columns>
+                <tr>
+                    <td [attr.colspan]="3">
+                        No se encontraron registros
+                    </td>
+                </tr>
+            </ng-template>
+        </p-table>
+
+    </p-dialog>
+</div>

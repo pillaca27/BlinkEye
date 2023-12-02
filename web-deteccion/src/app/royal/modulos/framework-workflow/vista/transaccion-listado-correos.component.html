@@ -1,0 +1,142 @@
+<p-table #dtFlujoNivel [style]="{'width': '100%'}" [responsive]="true" [scrollable]="true" [value]="dtoListado"
+    [globalFilterFields]="['flujoId','tipoAprobadorNombre','estadoNombre','aprobadores']">
+
+    <ng-template pTemplate="caption">
+        <div class="flex">
+            <button pButton label="Clear" class="p-button-outlined" icon="pi pi-filter-slash"
+                (click)="clear(dtFlujoNivel)"></button>
+            <span class="p-input-icon-left ml-auto">
+                <input pInputText type="text" (input)="dtFlujoNivel.filterGlobal($event.target.value, 'contains')"
+                    placeholder="Search keyword" />
+                <i class="pi pi-search"></i>
+            </span>&nbsp;
+            <button pButton type="button" label="GUARDAR" (click)="guardar()" *ngIf="!conPlantillaPorNivel"
+                class="p-button-outlined"></button>&nbsp;
+            <button pButton type="button" label="SEGUIMIENTO" (click)="seguimiento()" *ngIf="!conPlantillaPorNivel"
+                class="p-button-outlined"></button>&nbsp;
+            <button pButton type="button" label="APROBAR" (click)="aprobar()" *ngIf="!conPlantillaPorNivel"
+                class="p-button-outlined"></button>&nbsp;
+            <button pButton type="button" label="RECHAZAR" (click)="rechazar()" *ngIf="!conPlantillaPorNivel"
+                class="p-button-outlined"></button>&nbsp;
+            <button pButton type="button" label="DEVOLVER" (click)="devolver()" *ngIf="!conPlantillaPorNivel"
+                class="p-button-outlined"></button>&nbsp;
+            <button pButton type="button" label="ALERTA" (click)="alerta()" class="p-button-outlined"></button>
+            <button pButton type="button" label="EXPORTAR" (click)="coreExportar('XLS')"
+                class="p-button-outlined"></button>
+
+
+        </div>
+    </ng-template>
+    <ng-template pTemplate="header">
+        <tr>
+            <th class="tablaHeaderCodigoSuperChico">Flujo</th>
+            <th class="tablaHeaderCodigoSuperChico">Nivel</th>
+            <th class="tablaHeaderAccion5">Rol (Actividad) Estado</th>
+            <!--
+                <th class="tablaHeaderAccion5">Actividad</th>
+                <th class="tablaHeaderAccion5">Estado</th>
+                -->
+            <th class="tablaHeaderAccion1">Correo Persona (Aprobadores)</th>
+            <th class="tablaHeaderAccion1">Correo Jefe</th>
+            <th class="tablaHeaderAccion1">Correo Solicitante (Usuario Requerim.)</th>
+            <th class="tablaHeaderAccion1">Correo Persona Referencia (Proveedor)</th>
+            <th class="tablaHeaderAccion1">Correo Transacción (Gestor de Compras)</th>
+            <th class="tablaHeaderNombre">Aprobadores</th>
+            <th class="tablaHeaderNombre">Correos</th>
+            <th *ngIf="conPlantillaPorNivel" class="tablaHeader3BotonesLabel">Plantillas de Correo</th>
+            <th class="tablaHeaderNombre">Otros Correos</th>
+            <th *ngIf="conPlantillaPorNivel" class="tablaHeader3BotonesLabel">Ejecucion de Plantillas</th>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="body" let-rowData let-columns="columns">
+        <tr>
+            <td class="tablaColumnaCodigoSuperChico"><span class="p-column-title">Flujo</span>{{rowData.flujoId}}</td>
+            <td class="tablaColumnaCodigoSuperChico"><span class="p-column-title">Nivel</span>{{rowData.nivelId}}</td>
+            <td class="tablaColumnaAccion5"><span class="p-column-title">Rol (Actividad)
+                    Estado</span>{{rowData.tipoAprobadorNombre}} ({{rowData.accion}}) {{rowData.estadoNombre}}</td>
+            <!--
+                <td class="tablaColumnaAccion5"><span class="p-column-title">Actividad</span>{{rowData.accion}}</td>
+                <td class="tablaColumnaAccion5"><span class="p-column-title">Estado</span>{{rowData.estadoNombre}}</td>
+                -->
+            <td class="tablaColumnaAccion1"><span class="p-column-title">Correo Persona</span>{{rowData.correoPersona}}
+            </td>
+            <td class="tablaColumnaAccion1"><span class="p-column-title">Correo Jefe</span>{{rowData.correoJefe}}</td>
+            <td class="tablaColumnaAccion1"><span class="p-column-title">correo Solicitante (Usuario
+                    Requerimiento)</span>{{rowData.correoSolicitante}}</td>
+            <td class="tablaColumnaAccion1"><span class="p-column-title">Correo Persona
+                    Referencia</span>{{rowData.correoPersonaReferencia}}</td>
+            <td class="tablaColumnaAccion1"><span class="p-column-title">Correo
+                    Transacción</span>{{rowData.correoTransaccion}}</td>
+
+            <td class="tablaColumnaNombre"><span class="p-column-title">Aprobadores</span>{{rowData.aprobadores}}</td>
+            <td class="tablaColumnaNombre"><span class="p-column-title">Correos</span>{{rowData.aprobadoresCorreos}}
+            </td>
+            <td class="tablaColumna3BotonesLabel" *ngIf="conPlantillaPorNivel">
+                <span class="p-column-title">Plantilla Correos</span>
+
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-success" type="button" label="Aprobar"
+                                    [icon]="iconoPlantilla(rowData, 'A')"
+                                    (click)="verPlantillaAprobar(rowData)"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-danger" type="button" label="Rechazar"
+                                    [icon]="iconoPlantilla(rowData, 'R')"
+                                    (click)="verPlantillaRechazar(rowData)"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-warning" type="button"
+                                    label="Devolver" [icon]="iconoPlantilla(rowData, 'D')"
+                                    (click)="verPlantillaDevolver(rowData)"></button>
+                            </div>
+                            <!-- <div class="p-field p-col-12 p-md-3">
+                                    <button pButton class="p-button-outlined p-button-warning"
+                                        type="button" label="Seguimiento"
+                                        [icon]="iconoPlantilla(rowData, 'S')"
+                                        (click)="verPlantillaSeguimiento(rowData)"></button>
+                                </div> -->
+                        </div>
+                    </div>
+                </div>
+            </td>
+            <td class="tablaColumnaNombre"><span class="p-column-title">Otros Correos</span>{{rowData.correoOtros}}</td>
+            <td class="tablaColumna3BotonesLabel" *ngIf="conPlantillaPorNivel">
+                <span class="p-column-title">Ejecución de Plantillas</span>
+
+                <div class="p-grid">
+                    <div class="p-col-12">
+                        <div class="p-fluid p-formgrid p-grid">
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-success" type="button" label="Aprobar"
+                                    icon="fad fa-search" (click)="verPlantillaEjecucionAprobar(rowData)"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-danger" type="button" label="Rechazar"
+                                    icon="fad fa-search" (click)="verPlantillaEjecucionRechazar(rowData)"></button>
+                            </div>
+                            <div class="p-field p-col-12 p-md-4">
+                                <button pButton class="p-button-outlined p-button-warning" type="button"
+                                    label="Devolver" icon="fad fa-search"
+                                    (click)="verPlantillaEjecucionDevolver(rowData)"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </td>
+        </tr>
+    </ng-template>
+    <ng-template pTemplate="emptymessage" let-columns>
+        <tr>
+            <td [attr.colspan]="13">
+                No existen registros para mostrar
+            </td>
+        </tr>
+    </ng-template>
+</p-table>
+
+<!-- (cargarSeleccionEvent)="listar()" -->
+
+<app-wf-popsyreportedetalle (cargarSeleccionEvent)="confirmarPlantilla($event)"></app-wf-popsyreportedetalle>

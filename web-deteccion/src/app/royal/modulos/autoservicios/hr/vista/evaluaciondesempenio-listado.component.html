@@ -1,0 +1,134 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Compañía</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxCompaniaNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarCompania()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxCompaniaNombre=null;filtro.compania=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText style="width:100%;" [(ngModel)]="filtro.descripcion" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText disabled style="width:100%;flex: 5;" [(ngModel)]="filtro.auxEstadoNombre" />
+                                <button pButton icon="fa fa-binoculars" type="button" title="Buscar" (click)="buscarEstado()" [style]="{'flex': '1'}"></button>
+                                <button pButton icon="fa fa-trash" type="button" title="Limpiar" (click)="filtro.auxEstadoNombre=null;filtro.estado=null;" [style]="{'flex': '1'}"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-col-12 p-md-2">
+        </div>
+        <div class="p-col-12 p-md-8"></div>
+        <div class="p-col-12 p-md-2">
+            <br>
+            <button pButton pRipple type="button" label="Buscar" icon="fa fa-binoculars" (click)="buscar()"></button>
+        </div>
+    </div>
+
+    <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros" [paginator]="true" [totalRecords]="listaEvaluaciones.length"
+        [value]="listaEvaluaciones" [(selection)]="registroSeleccionado" selectionMode="single">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion2">Acciones</th>
+                <th class="tablaHeaderNombreMedio">Compañía</th>
+                <th class="tablaHeaderCodigoChico">Evaluación</th>
+                <th class="tablaHeaderNombreMedio">Descripción</th>
+                <th class="tablaHeaderCodigoChico">Periodo</th>
+                <th class="tablaHeaderFecha">Inicio</th>
+                <th class="tablaHeaderFecha">Fin</th>
+                <th class="tablaHeaderCodigo">Estado</th>
+                <th class="tablaHeaderCodigoChico">Por Evaluar</th>
+                <th class="tablaHeaderCodigoChico">Evaluando</th>
+                <th class="tablaHeaderCodigoChico">Evaluados</th>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-rowData let-columns="columns">
+            <tr [pSelectableRow]="rowData">
+                <td class="tablaColumnaAccion2">
+                    <span class="p-column-title">Acciones</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-eye" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="ver(rowData)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" *ngIf="rowData.puedeEvaluar=='SI'" class="p-button-rounded p-button-text botonGrilla" title="Evaluar" (click)="evaluar(rowData)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Compañía</span> {{rowData.companiaDescripcion}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Evaluación</span> {{rowData.evaluacion}}
+                </td>
+                <td class="tablaColumnaNombreMedio">
+                    <span class="p-column-title">Descripción</span> {{rowData.evaluacionDescripcion}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Periodo</span> {{rowData.periodo}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Inicio</span> {{rowData.fechaHoraPlanInicio}}
+                </td>
+                <td class="tablaColumnaFecha">
+                    <span class="p-column-title">Fin</span> {{rowData.fechaHoraPlanFin}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Estado</span> {{rowData.estadoNombre}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Por Evaluar</span> {{rowData.nroParticipantesPorEvaluar}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Evaluando</span> {{rowData.nroParticipantesEnEvaluacion}}
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Evaluados</span> {{rowData.nroParticipantesEvaluados}}
+                </td>
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="11">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<app-selector-compania></app-selector-compania>
+<app-selector-miscelaneos></app-selector-miscelaneos>

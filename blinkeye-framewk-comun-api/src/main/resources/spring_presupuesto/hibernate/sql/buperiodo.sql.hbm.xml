@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : bupeiheader
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+    
+     <sql-query name="buperiodo.listarPeriodospoi">
+    	select 	periodo as "idOracle", 
+    			descripcion as "nombre"
+    	from BU_PERIODO 
+    	where Modulo = 'OI' 
+    	order by periodo desc
+    </sql-query>
+    
+    <sql-query name="buperiodo.obtenerPeriodoPoiActual">
+    	SELECT BU_Periodo.Periodo as "periodoOracle",
+            BU_Periodo.Descripcion as "descripcion",   
+            BU_Periodo.Anodesde as "anodesdeOracle",   
+            BU_Periodo.Anohasta as "anohastaOracle",    
+            BU_Periodo.estado as "estado"
+        FROM BU_Periodo  
+        WHERE ( BU_Periodo.Modulo = 'OI' )
+        AND ( BU_Periodo.Periodo = :p_periodo )
+  	</sql-query>
+    
+	<sql-query name="buperiodo.obtenerListaPeriodos">
+    <![CDATA[
+    	SELECT   bu_periodo.periodo as "periodoOracle", 
+            bu_periodo.descripcion as "descripcion", 
+            bu_periodo.anodesde as "anodesdeOracle",
+            bu_periodo.anohasta as "anohastaOracle",  
+            bu_periodo.estado as "estado",
+            bu_periodo.descripcion2 as "descripcion2",
+            bu_periodo.descripcion3 as "descripcion3"
+            
+            --bu_periodo.anofoda as "anofoda",
+            --bu_periodo.periodopoi as "periodopoi" 
+            --bu_periodo.flagreformulacion as "flagreformulacion"
+      from bu_periodo
+     WHERE (bu_periodo.modulo = 'OE')
+    ]]>
+	</sql-query>
+</hibernate-mapping>

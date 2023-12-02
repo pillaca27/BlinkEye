@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : astipohorario
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="astipohorario.listar">
+    	select TipoHorario as "id", DescripcionLocal as "nombre",estado as "estadoId" 
+    	from AS_TipoHorario
+    	order by descripcionlocal
+  	</sql-query>
+	
+	<sql-query name="astipohorario.listarActivos">
+    	select TipoHorario as "id", DescripcionLocal as "nombre"
+    			,estado as "estadoId" 
+    	from AS_TipoHorario 
+    	where Estado = 'A'
+    	order by descripcionlocal
+  	</sql-query>
+  	
+  	<sql-query name="astipohorario.obtenertabla">
+    	select TipoHorario as "id", DescripcionLocal as "nombre" 
+    			,estado as "estadoId"
+    	from AS_TipoHorario 
+    	where tipohorario = :p_tipohorario
+  	</sql-query>
+	
+	<sql-query name="astipohorario.obtenerdto">
+    	SELECT A.tipohorario as "tipohorario",
+		       A.descripcionlocal as "descripcionlocal",
+		       A.descripcionextranjera as "descripcionextranjera",
+		       A.tipoturno as "tipoturno",
+		       A.lunes as "lunes",
+		       A.martes as "martes",
+		       A.miercoles as "miercoles",
+		       A.jueves as "jueves",
+		       A.viernes as "viernes",
+		       A.sabado as "sabado",
+		       A.domingo as "domingo",
+		       A.estado as "estado",
+		       A.ultimousuario as "ultimousuario",
+		       A.ultimafechamodif as "ultimafechamodif"
+		FROM   as_tipohorario A
+		where A.tipohorario = :p_tipohorario
+  	</sql-query>
+  	
+  	<sql-query name="astipohorario.listardtofiltros">
+    	SELECT A.tipohorario as "tipohorario",
+		       A.descripcionlocal as "descripcionlocal",
+		       A.descripcionextranjera as "descripcionextranjera",
+		       A.tipoturno as "tipoturno",
+		       A.lunes as "lunes",
+		       A.martes as "martes",
+		       A.miercoles as "miercoles",
+		       A.jueves as "jueves",
+		       A.viernes as "viernes",
+		       A.sabado as "sabado",
+		       A.domingo as "domingo",
+		       A.estado as "estado",
+		       A.ultimousuario as "ultimousuario",
+		       A.ultimafechamodif as "ultimafechamodif"
+		FROM   as_tipohorario A
+		where
+				A.tipohorario = ISNULL(:p_tipohorario,A.tipohorario)
+			and UPPER(ISNULL(a.descripcionlocal,'xxx')) like '%' || ISNULL(:p_descripcionlocal,UPPER(a.descripcionlocal)) || '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		order by descripcionlocal
+  	</sql-query>
+  	
+  	<sql-query name="astipohorario.listardtoordentipohorario">
+    	SELECT A.tipohorario as "tipohorario",
+		       A.descripcionlocal as "descripcionlocal",
+		       A.descripcionextranjera as "descripcionextranjera",
+		       A.tipoturno as "tipoturno",
+		       A.lunes as "lunes",
+		       A.martes as "martes",
+		       A.miercoles as "miercoles",
+		       A.jueves as "jueves",
+		       A.viernes as "viernes",
+		       A.sabado as "sabado",
+		       A.domingo as "domingo",
+		       A.estado as "estado",
+		       A.ultimousuario as "ultimousuario",
+		       A.ultimafechamodif as "ultimafechamodif"
+		FROM   as_tipohorario A
+		order by tipohorario
+  	</sql-query>
+  	
+  	  <sql-query name="astipohorario.obtenercomboTipoHorario">
+      <![CDATA[
+      
+	  	SELECT as_TipoHorario.TipoHorario "id",
+			as_TipoHorario.DescripcionLocal "nombre"
+			FROM as_TipoHorario
+			ORDER BY DescripcionLocal ASC
+  	
+  	
+  	   ]]>
+	 </sql-query>
+    
+    <sql-query name="astipohorario.contartipohorarioporfiltro">
+        SELECT COUNT(1)
+		FROM AS_TIPOHORARIO A
+		WHERE 1 = 1
+			AND A.TIPOHORARIO = ISNULL(:p_tipo, A.TIPOHORARIO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+    </sql-query>
+    
+    <sql-query name="astipohorario.listartipohorarioporfiltro">
+		SELECT A.TIPOHORARIO AS "id", 
+			LTRIM(RTRIM(UPPER(A.DESCRIPCIONLOCAL))) AS "descripcion", 
+			CAST(A.ESTADO AS VARCHAR) AS "estadoId"
+		FROM AS_TIPOHORARIO A
+		WHERE 1 = 1
+			AND A.TIPOHORARIO = ISNULL(:p_tipo, A.TIPOHORARIO)
+			AND A.DESCRIPCIONLOCAL like '%' + ISNULL(:p_descripcion, A.DESCRIPCIONLOCAL) + '%'
+			AND A.Estado = ISNULL(:p_estado, A.Estado)
+		ORDER BY A.DESCRIPCIONLOCAL
+    </sql-query>
+  	
+</hibernate-mapping>

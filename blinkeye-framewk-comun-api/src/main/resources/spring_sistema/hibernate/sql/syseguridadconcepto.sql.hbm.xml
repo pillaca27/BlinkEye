@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : sistema.SySeguridadconcepto
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    <sql-query name="syseguridadconcepto.obtenerDto">
+         select 
+			CAST(a.AplicacionCodigo AS VARCHAR(2)) "aplicacioncodigo"
+			,CAST(a.Grupo AS VARCHAR(20)) "grupo"
+			,CAST(a.Concepto AS VARCHAR(20)) "concepto"
+			,a.OrdenPresentacion "ordenpresentacion"
+			,CAST(a.DescripcionLocal AS VARCHAR(50)) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR(50)) "descripcioningles"
+			,CAST(a.CodigoInterno AS VARCHAR(10)) "codigointerno"
+			,CAST(a.Estado AS VARCHAR(1)) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR(20)) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from SY_SEGURIDADCONCEPTO a
+         where 
+			a.AplicacionCodigo = :p_aplicacioncodigo
+			AND a.Grupo = :p_grupo
+			AND a.Concepto = :p_concepto
+
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listarPaginadoContar">
+         select count(1)
+         from SY_SEGURIDADCONCEPTO a
+         where 
+			a.AplicacionCodigo = ISNULL(:p_aplicacioncodigo, a.AplicacionCodigo)
+			AND a.Grupo = ISNULL(:p_grupo, a.Grupo)
+			AND a.Concepto = ISNULL(:p_concepto, a.Concepto)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listarPaginadoSentencia">
+         select 
+			CAST(a.AplicacionCodigo AS VARCHAR(2)) "aplicacioncodigo"
+			,CAST(a.Grupo AS VARCHAR(20)) "grupo"
+			,CAST(a.Concepto AS VARCHAR(20)) "concepto"
+			,a.OrdenPresentacion "ordenpresentacion"
+			,CAST(a.DescripcionLocal AS VARCHAR(50)) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR(50)) "descripcioningles"
+			,CAST(a.CodigoInterno AS VARCHAR(10)) "codigointerno"
+			,CAST(a.Estado AS VARCHAR(1)) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR(20)) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+
+         from SY_SEGURIDADCONCEPTO a
+         where 
+			a.AplicacionCodigo = ISNULL(:p_aplicacioncodigo, a.AplicacionCodigo)
+			AND a.Grupo = ISNULL(:p_grupo, a.Grupo)
+			AND a.Concepto = ISNULL(:p_concepto, a.Concepto)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listarDtoCore">
+         select 
+			CAST(a.AplicacionCodigo AS VARCHAR(2)) "aplicacioncodigo"
+			,CAST(a.Grupo AS VARCHAR(20)) "grupo"
+			,CAST(a.Concepto AS VARCHAR(20)) "concepto"
+			,a.OrdenPresentacion "ordenpresentacion"
+			,CAST(a.DescripcionLocal AS VARCHAR(50)) "descripcionlocal"
+			,CAST(a.DescripcionIngles AS VARCHAR(50)) "descripcioningles"
+			,CAST(a.CodigoInterno AS VARCHAR(10)) "codigointerno"
+			,CAST(a.Estado AS VARCHAR(1)) "estado"
+			,CAST(a.UltimoUsuario AS VARCHAR(20)) "ultimousuario"
+			,a.UltimaFechaModif "ultimafechamodif"
+			,'ACTUALIZAR' "flgactualizar"
+         from SY_SEGURIDADCONCEPTO a
+         where 
+			a.AplicacionCodigo = ISNULL(:p_aplicacioncodigo, a.AplicacionCodigo)
+			AND a.Grupo = ISNULL(:p_grupo, a.Grupo)
+			AND a.Concepto = ISNULL(:p_concepto, a.Concepto)
+			AND a.DescripcionLocal like '%' + ISNULL(:p_descripcionlocal, a.DescripcionLocal) + '%' 
+			AND a.Estado = ISNULL(:p_estado, a.Estado)
+
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listar">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listarActivos">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+    </sql-query>
+
+    <sql-query name="syseguridadconcepto.listaCortaPorNombre">
+         select 
+             'codigo' AS "codigo"
+             ,'nombre' AS "nombre"
+             ,'estadoid' AS "estadoId"
+         from dual
+         limit 15
+    </sql-query>
+
+</hibernate-mapping>

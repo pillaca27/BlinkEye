@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : prtipoproceso
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+    
+     <sql-query name="prtipoplanillaperiodosemana.obtenerDto">
+         select 
+			TIPOPLANILLA "tipoplanilla"
+			,PERIODOSEMANAL "periodosemanal"
+			,PERIODO "periodo"
+			,TIPOPROCESO "tipoproceso"
+			,SECUENCIA "secuencia"
+			,FECHAINICIO "fechainicio"
+			,FECHAFIN "fechafin"
+			,FLAGDESCUENTO "flagdescuento"
+
+         from PR_TIPOPLANILLAPERIODOSEMANA
+         where 
+			TIPOPLANILLA = :p_tipoplanilla
+			AND PERIODOSEMANAL = :p_periodosemanal
+			AND PERIODO = :p_xperiodo
+			AND TIPOPROCESO = :p_tipoproceso
+			AND SECUENCIA = :p_secuencia
+    </sql-query>
+    
+    <sql-query name="prtipoplanillaperiodosemana.obtenerperiodosemanal">
+         select 
+			TIPOPLANILLA "tipoplanilla"
+			,PERIODOSEMANAL "periodosemanal"
+			,Substring(PeriodoSemanal,5,2) "auxPeriodosemanalCorto"
+			,PERIODO "periodo"
+			,TIPOPROCESO "tipoproceso"
+			,SECUENCIA "secuencia"
+			,FECHAINICIO "fechainicio"
+			,FECHAFIN "fechafin"
+			,FLAGDESCUENTO "flagdescuento"
+         from PR_TIPOPLANILLAPERIODOSEMANA
+         where 
+				TIPOPLANILLA = :p_tipoplanilla
+			AND PERIODO = :p_xperiodo
+			AND TIPOPROCESO = :p_tipoproceso
+    </sql-query>
+    
+</hibernate-mapping>

@@ -1,0 +1,239 @@
+<div class="ui-fluid" *ngIf="!verSeccionCarrera">
+
+    <p-dialog header="SELECTOR DE CENTRO DE ESTUDIOS" [(visible)]="verSelector" modal="modal" showEffect="fade"
+        hideEffect="size" [style]="{'width':'700px'}">
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-12 p-lg-3">
+                <span>Código</span>
+                <input pInputText style="width: 100%;" type="number" [(ngModel)]="filtro.centro" />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-3">
+                <span>Descripción</span>
+                <input pInputText style="width: 100%;" type="text" [(ngModel)]="filtro.descripcion" />
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-3">
+                <span>Régimen</span>
+                <p-dropdown [options]="lstRegimen" [style]="{'width':'100%'}" [(ngModel)]="filtro.regimen">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-12 p-lg-3">
+                <span>Tipo Institución</span>
+                <p-dropdown [options]="lstTipo" [style]="{'width':'100%'}" [(ngModel)]="filtro.tipoinstitucion">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion">
+                    <div class="p-field p-col-12 p-md-3">
+                        <br>
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtCentroEstudio2)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <br>
+                        <button pButton label="Aceptar" icon="fa fa-check" type="button" (click)="aceptar()"
+                            [style]="{'width':'100%'}" class="ui-button ui-button-rounded"></button>
+                    </div>
+
+
+                    <div class="p-field p-col-12 p-md-12">
+                        <br>
+                        <p-table #dtCentroEstudio2 [rows]="registrosPorPagina" [paginator]="true" [lazy]="true"
+                            [value]="filtro.paginacion.paginacionListaResultado"
+                            (onLazyLoad)="cargarCentroEstudios($event)" selectionMode="single" [responsive]="true"
+                            [(selection)]="centroSeleccionado"
+                            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderCodigoChico">Código</th>
+                                    <th class="tablaHeaderCodigoChico">Régimen</th>
+                                    <th class="tablaHeaderCodigoChico">Tipo Inst.</th>
+                                    <th class="tablaHeaderNombreMedio">Descripción</th>
+                                    <th class="tablaHeaderCodigoChico">Código T-Registro</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns ">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código</span>
+                                        {{rowData.centro}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Régimen</span>
+                                        {{rowData.regimen}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Tipo Inst.</span>
+                                        {{rowData.tipo}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Descripción</span>
+                                        {{rowData.descripcion}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código T-Registro</span>
+                                        {{rowData.rtps}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage " let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+</div>
+
+<div class="ui-fluid" *ngIf="verSeccionCarrera">
+
+    <p-dialog header="SELECTOR DE CENTRO DE ESTUDIOS / CARRERA" [(visible)]="verSelector" modal="modal"
+        showEffect="fade" hideEffect="size" [style]="{'width':'1100px'}">
+
+
+        <div class="p-grid">
+            <div class="p-col-12 p-md-6 p-lg-2">
+                <span>Código</span>
+                <input pInputText style="width: 100%;" type="number" [(ngModel)]="filtro.centro" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <span>Descripción</span>
+                <input pInputText style="width: 100%;" type="text" [(ngModel)]="filtro.descripcion" />
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-2">
+                <span>Régimen</span>
+                <p-dropdown [options]="lstRegimen" [style]="{'width':'100%'}" [(ngModel)]="filtro.regimen">
+                </p-dropdown>
+            </div>
+            <div class="p-col-12 p-md-6 p-lg-4">
+                <span>Tipo Institución</span>
+                <p-dropdown [options]="lstTipo" [style]="{'width':'100%'}" [(ngModel)]="filtro.tipoinstitucion">
+                </p-dropdown>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid botonesSeccion">
+                    <div class="p-field p-col-12 p-md-2">
+                        <br>
+                        <button pButton label="Buscar" icon="fa fa-binoculars" type="button"
+                            (click)="coreBuscar(dtCentroEstudio)" [style]="{'width':'100%'}"
+                            class="ui-button ui-button-rounded"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-8">
+                    </div>
+                    <div class="p-field p-col-12 p-md-2">
+                        <br>
+                        <button pButton label="Aceptar" icon="fa fa-check" type="button" (click)="aceptar()"
+                            [style]="{'width':'100%'}" class="ui-button ui-button-rounded"></button>
+                    </div>
+
+
+                    <div class="p-field p-col-12 p-md-7">
+                        <br>
+                        <p-table #dtCentroEstudio [rows]="registrosPorPagina" [paginator]="true" [lazy]="true"
+                            [value]="filtro.paginacion.paginacionListaResultado"
+                            (onLazyLoad)="cargarCentroEstudios($event)" selectionMode="single" [responsive]="true"
+                            (onRowSelect)="onRowSelect()" [(selection)]="centroSeleccionado"
+                            [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderCodigoChico">Código</th>
+                                    <th class="tablaHeaderCodigoChico">Régimen</th>
+                                    <th class="tablaHeaderCodigoChico">Tipo Inst.</th>
+                                    <th class="tablaHeaderNombreMedio">Descripción</th>
+                                    <th class="tablaHeaderCodigoChico">Código T-Registro</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns ">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código</span>
+                                        {{rowData.centro}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Régimen</span>
+                                        {{rowData.regimen}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Tipo Inst.</span>
+                                        {{rowData.tipo}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Descripción</span>
+                                        {{rowData.descripcion}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código T-Registro</span>
+                                        {{rowData.rtps}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage " let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-5">
+                        <br>
+                        <p-table #dt1 [rows]="registrosPorPagina" [paginator]="true" [value]="carreras"
+                            selectionMode="single" [responsive]="true" [(selection)]="carreraSeleccionada"
+                            [totalRecords]="carreras.length" [globalFilterFields]="['profesionDescripcion']">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderCodigoChico">Código</th>
+                                    <th class="tablaHeaderNombreMedio">
+                                        <input pInputText type="text"
+                                            (input)="dt1.filterGlobal($event.target.value, 'contains')"
+                                            placeholder="Carrera" />
+                                    </th>
+                                    <th class="tablaHeaderCodigoChico">Código T-Registro</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns ">
+                                <tr [pSelectableRow]="rowData">
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código</span>
+                                        {{rowData.profesion}}
+                                    </td>
+                                    <td class="tablaColumnaNombreMedio">
+                                        <span class="p-column-title">Descripción</span>
+                                        {{rowData.profesionDescripcion}}
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        <span class="p-column-title">Código T-Registro</span>
+                                        {{rowData.profesionRtps}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage " let-columns>
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-dialog>
+</div>

@@ -1,0 +1,20 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Periodo</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstPeriodos" [(ngModel)]="filtro.periodoId" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-2">
+                    <button pButton pRipple type="button" label="Imprimir" class="p-button-outlined" icon="fad fa-print" (click)="imprimir()"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>

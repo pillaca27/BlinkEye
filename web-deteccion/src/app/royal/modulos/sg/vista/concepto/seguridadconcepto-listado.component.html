@@ -1,0 +1,252 @@
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Aplicación Código</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.aplicacioncodigo" [filter]="true" [options]="lstAplicaciones" [style]="{'width':'100%'}" (onChange)="onChangeAplicacion()"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Grupo</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.grupo" [filter]="true" [options]="lstGrupos" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Concepto</label>
+                        <div class="p-col">
+                            <input pInputText type="text" style="width:100%;" [(ngModel)]="filtro.concepto" maxlength="6" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.concepto=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input #myDescripcion pInputText type="text" class="inputDescripcion" style="width:100%;" [(ngModel)]="filtro.descripcion" maxlength="200" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.descripcion=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" scrollHeight="400px" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" [scrollable]="true" (onLazyLoad)="grillaCargarDatos($event)"
+        [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigo">Aplicación Código</th>
+                <th class="tablaHeaderCodigo">Grupo</th>
+                <th class="tablaHeaderCodigo">Concepto</th>
+                <th class="tablaHeaderNombre">Descripción</th>
+                <!-- <th class="tablaHeaderCodigo">Descripcióningles</th>  
+             <th class="tablaHeaderCodigo">Visibleflag</th>
+            <th class="tablaHeaderCodigo">Tipodedetalle</th>
+            <th class="tablaHeaderCodigo">Tipodeobjeto</th>
+            <th class="tablaHeaderCodigo">Objeto</th>
+            <th class="tablaHeaderCodigo">Tipodeacceso</th>
+            <th class="tablaHeaderCodigo">Objetowindow</th>
+            <th class="tablaHeaderCodigo">Workflag</th>
+            <th class="tablaHeaderCodigo">Workagregarflag</th>
+            <th class="tablaHeaderCodigo">Workmodificarflag</th>
+            <th class="tablaHeaderCodigo">Workborrarflag</th>
+            <th class="tablaHeaderCodigo">Workaprobarflag</th> -->
+                <th class="tablaHeaderNombre">Webpage</th>
+                <!--<th class="tablaHeaderCodigo">Webflag</th>
+            <th class="tablaHeaderCodigo">Webaction</th>
+            <th class="tablaHeaderCodigo">Webgrupo</th>
+            <th class="tablaHeaderMonto">Webgruposecuencia</th>
+            <th class="tablaHeaderCodigo">Tipodeacceso2</th>
+            <th class="tablaHeaderCodigo">Tipodeacceso3</th>
+            <th class="tablaHeaderCodigo">Tipodeacceso4</th>
+            <th class="tablaHeaderCodigo">Workprocesarflag</th>
+            <th class="tablaHeaderCodigo">Workopción1flag</th>
+            <th class="tablaHeaderCodigo">Workopción2flag</th>
+            <th class="tablaHeaderCodigo">Workopción3flag</th>
+            <th class="tablaHeaderCodigo">Workopción4flag</th>
+            <th class="tablaHeaderCodigo">Workopción5flag</th> -->
+                <th class="tablaHeaderMonto">Orden</th>
+                <th class="tablaHeaderCodigo">Imagen</th>
+                <!--  <th class="tablaHeaderCodigo">Jerarquia</th> -->
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" *ngIf="menuSeguridad.flgModificar" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" *ngIf="menuSeguridad.flgBorrar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Aplicación Código</span>
+                    <!--  {{row.aplicacioncodigo}} -->{{row.aplicacioncodigonombre}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Grupo</span>
+                    <!--       {{row.grupo}} -->{{row.gruponombre}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Concepto</span> {{row.concepto}}
+                </td>
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Descripción</span> {{row.descripcion}}
+                </td>
+                <!-- <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Descripcióningles</span>
+                {{row.descripcioningles}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Visibleflag</span>
+                {{row.visibleflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodedetalle</span>
+                {{row.tipodedetalle}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodeobjeto</span>
+                {{row.tipodeobjeto}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Objeto</span>
+                {{row.objeto}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodeacceso</span>
+                {{row.tipodeacceso}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Objetowindow</span>
+                {{row.objetowindow}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workflag</span>
+                {{row.workflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workagregarflag</span>
+                {{row.workagregarflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workmodificarflag</span>
+                {{row.workmodificarflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workborrarflag</span>
+                {{row.workborrarflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workaprobarflag</span>
+                {{row.workaprobarflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Webflag</span>
+                {{row.webflag}}
+            </td> -->
+                <td class="tablaColumnaNombre">
+                    <span class="p-column-title">Webpage</span> {{row.webpage}}
+                </td>
+                <!-- <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Webaction</span>
+                {{row.webaction}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Webgrupo</span>
+                {{row.webgrupo}}
+            </td>
+            <td class="tablaColumnaMonto">
+                <span class="p-column-title">Webgruposecuencia</span>
+                {{row.webgruposecuencia| number:'1.0-0'}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodeacceso2</span>
+                {{row.tipodeacceso2}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodeacceso3</span>
+                {{row.tipodeacceso3}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Tipodeacceso4</span>
+                {{row.tipodeacceso4}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workprocesarflag</span>
+                {{row.workprocesarflag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workopción1flag</span>
+                {{row.workopcion1flag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workopción2flag</span>
+                {{row.workopcion2flag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workopción3flag</span>
+                {{row.workopcion3flag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workopción4flag</span>
+                {{row.workopcion4flag}}
+            </td>
+            <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Workopción5flag</span>
+                {{row.workopcion5flag}}
+            </td> -->
+                <td class="tablaColumnaMonto">
+                    <span class="p-column-title">Orden</span> {{row.orden| number:'1.0-0'}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Imagen</span> {{row.imagen}}
+                    <br>
+                    <i *ngIf="row.imagen !== null" icon="row.imagen"></i>
+                </td>
+                <!--  <td class="tablaColumnaCodigo">
+                <span class="p-column-title">Jerarquia</span>
+                {{row.jerarquia}}
+            </td> -->
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="8">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>

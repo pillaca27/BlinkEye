@@ -1,0 +1,76 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Unidad Replicación</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.unidadreplicacion" maxlength="4" type="text" (ngModelChange)="dto.unidadreplicacion = $event.toUpperCase()" [disabled]="accionnuevo" [pKeyFilter]="blockSpecial" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-8">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.descripcionlocal" maxlength="30" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Rango Persona Inicio</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="dto.rangopersonainicio" mode="decimal" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="0"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Fin</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="dto.rangopersonafin" mode="decimal" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="0"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">N° Persona Actual</label>
+                        <div class="p-col">
+                            <p-inputNumber [locale]="locale" [(ngModel)]="dto.personaactual" mode="decimal" [style]="{'width':'100%'}" [disabled]="!objetoTitulo.puedeEditar" [minFractionDigits]="0"></p-inputNumber>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

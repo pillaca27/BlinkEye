@@ -1,0 +1,55 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Aplicación Código</label>
+                    <p-dropdown #myAplicacioncodigo title="Aplicación Código" [(ngModel)]="dto.aplicacioncodigo"
+                        [disabled]="!objetoTitulo.puedeEditarPk" required [filter]="true" [options]="lstAplicaciones"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                    <!-- <input #myAplicacioncodigo title="Aplicación código" class="inputCodigo" pInputText
+                        [(ngModel)]="dto.aplicacioncodigo" maxlength="2" type="text"
+                        [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.aplicacioncodigo=$event.toUpperCase()" required /> -->
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Topico</label>
+                    <input #myTopico title="Topico" class="inputCodigo" pInputText [(ngModel)]="dto.topico"
+                        maxlength="3" type="text" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.topico=$event.toUpperCase()" required />
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-4">
+                    <label class="importante">Descripción Local</label>
+                    <input #myDescripcionlocal title="Descripción Local" class="inputDescripcion" pInputText
+                        [(ngModel)]="dto.descripcionlocal" maxlength="50" type="text"
+                        [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.descripcionlocal=$event.toUpperCase()" />
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-4">
+                    <label>Descripción Ingles</label>
+                    <input class="inputDescripcion" pInputText [(ngModel)]="dto.descripcioningles" maxlength="50"
+                        type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"
+                        (ngModelChange)="dto.descripcioningles=$event.toUpperCase()" />
+                </div>
+                <div class="p-col-12 p-md-8"></div>
+                <div class="p-col-12 p-md-4">
+                    <label>Estado</label>
+                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar"
+                        [style]="{'width':'100%'}"></p-dropdown>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario"
+    [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B">
+</app-botones-mantenimiento>

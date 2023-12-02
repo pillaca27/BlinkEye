@@ -1,0 +1,1596 @@
+<p-tabView>
+    <p-tabPanel header="Información General" leftIcon="fad fa-box-check">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-3">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Aplicación</label>
+                            <div class="p-col">
+                                <p-dropdown [options]="lstAplicacion" [style]="{'width':'100%'}" [(ngModel)]="bean.aplicacion">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Código</label>
+                            <div class="p-col">
+                                <input pInputText type="text" maxlength="2" style="width:100%" [disabled]="accion != ACCIONES.NUEVO" [(ngModel)]="bean.proceso" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Descripción</label>
+                            <div class="p-col">
+                                <input pInputText type="text" style="width:100%" [(ngModel)]="bean.descripcion" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-3">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Estado</label>
+                            <div class="p-col">
+                                <p-dropdown [options]="lstEstadosBasicos" [style]="{'width':'100%'}" [(ngModel)]="bean.estado">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label importante">Estado Inicial</label>
+                            <div class="p-col">
+                                <p-dropdown [options]="lstEstadosBean" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="bean.nivelestadoidinicial">
+                                </p-dropdown>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Componente web</label>
+                            <div class="p-col">
+                                <input pInputText type="text" style="width:100%" [(ngModel)]="bean.componenteweb" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">API</label>
+                            <div class="p-col">
+                                <input pInputText type="text" style="width:100%" [(ngModel)]="bean.api" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Administrador</label>
+                            <div class="p-col">
+                                <div class="p-inputgroup">
+                                    <input pInputText type="text" [(ngModel)]="bean.administradorNombre" disabled style="flex: 5;" />
+                                    <p-button (click)="buscarAdministrador()" [style]="{'flex': '1'}" icon="pi pi-search">
+                                    </p-button>
+                                    <p-button (click)="limpiarAdministrador()" [style]="{'flex': '1'}" icon="pi pi-times">
+                                    </p-button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <div class="p-col-12 p-md-2">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Alerta en comunicación?</label>
+                            <div class="p-col">
+                                <p-checkbox binary="true" label="" [(ngModel)]="bean.flagComunicacionAlerta">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Planificación?</label>
+                            <div class="p-col">
+                                <p-checkbox binary="true" label="" [(ngModel)]="bean.flagPlanificacionGenerar">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-2">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Plantilla por Niveles?</label>
+                            <div class="p-col">
+                                <p-checkbox binary="true" label="" [(ngModel)]="bean.flagCorreoNiveles">
+                                </p-checkbox>
+                            </div>
+                        </div>
+                    </div> -->
+
+                    <div class="p-field p-col-12 p-md-3" style="display: none;">
+                        <span>Origen Datos</span>
+                        <p-dropdown [options]="lstOrigenes" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="bean.origen">
+                        </p-dropdown>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3" style="display: none;">
+                        <label>Sp Ver</label>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="bean.spver" />
+                    </div>
+
+                    <!-- <div class="p-col-12 p-md-4">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Segmento Tabla</label>
+                            <div class="p-col">
+                                <input pInputText type="text" style="width:100%" [(ngModel)]="bean.segmentocodigotabla" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="p-col-12 p-md-4"></div>
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Plantillas Correo" class="p-button-outlined" (click)="verModalPlantillas=true"></button>
+                    </div> -->
+
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-6">
+                        <p-table [style]="{'width': '100%'}" [value]="bean.variables" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion0">Acción</th>
+                                    <th class="tablaHeaderIzquierda">
+                                        <div class="p-col-12">
+                                            <div class="p-fluid p-formgrid p-grid">
+                                                <div class="p-col-7 p-md-7 p-lg-7">
+                                                    <label>Variable</label>
+                                                </div>
+                                                <div class="p-col-5 p-md-5 p-lg-5">
+                                                    <p-button icon="fad fa-plus" (click)="abrirDialogoVariable()">
+                                                    </p-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion0">
+                                        <span class="p-column-title">Acción</span>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarVariable(rowData.variable)"></button>
+                                    </td>
+                                    <td class="tablaColumnaIzquierda">
+                                        <span class="p-column-title">Variable</span> {{rowData.variable | labelFromItem:lstVariablesMaster}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="2">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <br>
+                        <p-table [style]="{'width': '100%'}" [value]="bean.estados" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion2">Acción</th>
+                                    <th class="tablaHeaderIzquierda">
+                                        <div class="p-col-12">
+                                            <div class="p-fluid p-formgrid p-grid">
+                                                <div class="p-col-7 p-md-7 p-lg-7">
+                                                    <label>Estado</label>
+                                                </div>
+                                                <div class="p-col-5 p-md-5 p-lg-5">
+                                                    <p-button icon="fad fa-plus" (click)="abrirDialogoEstado()">
+                                                    </p-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="tablaHeaderIzquierda">
+                                        Tipo
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion2">
+                                        <span class="p-column-title">Acción</span>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" (click)="editarEstado(rowData.estado)"></button>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarEstado(rowData.estado)"></button>
+                                    </td>
+                                    <td class="tablaColumnaIzquierda">
+                                        <span class="p-column-title">Estado</span> {{rowData.estado}} - {{rowData.descripcion}}
+                                    </td>
+                                    <td class="tablaColumnaIzquierda" pEditableColumn>
+                                        <span class="p-column-title">Tipo</span>
+                                        <p-dropdown [options]="lstTipoEstado" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="rowData.tipo">
+                                        </p-dropdown>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6">
+                        <p-table [style]="{'width': '100%'}" [value]="bean.tipodocumentos" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion0">Acción</th>
+                                    <th class="tablaHeaderIzquierda">
+                                        <div class="p-col-12">
+                                            <div class="p-fluid p-formgrid p-grid">
+                                                <div class="p-col-7 p-md-7 p-lg-7">
+                                                    <label>Documento</label>
+                                                </div>
+                                                <div class="p-col-5 p-md-5 p-lg-5">
+                                                    <p-button icon="fad fa-plus" (click)="abrirDialogoDocumento()">
+                                                    </p-button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </th>
+                                    <th class="tablaHeaderAccion3">Grupo
+                                    </th>
+                                    <th class="tablaHeaderAccion2">Plantilla
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion0">
+                                        <span class="p-column-title">Acción</span>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarDocumento(rowData.tipodocumento)"></button>
+                                    </td>
+                                    <td class="tablaColumnaIzquierda">
+                                        <span class="p-column-title">Documento</span> {{rowData.tipodocumentoAux}}
+                                        <span *ngIf="rowData.rutaplantilla!=null"> (Con Plantilla)</span>
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaAccion3">
+                                        <span class="p-column-title">Grupo</span>
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input pInputText type="text" [(ngModel)]="rowData.grupo">
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{rowData.grupo}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaAccion2">
+                                        <span class="p-column-title">Plantilla</span>
+
+                                        <button pButton pRipple type="button" icon="fad fa-cloud-download" class="p-button-rounded p-button-text" title="Descargar" (click)="verPlantilla(rowData.tipodocumento) "></button>
+
+                                        <input #photoInputCargarPlantilla type="file" class="form-control" style="display:none" (change)="subirDocumento(photoInputCargarPlantilla)">
+
+                                        <button pButton pRipple type="button" icon="fad fa-cloud-upload" class="p-button-rounded p-button-text" title="Subir" (click)="subirDocumentoPre(rowData.tipodocumento);photoInputCargarPlantilla.click()"></button>
+
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="4">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                        <br>
+                        <p-table [style]="{'width': '100%'}" [value]="bean.roles" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion2">Editar</th>
+                                    <th class="tablaHeaderAccion1">
+                                        Código
+                                    </th>
+                                    <th class="tablaHeaderIzquierda">
+                                        Rol
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowData let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion2">
+                                        <span class="p-column-title">Editar</span>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" (click)="editarRol(rowData.codigo)"></button>
+                                    </td>
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Código</span> {{rowData.codigo}}
+                                    </td>
+                                    <td class="tablaColumnaIzquierda">
+                                        <span class="p-column-title">Rol</span> {{rowData.descripcion}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+
+    <p-tabPanel header="Configuraciones" leftIcon="fad fa-th-list">
+        <div class="p-grid" *ngIf="flujoSeleccionado==null">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Flujo" icon="fad fa-plus" class="p-button-outlined" (click)="agregarFlujo()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-10">
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" [value]="bean.flujos" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion3">Acción</th>
+                                    <th class="tablaHeaderCodigoGrande">Variable</th>
+                                    <th class="tablaHeaderCodigoGrande">Comparación</th>
+                                    <th class="tablaHeaderTexto">Valor</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowFlujo let-columns="columns">
+                                <tr style="color: black; height: 50px; " [style.background-color]="colores[rowFlujo.flujo]">
+                                    <td colspan="4">
+                                        <br>
+                                        <div class="p-grid">
+                                            <div class="p-col-12 p-md-6 p-lg-6">
+                                                <label>{{rowFlujo.descripcion}}</label>
+                                            </div>
+                                            <div class="p-col-12 p-md-2 p-lg-2">
+                                                <button pButton type="button" icon="fad fa-plus" label="Criterio" (click)="agregarCriterio(rowFlujo.flujo)" style="width: 100%;" class="ui-button"></button>
+                                            </div>
+                                            <div class="p-col-12 p-md-2 p-lg-2">
+                                                <button pButton type="button" icon="pi pi-times" style="width: 100%;" (click)="eliminarFlujo(rowFlujo.flujo)" label="Eliminar" class="ui-button"></button>
+                                            </div>
+                                            <div class="p-col-12 p-md-2 p-lg-2">
+                                                <button pButton type="button" icon="pi pi-list" label="Niveles" class="ui-button" style="width: 100%;" (click)="verNiveles(rowFlujo.flujo)"></button>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                                <ng-container *ngFor="let rowConfig of rowFlujo.configuraciones; index as i; first as isFirst">
+                                    <tr [style.background-color]="adjustHexOpacity(colores[rowFlujo.flujo])">
+                                        <td class="tablaColumnaAccion3">
+                                            <span class="p-column-title">Acción</span>
+                                            <button pButton pRipple type="button" icon="fad fa-align-justify" class="p-button-rounded p-button-text" title="Valores" (click)="editarValores(rowFlujo.flujo, rowConfig.configuracion)"></button>
+                                            <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" (click)="editarCriterio(rowFlujo.flujo, rowConfig.configuracion)"></button>
+                                            <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminarCriterio(rowFlujo.flujo, rowConfig.configuracion)"></button>
+                                        </td>
+                                        <td class="tablaColumnaCodigoGrande">
+                                            <span class="p-column-title">Variable</span> {{rowConfig.variable | labelFromItem:lstVariablesMaster}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoGrande">
+                                            <span class="p-column-title">Comparación</span> {{rowConfig.comparacion | labelFromItem:lstComparacionMaster}}
+                                        </td>
+                                        <td class="tablaColumnaTexto">
+                                            <span class="p-column-title">Valor</span> {{rowConfig.valorDescripcion}}
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="4">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-grid" *ngIf="flujoSeleccionado!=null">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Nivel" icon="fad fa-plus" class="p-button-outlined" (click)="agregarNivel()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Nivel 0" icon="fad fa-plus" class="p-button-outlined" (click)="agregarNivel0()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-2">
+                        <button pButton pRipple type="button" label="Volver" icon="fad fa-reply" class="p-button-outlined" (click)="volverANiveles()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-6" style="text-align: center;font-size: 20px; font-weight: 900;" [style.color]="colores[flujoSeleccionado.flujo]">
+                        <label>{{flujoSeleccionado.descripcion}}</label>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" [value]="flujoSeleccionado.configuraciones" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion4">Variable</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Comparación</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderTexto">Valor</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowConfig let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion4">
+                                        <span class="p-column-title">Variable</span> {{rowConfig.variable | labelFromItem:lstVariablesMaster}}
+                                    </td>
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Comparación</span> {{rowConfig.comparacion | labelFromItem:lstComparacionMaster}}
+                                    </td>
+                                    <td class="tablaColumnaTexto">
+                                        <span class="p-column-title">Valor</span> {{rowConfig.valorDescripcion}}
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="3">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" scrollHeight="300px" [value]="flujoSeleccionado.niveles" [responsive]="true" [scrollable]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion4">Acción</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Nivel</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderNombreMedio">Rol</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderNombreMedio">Actividad</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderEstadoMedioComboBox">Estado</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderUbigeoGrande">Aprobador</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Documento</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Adjuntar Documentos en Correo?</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Notificación?</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo {{obtenerNombreRol('PERS')}}</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo {{obtenerNombreRol('JEIN')}}</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo {{obtenerNombreRol('SOLI')}}</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo {{obtenerNombreRol('REFE')}}</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo {{obtenerNombreRol('TRAP')}}</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaHeaderAccion1">Correo Otros</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" *ngIf="bean.flagCorreoNiveles" class="tablaHeader3BotonesLabel">Plantillas de Correo
+                                    </th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaColumnaAccion7">SPs</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaColumnaAccion7">Origen</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" class="tablaColumnaAccion7">Condición Aprobación</th>
+                                    <th [style.background-color]="colores[flujoSeleccionado.flujo]" *ngIf="bean.flagPlanificacionGenerar" class="tablaHeaderAccion1">Planificación
+                                    </th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowNivel let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion4">
+                                        <span class="p-column-title">Acción</span>
+                                        <button pButton pRipple type="button" icon="fad fa-user" *ngIf="rowNivel.tipoaprobador=='PERS'&&rowNivel.nivel>0" class="p-button-rounded p-button-text" title="Empleado" (click)="agregarEmpleadoModal(rowNivel.nivel)"></button>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="rowNivel.nivel>0" (click)="editarNivel(rowNivel.nivel)"></button>
+                                        <button pButton pRipple type="button" icon="fad fa-sort" class="p-button-rounded p-button-text" title="Cambiar Posición" *ngIf="rowNivel.nivel>0" (click)="editarPosicionNivel(rowNivel.nivel)"></button>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminarNivel(rowNivel.nivel)"></button>
+                                    </td>
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Nivel</span> {{rowNivel.nivel}}
+                                    </td>
+                                    <td pEditableColumn class="tablaHeaderNombreMedio">
+                                        <span class="p-column-title">Rol</span>
+                                        <p-dropdown [options]="lstTipoAprobador" [style]="{'width':'100%'}" *ngIf="rowNivel.nivel>0" (onChange)="cambiarTipoAprobadorNivel(rowNivel.nivel)" appendTo="body" [(ngModel)]="rowNivel.tipoaprobador">
+                                        </p-dropdown>
+                                    </td>
+                                    <td pEditableColumn class="tablaHeaderNombreMedio">
+                                        <span class="p-column-title">Actividad</span>
+                                        <input pInputText type="text" style="width:100%" *ngIf="rowNivel.nivel>0" [(ngModel)]="rowNivel.nombre" />
+                                    </td>
+                                    <td pEditableColumn class="tablaHeaderEstadoMedioComboBox">
+                                        <span class="p-column-title">Estado</span>
+                                        <p-dropdown [options]="lstEstadosBean" [style]="{'width':'100%'}" *ngIf="rowNivel.nivel>0" title="{{rowNivel.estado}}" appendTo="body" [(ngModel)]="rowNivel.estado">
+                                        </p-dropdown>
+                                    </td>
+                                    <td class="tablaColumnaUbigeoGrande">
+                                        <span class="p-column-title">Aprobador</span>
+                                        <ul style="padding-left: 10px;" *ngIf="rowNivel.tipoaprobador=='PERS'">
+                                            <ng-container *ngFor="let rowAprobador of rowNivel.aprobadores; index as i; first as isFirst">
+                                                <li>{{rowAprobador.nombreEmpleado}}
+                                                    <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminarAprobadorNivel(rowNivel.nivel, rowAprobador.empleado)"></button>
+                                                    <button pButton pRipple type="button" icon="fad fa-th-list" *ngIf="rowNivel.condicionaprobacion=='TODOSUNAPR'" class="p-button-rounded p-button-text" title="Segmentos" (click)="abrirSegmentos(rowNivel.nivel, rowAprobador.empleado)"></button>
+
+                                                    <ul *ngIf="rowNivel.condicionaprobacion=='TODOSUNAPR'" style=" list-style-type: lower-alpha;">
+                                                        <ng-container *ngFor="let segmento of obtenerNombreEnLista(rowAprobador.valorDescripcion); index as i; first as isFirst">
+                                                            <li>
+                                                                {{segmento}}
+                                                            </li>
+                                                        </ng-container>
+                                                    </ul>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                    </td>
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Documento</span>
+                                        <button pButton pRipple type="button" icon="fad fa-file" class="p-button-rounded p-button-text" title="Documento" (click)="agregarDocumentoModal(rowNivel.nivel)"></button>
+                                        <!--
+                                        <ul style="padding-left: 10px;">
+                                            <ng-container
+                                                *ngFor="let rowDocumento of rowNivel.documentos; index as i; first as isFirst">
+                                                <li style="font-size: 12px;">
+                                                    {{rowDocumento.tipodocumento |
+                                                    labelFromItem:lstTiposDocumentosMaster}}
+                                                    <span *ngIf="rowDocumento.requerido"><i style="color: #ff6c00;"
+                                                            title="Requerido"
+                                                            class="fad fa-comment-alt-exclamation"></i></span>
+                                                    {{rowDocumento.firmadigital?'Firma dig.':''}}
+                                                    {{rowDocumento.firmaimagen?'Firma img.':''}}
+                                                    <span *ngIf="rowDocumento.editable"><i title="Editable"
+                                                            class="fad fa-pencil"></i></span>
+                                                    <button pButton pRipple type="button" icon="fad fa-times"
+                                                        class="p-button-rounded p-button-danger p-button-text"
+                                                        title="Eliminar"
+                                                        (click)="eliminarDocumentoNivel(rowNivel.nivel, rowDocumento.tipodocumento)"></button>
+                                                </li>
+                                            </ng-container>
+                                        </ul>
+                                        -->
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Adjuntar Documentos en Correo?</span>
+                                        <p-checkbox title="Adjuntar Documentos en Correo?" [(ngModel)]="rowNivel.auxFlgCorreoAdjuntarDocumentos" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Notificación?</span>
+                                        <p-checkbox title="Notificación" [(ngModel)]="rowNivel.btnNotificar" *ngIf="rowNivel.nivel>0" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo {{obtenerNombreRol('PERS')}}</span>
+                                        <p-checkbox [(ngModel)]="rowNivel.auxFlgCorreoPersona" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo {{obtenerNombreRol('JEIN')}}</span>
+                                        <p-checkbox [(ngModel)]="rowNivel.correojefe" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo {{obtenerNombreRol('SOLI')}}</span>
+                                        <p-checkbox [(ngModel)]="rowNivel.correosolicitante" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo {{obtenerNombreRol('REFE')}}</span>
+                                        <p-checkbox [(ngModel)]="rowNivel.auxFlgCorreoPersonaReferencia" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo {{obtenerNombreRol('TRAP')}}</span>
+                                        <p-checkbox [(ngModel)]="rowNivel.auxFlgCorreoTransaccion" binary="true">
+                                        </p-checkbox>
+                                    </td>
+                                    <td class="tablaHeaderAccion1">
+                                        <span class="p-column-title">Correo Otros</span>
+                                        <button pButton pRipple type="button" icon="fad fa-envelope" class="p-button-rounded p-button-text" title="Correo Otros" (click)="verOtros(rowNivel.nivel)"></button>
+                                    </td>
+                                    <td class="tablaColumna3BotonesLabel" *ngIf="bean.flagCorreoNiveles">
+                                        <span class="p-column-title">Plantilla Correos</span>
+
+                                        <div class="p-grid">
+                                            <div class="p-col-12">
+                                                <div class="p-fluid p-formgrid p-grid">
+                                                    <div class="p-field p-col-12 p-md-4">
+                                                        <button pButton class="p-button-outlined p-button-success" type="button" label="Aprobar" [icon]="iconoPlantilla(rowNivel, 'A')" (click)="verPlantillaAprobar(rowNivel.nivel)"></button>
+                                                    </div>
+                                                    <div class="p-field p-col-12 p-md-4">
+                                                        <button pButton class="p-button-outlined p-button-danger" type="button" label="Rechazar" [icon]="iconoPlantilla(rowNivel, 'R')" (click)="verPlantillaRechazar(rowNivel.nivel)"></button>
+                                                    </div>
+                                                    <div class="p-field p-col-12 p-md-4">
+                                                        <button pButton class="p-button-outlined p-button-warning" type="button" label="Devolver" [icon]="iconoPlantilla(rowNivel, 'D')" (click)="verPlantillaDevolver(rowNivel.nivel)"></button>
+                                                    </div>
+                                                    <!-- <div class="p-field p-col-12 p-md-3">
+                                                        <button pButton class="p-button-outlined p-button-warning"
+                                                            type="button" label="Seguimiento"
+                                                            [icon]="iconoPlantilla(rowNivel, 'S')"
+                                                            (click)="verPlantillaSeguimiento(rowNivel.nivel)"></button>
+                                                    </div> -->
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </td>
+                                    <td class="tablaColumnaAccion7">
+                                        <span class="p-column-title">SPs</span>
+                                        <ul style="padding-left: 10px;">
+                                            <li *ngIf="!estaVacio(rowNivel.spvalidar)">Validar</li>
+                                            <li *ngIf="!estaVacio(rowNivel.spaprobar)">Aprobar</li>
+                                            <li *ngIf="!estaVacio(rowNivel.sprechazar)">Rechazar</li>
+                                            <li *ngIf="!estaVacio(rowNivel.spdevolver)">Devolver</li>
+                                        </ul>
+                                    </td>
+                                    <td class="tablaColumnaAccion7">
+                                        <span class="p-column-title">Origen</span>
+                                        <ul style="padding-left: 10px;" *ngIf="rowNivel.nivel>0">
+                                            <li *ngIf="rowNivel.origenDatos==null">Sistema Actual</li>
+                                            <li *ngIf="rowNivel.origenDatos!=null">{{rowNivel.origenDatos | labelFromItem:lstOrigenes}}
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaAccion7">
+                                        <span class="p-column-title">Condición Aprobación</span>
+                                        <p-dropdown [options]="lstCondicionAprobacion" [style]="{'width':'100%'}" *ngIf="rowNivel.nivel>0" appendTo="body" [(ngModel)]="rowNivel.condicionaprobacion">
+                                        </p-dropdown>
+                                    </td>
+                                    <td class="tablaColumnaAccion1" *ngIf="bean.flagPlanificacionGenerar&&rowNivel.nivel>0">
+                                        <span class="p-column-title">Planificación</span>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" (click)="editarNivelPlanificacion(rowNivel.nivel)"></button>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="17">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </p-tabPanel>
+
+    <!-- <p-tabPanel header="Plantillas Relacionadas" leftIcon="fad fa-th-list">
+        <div class="p-grid">
+            <div class="p-col-12">
+                <p-table [value]="lstPlantillasRelacionadas" [responsive]="true" [style]="{width:'100%', height:'auto'}">
+
+                    <ng-template pTemplate="header">
+                        <tr>
+                            <th class="tablaHeaderAccion1">Acción</th>
+                            <th class="tablaHeaderCodigoGrande">Aplicación</th>
+                            <th class="tablaHeaderCodigo">Reporte</th>
+                            <th class="tablaHeaderCodigo">Compañía</th>
+                            <th class="tablaHeaderCodigo">Periodo</th>
+                            <th class="tablaHeaderCodigo">Versión</th>
+                            <th class="tablaHeaderEstado">Nombre</th>
+                            <th class="tablaHeaderEstado">Estado</th>
+                        </tr>
+                    </ng-template>
+                    <ng-template pTemplate="body" let-rowData let-columns="columns">
+                        <tr>
+                            <td class="tablaColumnaAccion1">
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" (click)="editarReporte(rowData)"></button>
+                            </td>
+
+                            <td class="tablaColumnaCodigoGrande">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Aplicación</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.aplicacionDescripcion}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Reporte</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.reportecodigo}} - {{rowData.nombreReporte}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Compañía</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.companiasocio}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Periodo</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.periodo}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Versión</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.version}}</div>
+                            </td>
+                            <td class="tablaColumnaCodigo">
+                                <div class="ui-g-4 ui-lg-12" style="height: 0px;"><span class="p-column-title">Nombre</span>
+                                </div>
+                                <div class="ui-g-8 ui-lg-12">{{rowData.nombre}}</div>
+                            </td>
+                            <td class="tablaColumnaEstado">{{ rowData.estado == 'A' ? 'Activo' : 'Inactivo' }}</td>
+                        </tr>
+                    </ng-template>
+
+                    <ng-template pTemplate="emptymessage" let-columns>
+                        <tr>
+                            <td [attr.colspan]="8">
+                                No existen registros para mostrar
+                            </td>
+                        </tr>
+                    </ng-template>
+                </p-table>
+
+            </div>
+        </div>
+    </p-tabPanel> -->
+</p-tabView>
+
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS2B" *ngIf="flujoSeleccionado == null">
+</app-botones-mantenimiento>
+
+<p-dialog header="Configuración" [(visible)]="verModalConfiguracion" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Variable</label>
+                    <p-dropdown [options]="lstCriterioVariables" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="configSeleccionada.variable">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Comparación</label>
+                    <p-dropdown [options]="lstComparacionMaster" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="configSeleccionada.comparacion">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="guardarConfiguracion()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalConfiguracion=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Seleccionar Variable" [(visible)]="verModalVariableMaster">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Tipo</label>
+                    <p-dropdown [options]="lstVariablesMaster" [style]="{'width':'100%'}" [(ngModel)]="dlgVariable" appendTo="body">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="agregarVariable()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalVariableMaster=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Seleccionar Documento" [(visible)]="verModalDocumentoMaster" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Tipo</label>
+                    <p-dropdown [options]="lstTiposDocumentosMaster" [style]="{'width':'100%'}" appendTo="body" [filter]="true" [(ngModel)]="dlgDocumento">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="agregarDocumento()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" icon="fad fa-undo" label="Cancelar" (click)="verModalDocumentoMaster=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Ingresar Estado" [(visible)]="verModalEstadoMaster" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'400px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Id</label>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="dlgEstadoCodigo" maxlength="4">
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Nombre</label>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="dlgEstado" maxlength="100">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="agregarEstado()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalEstadoMaster=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Estado" [(visible)]="verDialogoEstadoEdicion" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'400px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Nombre</label>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="nombreEstadoEdicion" maxlength="100">
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Tipo</label>
+                    <p-dropdown [options]="lstTipoEstado" [style]="{'width':'100%'}" appendTo="body" [filter]="true" [(ngModel)]="tipoEstadoEdicion">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarEstado()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verDialogoEstadoEdicion=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Rol" [(visible)]="verDialogoRolEdicion" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'400px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Código</label>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="codigoRolEditando" maxlength="100" disabled>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Rol</label>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="nombreRolEditando" maxlength="100">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarRol()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verDialogoRolEdicion=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Nivel" [(visible)]="verModalNivel" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'750px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-fieldset legend="Botones">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <button pButton class="p-button-outlined" type="button" label="Agregar" icon="fad fa-plus" (click)="agregarAccion()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgAprobar" label='Mostrar Aprobar?'></p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgRechazar" label='Mostrar Rechazar?'></p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgDevolver" label='Mostrar Devolver?'></p-checkbox>
+                    </div>
+
+                    <div class="p-field p-col-12 p-md-12">
+                        <p-table [style]="{'width': '100%'}" [value]="botones" [responsive]="true">
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Acción</th>
+                                    <th>Nombre</th>
+                                    <th>Comando</th>
+                                    <th>Estado</th>
+                                    <th>Destino</th>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-rowNivel let-columns="columns">
+                                <tr>
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Acción</span>
+                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" title="Eliminar" (click)="eliminarAccion(rowNivel.accion)"></button>
+                                    </td>
+                                    <td pEditableColumn>
+                                        <span class="p-column-title">Nombre</span>
+                                        <input pInputText type="text" style="width:100%" [(ngModel)]="rowNivel.nombre" />
+                                    </td>
+                                    <td pEditableColumn>
+                                        <span class="p-column-title">Comando</span>
+                                        <p-dropdown [options]="lstAccionesWF" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="rowNivel.accionwf">
+                                        </p-dropdown>
+                                    </td>
+                                    <td pEditableColumn>
+                                        <span class="p-column-title">Estado</span>
+                                        <input pInputText type="text" style="width:100%" maxlength="10" [(ngModel)]="rowNivel.subaccion" />
+                                    </td>
+                                    <td pEditableColumn>
+                                        <span class="p-column-title">Destino</span>
+                                        <p-dropdown [options]="lstDestinos" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="rowNivel.nivelDestinoId">
+                                        </p-dropdown>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        Sin datos
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </div>
+                </div>
+            </p-fieldset>
+            <p-fieldset legend="Comentario">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgComentarioAprobarAlAprobar" label='Al Aprobar?'>
+                        </p-checkbox>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
+            <p-fieldset legend="Comentario Detallado">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgComentarioAprobar" label='Al Aprobar?'></p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgComentarioRechazar" label='Al Rechazar?'></p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgComentarioDevolver" label='Al Devolver?'></p-checkbox>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
+            <p-fieldset legend="Documentos">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgNivelDocumentoNuevo" label='Ver Boton Nuevo'>
+                        </p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3">
+                        <p-checkbox binary="true" [(ngModel)]="dlgNivelDocumentoGrupo" label='Ver Grupo?'></p-checkbox>
+                    </div>
+                    <div class="p-field p-col-12 p-md-3"></div>
+                    <div class="p-field p-col-12 p-md-3"></div>
+                </div>
+            </p-fieldset>
+            <br>
+            <p-fieldset legend="Eventos">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>SP Validar</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelSPV" maxlength="1000">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>SP Aprobar</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelSPA" maxlength="1000">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>SP Rechazar</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelSPR" maxlength="1000">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>SP Devolver</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelSPD" maxlength="1000">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>API</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelAPI" maxlength="1000">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>Componente web</span>
+                        <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelcomponente" maxlength="100">
+                    </div>
+                    <div class="p-field p-col-12 p-md-4">
+                        <span>Origen Datos</span>
+                        <p-dropdown [options]="lstOrigenes" [style]="{'width':'100%'}" appendTo="body" [(ngModel)]="dlgOrigen">
+                        </p-dropdown>
+                    </div>
+                </div>
+            </p-fieldset>
+            <br>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarNivel()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-6"></div>
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalNivel=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Planificación" [(visible)]="verModalNivel2" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'750px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <span>Nombre</span>
+                    <input pInputText type="text" style="width:100%" [(ngModel)]="dlgNivelNombre" maxlength="200">
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Tipo</span>
+                    <p-dropdown [options]="lstTiposDuraciones" [style]="{'width':'100%'}" appendTo="body" [filter]="true" [(ngModel)]="dlgNivelDuracionTipo">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <span>Duración</span>
+                    <input pInputText type="number" style="width:100%" [(ngModel)]="dlgNivelDuracionCantidad">
+                </div>
+
+
+                <div class="p-field p-col-12 p-md-3">
+                    <div class="p-inputgroup">
+                        <div style="flex: 1;">
+                            <span>Ver</span>
+                            <br>
+                            <p-checkbox binary="true" [(ngModel)]="dlgNivelPlaniVer">
+                            </p-checkbox>
+                        </div>
+                        <div style="flex: 1;">
+                            <span>Editar</span>
+                            <br>
+                            <p-checkbox binary="true" [(ngModel)]="dlgNivelPlaniEdi">
+                            </p-checkbox>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-field p-col-12 p-md-3">
+                </div>
+
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarNivel2()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalNivel2=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Valores" [(visible)]="verModalValores" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width:'570px'}" hideEffect="size">
+
+    <div class="p-grid" *ngIf="configSeleccionada.comparacion=='>'">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label>Mayor Que</label>
+                    <input pInputText type="number" style="width:100%" [(ngModel)]="valores0">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid" *ngIf="configSeleccionada.comparacion=='BW'">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <label>De</label>
+                    <input pInputText type="number" style="width:100%" [(ngModel)]="valores0">
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <label>A</label>
+                    <input pInputText type="number" style="width:100%" [(ngModel)]="valores1">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarValores()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalValores=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Seleccione los Valores" [(visible)]="verModalValores2" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width:'950px'}" hideEffect="size">
+
+    <div class="p-grid">
+        <div class="p-field p-col-12 p-md-3">
+            <span>Código</span>
+            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtroSelectorDinamico.codigo" />
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <span>Descripción</span>
+            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtroSelectorDinamico.descripcion" />
+        </div>
+        <div class="p-field p-md-3">
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <button pButton pRipple type="button" label="Buscar" icon="pi pi-search" style="width: 100%;" class="p-button-outlined p-button-success" (click)="buscarDinamico()"></button>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="filtroSelectorDinamico.paginacion.paginacionListaResultado" #dtDinamico [lazy]="true" [totalRecords]="filtroSelectorDinamico.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="buscarSelectorDinamico($event)"
+                [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Valores</th>
+                        <th style="width: 10%;">Sel.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.descripcion}}</td>
+                        <td style="width: 10%;">
+                            <button pButton pRipple type="button" icon="fal fa-plus" class="p-button-rounded p-button-text" (click)="agregarValorSeleccionado(rowData.codigo, rowData.descripcion)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="lstSeleccionados" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Seleccionado</th>
+                        <th style="width: 10%;">Eli.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.descripcion}}</td>
+                        <td style="width: 10%;">
+                            <span class="p-column-title">Acción</span>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarValorSeleccionado(rowData.codigo)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarValores()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalValores2=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Seleccione los Documentos" [(visible)]="verModalSelectorDocumentos" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width:'950px'}" hideEffect="size">
+
+    <div class="p-grid">
+        <div class="p-field p-col-12 p-md-6">
+            <span>Aplicación</span>
+            <p-dropdown [options]="lstAplicacion2" [style]="{'width':'100%'}" [(ngModel)]="filtroDocumentos.aplicacion" (onChange)="cambiarProcesosXAplicacion()" appendTo="body">
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+            <span>Proceso</span>
+            <p-dropdown [options]="lstProcesoMast" [style]="{'width':'100%'}" [(ngModel)]="filtroDocumentos.proceso" appendTo="body">
+            </p-dropdown>
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+            <span>Código</span>
+            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtroDocumentos.codigo" />
+        </div>
+        <div class="p-field p-col-12 p-md-6">
+            <span>Descripción</span>
+            <input pInputText type="text" style="width: 100%;" [(ngModel)]="filtroDocumentos.nombre" />
+        </div>
+        <div class="p-field p-col-12 p-md-9">
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <button pButton pRipple type="button" label="Buscar" icon="pi pi-search" style="width: 100%;" class="p-button-outlined" (click)="buscarDocumentos()"></button>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="filtroDocumentos.paginacion.paginacionListaResultado" #dtDocSy [lazy]="true" [totalRecords]="filtroDocumentos.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="buscarSelectorDocumentos($event)"
+                [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Código</th>
+                        <th>Nombre</th>
+                        <th style="width: 10%;">Sel.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.codigo}}</td>
+                        <td>{{rowData.descripcion}}</td>
+                        <td style="width: 10%;">
+                            <button pButton pRipple type="button" icon="fal fa-plus" class="p-button-rounded p-button-text" (click)="agregarDocumentoSeleccionado(rowData.codigo, rowData.descripcion)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="3">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="lstDocumentosSeleccionados" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Seleccionado</th>
+                        <th style="width: 10%;">Eli.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.tipodocumentoAux}}</td>
+                        <td style="width: 10%;">
+                            <span class="p-column-title">Acción</span>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarDocumentoSeleccionado(rowData.codigo)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="aceptarDocumentos()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalSelectorDocumentos=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Seleccione los Segmentos" [(visible)]="verModalValores3" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width:'950px'}" hideEffect="size">
+
+    <div class="p-grid">
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="lstSegmentosDisponibles" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Valores</th>
+                        <th style="width: 10%;">Sel.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.nombre}}</td>
+                        <td style="width: 10%;">
+                            <button pButton pRipple type="button" icon="fal fa-plus" class="p-button-rounded p-button-text" (click)="agregarValorSeleccionado2(rowData.codigo, rowData.nombre)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+        <div class="p-col-6">
+            <p-table [paginator]="true" [rows]="10" [style]="{'width': '100%'}" [value]="lstSeleccionados" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th>Seleccionado</th>
+                        <th style="width: 10%;">Eli.</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td>{{rowData.descripcion}}</td>
+                        <td style="width: 10%;">
+                            <span class="p-column-title">Acción</span>
+                            <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text" (click)="eliminarValorSeleccionado2(rowData.codigo)"></button>
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="2">
+                            No se encontraron registros
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarValores2()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalValores3=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Documentos por Nivel" [(visible)]="verModalDocxNivel" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width:'900px'}" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-table [paginator]="true" [rows]="30" [style]="{'width': '100%'}" [value]="lstDocumentosPorProceso" [(selection)]="lstDocumentosPorProcesoSeleccionados" dataKey="tipodocumento" [responsive]="true">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <th class="tablaHeaderCodigoChico">
+                            <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                        </th>
+                        <th class="tablaHeaderAccion1">Requerido</th>
+                        <th class="tablaHeaderAccion1" *ngIf="nivelActualizando>0">Editable</th>
+
+                        <th class="tablaHeaderAccion1" *ngIf="puedeFirmarDigital&&nivelActualizando>0">Firma digital
+                        </th>
+                        <th class="tablaHeaderAccion1" *ngIf="puedeFirmarImagen&&nivelActualizando>0">Firma por imagen
+                        </th>
+
+                        <th class="tablaHeaderIzquierda">Documento</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr>
+                        <td class="tablaColumnaCodigoChico">
+                            <p-tableCheckbox [value]="rowData"></p-tableCheckbox>
+                        </td>
+                        <td class="tablaColumnaAccion1">
+                            <p-checkbox title="Requerido" [(ngModel)]="rowData.requerido" binary="true">
+                            </p-checkbox>
+                        </td>
+                        <td class="tablaColumnaAccion1" *ngIf="nivelActualizando>0">
+                            <p-checkbox title="Editable" [(ngModel)]="rowData.editable" binary="true">
+                            </p-checkbox>
+                        </td>
+
+                        <td class="tablaColumnaAccion1" *ngIf="puedeFirmarDigital&&nivelActualizando>0">
+                            <p-checkbox title="Firma digital" [(ngModel)]="rowData.firmadigital" binary="true">
+                            </p-checkbox>
+                        </td>
+                        <td class="tablaColumnaAccion1" *ngIf="puedeFirmarImagen&&nivelActualizando>0">
+                            <p-checkbox title="Firma por imagen" [(ngModel)]="rowData.firmaimagen" binary="true">
+                            </p-checkbox>
+                        </td>
+
+                        <td class="tablaColumnaIzquierda">
+                            {{nombreDoc(rowData.tipodocumento)}}
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="guardarDocumentosXNivel()"></button>
+                </div>
+                <div class="p-field p-md-6">
+                </div>
+                <div class="p-field p-col-12 p-md-3">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalDocxNivel=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Documentos" [(visible)]="verModalDocumento" modal="modal" showEffect="fade" [blockScroll]="true" [style]="{width: '20vw'}" hideEffect="size">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Tipo</label>
+                    <p-dropdown [options]="lstTiposDocumentosBean" [style]="{'width':'100%'}" appendTo="body" [filter]="true" [(ngModel)]="documentoModal">
+                    </p-dropdown>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <p-checkbox binary="true" label="Requerido" [(ngModel)]="requeridoModal">
+                    </p-checkbox>
+                </div>
+                <div class="p-field p-col-12 p-md-12" *ngIf="puedeFirmarDigital">
+                    <p-checkbox binary="true" label="Firma digital" [(ngModel)]="digitalModal">
+                    </p-checkbox>
+                </div>
+                <div class="p-field p-col-12 p-md-12" *ngIf="puedeFirmarImagen">
+                    <p-checkbox binary="true" label="Firma por imagen" [(ngModel)]="imagenModal">
+                    </p-checkbox>
+                </div>
+                <div class="p-field p-col-12 p-md-12">
+                    <p-checkbox binary="true" label="Editable" [(ngModel)]="editableModal">
+                    </p-checkbox>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="guardarDocumentoBean()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalDocumento=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Correos" [(visible)]="verModalCorreo" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'570px'}">
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton label="Agregar" icon="fad fa-plus" type="button" class="p-button-outlined" (click)="agregarCorreo()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-8"></div>
+
+                <div class="p-field p-col-12 p-md-12">
+                    <p-table [scrollable]="true" [style]="{'width': '100%'}" [responsive]="true" [value]="lstCorreos">
+                        <ng-template pTemplate="header" let-columns>
+                            <tr>
+                                <th class="tablaHeaderAccion1">Acción</th>
+                                <th>Correo</th>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="body" let-row let-columns>
+                            <tr>
+                                <td class="tablaColumnaAccion1">
+                                    <button pButton icon="fal fa-trash-alt" (click)="eliminarCorreo(row)" class="p-button-rounded p-button-danger p-button-text" type="button"></button>
+                                </td>
+                                <td pEditableColumn>
+                                    <input pInputText type="text" style="width:100%" [(ngModel)]="row.descripcion">
+                                </td>
+                            </tr>
+                        </ng-template>
+                        <ng-template pTemplate="emptymessage" let-columns>
+                            <tr>
+                                <td [attr.colspan]="2">
+                                    No se encontraron registros
+                                </td>
+                            </tr>
+                        </ng-template>
+                    </p-table>
+                </div>
+
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="guardarCorreosOtros()"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verModalCorreo=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-dialog header="Editar Nivel" [(visible)]="verDlgPosicion" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'400px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-12">
+                    <label>Nivel</label>
+                    <input pInputText type="number" style="width:100%" [(ngModel)]="nivelDestino" maxlength="100">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined" type="button" label="Aceptar" icon="fad fa-check" (click)="actualizarPosicion()"></button>
+                </div>
+                <div class="p-field p-md-4">
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-secondary" type="button" label="Cancelar" icon="fad fa-undo" (click)="verDlgPosicion=false"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>
+
+<p-confirmDialog header="Confirmación" icon="fa fa-question-circle" [style]="{ width:'300px' }" #cd>
+    <p-footer>
+        <div class="p-grid">
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd.accept()"></button>
+            </div>
+            <div class="p-col-6 p-md-6 p-lg-5">
+                <button type="button" pButton icon="fad fa-times" label="No" (click)="cd.reject()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-confirmDialog>
+
+
+<app-wf-personacomun-selector (cargarSeleccionPersonaEvent)="cargarEmpleado($event)"></app-wf-personacomun-selector>
+<!--<app-wf-popsyreportedetalle (cargarSeleccionEvent)="confirmarPlantilla($event)"></app-wf-popsyreportedetalle>-->
+
+<p-dialog header="Plantillas" [(visible)]="verModalPlantillas" modal="modal" showEffect="fade" [blockScroll]="true" hideEffect="size" [style]="{width:'570px'}">
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-success" type="button" label="Aprobar" [icon]="iconoPlantilla(-1, 'AD')" (click)="verPlantillaDefault('AD', 'APROBA')"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-danger" type="button" label="Rechazar" [icon]="iconoPlantilla(-1, 'RD')" (click)="verPlantillaDefault('RD', 'RECHAZ')"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined p-button-warning" type="button" label="Devolver" [icon]="iconoPlantilla(-1, 'DD')" (click)="verPlantillaDefault('DD', 'DEVOLV')"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined " type="button" label="Guardar" [icon]="iconoPlantilla(-1, 'GD')" (click)="verPlantillaDefault('GD', 'GUARDA')"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined " type="button" label="Seguimiento" [icon]="iconoPlantilla(-1, 'SD')" (click)="verPlantillaDefault('SD', 'SEGUIM')"></button>
+                </div>
+                <div class="p-field p-col-12 p-md-4">
+                    <button pButton class="p-button-outlined " type="button" label="Alerta" [icon]="iconoPlantilla(-1, 'TD')" (click)="verPlantillaDefault('TD', 'ALERTA')"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-dialog>

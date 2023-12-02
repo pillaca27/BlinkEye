@@ -1,0 +1,156 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Aplicación</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="dto.aplicacioncodigo" [style]="{'width':'100%'}" pInputText type="text" [pKeyFilter]="blockSpecialAplicacion" (keyup)="validarMayus()" [disabled]="!indicadorNuevo" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText type="text" maxlength="20" [(ngModel)]="dto.descripcioncorta" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción Completa</label>
+                        <div class="p-col">
+                            <input pInputText type="text" maxlength="40" [(ngModel)]="dto.descripcionlarga" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Esta Disponible?</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <p-radioButton name="disponible" label="Si" value="S" [style]="{'flex': '1'}" [(ngModel)]="dto.estadisponible" [disabled]="!objetoTitulo.puedeEditar" inputId="opt1">
+                                </p-radioButton>
+                                &nbsp;&nbsp; &nbsp;&nbsp;
+                                <p-radioButton name="disponible" label="No" value="N" [style]="{'flex': '1'}" [(ngModel)]="dto.estadisponible" [disabled]="!objetoTitulo.puedeEditar" inputId="opt1">
+                                </p-radioButton>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-divider align="left">
+            <div class="p-d-inline-flex p-ai-center">
+                <i class="pi pi-bars p-mr-2"></i>
+                <b>Datos Por Defecto para la Generación de Vouchers</b>
+            </div>
+        </p-divider>
+
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Periodo Contable</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="dto.ultimoperiodocontable" [style]="{'width':'100%'}" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar" maxlength="6" pKeyFilter="int">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Departamento [Revisión]</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.departamentorevisor" [options]="lstDepartamentos" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Código Sistema Fuente</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.sistemafuente" [options]="lstSistemaFuente" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <p-divider align="left" *ngIf="dto.aplicacioncodigo == 'AP' || dto.aplicacioncodigo =='CO' || dto.aplicacioncodigo == 'ap' || dto.aplicacioncodigo =='co'">
+            <div class="p-d-inline-flex p-ai-center">
+                <i class="pi pi-bars p-mr-2"></i>
+                <b>Prefijo para Vouchers</b>
+            </div>
+        </p-divider>
+
+        <div class="p-col-12" *ngIf="dto.aplicacioncodigo == 'AP' || dto.aplicacioncodigo =='CO' || dto.aplicacioncodigo == 'ap' || dto.aplicacioncodigo =='co'">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Provisión de Documentos</label>
+                        <div class="p-col">
+                            <input [pKeyFilter]="blockSpecialAplicacion" onkeyup="this.value = this.value.toUpperCase();" [(ngModel)]="dto.aplicacionusuario" [style]="{'width':'100%'}" pInputText type="text" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label *ngIf="dto.aplicacioncodigo == 'AP' || dto.aplicacioncodigo == 'ap'" class="p-col-fixed label">Pagos</label>
+                        <label *ngIf="dto.aplicacioncodigo == 'CO' || dto.aplicacioncodigo == 'co'" class="p-col-fixed label">Cobranzas</label>
+                        <div class="p-col">
+                            <input [pKeyFilter]="blockSpecialAplicacion" onkeyup="this.value = this.value.toUpperCase();" [(ngModel)]="dto.aplicacionusuario02" [style]="{'width':'100%'}" pInputText type="text" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Letras y Préstamos</label>
+                        <div class="p-col">
+                            <input [pKeyFilter]="blockSpecialAplicacion" onkeyup="this.value = this.value.toUpperCase();" [(ngModel)]="dto.aplicacionusuario03" [style]="{'width':'100%'}" pInputText type="text" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label *ngIf="dto.aplicacioncodigo == 'AP' || dto.aplicacioncodigo == 'ap'" class="p-col-fixed label">Transacciones Bancarias</label>
+                        <label *ngIf="dto.aplicacioncodigo == 'CO' || dto.aplicacioncodigo == 'co'" class="p-col-fixed label">Cobranzas Dudosas</label>
+                        <div class="p-col">
+                            <input [pKeyFilter]="blockSpecialAplicacion" onkeyup="this.value = this.value.toUpperCase();" [(ngModel)]="dto.aplicacionusuario04" [style]="{'width':'100%'}" pInputText type="text" maxlength="2">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}"></p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

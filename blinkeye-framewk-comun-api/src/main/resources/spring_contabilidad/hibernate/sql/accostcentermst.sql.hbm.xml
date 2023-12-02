@@ -1,0 +1,760 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : accostcentermst
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+	
+	<sql-query name="accostcentermst.listar">
+    	<![CDATA[
+      	select localname as "nombre", costcenter as "codigo", 
+      		CAST(Status as varchar) AS "estadoId" 
+      	from AC_Costcentermst 
+      	order by LOCALNAME 
+    	]]>
+  	</sql-query>
+  	
+  	<sql-query name="accostcentermst.listaractivos">
+    	<![CDATA[
+      	select localname as "nombre", costcenter as "codigo",
+      		CAST(Status as varchar) AS "estadoId"
+      	from AC_Costcentermst where Status = 'A'
+      	order by LOCALNAME 
+    	]]>
+  	</sql-query>
+  	
+  	<sql-query name="accostcentermst.obtenertabla">
+    	select localname as "nombre", costcenter as "codigo" 
+      			,CAST(Status as varchar) AS "estadoId"
+      	from AC_Costcentermst where costcenter = :p_costcenter
+      	
+  	</sql-query>
+	
+<!-- 	<sql-query name="accostcentermst.obtenerdto"> -->
+<!--          select  -->
+<!-- 			COSTCENTER "costcenter" -->
+<!-- 			,LOCALNAME "localname" -->
+<!-- 			,ENGLISHNAME "englishname" -->
+<!-- 			,COSTCENTERCLASIFICATION "costcenterclasification" -->
+<!-- 			,COSTCENTERGROUP "costcentergroup" -->
+<!-- 			,COSTCENTERSUBGROUP "costcentersubgroup" -->
+<!-- 			,COSTCENTERRELATION "costcenterrelation" -->
+<!-- 			,RESPONSIBLE "responsible" -->
+<!-- 			,CAST(EXPENSEFINANCEFLAG as varchar) "expensefinanceflag" -->
+<!-- 			,CAST(EXPENSEADMINISTRATIVEFLAG as varchar) "expenseadministrativeflag" -->
+<!-- 			,CAST(EXPENSESALESFLAG as varchar) "expensesalesflag" -->
+<!-- 			,CAST(EXPENSEPRODUCTIONFLAG as varchar) "expenseproductionflag" -->
+<!-- 			,COSTCENTERNEXT "costcenternext" -->
+<!-- 			,VENDOR "vendor" -->
+<!-- 			,AMOUNTINVOICES "amountinvoices" -->
+<!-- 			,AMOUNTREQUISITIONS "amountrequisitions" -->
+<!-- 			,AMOUNTADVANCES "amountadvances" -->
+<!-- 			,AMOUNTOTHERS01 "amountothers01" -->
+<!-- 			,AMOUNTOTHERS02 "amountothers02" -->
+<!-- 			,AMOUNTOTHERS03 "amountothers03" -->
+<!-- 			,VENDORSIGNFILE "vendorsignfile" -->
+<!-- 			,ACCOUNT "account" -->
+<!-- 			,CAST(STATUS as varchar) "status" -->
+<!-- 			,LASTUSER "lastuser" -->
+<!-- 			,LASTDATE "lastdate" -->
+<!-- 			,CAST(INCOMEFLAG as varchar) "incomeflag" -->
+<!-- 			,ACCOUNTINFLATION "accountinflation" -->
+<!-- 			,CAST(EXPENSEFIXEDFLAG as varchar) "expensefixedflag" -->
+<!-- 			,CAST(EXPENSEDIRECTFLAG as varchar) "expensedirectflag" -->
+<!-- 			,SUCURSAL "sucursal" -->
+<!-- 			,INTERNALNUMBER "internalnumber" -->
+
+<!--          from AC_COSTCENTERMST -->
+<!--          where  -->
+<!-- 			COSTCENTER = :p_costcenter -->
+<!--     </sql-query> -->
+  	
+  	<sql-query name="accostcentermst.listardtofiltros">
+    	select 
+			COSTCENTER "costcenter"
+			,LOCALNAME "localname"
+			,ENGLISHNAME "englishname"
+			,COSTCENTERCLASIFICATION "costcenterclasification"
+			,COSTCENTERGROUP "costcentergroup"
+			,COSTCENTERSUBGROUP "costcentersubgroup"
+			,COSTCENTERRELATION "costcenterrelation"
+			,RESPONSIBLE "responsible"
+			,CAST(EXPENSEFINANCEFLAG as varchar) "expensefinanceflag"
+			,CAST(EXPENSEADMINISTRATIVEFLAG as varchar) "expenseadministrativeflag"
+			,CAST(EXPENSESALESFLAG as varchar) "expensesalesflag"
+			,CAST(EXPENSEPRODUCTIONFLAG as varchar) "expenseproductionflag"
+			,COSTCENTERNEXT "costcenternext"
+			,VENDOR "vendor"
+			,AMOUNTINVOICES "amountinvoices"
+			,AMOUNTREQUISITIONS "amountrequisitions"
+			,AMOUNTADVANCES "amountadvances"
+			,AMOUNTOTHERS01 "amountothers01"
+			,AMOUNTOTHERS02 "amountothers02"
+			,AMOUNTOTHERS03 "amountothers03"
+			,VENDORSIGNFILE "vendorsignfile"
+			,ACCOUNT "account"
+			,CAST(STATUS as varchar) "status"
+			,LASTUSER "lastuser"
+			,LASTDATE "lastdate"
+			,CAST(INCOMEFLAG as varchar) "incomeflag"
+			,ACCOUNTINFLATION "accountinflation"
+			,CAST(EXPENSEFIXEDFLAG as varchar) "expensefixedflag"
+			,CAST(EXPENSEDIRECTFLAG as varchar) "expensedirectflag"
+			,SUCURSAL "sucursal"
+			,INTERNALNUMBER "internalnumber"
+			,UUID "uuid"
+         from AC_COSTCENTERMST
+		where 
+				COSTCENTER = ISNULL(:p_costcenter,COSTCENTER)	
+			and UPPER(ISNULL(LOCALNAME,'xxx')) like '%' + ISNULL(:p_localname,UPPER(LOCALNAME)) + '%'
+			and ISNULL(status,'xx') = ISNULL(:p_status,ISNULL(status,'xx'))
+		order by LOCALNAME 
+  	</sql-query>
+  	
+	<sql-query name="accostcentermst.contarAutorizaciones">
+       SELECT count(1)
+	    FROM seguridadautorizaciones A
+	    WHERE 1=1
+	    AND A.APLICACIONCODIGO = :p_id_aplicacion
+	    AND A.GRUPO = :p_id_grupo
+	    AND A.CONCEPTO = :p_id_concepto
+	    AND A.ESTADO = 'A'
+	    AND A.USUARIO IN (SELECT :p_id_usuario  
+	                        UNION ALL 
+	                      SELECT P.PERFIL 
+	                        FROM SEGURIDADPERFILUSUARIO P
+	                        WHERE P.USUARIO = :p_id_usuario
+	                        AND P.ESTADO = 'A'
+	                      )         
+    </sql-query>
+  	
+  	<sql-query name="accostcentermst.paginadoAutorizadosContar">
+       SELECT count(1)
+        FROM ac_costcentermst C
+            INNER JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoAutorizadosListar">
+        SELECT C.COSTCENTER as "costcenter"
+            ,C.LOCALNAME as "localname" 
+            ,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+        FROM ac_costcentermst C
+            LEFT JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+        order by C.COSTCENTER
+    </sql-query>
+    
+	 <sql-query name="accostcentermst.paginadoSupervisadosListar">
+        SELECT C.COSTCENTER as "costcenter"
+			,C.LOCALNAME as "localname" 
+			,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+		AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )         	
+		order by C.COSTCENTER
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoSupervisadosContar">
+       SELECT count(1)
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+        AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )
+    </sql-query>
+        
+    <sql-query name="accostcentermst.paginadoEmpleadosListar">
+         SELECT C.COSTCENTER as "costcenter"
+			,C.LOCALNAME as "localname" 
+			,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+		FROM ac_costcentermst C
+            inner join MA_PersonaCentroCostoAutorizac A
+            on C.COSTCENTER = A.CENTROCOSTOS
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+             )
+        AND A.APLICACIONCODIGO = 'WH'
+        AND A.PERSONA = :p_id_persona
+        AND ISNULL(A.REVISIONFLAG,'X') = ISNULL(:p_flg_revision, ISNULL(A.REVISIONFLAG,'X'))
+        AND ISNULL(A.APROBACIONFLAG,'X') = ISNULL(:p_flg_aprobacion, ISNULL(A.APROBACIONFLAG,'X'))
+        AND ISNULL(A.PREPARACIONFLAG,'X') = ISNULL(:p_flg_preparacion, ISNULL(A.PREPARACIONFLAG,'X'))
+            	
+		order by C.COSTCENTER
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoEmpleadosContar">
+        SELECT COUNT(1)
+		FROM ac_costcentermst C
+            inner join MA_PersonaCentroCostoAutorizac A
+            on C.COSTCENTER = A.CENTROCOSTOS
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+        AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+             )
+        AND A.APLICACIONCODIGO = 'WH'
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND A.PERSONA = :p_id_persona
+        AND ISNULL(A.REVISIONFLAG,'X') = ISNULL(:p_flg_revision, ISNULL(A.REVISIONFLAG,'X'))
+        AND ISNULL(A.APROBACIONFLAG,'X') = ISNULL(:p_flg_aprobacion, ISNULL(A.APROBACIONFLAG,'X'))
+        AND ISNULL(A.PREPARACIONFLAG,'X') = ISNULL(:p_flg_preparacion, ISNULL(A.PREPARACIONFLAG,'X'))        
+    </sql-query>
+  	
+  	
+  	
+  	<sql-query name="accostcentermst.paginadoAutorizadosContarPrincipales">
+       SELECT count(1)
+        FROM ac_costcentermst C
+            INNER JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 3
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+    </sql-query>
+    
+    
+    <sql-query name="accostcentermst.paginadoAutorizadosListarPrincipales">
+        SELECT C.COSTCENTER as "costcenter"
+            ,C.LOCALNAME as "localname" 
+            ,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+        FROM ac_costcentermst C
+            LEFT JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 3
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+        order by C.COSTCENTER
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoSupervisadosContarPrincipales">
+       SELECT count(1)
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 3
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+        AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )
+    </sql-query>
+  	
+  	
+  	<sql-query name="accostcentermst.paginadoSupervisadosListarPrincipales">
+        SELECT C.COSTCENTER as "costcenter"
+			,C.LOCALNAME as "localname" 
+			,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 3
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+		AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )         	
+		order by C.COSTCENTER
+    </sql-query>
+  	
+  		<sql-query name="accostcentermst.paginadoAutorizadosContarPrincipalesGenerados">
+       SELECT count(1)
+        FROM ac_costcentermst C
+            INNER JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 5
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+    </sql-query>
+    
+    
+    <sql-query name="accostcentermst.paginadoAutorizadosListarPrincipalesGenerados">
+        SELECT C.COSTCENTER as "costcenter"
+            ,C.LOCALNAME as "localname" 
+            ,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+        FROM ac_costcentermst C
+            LEFT JOIN sy_seguridadautorizaciones A
+            ON  A.AplicacionCodigo = 'SY'
+                AND A.Grupo = 'CENTROCOSTOS'
+                AND A.Usuario = :p_id_usuario
+                AND C.COSTCENTER = A.CONCEPTO
+        WHERE 1=1
+        AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.COSTCENTER LIKE '%' + ISNULL(:p_codigo,C.COSTCENTER) + '%'
+        AND UPPER(C.LOCALNAME) LIKE '%' + UPPER(ISNULL(:p_nombre,C.LOCALNAME)) + '%'
+        AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 5
+        AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         )
+        order by C.COSTCENTER
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoSupervisadosContarPrincipalesGenerados">
+       SELECT count(1)
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 5
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+        AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )
+    </sql-query>
+  	
+  	
+  	<sql-query name="accostcentermst.paginadoSupervisadosListarPrincipalesGenerados">
+        SELECT C.COSTCENTER as "costcenter"
+			,C.LOCALNAME as "localname" 
+			,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+		FROM ac_costcentermst C
+		WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+		AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+		AND LEN(RTRIM(LTRIM(C.COSTCENTER))) = 5
+		AND ( C.multicompanyflag = 'S'
+          OR EXISTS (
+                SELECT 1
+                  FROM ac_costcentercompany
+                 WHERE C.costcenter = ac_costcentercompany.costcenter
+                   AND ac_costcentercompany.companyowner = :p_id_compania)
+         	)
+		AND ( C.VENDOR = :p_id_persona
+            OR 'S' = :p_flg_supervisor )         	
+		order by C.COSTCENTER
+    </sql-query>
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+  	
+<!--   	Mantenimiento -->
+   <sql-query name="accostcentermst.obtenerDtoPorUuid">
+           SELECT RTRIM(AC_CostCenterMst.CostCenter) as "costcenter",   
+         AC_CostCenterMst.LocalName as "localname",   
+         AC_CostCenterMst.EnglishName as "englishname",   
+ 
+         cast(AC_CostCenterMst.ExpenseFinanceFlag as varchar) "expensefinanceflag"
+			,cast(AC_CostCenterMst.ExpenseAdministrativeFlag as varchar) "expenseadministrativeflag"
+			,cast(AC_CostCenterMst.ExpenseSalesFlag as varchar) "expensesalesflag"
+			,cast(AC_CostCenterMst.ExpenseProductionFlag as varchar) "expenseproductionflag"	,	  
+		  cast(AC_CostCenterMst.IncomeFlag as varchar) as "incomeflag",    
+         
+         AC_CostCenterMst.Vendor as "vendor",   
+         AC_CostCenterMst.AmountInvoices as "amountinvoices",   
+         AC_CostCenterMst.CostCenterNext as "costcenternext",   
+
+         AC_CostCenterMst.CostCenterType as "costcentertype",           
+         AC_CostCenterMst.Account as "account",   
+         AC_CostCenterMst.AccountDestination as "accountdestination",   
+         AC_CostCenterMst.Sucursal as "sucursal",   
+
+         cast(AC_CostCenterMst.Status as varchar) "status",
+         AC_CostCenterMst.LastUser as "lastuser",   
+         AC_CostCenterMst.Lastdate as "lastdate",
+         cast(AC_CostCenterMst.MultiCompanyFlag as varchar ) as  "multicompanyflag",   
+
+		AC_CostCenterMst.CostCenterClasification as "costcenterclasification",   
+         AC_CostCenterMst.CostCenterGroup as "costcentergroup",   
+         AC_CostCenterMst.CostCenterSubGroup as "costcentersubgroup",   
+         AC_CostCenterGroup.LocalName as "grupo",   
+         AC_CostCenterSubGroup.LocalName  as "subgrupo" ,
+         		 PersonaMast.busqueda as "vendorDescri",
+		 AC_CostCenterMst.costcenternext + ' - ' + AC_CostCenterMst2.localname as "costcenternextDescri"
+
+		,AC_CostCenterMst.UUID "uuid"
+    FROM AC_CostCenterMst WITH (NOLOCK) LEFT JOIN AC_CostCenterGroup WITH (NOLOCK)
+         ON   ( AC_CostCenterMst.CostCenterGroup = AC_CostCenterGroup.CostCenterGroup)
+LEFT JOIN AC_CostCenterSubGroup WITH (NOLOCK)
+         ON ( AC_CostCenterSubGroup.CostCenterGroup = AC_CostCenterMst.CostCenterGroup and  
+         AC_CostCenterSubGroup.CostCenterSubGroup = AC_CostCenterMst.CostCenterSubGroup )
+         		 LEFT JOIN PersonaMast  WITH (NOLOCK)  ON PersonaMast.Persona =AC_CostCenterMst.vendor
+		  LEFT JOIN AC_CostCenterMst AC_CostCenterMst2  WITH (NOLOCK)  ON AC_CostCenterMst2.CostCenter =AC_CostCenterMst.costcenternext
+   WHERE  AC_CostCenterMst.UUID = :p_uuid
+
+
+    </sql-query>
+
+   <sql-query name="accostcentermst.obtenerDto">
+           SELECT RTRIM(AC_CostCenterMst.CostCenter) as "costcenter",   
+         AC_CostCenterMst.LocalName as "localname",   
+         AC_CostCenterMst.EnglishName as "englishname",   
+ 
+         cast(AC_CostCenterMst.ExpenseFinanceFlag as varchar) "expensefinanceflag"
+			,cast(AC_CostCenterMst.ExpenseAdministrativeFlag as varchar) "expenseadministrativeflag"
+			,cast(AC_CostCenterMst.ExpenseSalesFlag as varchar) "expensesalesflag"
+			,cast(AC_CostCenterMst.ExpenseProductionFlag as varchar) "expenseproductionflag"	,	  
+		  cast(AC_CostCenterMst.IncomeFlag as varchar) as "incomeflag",    
+         
+         AC_CostCenterMst.Vendor as "vendor",   
+         AC_CostCenterMst.AmountInvoices as "amountinvoices",   
+         AC_CostCenterMst.CostCenterNext as "costcenternext",   
+
+         AC_CostCenterMst.CostCenterType as "costcentertype",           
+         AC_CostCenterMst.Account as "account",   
+         AC_CostCenterMst.AccountDestination as "accountdestination",   
+         AC_CostCenterMst.Sucursal as "sucursal",   
+
+         cast(AC_CostCenterMst.Status as varchar) "status",
+         AC_CostCenterMst.LastUser as "lastuser",   
+         AC_CostCenterMst.Lastdate as "lastdate",
+         cast(AC_CostCenterMst.MultiCompanyFlag as varchar ) as  "multicompanyflag",   
+
+		AC_CostCenterMst.CostCenterClasification as "costcenterclasification",   
+         AC_CostCenterMst.CostCenterGroup as "costcentergroup",   
+         AC_CostCenterMst.CostCenterSubGroup as "costcentersubgroup",   
+         AC_CostCenterGroup.LocalName as "grupo",   
+         AC_CostCenterSubGroup.LocalName  as "subgrupo" ,
+         		 PersonaMast.busqueda as "vendorDescri",
+		 AC_CostCenterMst.costcenternext + ' - ' + AC_CostCenterMst2.localname as "costcenternextDescri"
+
+		,AC_CostCenterMst.UUID "uuid"
+    FROM AC_CostCenterMst WITH (NOLOCK) LEFT JOIN AC_CostCenterGroup WITH (NOLOCK)
+         ON   ( AC_CostCenterMst.CostCenterGroup = AC_CostCenterGroup.CostCenterGroup)
+LEFT JOIN AC_CostCenterSubGroup WITH (NOLOCK)
+         ON ( AC_CostCenterSubGroup.CostCenterGroup = AC_CostCenterMst.CostCenterGroup and  
+         AC_CostCenterSubGroup.CostCenterSubGroup = AC_CostCenterMst.CostCenterSubGroup )
+         		 LEFT JOIN PersonaMast  WITH (NOLOCK)  ON PersonaMast.Persona =AC_CostCenterMst.vendor
+		  LEFT JOIN AC_CostCenterMst AC_CostCenterMst2  WITH (NOLOCK)  ON AC_CostCenterMst2.CostCenter =AC_CostCenterMst.costcenternext
+   WHERE ( AC_CostCenterMst.CostCenter = :p_costcenter )
+
+
+    </sql-query>
+    
+        <sql-query name="accostcentermst.obtenerDtoDetalle1">
+               SELECT rtrim(AC_CostCenterAccount.Account) as "account",   
+         accountmst.localname as "descripcion",   
+        cast(AC_CostCenterAccount.Status as varchar) "status",   
+         AC_CostCenterAccount.LastUser as "lastuser",   
+         AC_CostCenterAccount.LastDate as "lastdate",   
+         AC_CostCenterAccount.CostCenter  as "costcenter",
+         cast('A' as varchar) as "accion"
+    FROM AC_CostCenterAccount  
+         left join accountmst  on accountmst.account = AC_CostCenterAccount.Account
+   WHERE 
+         ( ( AC_CostCenterAccount.CostCenter = :p_costcenter ) )   
+ORDER BY AC_CostCenterAccount.Account ASC   
+
+
+    </sql-query>
+    
+            <sql-query name="accostcentermst.obtenerDtoDetalle2">
+               SELECT AC_CostCenterVendor.CostCenter as "costcenter",   
+         PersonaMast.Busqueda as  "descripcion",   
+         AC_CostCenterVendor.Vendor as "vendor",   
+        cast(AC_CostCenterVendor.Status as varchar) "status", 
+         AC_CostCenterVendor.LastUser as "lastuser",   
+         AC_CostCenterVendor.LastDate  as "lastdate",
+           cast('A' as varchar) as "accion"
+    FROM AC_CostCenterVendor,   
+         PersonaMast  
+   WHERE ( AC_CostCenterVendor.Vendor = PersonaMast.Persona ) and  
+         ( ( AC_CostCenterVendor.CostCenter = :p_costcenter) ) 
+
+
+    </sql-query>
+
+ 
+             <sql-query name="accostcentermst.obtenerDtoDetalle3">
+               select 
+			CostCenter "costcenter"
+			,rtrim(CostCenterDestination) "costcenterdestination"
+			 ,cast(Status as varchar) "status" 
+			,LastUser "lastuser"
+			,LastDate "lastdate"
+			,cast('A' as varchar) as "accion"
+			
+         from AC_COSTCENTERDESTVALID
+         where 
+			CostCenter = :p_costcenter
+    </sql-query>
+    
+            <sql-query name="accostcentermst.obtenerDtoDetalle4">
+SELECT AC_CostCenterAfe.CostCenter as "costcenter",   
+         rtrim(AC_CostCenterAfe.Afe) as "afe",   
+         cast(AC_CostCenterAfe.Status as varchar) as "status",   
+         AC_CostCenterAfe.LastUser as "lastuser",   
+         AC_CostCenterAfe.LastDate as "lastdate",   
+         afemst.localname  as "descripcion"
+         ,cast('A' as varchar) as "accion"
+         
+    FROM AC_CostCenterAfe WITH (NOLOCK) LEFT JOIN afemst WITH (NOLOCK)
+         ON ( AC_CostCenterAfe.Afe = afemst.afe )
+   WHERE ( AC_CostCenterAfe.CostCenter = :p_costcenter )
+    </sql-query>
+    
+
+    <sql-query name="accostcentermst.listarPaginadoContar">
+         select count(1)
+         from AC_COSTCENTERMST
+         where 
+				CostCenter >= :p_costcenter
+
+    </sql-query>
+
+    <sql-query name="accostcentermst.listarPaginadoSentencia">
+         select 
+			CostCenter "costcenter"
+			,LocalName "localname"
+			,cast(ExpenseFinanceFlag as varchar) "expensefinanceflag"
+			,cast(ExpenseAdministrativeFlag as varchar) "expenseadministrativeflag"
+			,cast(ExpenseSalesFlag as varchar) "expensesalesflag"
+			,cast(ExpenseProductionFlag as varchar) "expenseproductionflag"		
+			,cast(Status as varchar) "status"
+			,case when cast(status as varchar(1)) = 'A' THEN 'Activo' else
+			'Inactivo' end AS "estadodescripcion"
+			,case when cast(ExpenseFinanceFlag as varchar) = 'Y' THEN 'X' ELSE ' ' END AS "finanzas"
+			,case when cast(ExpenseAdministrativeFlag as varchar) = 'Y' THEN 'X' ELSE ' ' END AS "admin"
+			,case when cast(ExpenseSalesFlag as varchar) = 'Y' THEN 'X' ELSE ' ' END AS "ventas"
+			,case when cast(ExpenseProductionFlag as varchar) = 'Y' THEN 'X' ELSE ' ' END AS "prod"
+			,UUID "uuid"
+         from AC_COSTCENTERMST
+		
+         where 
+			CostCenter >= :p_costcenter
+			ORDER BY CostCenter ASC   
+    </sql-query>
+    
+     <sql-query name="accostcentermst.listarPaginadoContarGrupo">
+        
+			  SELECT count(1)
+    FROM AC_CostCenterGroup,   
+         AC_CostCenterSubGroup  
+   WHERE ( AC_CostCenterGroup.CostCenterGroup = AC_CostCenterSubGroup.CostCenterGroup ) and  
+         ( ( AC_CostCenterGroup.Status = 'A' ) AND  
+         ( AC_CostCenterSubGroup.Status = 'A' ) )   and AC_CostCenterGroup.CostCenterGroup >= :p_grupo 
+
+    </sql-query>
+
+    <sql-query name="accostcentermst.listarPaginadoSentenciaGrupo">
+         
+			  SELECT AC_CostCenterGroup.CostCenterGroup as "costcentergroup",   
+         AC_CostCenterGroup.LocalName as "localname",   
+         AC_CostCenterSubGroup.CostCenterSubGroup as "costcentermajorgroup",   
+         AC_CostCenterSubGroup.LocalName as "subgrupo"  
+    FROM AC_CostCenterGroup,   
+         AC_CostCenterSubGroup  
+   WHERE ( AC_CostCenterGroup.CostCenterGroup = AC_CostCenterSubGroup.CostCenterGroup ) and  
+         ( ( AC_CostCenterGroup.Status = 'A' ) AND  
+         ( AC_CostCenterSubGroup.Status = 'A' ) )   and AC_CostCenterGroup.CostCenterGroup >= :p_grupo 
+ORDER BY AC_CostCenterGroup.CostCenterGroup ASC,   
+         AC_CostCenterSubGroup.CostCenterSubGroup ASC   
+    </sql-query>
+    
+
+    <sql-query name="accostcentermst.listarDtoCore">
+         select 
+			CostCenter "costcenter"
+			,LocalName "localname"
+			,EnglishName "englishname"
+			,CostCenterClasification "costcenterclasification"
+			,CostCenterGroup "costcentergroup"
+			,CostCenterSubGroup "costcentersubgroup"
+			,CostCenterRelation "costcenterrelation"
+			,Responsible "responsible"
+			,ExpenseFinanceFlag "expensefinanceflag"
+			,ExpenseAdministrativeFlag "expenseadministrativeflag"
+			,ExpenseSalesFlag "expensesalesflag"
+			,ExpenseProductionFlag "expenseproductionflag"
+			,CostCenterNext "costcenternext"
+			,Vendor "vendor"
+			,AmountInvoices "amountinvoices"
+			,AmountRequisitions "amountrequisitions"
+			,AmountAdvances "amountadvances"
+			,AmountOthers01 "amountothers01"
+			,AmountOthers02 "amountothers02"
+			,AmountOthers03 "amountothers03"
+			,VendorSignFile "vendorsignfile"
+			,Account "account"
+			,Status "status"
+			,LastUser "lastuser"
+			,Lastdate "lastdate"
+			,CostProductionLevel "costproductionlevel"
+			,AccountDestination "accountdestination"
+			,CostCenterType "costcentertype"
+			,IncomeFlag "incomeflag"
+			,AccountInflation "accountinflation"
+			,ExpenseDirectFlag "expensedirectflag"
+			,ExpenseFixedFlag "expensefixedflag"
+			,Sucursal "sucursal"
+			,InternalNumber "internalnumber"
+			,RacionPerfil "racionperfil"
+			,RacionPerfilMantenimiento "racionperfilmantenimiento"
+			,Address "address"
+			,MultiCompanyFlag "multicompanyflag"
+			,CPAutomaticInvoFlag "cpautomaticinvoflag"
+			,CPAutomaticRequFlag "cpautomaticrequflag"
+			,UUID "uuid"
+         from AC_COSTCENTERMST
+         where 
+			CostCenter = ISNULL(:p_costcenter, CostCenter)
+			CostCenter = ISNULL(:p_costcenter, CostCenter)
+
+    </sql-query>
+    
+    
+    <sql-query name="accostcentermst.paginadoTodosContar">
+    	SELECT count(*)
+		FROM ac_costcentermst C
+        WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+        
+    </sql-query>
+    
+    <sql-query name="accostcentermst.paginadoTodosListar">
+         SELECT C.COSTCENTER as "costcenter"
+			,C.LOCALNAME as "localname" 
+			,CAST(C.expensefinanceflag as varchar) as "expensefinanceflag"
+            ,CAST(C.expenseadministrativeflag as varchar) as "expenseadministrativeflag"
+            ,CAST(C.expensesalesflag as varchar) as "expensesalesflag"
+            ,CAST(C.expenseproductionflag as varchar) as "expenseproductionflag"
+		FROM ac_costcentermst C
+        WHERE C.COSTCENTER = ISNULL(:p_codigo,C.COSTCENTER)
+		AND C.status = ISNULL(:p_id_estado,C.status)
+        AND C.LOCALNAME LIKE '%' + ISNULL(:p_nombre,C.LOCALNAME) + '%'
+
+		order by C.COSTCENTER
+    </sql-query>
+
+    
+</hibernate-mapping>

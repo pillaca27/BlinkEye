@@ -1,0 +1,109 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Sucursal</label>
+                        <div class="p-col">
+                            <input [(ngModel)]="filtro.sucursal" [style]="{'width':'100%'}" [pKeyFilter]="blockSpecial" pInputText (ngModelChange)="filtro.sucursal = $event.toUpperCase()" type="text" maxlength="4" (keypress)="defaultBuscar($event)">
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText type="text" class="inputDescripcion" [(ngModel)]="filtro.descripcionlocal" maxlength="30" (keypress)="defaultBuscar($event)" (ngModelChange)="filtro.descripcionlocal=$event.toUpperCase()" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="filtro.estado" [options]="lstEstados" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS3B">
+    </app-botones-listado>
+
+    <p-table [value]="filtro.paginacion.paginacionListaResultado" [paginator]="true" [responsive]="true" [style]="{ width: '100%'}" [rows]="filtro.paginacion.paginacionRegistrosPorPagina" [lazy]="true" (onLazyLoad)="grillaCargarDatos($event)" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados"
+        [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaHeaderAccion3">Acción</th>
+                <th class="tablaHeaderCodigoChico">Sucursal</th>
+                <th class="tablaHeaderIzquierda">Descripción</th>
+                <th class="tablaHeaderCodigo">Grupo</th>
+                <th class="tablaHeaderEstado">Estado</th>
+                <th class="tablaHeaderEstado">Último Usuario</th>
+                <th class="tablaHeaderEstado">Última Modif.</th>
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="body" let-row>
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <span class="p-column-title">Acción</span>
+                    <table>
+                        <tr>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-pencil-alt" *ngIf="menuSeguridad.flgModificar" class="p-button-rounded p-button-text botonGrilla" title="Editar" (click)="coreEditar(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fad fa-search" *ngIf="menuSeguridad.flgModificar" class="p-button-rounded p-button-text botonGrilla" title="Ver" (click)="coreVer(row)"></button>
+                            </th>
+                            <th>
+                                <button pButton pRipple type="button" icon="fal fa-trash-alt" *ngIf="menuSeguridad.flgModificar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminar(row)"></button>
+                            </th>
+                        </tr>
+                    </table>
+
+                </td>
+                <td class="tablaColumnaCodigoChico">
+                    <span class="p-column-title">Sucursal</span> {{row.sucursal}}
+                </td>
+                <td class="tablaColumnaIzquierda">
+                    <span class="p-column-title">Descripción</span> {{row.descripcionlocal}}
+                </td>
+                <td class="tablaColumnaCodigo">
+                    <span class="p-column-title">Grupo</span> {{row.sucursalgrupo | labelFromItem : lstGrupoSucursal}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Estado</span>
+                    <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                    <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Último Usuario</span> {{row.ultimousuario}}
+                </td>
+                <td class="tablaColumnaEstado">
+                    <span class="p-column-title">Última Fecha Modif.</span> {{row.ultimafechamodif | date: 'dd/MM/yyyy'}}
+                </td>
+
+
+            </tr>
+        </ng-template>
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td [attr.colspan]="7">
+                    No existen registros para mostrar
+                </td>
+            </tr>
+        </ng-template>
+    </p-table>
+</p-card>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

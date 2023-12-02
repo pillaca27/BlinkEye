@@ -1,0 +1,64 @@
+<div class="ui-fluid" #frm>
+    <p-dialog header="RECURSO : Edición" [(visible)]="verSelector" modal="modal" [style]="{'width': '820px'}"
+        appendTo="body">
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-4 p-md-4">
+                        <label>Compañía</label>
+                        <p-dropdown [options]="companias" [disabled]="!puedeEditar"
+                            [(ngModel)]="companyownerrecurso.companyowner" [style]="{'width':'100%'}"></p-dropdown>
+                    </div>
+                    <div class="p-field p-col-4 p-md-4">
+                        <label>Tipo Recurso</label>
+                        <input pInputText type="text" disabled [(ngModel)]="companyownerrecurso.tiporecurso" />
+                    </div>
+                    <div class="p-field p-col-4 p-md-4">
+                        <label class="importante">Periodo</label>
+                        <input pInputText type="text" maxlength="6" [disabled]="!puedeEditar"
+                            [(ngModel)]="companyownerrecurso.periodo" />
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-field p-col-4 p-md-2">
+                        <input #photoRecurso type="file" class="form-control" style="display:none"
+                            (change)="cargarRecurso(photoRecurso)">
+                        <button pButton icon="fa fa-plus" class="ui-button" type="button"
+                            (click)="photoRecurso.click()"></button>
+                    </div>
+                    <div class="p-field p-col-4 p-md-2">
+                        <button pButton icon="fa fa-trash" class="ui-button" type="button"
+                            (click)="eliminarImagen()"></button>
+                    </div>
+                    <div class="p-field p-col-12 p-md-12">
+                        <img *ngIf="imageSrc" [src]="imageSrc" height="300">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="p-grid">
+            <div class="p-col-12">
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-4">
+                        <button pButton pRipple type="button" label="Guardar" icon="fad fa-save"
+                            class="p-button-outlined" (click)="guardar()"></button>
+                    </div>
+                    <div class="p-col-12 p-md-4"></div>
+                    <div class="p-col-12 p-md-4">
+                        <button pButton pRipple type="button" label="Salir" icon="fad fa-reply"
+                            class="p-button-outlined p-button-secondary" (click)='verSelector=false'></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+    </p-dialog>
+</div>

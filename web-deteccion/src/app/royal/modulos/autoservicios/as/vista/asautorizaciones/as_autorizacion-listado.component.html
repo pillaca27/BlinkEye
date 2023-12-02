@@ -1,0 +1,188 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Conceptos</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="conceptos" filter="true" [(ngModel)]="filtro.conceptoacceso" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Desde</label>
+                        <div class="p-col">
+                            <p-calendar [monthNavigator]="true" [yearNavigator]="true" [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaDesde" (keypress)="defaultBuscar($event)" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Hasta</label>
+                        <div class="p-col">
+                            <p-calendar [monthNavigator]="true " [yearNavigator]="true " [locale]="es" yearRange="1940:2200" (keypress)="defaultBuscar($event)" [(ngModel)]="filtro.fechaHasta" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="estados" [(ngModel)]="filtro.estado" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <!-- <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Periodo</label>
+                        <div class="p-col">
+                            <input pInputText type="text" placeholder="AAAAMM" maxlength="6" [(ngModel)]="filtro.periodo" />
+                        </div>
+                    </div>
+                </div> -->
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BAS2B">
+    </app-botones-listado>
+
+    <p-table #dtPermisos [scrollable]="true" [rows]="20" [responsive]="true" [paginator]="true" [value]="listadoAsAutorizaciones" [showCurrentPageReport]="true">
+
+        <ng-template pTemplate="header">
+            <tr>
+                <th class="tablaColumnaAccion3">Acción</th>
+                <th style="width: 3em" *ngIf="puedeAutorizar">
+                    <p-tableHeaderCheckbox></p-tableHeaderCheckbox>
+                </th>
+                <th class="tablaColumnaEstado">Estado</th>
+                <th class="tablaColumnaFecha">Inicio</th>
+                <th class="tablaColumnaFecha">Fin</th>
+                <th style="width:270px">Nombre</th>
+                <th style="width:270px">Concepto</th>
+                <th style="width:180px">Comportamiento Sobretiempo</th>
+                <th class="tablaColumnaFecha">Desde</th>
+                <th class="tablaColumnaFecha">Hasta</th>
+                <th style="width:90px">Inicio / Fin de Jornada</th>
+                <th style="width:170px">Observacion del Trabajador</th>
+                <th class="tablaHeaderUsuario">Solicitado Por</th>
+                <th class="tablaColumnaFecha">Fecha Solicitud</th>
+                <th style="width:170px">Autorizado Por</th>
+                <th class="tablaColumnaFecha">Fecha de Autorización</th>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="body" let-row let-columns="columns">
+            <tr>
+                <td class="tablaColumnaAccion3">
+                    <button pButton pRipple type="button" icon="fad fa-pencil-alt" class="p-button-rounded p-button-text" title="Editar" *ngIf="menuSeguridad.flgModificar && row.estado==='S' ||  row.estado==='R'" (click)="editar(row)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-search" class="p-button-rounded p-button-text" title="Ver" (click)="ver(row)"></button>
+                    <button pButton pRipple type="button" icon="fad fa-times" class="p-button-rounded p-button-text" title="Eliminar" *ngIf="menuSeguridad.flgBorrar" (click)="eliminar(row)"></button>
+                </td>
+
+                <td style="width: 3em" *ngIf="puedeAutorizar">
+                    <p-tableCheckbox [value]="row"></p-tableCheckbox>
+                </td>
+                <td class="tablaColumnaEstado">
+                    <label *ngIf="row.estado==='S'" style="color: cornflowerblue;">Solicitado</label>
+                    <label *ngIf="row.estado==='R'" style="color: red;">Rechazado</label>
+                    <label *ngIf="row.estado==='A'" style="color: green;">Aprobado</label>
+                </td>
+
+                <td class="tablaColumnaFecha"><span class="p-column-title">Inicio
+                </span>{{row.fecha | date: 'dd/MM/yyyy'}}</td>
+
+                <td class="tablaColumnaFecha"><span class="p-column-title">Fin
+                </span>{{row.fechafin | date: 'dd/MM/yyyy'}}</td>
+                <td style="width:270px"><span class="p-column-title">Nombre</span>{{row.nombrecompleto}}
+                </td>
+                <td style="width:270px;text-align:left"><span class="p-column-title">Concepto</span>{{row.conceptoaccesonombre}}</td>
+                <td style="width:180px;text-align:left"><span class="p-column-title"> Comportamiento
+                    Sobretiempo</span>{{row.comportamientoNombre}}</td>
+
+                <td class="tablaColumnaFecha"><span class="p-column-title">Desde</span>{{row.desde1 | date:'HH:mm'}}
+                </td>
+                <td class="tablaColumnaFecha"><span class="p-column-title">Hasta</span>{{row.hasta1 | date:'HH:mm'}}
+                </td>
+                <td style="width:90px;text-align:left"><span class="p-column-title">Inicio / Fin de Jornada</span> {{row.iniciofinjornada=='I'?'Inicio Jornada':row.iniciofinjornada=='F'?'Término Jornada':''}}</td>
+
+                <td style="width:170px;text-align: left;"><span class="p-column-title">
+                    Observacion del Trabajador</span>{{row.observacion}}</td>
+                <td class="tablaHeaderUsuario"><span class="p-column-title">Solicitado
+                    Por</span>{{row.solicitadopor}}</td>
+                <td class="tablaColumnaFecha"><span class="p-column-title">Fecha
+                    Solicitud</span>{{row.fechasolicitud | date: 'dd/MM/yyyy'}}</td>
+                <td style="width:170px"><span class="p-column-title">Autorizado
+                    Por</span>{{row.autorizadoPor}}
+                </td>
+                <td class="tablaColumnaFecha"><span class="p-column-title">Fecha de Autorización
+                </span>{{row.fechaAutorizado | date: 'dd/MM/yyyy'}}</td>
+            </tr>
+        </ng-template>
+
+        <ng-template pTemplate="emptymessage" let-columns>
+            <tr>
+                <td colspan="23">
+                    No se encontraron registros
+                </td>
+            </tr>
+        </ng-template>
+
+    </p-table>
+</p-card>
+
+<app-personacomun-selector></app-personacomun-selector>
+
+<p-confirmDialog header="Confirmación" icon="fa fa-question-circle" [style]="{ width:'300px' }" #cd>
+    <p-footer>
+        <div class="ui-g ui-g-nopad">
+            <div class="ui-g-6 ui-md-6 ui-lg-5">
+                <button type="button" pButton icon="fa fa-check" label="Si" (click)="cd.accept()"></button>
+            </div>
+            <div class="ui-g-6 ui-md-6 ui-lg-5">
+                <button type="button" pButton icon="fad fa-times" label="No" (click)="cd.reject()"></button>
+            </div>
+        </div>
+    </p-footer>
+</p-confirmDialog>
+
+<p-dialog header="Motivo de Rechazo" [(visible)]="verMantenimiento" modal="modal" showEffect="fade" hideEffect="size" [contentStyle]="{'max-height':'350px'}" autoAlign="true" [style]="{'max-width':'450px', 'left':'15px', 'right':'15px'}">
+    <div class="ui-fluid">
+        <div class="bordeGenerico">
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <label style="font-weight:bold">Ingrese el motivo del Rechazo del empleado.</label>
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-12 ui-lg-12">
+                    <input pInputText type="text" [ngModel]="nombrePersonaRechazado" disabled />
+                </div>
+            </div>
+
+            <div class="ui-g">
+                <div class="ui-g-12 ui-md-6 ui-lg-12">
+                    <textarea pInputTextarea [(ngModel)]="motivoRechazoIndividual" style="width: 100%" rows="10" cols="30" maxlength="800"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <div class="ui-g">
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <button pButton type="button" icon="fa fa-save" style="width:100%;font-size:12px;" label="Aceptar" class="ui-button-raised  ui-button-rounded ui-button-success" (click)="aceptarMotivoRechazo(rechazoActualSumado,dtPermisos)"></button>
+            </div>
+
+            <div class="ui-g-12 ui-md-6 ui-lg-4">
+                <button pButton type="button" icon="fa fa-history" style="width:100%;font-size:12px;" label="Cancelar" class="ui-button-raised  ui-button-rounded ui-button-success" (click)="verMantenimiento=false"></button>
+
+            </div>
+        </div>
+    </div>
+</p-dialog>

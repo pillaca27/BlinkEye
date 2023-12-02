@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ *
+ * @author : desarrollo
+ * @powerbuilder : hrtipotrabajador
+-->
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <sql-query name="asarea.listar">
+    	select CAST(area as integer) as "id", 
+    			nombre as "nombre", 
+    			Estado as "estadoId" 
+    	from as_area 
+    	order by NOMBRE
+	</sql-query>
+	
+	<sql-query name="asarea.listarActivos">
+    	select 	CAST(area as integer) as "id", 
+    			nombre as "nombre"
+    			,Estado as "estadoId" 
+    	from as_area where Estado = 'A'
+    	order by NOMBRE
+	</sql-query>
+	
+	<sql-query name="asarea.obtenertabla">
+    	select CAST(area as integer) as "id", 
+    			nombre as "nombre",
+    			Estado as "estadoId" 
+    			from as_area
+    			where area = :p_area 
+	</sql-query>
+	
+	<sql-query name="asarea.listarfiltros">
+    	select CAST(area as integer) as "id", 
+    			nombre as "nombre"
+    			,Estado as "estadoId" 
+    	from as_area 
+    	where  area = ISNULL(:p_area,area)
+			and UPPER(ISNULL(nombre,'xxx')) like '%' + ISNULL(:p_nombre,UPPER(nombre)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))			
+		order by nombre
+	</sql-query>
+	
+	 <sql-query name="asarea.obtenerdto">
+         select 
+			CAST(area as integer) as "area"
+			,NOMBRE "nombre"
+			,AREAPADRE "areapadre"
+			,DIAROTACION "diarotacion"
+			,ULTIMAROTACION "ultimarotacion"
+			,HORARIO "horario"
+			,EMPLEADORESPONSABLE "empleadoresponsable"
+			,SECRETARIAAREA "secretariaarea"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from AS_AREA
+         where 
+			AREA = :p_area
+    </sql-query>
+    
+    <sql-query name="asarea.listardtofiltros">
+         select 
+			CAST(area as integer) as "area"
+			,NOMBRE "nombre"
+			,AREAPADRE "areapadre"
+			,DIAROTACION "diarotacion"
+			,ULTIMAROTACION "ultimarotacion"
+			,HORARIO "horario"
+			,EMPLEADORESPONSABLE "empleadoresponsable"
+			,'' "secretariaarea"
+			,ESTADO "estado"
+			,ULTIMOUSUARIO "ultimousuario"
+			,ULTIMAFECHAMODIF "ultimafechamodif"
+         from AS_AREA
+         where 
+			AREA = ISNULL(:p_area,area)
+			and UPPER(ISNULL(NOMBRE,'xxx')) like '%' + ISNULL(:p_nombre,UPPER(NOMBRE)) + '%'
+			and ISNULL(ESTADO,'xx') = ISNULL(:p_estado,ISNULL(ESTADO,'xx'))
+		 order by NOMBRE			
+			
+    </sql-query>
+    
+</hibernate-mapping>

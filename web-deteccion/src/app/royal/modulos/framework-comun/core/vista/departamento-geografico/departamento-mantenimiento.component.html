@@ -1,0 +1,273 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <p-tabView (onChange)="onTabChange($event)" [activeIndex]="index">
+
+                <p-tabPanel header="Departamento / Provincias" *ngIf="!provincia">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Departamento</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.departamento" maxlength="3" type="text" [disabled]="accionnuevo" (blur)="limpiarDep()" [pKeyFilter]="blockSpecialNumero" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-6">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label importante">Descripción</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.descripcioncorta" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">País</label>
+                                <div class="p-col">
+                                    <!-- <input pInputText [(ngModel)]="dto.pais" maxlength="3" type="text"
+                                    [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" /> -->
+                                    <p-dropdown [(ngModel)]="dto.pais" [options]="lstPaises" maxlength="3" [disabled]="!objetoTitulo.puedeEditarPk" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+
+                    <p-divider align="left" *ngIf="dto.regimenfiscal !='N'">
+                        <div class="p-d-inline-flex p-ai-center">
+                            <i class="pi pi-bars p-mr-2"></i>
+                            <b>Provincias</b>&nbsp;&nbsp;
+                            <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                                <div class="p-col-12 p-md-12">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar " *ngIf="dto.departamento != null" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalleProvincia()"></button>
+                                </div>
+                            </div>
+                        </div>
+                    </p-divider>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-field p-col-12 p-md-12">
+                            <p-table [rows]="500" [value]="dto.provincias" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" selectionMode="single" dataKey="provincia">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderAccion1">Acción</th>
+                                        <th class="tablaHeaderCodigo">Departamento</th>
+                                        <th class="tablaHeaderCodigoChico">Provincia</th>
+                                        <th class="tablaHeaderIzquierda">Descripción</th>
+                                        <th class="tablaHeaderEstado">Estado</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns" let-rowIndex="rowIndex" let-expanded="expanded">
+                                    <tr [pEditableRow]="row" *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text botonGrilla" [disabled]="!objetoTitulo.puedeEditar" title="Eliminar" (click)="coreEliminarProvincias(row,rowIndex)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Departamento</span> {{row.departamento}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico" *ngIf="row.accion == 'A' ">
+                                            <span class="p-column-title">Provincia</span> {{row.provincia}}
+                                        </td>
+                                        <td pEditableColumn class="tablaColumnaCodigoChico" *ngIf="row.accion == 'N' ">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input maxlength="3" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar" (blur)="validarP(row)" [pKeyFilter]="blockSpecialNumero" [(ngModel)]="row.provincia" [style]="{'width':'100%'}" />
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{row.provincia}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td pEditableColumn class="tablaColumnaIzquierda">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input maxlength="20" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar" [pKeyFilter]="blockSpecial" [(ngModel)]="row.descripcioncorta" [style]="{'width':'100%'}" />
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{row.descripcioncorta}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Estado</span>
+                                            <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                                            <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                                        </td>
+
+                                    </tr>
+                                </ng-template>
+
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="5">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Estado</label>
+                                <div class="p-col">
+                                    <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                                    </p-dropdown>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </p-tabPanel>
+
+                <p-tabPanel header="Distritos" *ngIf="provincia">
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Departamento</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.departamento" maxlength="3" type="text" [disabled]="true" (blur)="limpiarDep()" [pKeyFilter]="blockSpecialNumero" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-5">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Descripción</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="dto.descripcioncorta" maxlength="20" type="text" [disabled]="true" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-4"></div>
+                        <div class="p-col-12 p-md-3">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Provincia</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="provinciaCod" maxlength="3" type="text" [disabled]="true" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-col-12 p-md-5">
+                            <div class="p-field p-grid">
+                                <label class="p-col-fixed label">Descripción</label>
+                                <div class="p-col">
+                                    <input pInputText [(ngModel)]="provinciaDescri" maxlength="20" type="text" [disabled]="true" [style]="{'width':'100%'}" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    <div class="p-fluid p-formgrid p-grid">
+                        <div class="p-fluid p-formgrid p-grid botonesSeccion" style="margin-top: 20px;">
+                            <div class="p-col-12 p-md-12">
+                                <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar " type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalleDistrito()"></button>
+                            </div>
+                        </div>
+                        <div class="p-field p-col-12 p-md-12">
+                            <p-table [rows]="500" [value]="dto.distritos" [responsive]="true" [style]="{ width: '100%'}" [scrollable]="true" selectionMode="single" dataKey="provincia">
+                                <ng-template pTemplate="header">
+                                    <tr>
+                                        <th class="tablaHeaderAccion1">Acción</th>
+                                        <th class="tablaHeaderCodigo">Departamento</th>
+                                        <th class="tablaHeaderCodigoChico">Provincia</th>
+                                        <th class="tablaHeaderCodigoChico">Código Postal</th>
+                                        <th class="tablaHeaderIzquierda">Descripción</th>
+                                        <th class="tablaHeaderEstado">Estado</th>
+                                    </tr>
+                                </ng-template>
+                                <ng-template pTemplate="body" let-row let-columns="columns" let-rowIndex="rowIndex" let-expanded="expanded">
+                                    <tr [pEditableRow]="row" *ngIf="row.accion == 'N' || row.accion == 'A'">
+                                        <td class="tablaColumnaAccion1">
+                                            <span class="p-column-title">Acción</span>
+                                            <table>
+                                                <tr>
+
+                                                    <th>
+                                                        <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminarDistritos(row,ri)"></button>
+                                                    </th>
+                                                </tr>
+                                            </table>
+
+                                        </td>
+                                        <td class="tablaColumnaCodigo">
+                                            <span class="p-column-title">Departamento</span> {{row.departamento}}
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico">
+                                            <span class="p-column-title">Provincia</span> {{row.provincia}}
+                                        </td>
+                                        <td pEditableColumn class="tablaColumnaCodigoChico" *ngIf="row.accion == 'N' ">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input maxlength="3" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar" (blur)="validarBlurProvincia(row)" [pKeyFilter]="blockSpecialNumero" [(ngModel)]="row.codigopostal" [style]="{'width':'100%'}" />
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{row.codigopostal}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+                                        <td class="tablaColumnaCodigoChico" *ngIf="row.accion == 'A' ">
+                                            <span class="p-column-title">Código Postal</span> {{row.codigopostal}}
+                                        </td>
+
+                                        <td pEditableColumn class="tablaColumnaIzquierda">
+                                            <p-cellEditor>
+                                                <ng-template pTemplate="input">
+                                                    <input maxlength="20" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar" [pKeyFilter]="blockSpecial" [(ngModel)]="row.descripcioncorta" [style]="{'width':'100%'}" />
+                                                </ng-template>
+                                                <ng-template pTemplate="output">
+                                                    {{row.descripcioncorta}}
+                                                </ng-template>
+                                            </p-cellEditor>
+                                        </td>
+
+                                        <td class="tablaColumnaEstado">
+                                            <span class="p-column-title">Estado</span>
+                                            <label *ngIf="row.estado == 'A'" class="tablaEstadoActivo">Activo</label>
+                                            <label *ngIf="row.estado == 'I'" class="tablaEstadoInactivo">Inactivo</label>
+                                        </td>
+                                    </tr>
+                                </ng-template>
+
+
+                                <ng-template pTemplate="emptymessage" let-columns>
+                                    <tr>
+                                        <td colspan="6">
+                                            No se encontraron registros
+                                        </td>
+                                    </tr>
+                                </ng-template>
+                            </p-table>
+                        </div>
+                    </div>
+                </p-tabPanel>
+            </p-tabView>
+
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

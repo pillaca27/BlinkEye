@@ -1,0 +1,87 @@
+<app-titulo-listado [bloquear]="blocked" [objTitulo]="objetoTitulo"></app-titulo-listado>
+
+<p-card>
+
+    <div class="p-fluid p-grid  formularioFila">
+        <div class="p-field p-col-12 p-md-2">
+            <label>Compañía</label>
+            <input pInputText type="text" [(ngModel)]="dtoCabecera.companiasocio" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Línea</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.linea" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Módulo</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.modulo" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Num. Doc.</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.numerodocumento" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Tipo Doc.</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.tipodocumento" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Flag Ver</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.flgVer" style="width:100%" />
+        </div>
+        <div class="p-field p-col-12 p-md-2">
+            <label>Flag Ver Auditoria</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.flgVerAuditoria" style="width:100%" />
+        </div>
+
+        <div class="p-field p-col-12 p-md-2">
+            <label>Flag Fecha Editable</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.flgFechaEditable" style="width:100%" />
+        </div>
+
+        <div class="p-field p-col-12 p-md-2">
+            <label>Flag Titulo Editable</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.flgTituloEditable" style="width:100%" />
+        </div>
+
+        <div class="p-field p-col-12 p-md-2">
+            <label>Flag Ver Columna Plantilla</label>
+            <input pInputText type="text"  [(ngModel)]="dtoCabecera.flgVerColumnaPlantilla" style="width:100%" />
+        </div>
+
+
+        
+
+        
+
+        
+        
+    </div>
+
+    <div class="p-fluid p-grid  formularioFila">        
+        <div class="p-field p-col-12 p-md-2">
+            <br>
+            <button pButton icon="fa fa-binoculars" (click)=" buscar()" type="button" label="Buscar"></button>
+        </div>
+        <div class="p-field p-col-12 p-md-3">
+            <br>
+            <button pButton icon="fa fa-binoculars" (click)=" buscarConPlantilla()" type="button" label="Buscar con Plantilla"></button>
+        </div>
+    </div>
+    
+
+    <app-adjuntossimple></app-adjuntossimple>
+
+
+    <div class="p-fluid p-grid  formularioFila">
+        <div class="p-field p-col-12 p-md-2">                        
+        </div>
+        <div class="p-field p-col-12 p-md-8"></div>
+        <div class="p-field p-col-12 p-md-2">
+            <br>
+            <button pButton icon="fa fa-binoculars" (click)="coreGuardar()" type="button" label="Guardar"></button>
+        </div>
+    </div>
+
+    
+</p-card>
+
+<app-personacomun-selector></app-personacomun-selector>

@@ -1,0 +1,411 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Compañía</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.companiacodigo" maxlength="6" type="text" (ngModelChange)="dto.companiacodigo = $event.toUpperCase()" [disabled]="accionnuevo" [pKeyFilter]="blockSpecial" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Descripción</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.descripcioncorta" maxlength="40" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Documento Fiscal</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.documentofiscal" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-9">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Desc. Completa</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.descripcionlarga" maxlength="60" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Socio Principal</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.propietariopordefecto" maxlength="2" type="text" [pKeyFilter]="blockSpecialNumero" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Tipo de Compañía</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.tipocompania" [options]="lstTipoCompania" (onChange)="tipoCompaniaChange()" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Persona #</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input class="importante" pInputText type="text" [readonly]="true" [(ngModel)]="dto.personaDescri" disabled readonly class="hoverDisabled" style="width:100%" />
+                                <button pButton icon="fa fa-binoculars" [disabled]="!objetoTitulo.puedeEditar " (click)="mostrarPersona()" type="button" title="Buscar Persona"></button>
+                                <button pButton icon="fa fa-trash" (click)="limpiar()" type="button" [disabled]="!objetoTitulo.puedeEditar " title="Limpiar Persona"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Moneda para Libros(*)</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.monedapordefecto" [options]="lstMonedas" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-7">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Repres. Legal</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.representantelegal" maxlength="30" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-5">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check1" binary="true" inputId="binary"></p-checkbox>&nbsp;
+                    <label for="ny">Afecto a Imp.Ventas (Cuentas x Pagar)</label>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-7">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Página Web</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.paginaweb" maxlength="100" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-5">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check2" binary="true" inputId="binary"></p-checkbox>&nbsp;
+                    <label for="ny">Crédito Fiscal en base a un % Mensual</label>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-7"></div>
+                <div class="p-field p-col-12 p-md-5">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check3" binary="true" inputId="binary"></p-checkbox>&nbsp;
+                    <label for="ny">Afecta al Factor R (Petroleras)</label>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-7"></div>
+                <div class="p-field p-col-12 p-md-5">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check4" binary="true" inputId="binary"></p-checkbox>&nbsp;
+                    <label for="ny">Generar Cuentas de Provisión SBS</label>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-7"></div>
+                <div class="p-field p-col-12 p-md-5">
+                    <p-checkbox [disabled]="!objetoTitulo.puedeEditar" [(ngModel)]="dto.check5" binary="true" inputId="binary"></p-checkbox>&nbsp;
+                    <label for="ny">Afecto a Retención de IGV</label>
+                </div>
+            </div>
+
+            <p-divider align="left">
+                <div class="p-d-inline-flex p-ai-center">
+                    <i class="pi pi-bars p-mr-2"></i>
+                    <b>Infomación Adicional</b>
+                </div>
+            </p-divider>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fecha Fundación</label>
+                        <div class="p-col">
+                            <p-calendar [locale]="es" [monthNavigator]="true" [yearNavigator]="true" [readonlyInput]="true" [(ngModel)]="dto.fechafundacion" dateFormat="dd/mm/yy" [ngStyle]="{'width': '100%'}" [disabled]="!objetoTitulo.puedeEditar" [showIcon]="true" yearRange="1900:2100"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-field p-col-12 p-md-3"></div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Teléfono</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.telefono1" maxlength="15" type="text" [pKeyFilter]="blockSpecialNumero" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Fax</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.fax1" maxlength="15" type="text" [pKeyFilter]="blockSpecialNumero" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Dirección</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.direccioncomun" maxlength="80" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label"></label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.telefono2" maxlength="15" type="text" [pKeyFilter]="blockSpecialNumero" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label"></label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.fax2" maxlength="15" type="text" [pKeyFilter]="blockSpecialNumero" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label"></label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.direccionadicional" maxlength="80" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+
+                <div class="p-col-12 p-md-6">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Logo File</label>
+                        <div class="p-col">
+                            <div class="p-inputgroup">
+                                <input pInputText [(ngModel)]="dto.logofile" maxlength="20" type="text" readonly [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                                <input #photoInputFoto type="file" class="form-control" style="display:none" accept="image/*" (change)="cargarArchivo(photoInputFoto)" id="upload">
+                                <button style="font-size: 12px" pButton label="Seleccionar Archivo" icon="fa fa-plus" [disabled]="!objetoTitulo.puedeEditar" class="ui-button" type="button" (click)="photoInputFoto.click()"></button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Certif. Inscripción</label>
+                        <div class="p-col">
+                            <input pInputText [(ngModel)]="dto.certificadoinscripcion" maxlength="20" type="text" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="Socios" [transitionOptions]="'0ms'" *ngIf="dto.tipocompania == 'R' || dto.tipocompania == 'P'">
+                        <p-table #dtListado2 [rows]="100" dataKey="id" editMode="row" [value]="dto.detalle1" [scrollable]="true" scrollHeight="180px" [style]="{'width': '100%'}" [responsive]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex" style="width: 200px;">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar || flagCompaniaReportera" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle1()"></button>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Acción</th>
+                                    <th class="tablaHeaderCodigoChico">Compañía Socio</th>
+                                    <th class="tablaHeaderCodigoChico">Socio</th>
+                                    <th class="tablaColumnaIzquierda2">Descripción Local</th>
+                                    <th class="tablaHeaderCodigoChico">% de Particip.</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-concepto let-editing="editing" let-ri="rowIndex">
+                                <tr [pEditableRow]="concepto" *ngIf="concepto.accion == 'N' || concepto.accion == 'A'">
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fal fa-trash-alt" [disabled]="!objetoTitulo.puedeEditar || flagCompaniaReportera" class="p-button-rounded p-button-danger p-button-text botonGrilla" title="Eliminar" (click)="coreEliminarDetalle1(concepto,ri)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico">
+                                        {{concepto.companyowner}}
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaCodigoChico" *ngIf="concepto.accion == 'N' ">
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input maxlength="2" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar || flagCompaniaReportera" [pKeyFilter]="blockSpecialNumero" [(ngModel)]="concepto.owner" [style]="{'width':'100%'}" />
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{concepto.owner}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td class="tablaColumnaCodigoChico" *ngIf="concepto.accion == 'A' ">
+                                        {{concepto.owner}}
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaIzquierda2">
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <input maxlength="40" pInputText type="text" [disabled]="!objetoTitulo.puedeEditar || flagCompaniaReportera" [(ngModel)]="concepto.description" [style]="{'width':'100%'}" />
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{concepto.description}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaCodigoChico2">
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="concepto.percentage" mode="decimal" [style]="{'width':'100%'}" maxlength="6" [disabled]="!objetoTitulo.puedeEditar || flagCompaniaReportera" [minFractionDigits]="2"></p-inputNumber>
+
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{concepto.percentage | number:'1.2-2'}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                </tr>
+                            </ng-template>
+
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="5">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-fieldset>
+                </div>
+                <div class="p-field p-col-12 p-md-6">
+                    <p-fieldset legend="Participantes" [transitionOptions]="'0ms'" *ngIf="dto.tipocompania == 'R' ">
+                        <p-table #dtListado2 [rows]="100" dataKey="id" editMode="row" [value]="dto.detalle2" [scrollable]="true" scrollHeight="180px" [style]="{'width': '100%'}" [responsive]="true">
+                            <ng-template pTemplate="caption">
+                                <div class="p-d-flex" style="width: 200px;">
+                                    <button pButton pRipple [disabled]="!objetoTitulo.puedeEditar" type="button" label="Agregar Detalle" icon="fad fa-layer-plus" class="p-button-outlined" (click)="agregarDetalle2()"></button>
+                                </div>
+                            </ng-template>
+                            <ng-template pTemplate="header">
+                                <tr>
+                                    <th class="tablaHeaderAccion1">Acción</th>
+                                    <th class="tablaHeaderCodigo">Compañía Socio</th>
+                                    <th class="tablaHeaderIzquierda">Descripción Local</th>
+                                    <th class="tablaHeaderCodigoChico">% de Particip.</th>
+
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="body" let-concepto let-editing="editing" let-ri="rowIndex">
+                                <tr [pEditableRow]="concepto" *ngIf="concepto.accion == 'N' || concepto.accion == 'A'">
+                                    <td class="tablaColumnaAccion1">
+                                        <span class="p-column-title">Acción</span>
+                                        <table>
+                                            <tr>
+                                                <th>
+                                                    <button pButton pRipple type="button" icon="fal fa-trash-alt" class="p-button-rounded p-button-danger p-button-text botonGrilla" [disabled]="!objetoTitulo.puedeEditar" title="Eliminar" (click)="coreEliminarDetalle2(concepto,ri)"></button>
+                                                </th>
+                                            </tr>
+                                        </table>
+
+                                    </td>
+                                    <td class="tablaColumnaCodigo" *ngIf="concepto.accion == 'N' "><span class="p-column-title">Compañía Socio</span>
+                                        <p-dropdown [(ngModel)]="concepto.companyowner" [options]="lstCompanias" [disabled]="!objetoTitulo.puedeEditar" appendTo="body" (onChange)="changueCompania(concepto)" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </td>
+
+                                    <td class="tablaColumnaCodigo" *ngIf="concepto.accion == 'A' "><span class="p-column-title">Compañía Socio</span>
+                                        <p-dropdown [(ngModel)]="concepto.companyowner" [options]="lstCompanias" [disabled]="true" appendTo="body" [style]="{'width':'100%'}">
+                                        </p-dropdown>
+                                    </td>
+                                    <td class="tablaColumnaIzquierda">
+                                        {{concepto.companyowner | labelFromItem:lstCompanias2 }}
+                                    </td>
+                                    <td pEditableColumn class="tablaColumnaCodigoChico2">
+                                        <p-cellEditor>
+                                            <ng-template pTemplate="input">
+                                                <p-inputNumber [locale]="locale" [(ngModel)]="concepto.percentage" mode="decimal" [style]="{'width':'100%'}" maxlength="6" [disabled]="!objetoTitulo.puedeEditar " [minFractionDigits]="2"></p-inputNumber>
+
+                                            </ng-template>
+                                            <ng-template pTemplate="output">
+                                                {{concepto.percentage | number:'1.2-2'}}
+                                            </ng-template>
+                                        </p-cellEditor>
+                                    </td>
+                                </tr>
+                            </ng-template>
+                            <ng-template pTemplate="emptymessage" let-columns>
+                                <tr>
+                                    <td [attr.colspan]="4">
+                                        No se encontraron registros
+                                    </td>
+                                </tr>
+                            </ng-template>
+                        </p-table>
+                    </p-fieldset>
+                </div>
+            </div>
+
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label importante">Estado</label>
+                        <div class="p-col">
+                            <p-dropdown [(ngModel)]="dto.estado" [options]="lstEstados" [disabled]="!objetoTitulo.puedeEditar" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</p-card>
+
+<app-auditoria [tipoAuditoria]="TIPOSAUDITORIA.BAS2C" [modificacionUsuario]="dto.ultimousuario" [modificacionFecha]="dto.ultimafechamodif">
+</app-auditoria>
+
+<app-botones-mantenimiento [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_MANTENIMIENTO.BAS21">
+</app-botones-mantenimiento>
+
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger" (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded" (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>
+<app-personacomun-selector></app-personacomun-selector>
