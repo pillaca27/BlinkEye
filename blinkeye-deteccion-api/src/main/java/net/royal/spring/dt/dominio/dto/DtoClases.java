@@ -30,8 +30,8 @@ public class DtoClases extends DominioTransaccion implements java.io.Serializabl
 
 	private Integer idClase;
 	private String nombre;
-	private java.util.Date fechaHoraInicio;
-	private java.util.Date fechaHoraFin;
+//	private java.util.Date fechaHoraInicio;
+//	private java.util.Date fechaHoraFin;
 	private Integer idDocente;
 
 	/**
@@ -68,40 +68,40 @@ public class DtoClases extends DominioTransaccion implements java.io.Serializabl
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Inicio
-	*/
-	public java.util.Date getFechaHoraInicio() {
-		return fechaHoraInicio;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Inicio
-	*/
-	public void setFechaHoraInicio(java.util.Date fechaHoraInicio) {
-		this.fechaHoraInicio = fechaHoraInicio;
-	}
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Fin
-	*/
-	public java.util.Date getFechaHoraFin() {
-		return fechaHoraFin;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Fin
-	*/
-	public void setFechaHoraFin(java.util.Date fechaHoraFin) {
-		this.fechaHoraFin = fechaHoraFin;
-	}
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Inicio
+//	*/
+//	public java.util.Date getFechaHoraInicio() {
+//		return fechaHoraInicio;
+//	}
+//
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Inicio
+//	*/
+//	public void setFechaHoraInicio(java.util.Date fechaHoraInicio) {
+//		this.fechaHoraInicio = fechaHoraInicio;
+//	}
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Fin
+//	*/
+//	public java.util.Date getFechaHoraFin() {
+//		return fechaHoraFin;
+//	}
+//
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Fin
+//	*/
+//	public void setFechaHoraFin(java.util.Date fechaHoraFin) {
+//		this.fechaHoraFin = fechaHoraFin;
+//	}
 	/**
 	 * 
 	 * 
@@ -144,8 +144,8 @@ public class DtoClases extends DominioTransaccion implements java.io.Serializabl
 		case ConstantePantallaAccion.INSERTAR,ConstantePantallaAccion.NINGUNO:
 			bean.getPk().setIdClase(idClase);
 			bean.setNombre(nombre);
-			bean.setFechaHoraInicio(fechaHoraInicio);
-			bean.setFechaHoraFin(fechaHoraFin);
+//			bean.setFechaHoraInicio(fechaHoraInicio);
+//			bean.setFechaHoraFin(fechaHoraFin);
 			bean.setIdDocente(idDocente);
 
 			break;

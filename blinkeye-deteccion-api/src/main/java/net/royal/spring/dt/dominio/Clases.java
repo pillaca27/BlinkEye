@@ -34,15 +34,15 @@ public class Clases extends DominioTransaccion implements java.io.Serializable{
 	@Column(name = "NOMBRE", length = 50, nullable = true)
 	private String nombre;
 
-	@JsonSerialize(using = USerializers.DateSerializer.class)
-	@JsonDeserialize(using = UDeserializers.DateDeserializer.class)
-	@Column(name = "FECHA_HORA_INICIO", nullable = true)
-	private java.util.Date fechaHoraInicio;
-
-	@JsonSerialize(using = USerializers.DateSerializer.class)
-	@JsonDeserialize(using = UDeserializers.DateDeserializer.class)
-	@Column(name = "FECHA_HORA_FIN", nullable = true)
-	private java.util.Date fechaHoraFin;
+//	@JsonSerialize(using = USerializers.DateSerializer.class)
+//	@JsonDeserialize(using = UDeserializers.DateDeserializer.class)
+//	@Column(name = "FECHA_HORA_INICIO", nullable = true)
+//	private java.util.Date fechaHoraInicio;
+//
+//	@JsonSerialize(using = USerializers.DateSerializer.class)
+//	@JsonDeserialize(using = UDeserializers.DateDeserializer.class)
+//	@Column(name = "FECHA_HORA_FIN", nullable = true)
+//	private java.util.Date fechaHoraFin;
 
 	@Column(name = "ID_DOCENTE", nullable = true)
 	private Integer idDocente;
@@ -81,40 +81,40 @@ public class Clases extends DominioTransaccion implements java.io.Serializable{
 	public void setNombre(String nombre) {
 		this.nombre = nombre;
 	}
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Inicio
-	*/
-	public java.util.Date getFechaHoraInicio() {
-		return fechaHoraInicio;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Inicio
-	*/
-	public void setFechaHoraInicio(java.util.Date fechaHoraInicio) {
-		this.fechaHoraInicio = fechaHoraInicio;
-	}
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Fin
-	*/
-	public java.util.Date getFechaHoraFin() {
-		return fechaHoraFin;
-	}
-
-	/**
-	 * 
-	 * 
-	 * @campo Fecha_Hora_Fin
-	*/
-	public void setFechaHoraFin(java.util.Date fechaHoraFin) {
-		this.fechaHoraFin = fechaHoraFin;
-	}
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Inicio
+//	*/
+//	public java.util.Date getFechaHoraInicio() {
+//		return fechaHoraInicio;
+//	}
+//
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Inicio
+//	*/
+//	public void setFechaHoraInicio(java.util.Date fechaHoraInicio) {
+//		this.fechaHoraInicio = fechaHoraInicio;
+//	}
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Fin
+//	*/
+//	public java.util.Date getFechaHoraFin() {
+//		return fechaHoraFin;
+//	}
+//
+//	/**
+//	 * 
+//	 * 
+//	 * @campo Fecha_Hora_Fin
+//	*/
+//	public void setFechaHoraFin(java.util.Date fechaHoraFin) {
+//		this.fechaHoraFin = fechaHoraFin;
+//	}
 	/**
 	 * 
 	 * 

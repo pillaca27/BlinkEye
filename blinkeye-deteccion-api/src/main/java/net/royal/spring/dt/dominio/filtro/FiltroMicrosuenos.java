@@ -26,6 +26,10 @@ import net.royal.spring.framework.modelo.generico.DominioTransaccion;
 public class FiltroMicrosuenos extends DominioTransaccion implements java.io.Serializable{
 
 	private Integer idMicrosueno;
+	private Integer idClase;
+	private Integer idAlumno;
+	private Date fechaDesde;
+	private Date fechaHasta;
 	private DominioPaginacion paginacion;
 
 	/**
@@ -46,6 +50,14 @@ public class FiltroMicrosuenos extends DominioTransaccion implements java.io.Ser
 		this.idMicrosueno = idMicrosueno;
 	}
 
+	public Integer getIdClase() {
+		return idClase;
+	}
+
+	public void setIdClase(Integer idClase) {
+		this.idClase = idClase;
+	}
+
 	public DominioPaginacion getPaginacion() {
 		if (paginacion == null)
 			paginacion = new DominioPaginacion();
@@ -56,5 +68,28 @@ public class FiltroMicrosuenos extends DominioTransaccion implements java.io.Ser
 		this.paginacion = paginacion;
 	}
 
+	public Integer getIdAlumno() {
+		return idAlumno;
+	}
+
+	public void setIdAlumno(Integer idAlumno) {
+		this.idAlumno = idAlumno;
+	}
+
+	public Date getFechaDesde() {
+		return fechaDesde;
+	}
+
+	public void setFechaDesde(Date fechaDesde) {
+		this.fechaDesde = fechaDesde;
+	}
+
+	public Date getFechaHasta() {
+		return fechaHasta;
+	}
+
+	public void setFechaHasta(Date fechaHasta) {
+		this.fechaHasta = fechaHasta;
+	}
 
 }

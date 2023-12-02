@@ -1,0 +1,139 @@
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Clase</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstClases" filter="true" [(ngModel)]="filtro.idClase" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-fluid p-formgrid p-grid">
+                    <div class="p-col-12 p-md-3">
+                        <div class="p-field p-grid">
+                            <label class="p-col-fixed label">Alumno</label>
+                            <div class="p-col">
+                                <!-- <p-dropdown [options]="estados" [(ngModel)]="filtro.idAlumno" [style]="{'width':'100%'}">
+                                </p-dropdown> -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Desde</label>
+                        <div class="p-col">
+                            <p-calendar [monthNavigator]="true" [yearNavigator]="true" [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaDesde" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Hasta</label>
+                        <div class="p-col">
+                            <p-calendar [monthNavigator]="true" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaHasta" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BOBUS">
+    </app-botones-listado>
+
+    <div class="p-fluid p-grid formularioFila">
+        <div class="p-col-12 p-md-12">
+            <br>
+            <p-table [rows]="20" [style]="{ width:'100%' }" [responsive]="true" [scrollable]="true" scrollWidth="100%" [paginator]="true" [lazy]="true" [totalRecords]="filtro.paginacion.paginacionRegistrosEncontrados" (onLazyLoad)="cargarListado($event)" [value]="filtro.paginacion.paginacionListaResultado"
+                     selectionMode="single" [showCurrentPageReport]="true" currentPageReportTemplate="Mostrando {first} a {last} de {totalRecords} registros">
+                <ng-template pTemplate="header">
+                    <tr>
+                        <!-- <th class="tablaHeaderAccion3">Acciones</th> -->
+                        <th class="tablaHeaderCodigo">Clase</th>
+                        <th class="tablaHeaderNombreMedio">Profesor</th>
+                        <th class="tablaHeaderNombreMedio">Alumno</th>
+                        <th class="tablaHeaderFecha">Inicio de Clase</th>
+                        <th class="tablaHeaderFecha">Término de Clase</th>
+                        <th class="tablaHeaderCodigo">Número de Microsueños</th>
+                        <th class="tablaHeaderCodigo">Duración Total (en segundos)</th>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="body" let-rowData let-columns="columns">
+                    <tr [pSelectableRow]="rowData">
+                        <!-- <td class="tablaColumnaAccion3">
+                            <span class="p-column-title">Acciones</span>
+                            <table>
+                                <tr>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-pencil-alt"
+                                            *ngIf="accionPadre == ACCIONES.EDITAR"
+                                            class="p-button-rounded p-button-text botonGrilla" title="Editar"
+                                            (click)="editar(rowData)"></button>
+                                    </th>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-search"
+                                            class="p-button-rounded p-button-text botonGrilla" title="Ver"
+                                            (click)="ver(rowData)"></button>
+                                    </th>
+                                    <th>
+                                        <button pButton pRipple type="button" icon="fad fa-times"
+                                            *ngIf="accionPadre == ACCIONES.EDITAR"
+                                            class="p-button-rounded p-button-text p-button-warning botonGrilla"
+                                            title="Eliminar" (click)="eliminar(rowData)"></button>
+                                    </th>
+                                </tr>
+                            </table>
+                        </td> -->
+                        <td class="tablaColumnaCodigo">
+                            <span class="p-column-title">Clase</span>
+                            {{rowData.auxNombreClase}}
+                        </td>
+                        <td class="tablaColumnaNombreMedio">
+                            <span class="p-column-title">Profesor</span>
+                            {{rowData.auxApellidoDocente + ' ' + rowData.auxNombreDocente}}
+                        </td>
+                        <td class="tablaColumnaNombreMedio">
+                            <span class="p-column-title">Alumno</span>
+                            {{rowData.auxApellidoAlumo + ' ' + rowData.auxNombreAlumno}}
+                        </td>
+                        <td class="tablaColumnaFecha">
+                            <span class="p-column-title">Inicio de Clase</span>
+                            {{rowData.fechahoraInicio | date: 'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td class="tablaColumnaFecha">
+                            <span class="p-column-title">Término de Clase</span>
+                            {{rowData.fechahoraFin | date: 'dd/MM/yyyy HH:mm'}}
+                        </td>
+                        <td class="tablaHeaderCodigo">
+                            <span class="p-column-title">Número de Microsueños</span>
+                            {{rowData.totalMicrosuenos}}
+                        </td>
+                        <td class="tablaHeaderCodigo">
+                            <span class="p-column-title">Duración Total (en segundos)</span>
+                            {{rowData.duraciontotalMicrosuenos}}
+                        </td>
+                    </tr>
+                </ng-template>
+                <ng-template pTemplate="emptymessage" let-columns>
+                    <tr>
+                        <td [attr.colspan]="8">
+                            No existen registros para mostrar
+                        </td>
+                    </tr>
+                </ng-template>
+            </p-table>
+        </div>
+    </div>
+</p-card>
+<p-confirmDialog #c key="confirm">
+    <p-footer>
+        <button pButton type="button" icon="fa fa-check" label="Si" class="ui-button-rounded ui-button-danger"
+            (click)="c.accept()"></button>
+        <button pButton type="button" icon="fa fa-close" label="No" class="ui-button-rounded"
+            (click)="c.reject()"></button>
+    </p-footer>
+</p-confirmDialog>

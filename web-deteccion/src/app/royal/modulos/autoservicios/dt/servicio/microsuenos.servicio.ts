@@ -22,6 +22,14 @@ export class MicrosuenosService {
             );
     }
 
+    public listarPorClasepaginado(filtro: FiltroMicrosuenos): Promise<DominioPaginacion> {
+        filtro.paginacion.paginacionListaResultado = null;
+        return this.config.getHttp().put(this.url + 'listarPorClasepaginado', filtro)
+            .toPromise()
+            .then(response => response as DominioPaginacion)
+            .catch(error => new DominioPaginacion());
+    }
+
     // public obtenerDtoPorId(idMicrosueno : number, idAlumno : number, idClase : number, fechaHora : Date, duracion : number): Promise<DtoMicrosuenos> {
     //     var dto = new DtoMicrosuenos();
     //     dto.idMicrosueno = idMicrosueno;

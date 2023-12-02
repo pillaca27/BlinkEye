@@ -33,8 +33,8 @@ public class Microsuenos extends DominioTransaccion implements java.io.Serializa
 	@Column(name = "ID_ALUMNO", nullable = true)
 	private Integer idAlumno;
 
-	@Column(name = "ID_CLASE", nullable = true)
-	private Integer idClase;
+	@Column(name = "ID_SESION", nullable = true)
+	private Integer idSesion;
 
 	@JsonSerialize(using = USerializers.DateSerializer.class)
 	@JsonDeserialize(using = UDeserializers.DateDeserializer.class)
@@ -81,19 +81,19 @@ public class Microsuenos extends DominioTransaccion implements java.io.Serializa
 	/**
 	 * 
 	 * 
-	 * @campo ID_Clase
+	 * @campo ID_SESION
 	*/
-	public Integer getIdClase() {
-		return idClase;
+	public Integer getIdSesion() {
+		return idSesion;
 	}
 
 	/**
 	 * 
 	 * 
-	 * @campo ID_Clase
+	 * @campo ID_SESION
 	*/
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
+	public void setIdSesion(Integer idSesion) {
+		this.idSesion = idSesion;
 	}
 	/**
 	 * 

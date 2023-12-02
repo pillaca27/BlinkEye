@@ -135,4 +135,21 @@ public class MicrosuenosDaoImpl extends GenericoDaoImpl<Microsuenos, Microsuenos
 		return datos;
 	}
 
+	public DominioPaginacion listarPorClasepaginado(SeguridadUsuarioActual usuarioActual, FiltroMicrosuenos filtro) {
+		List<DominioParametroPersistencia> parametros = new ArrayList<DominioParametroPersistencia>();
+
+		if (UInteger.esCeroOrNulo(filtro.getIdClase()))
+			filtro.setIdClase(null);
+
+		parametros.add(new DominioParametroPersistencia("p_idclase", Integer.class, filtro.getIdClase()));
+
+		Integer registros = contar("microsuenos.listarPorClasepaginadoContar", parametros);
+		logger.debug(registros);
+		List lst = listarConPaginacion(filtro.getPaginacion(), parametros, "microsuenos.listarPorClasepaginado",DtoMicrosuenos.class);
+		logger.debug(lst.size());
+		filtro.getPaginacion().setPaginacionRegistrosEncontrados(registros);
+		filtro.getPaginacion().setPaginacionListaResultado(lst);
+		return filtro.getPaginacion();
+	}
+
 }

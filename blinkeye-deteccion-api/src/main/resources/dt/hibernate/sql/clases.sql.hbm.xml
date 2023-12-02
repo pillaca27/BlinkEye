@@ -68,10 +68,9 @@
     </sql-query>
 
     <sql-query name="clases.listarActivos">
-         select 
-             'codigo' AS "codigo"
-             ,'nombre' AS "nombre"
-             ,'estadoid' AS "estadoId"
+         select a.ID_Clase as "id",
+			   a.Nombre as "nombre"
+		from Clases a
     </sql-query>
 
     <sql-query name="clases.listaCortaPorNombre">

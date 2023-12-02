@@ -12,5 +12,7 @@ export class FiltroMicrosuenos {
     idClase : number;
     fechaHora : Date;
     duracion : number;
+	fechaDesde: Date;
+	fechaHasta: Date;
     
 }

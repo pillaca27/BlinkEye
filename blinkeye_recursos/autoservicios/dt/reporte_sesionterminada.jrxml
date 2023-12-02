@@ -11,8 +11,8 @@
     a.Nombre AS Nombre_Alumno,
     a.Apellido AS Apellido_Alumno,
     a.Email AS Email_Alumno,
-    c.Fecha_Hora_Inicio,
-    c.Fecha_Hora_Fin,
+    s.Fecha_Hora_Inicio,
+    s.Fecha_Hora_Fin,
     COUNT(m.ID_Microsueno) AS Total_Microsuenos,
     COALESCE(SUM(m.Duracion), 0) AS Duracion_Total_Microsuenos
 FROM
@@ -20,17 +20,19 @@ FROM
 left JOIN
     Microsuenos m ON a.ID_Alumno = m.ID_Alumno
 left JOIN
-    Clases c ON m.ID_Clase = c.ID_Clase
+    Sesiones s ON m.ID_Sesion = s.ID_Sesion
+left JOIN
+    Clases c ON s.ID_Clase = c.ID_Clase
 left JOIN
     EmpleadoMast d ON d.Empleado = c.ID_Docente
 left join
 	PersonaMast p ON p.Persona = d.Empleado
 WHERE
-   c.ID_Clase = 3
+   c.ID_Clase = 1
 GROUP BY
-    c.Nombre, p.Nombres, p.ApellidoPaterno, a.Nombre, a.Apellido, a.Email, c.Fecha_Hora_Inicio, c.Fecha_Hora_Fin
+    c.Nombre, p.Nombres, p.ApellidoPaterno, a.Nombre, a.Apellido, a.Email, s.Fecha_Hora_Inicio, s.Fecha_Hora_Fin
 ORDER BY
-    Total_Microsuenos DESC;]]>
+    Total_Microsuenos DESC]]>
 	</queryString>
 	<field name="Nombre_Clase" class="java.lang.String"/>
 	<field name="Nombre_Docente" class="java.lang.String"/>

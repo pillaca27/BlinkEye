@@ -29,9 +29,21 @@ public class DtoMicrosuenos extends DominioTransaccion implements java.io.Serial
 
 	private Integer idMicrosueno;
 	private Integer idAlumno;
-	private Integer idClase;
+	private Integer idSesion;
 	private java.util.Date fechaHora;
 	private Integer duracion;
+	
+	private String auxNombreClase;
+	private String auxNombreDocente;
+	private String auxApellidoDocente;
+	private String auxNombreAlumno;
+	private String auxApellidoAlumo;
+	private String auxEmailAlumno;
+	private java.util.Date fechahoraInicio;
+	private java.util.Date fechahoraFin;
+	private Integer totalMicrosuenos;
+	private Integer DuraciontotalMicrosuenos;
+	
 
 	/**
 	 * 
@@ -72,8 +84,8 @@ public class DtoMicrosuenos extends DominioTransaccion implements java.io.Serial
 	 * 
 	 * @campo ID_Clase
 	*/
-	public Integer getIdClase() {
-		return idClase;
+	public Integer getIdSesion() {
+		return idSesion;
 	}
 
 	/**
@@ -81,8 +93,8 @@ public class DtoMicrosuenos extends DominioTransaccion implements java.io.Serial
 	 * 
 	 * @campo ID_Clase
 	*/
-	public void setIdClase(Integer idClase) {
-		this.idClase = idClase;
+	public void setIdSesion(Integer idSesion) {
+		this.idSesion = idSesion;
 	}
 	/**
 	 * 
@@ -143,7 +155,7 @@ public class DtoMicrosuenos extends DominioTransaccion implements java.io.Serial
 		case ConstantePantallaAccion.INSERTAR,ConstantePantallaAccion.NINGUNO:
 			bean.getPk().setIdMicrosueno(idMicrosueno);
 			bean.setIdAlumno(idAlumno);
-			bean.setIdClase(idClase);
+			bean.setIdSesion(idSesion);
 			bean.setFechaHora(fechaHora);
 			bean.setDuracion(duracion);
 
@@ -154,6 +166,86 @@ public class DtoMicrosuenos extends DominioTransaccion implements java.io.Serial
 		}
 
 		return bean;
+	}
+
+	public String getAuxNombreClase() {
+		return auxNombreClase;
+	}
+
+	public void setAuxNombreClase(String auxNombreClase) {
+		this.auxNombreClase = auxNombreClase;
+	}
+
+	public String getAuxNombreDocente() {
+		return auxNombreDocente;
+	}
+
+	public void setAuxNombreDocente(String auxNombreDocente) {
+		this.auxNombreDocente = auxNombreDocente;
+	}
+
+	public String getAuxApellidoDocente() {
+		return auxApellidoDocente;
+	}
+
+	public void setAuxApellidoDocente(String auxApellidoDocente) {
+		this.auxApellidoDocente = auxApellidoDocente;
+	}
+
+	public String getAuxNombreAlumno() {
+		return auxNombreAlumno;
+	}
+
+	public void setAuxNombreAlumno(String auxNombreAlumno) {
+		this.auxNombreAlumno = auxNombreAlumno;
+	}
+
+	public String getAuxApellidoAlumo() {
+		return auxApellidoAlumo;
+	}
+
+	public void setAuxApellidoAlumo(String auxApellidoAlumo) {
+		this.auxApellidoAlumo = auxApellidoAlumo;
+	}
+
+	public String getAuxEmailAlumno() {
+		return auxEmailAlumno;
+	}
+
+	public void setAuxEmailAlumno(String auxEmailAlumno) {
+		this.auxEmailAlumno = auxEmailAlumno;
+	}
+
+	public java.util.Date getFechahoraInicio() {
+		return fechahoraInicio;
+	}
+
+	public void setFechahoraInicio(java.util.Date fechahoraInicio) {
+		this.fechahoraInicio = fechahoraInicio;
+	}
+
+	public java.util.Date getFechahoraFin() {
+		return fechahoraFin;
+	}
+
+	public void setFechahoraFin(java.util.Date fechahoraFin) {
+		this.fechahoraFin = fechahoraFin;
+	}
+
+	public Integer getTotalMicrosuenos() {
+		return totalMicrosuenos;
+	}
+
+	public void setTotalMicrosuenos(Integer totalMicrosuenos) {
+		this.totalMicrosuenos = totalMicrosuenos;
+	}
+
+	public Integer getDuraciontotalMicrosuenos() {
+		return DuraciontotalMicrosuenos;
+	}
+
+	public void setDuraciontotalMicrosuenos(Integer duraciontotalMicrosuenos) {
+		DuraciontotalMicrosuenos = duraciontotalMicrosuenos;
 	}
 
 }

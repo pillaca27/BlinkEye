@@ -4,6 +4,7 @@ import { AppMainComponent } from './app.main.component';
 import { AppComunLoginComponent } from './royal/modulos/framework-seguridad/vista/app.comun-login.component';
 import { DashboardComponent } from './royal/modulos/autoservicios/db/dashboard.componente';
 import { ReporteDeteccionComponent } from './royal/modulos/autoservicios/dt/vista/reporte-deteccion/reporte-deteccion.component';
+import { ConsultaClaseComponent } from './royal/modulos/autoservicios/dt/vista/consulta-clase/consulta-clase.component';
 
 @NgModule({
 
@@ -18,6 +19,7 @@ import { ReporteDeteccionComponent } from './royal/modulos/autoservicios/dt/vist
                         path: 'dt',
                         children: [
                             { path: 'reporte-deteccion', component: ReporteDeteccionComponent },
+                            { path: 'consulta-clase', component: ConsultaClaseComponent },
                         ]
                     },
                     // {

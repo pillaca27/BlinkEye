@@ -95,6 +95,14 @@ public class MicrosuenosRest extends GenericoHibernateRest {
 
 		return microsuenosDao.ejecutarReporteComoPDF(pathPrincipal, parametrosReport);
 	}
+	
+	@Transactional
+	@PutMapping(value="/listarPorClasepaginado", produces = MediaType.APPLICATION_JSON_VALUE)
+	public ResponseEntity<DominioPaginacion> listarPaginado(@RequestBody FiltroMicrosuenos filtro) throws Exception {
+		logger.debug("MicrosuenosRest.listarPorClasepaginado");
+		DominioPaginacion paginacion = microsuenosDao.listarPorClasepaginado(this.getUsuarioActual(), filtro);
+		return new ResponseEntity<DominioPaginacion>(paginacion,HttpStatus.OK);
+	}
 
 	/*@Transactional
 	@PutMapping(value = "/validar/{accion}", produces = MediaType.APPLICATION_JSON_VALUE)

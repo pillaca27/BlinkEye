@@ -35,6 +35,8 @@ import { PdfJsViewerModule } from "ng2-pdfjs-viewer";
 
 import { DashboardComponent } from './db/dashboard.componente';
 import { ReporteDeteccionComponent } from './dt/vista/reporte-deteccion/reporte-deteccion.component';
+import { ConsultaClaseComponent } from './dt/vista/consulta-clase/consulta-clase.component';
+import { ConsultaAlumnoComponent } from './dt/vista/consulta-alumno/consulta-alumno.component';
 
 import { AlumnosService } from "./dt/servicio/alumnos.servicio";
 import { ClasesService } from "./dt/servicio/clases.servicio";
@@ -49,6 +51,8 @@ import { MicrosuenosService } from "./dt/servicio/microsuenos.servicio";
         //USAR
         DashboardComponent,
         ReporteDeteccionComponent,
+        ConsultaClaseComponent,
+        ConsultaAlumnoComponent
         // AlumnosListadoComponent,
         // AlumnosMantenimientoComponent
     ],
@@ -92,7 +96,10 @@ import { MicrosuenosService } from "./dt/servicio/microsuenos.servicio";
         { provide: LocationStrategy, useClass: HashLocationStrategy },
 
         //usar
-        MicrosuenosService
+        MicrosuenosService,
+        ClasesService,
+        AlumnosService,
+        DocentesService
 
     ]
 })
