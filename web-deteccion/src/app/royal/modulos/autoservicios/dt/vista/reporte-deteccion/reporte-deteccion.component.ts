@@ -8,6 +8,7 @@ import { UIListadoController } from '@framework/angular/interface/UIListadoContr
 import { SelectItem, MessageService, LazyLoadEvent } from 'primeng/api';
 import { MicrosuenosService } from '../../servicio/microsuenos.servicio';
 import { FiltroMicrosuenos } from '../../dominio/filtro/FiltroMicrosuenos';
+import { ClasesService } from '../../servicio/clases.servicio';
 
 @Component({
     templateUrl: 'reporte-deteccion.component.html'
@@ -19,11 +20,15 @@ export class ReporteDeteccionComponent extends FormularioComponent implements On
 
     constructor(
         private microsuenosService: MicrosuenosService,
+        private clasesService: ClasesService,
         private route: ActivatedRoute,
         messageService: MessageService,
         servicioComun: ServicioComunService,
         noAuthorizationInterceptor: NoAuthorizationInterceptor
     ) { super(noAuthorizationInterceptor, messageService, servicioComun); }
+
+    filtro: FiltroMicrosuenos = new FiltroMicrosuenos;
+    lstClases: SelectItem[] = [];
 
     ngOnInit() {
         this.formularioIniciar(this.route);
@@ -31,9 +36,26 @@ export class ReporteDeteccionComponent extends FormularioComponent implements On
         this.formularioOninit = false;
         this.desbloquearPagina();
 
-        var filtro: FiltroMicrosuenos = new FiltroMicrosuenos();
+        this.bloquearPagina();
+        const p1 = this.inicializarClases();
 
-        this.imprimirDeteccion(filtro);
+        Promise.all([p1]).then(f => {
+                this.desbloquearPagina();
+        });
+    }
+
+    inicializarClases()
+    {
+        this.lstClases.push({ label: '--- Todos ---', value: null });
+        this.clasesService.listarActivos().then( td => {
+            if(!this.esListaVacia(td))
+            {
+                td.forEach(element => {
+                    this.lstClases.push({ label: element.nombre, value: element.id });
+                });
+            }
+        })
+        return 1;
     }
 
     imprimirDeteccion(filtro) {
@@ -58,7 +80,16 @@ export class ReporteDeteccionComponent extends FormularioComponent implements On
 
     coreNuevo() { }
     coreBusquedaRapida(filtro: string) { }
-    coreBuscar(tabla: LazyLoadEvent) { }
+    coreBuscar(tabla: LazyLoadEvent) {
+        if(this.esNumeroVacioOrCero(this.filtro.idClase))
+        {
+            this.mostrarMensajeAdvertencia("La Clase es requerida");
+        }
+        else
+        {
+            this.imprimirDeteccion(this.filtro);
+        }
+    }
     coreFiltro(flag: boolean) { }
     coreAnular(dto: any) { }
     coreEliminar(dto: any) { }

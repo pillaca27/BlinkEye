@@ -6,7 +6,11 @@ import java.net.InetAddress;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.UnknownHostException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Hashtable;
@@ -726,18 +730,29 @@ public class UsuarioSeguridadServicioImpl extends GenericoServicioImpl {
 			rutaDisco=rutaDisco + UString.obtenerValorCadenaSinNulo(documento) + "." + cfg.getExtension();
 			fotonombre = UString.obtenerValorCadenaSinNulo(documento) + "." + cfg.getExtension();
 		}
-//		logger.debug("rutaDisco:"+rutaDisco);
-//		logger.debug("fotonombre:"+fotonombre);
-//		String url = UHttpServletRequest.rutaWebServer(request);
-//		url = url + "/" + cfg.getRutaweb() + "/" + fotonombre;
-//		logger.debug("url:"+url);
+		logger.debug("rutaDisco:"+rutaDisco);
+		logger.debug("fotonombre:"+fotonombre);
+		String url = UHttpServletRequest.rutaWebServer(request);
+		url = url + "/" + cfg.getRutaweb() + "/" + fotonombre;
+		logger.debug("url:"+url);
 		
 		File f=new File(rutaDisco);
 		if (f.exists()) {
 			logger.debug("rutaDisco existe !!");	
 			retorno = rutaDisco;
+			
+			try {
+	            Path path = Paths.get(rutaDisco);
+	            byte[] imageBytes = Files.readAllBytes(path);
+	            return Base64.getEncoder().encodeToString(imageBytes);
+	        } catch (Exception e) {
+	        	logger.debug("rutaDisco no existe !!");
+	        	retorno="assets/layout/images/user.png";
+	        }
+			
 		}else {
 			logger.debug("rutaDisco no existe !!");
+			retorno="assets/layout/images/user.png";
 		}
 		logger.debug("rutasssss");		
 		logger.debug(retorno);

@@ -113,7 +113,10 @@ export class AppTopBarComponent implements OnDestroy, OnInit {
                 // this.departamentoNombre = response.departamentoNombre;
 
                 // Si hay una foto, úsala. De lo contrario, usa una foto predeterminada.
-                this.foto = response.personaFotoUrl || 'assets/imagenes/usrDefault.jpg';
+                if(response.personaFotoUrl !== 'assets/layout/images/user.png')
+                {
+                    this.foto = 'data:image/jpeg;base64,' + response.personaFotoUrl;
+                }
 
                 //sino hay foto
                 sessionStorage.setItem('usuarioActual', JSON.stringify(response));

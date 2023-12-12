@@ -79,7 +79,11 @@
     </sql-query>
     
     <sql-query name="microsuenos.listarPorClasepaginadoContar">
-         SELECT COUNT(*) FROM (SELECT
+    <![CDATA[
+         DECLARE @FechaDesde DATE = '1800-01-01'; -- Fecha temprana por defecto
+DECLARE @FechaHasta DATE = '9999-12-31'; -- Fecha tardía por defecto
+
+SELECT COUNT(*) FROM (SELECT
 		    c.Nombre AS auxNombreClase,
 		    p.Nombres AS auxNombreDocente,
 		    p.ApellidoPaterno AS auxApellidoDocente,
@@ -104,40 +108,52 @@
 			PersonaMast p ON p.Persona = d.Empleado
 		WHERE
 		    c.ID_Clase = ISNULL(:p_idclase, c.ID_Clase)
+		    AND c.ID_Docente = ISNULL(:p_iddocente, c.ID_Docente)
+			AND (s.Fecha_Hora_Inicio  >= ISNULL(:p_fechaDesde, @FechaDesde))
+   			AND (s.Fecha_Hora_Fin  <= ISNULL(:p_fechaHasta, @FechaHasta))
 		GROUP BY
 		    c.Nombre, p.Nombres, p.ApellidoPaterno, a.Nombre, a.Apellido, a.Email, s.Fecha_Hora_Inicio, s.Fecha_Hora_Fin) tb
+		]]>
     </sql-query>
     
     <sql-query name="microsuenos.listarPorClasepaginado">
-         SELECT
-		    c.Nombre AS auxNombreClase,
-		    p.Nombres AS auxNombreDocente,
-		    p.ApellidoPaterno AS auxApellidoDocente,
-		    a.Nombre AS auxNombreAlumno,
-		    a.Apellido AS auxApellidoAlumo,
-		    a.Email AS auxEmailAlumno,
-		    s.Fecha_Hora_Inicio as fechahoraInicio,
-		    s.Fecha_Hora_Fin as fechahoraFin,
-		    COUNT(m.ID_Microsueno) AS totalMicrosuenos,
-		    COALESCE(SUM(m.Duracion), 0) AS DuraciontotalMicrosuenos
+    <![CDATA[
+         DECLARE @FechaDesde DATE = '1800-01-01'; -- Fecha temprana por defecto
+			DECLARE @FechaHasta DATE = '9999-12-31'; -- Fecha tardía por defecto
+			
+			SELECT
+			    c.Nombre AS auxNombreClase,
+			    p.Nombres AS auxNombreDocente,
+			    p.ApellidoPaterno AS auxApellidoDocente,
+			    a.Nombre AS auxNombreAlumno,
+			    a.Apellido AS auxApellidoAlumo,
+			    a.Email AS auxEmailAlumno,
+			    s.Fecha_Hora_Inicio as fechahoraInicio,
+			    s.Fecha_Hora_Fin as fechahoraFin,
+			    COUNT(m.ID_Microsueno) AS totalMicrosuenos,
+			    COALESCE(SUM(m.Duracion), 0) AS DuraciontotalMicrosuenos
 			FROM
 			    Alumnos a
-			left JOIN
+			LEFT JOIN
 			    Microsuenos m ON a.ID_Alumno = m.ID_Alumno
-			left JOIN
+			LEFT JOIN
 			    Sesiones s ON m.ID_Sesion = s.ID_Sesion
-			left JOIN
+			LEFT JOIN
 			    Clases c ON s.ID_Clase = c.ID_Clase
-			left JOIN
+			LEFT JOIN
 			    EmpleadoMast d ON d.Empleado = c.ID_Docente
-			left join 
-				PersonaMast p ON p.Persona = d.Empleado
+			LEFT JOIN
+			    PersonaMast p ON p.Persona = d.Empleado
 			WHERE
 			    c.ID_Clase = ISNULL(:p_idclase, c.ID_Clase)
+			    AND c.ID_Docente = ISNULL(:p_iddocente, c.ID_Docente)
+			    AND s.Fecha_Hora_Inicio >= ISNULL(:p_fechaDesde, @FechaDesde)
+			    AND s.Fecha_Hora_Fin <= ISNULL(:p_fechaHasta, @FechaHasta)
 			GROUP BY
 			    c.Nombre, p.Nombres, p.ApellidoPaterno, a.Nombre, a.Apellido, a.Email, s.Fecha_Hora_Inicio, s.Fecha_Hora_Fin
 			ORDER BY
 			    totalMicrosuenos DESC;
+	]]>
     </sql-query>
 
 </hibernate-mapping>

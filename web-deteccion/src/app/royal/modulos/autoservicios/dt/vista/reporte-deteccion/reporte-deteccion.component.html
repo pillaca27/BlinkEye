@@ -1,3 +1,43 @@
-<div style="width: 100%; height: 500px">
-    <ng2-pdfjs-viewer #pdfViewerReporteDeteccion [zoom]="90"></ng2-pdfjs-viewer>
-</div>
+<p-card>
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <!-- <div class="p-col-12 p-md-8">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Elegir la clase a generar:</label>
+                    </div>
+                </div> -->
+                <div class="p-col-12 p-md-2">
+                    <!-- <div class="p-field p-grid"> -->
+                        <div class="p-col">
+                            <label class="p-col-fixed label">Elegir la clase a generar:</label>
+                        </div>
+                        <!-- <label class="p-col-fixed label">Elegir la clase a generar:</label> -->
+                    <!-- </div> -->
+                </div>
+                <div class="p-col-12 p-md-4">
+                    <div class="p-field p-grid">
+                        <div class="p-col">
+                            <p-dropdown [options]="lstClases" filter="true" [(ngModel)]="filtro.idClase" [style]="{'width':'100%'}">
+                            </p-dropdown>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <app-botones-listado [objTitulo]="objetoTitulo" [tipo]="TIPOSBOTONES_LISTADO.BOBUS">
+    </app-botones-listado>
+
+    <div class="p-grid">
+        <div class="p-col-12">
+            <div class="p-fluid p-formgrid p-grid">
+                <div style="width: 100%; height: 700px">
+                    <ng2-pdfjs-viewer #pdfViewerReporteDeteccion [zoom]="90"></ng2-pdfjs-viewer>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</p-card>

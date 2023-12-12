@@ -11,6 +11,7 @@ import { FiltroMicrosuenos } from '../../dominio/filtro/FiltroMicrosuenos';
 import { Table } from 'primeng/table';
 import { ClasesService } from '../../servicio/clases.servicio';
 import { DtoTabla } from '@framework/modelo/generico/dto/DtoTabla';
+import { DocentesService } from '../../servicio/docentes.servicio';
 
 @Component({
     templateUrl: 'consulta-clase.component.html'
@@ -22,6 +23,7 @@ export class ConsultaClaseComponent extends FormularioComponent implements OnIni
 
     constructor(
         private clasesService: ClasesService,
+        private docentesServicee: DocentesService,
         private microsuenosService: MicrosuenosService,
         private route: ActivatedRoute,
         messageService: MessageService,
@@ -35,6 +37,7 @@ export class ConsultaClaseComponent extends FormularioComponent implements OnIni
 
     filtro: FiltroMicrosuenos = new FiltroMicrosuenos;
     lstClases: SelectItem[] = [];
+    lstDocentes: SelectItem[] = [];
 
     ngOnInit() {
         this.formularioIniciar(this.route);
@@ -42,8 +45,9 @@ export class ConsultaClaseComponent extends FormularioComponent implements OnIni
 
         this.bloquearPagina();
         const p1 = this.inicializarClases();
+        const p2 = this.inicializarDocentes();
 
-        Promise.all([p1]).then(f => {
+        Promise.all([p1, p2]).then(f => {
                 this.desbloquearPagina();
         });
     }
@@ -56,6 +60,20 @@ export class ConsultaClaseComponent extends FormularioComponent implements OnIni
             {
                 td.forEach(element => {
                     this.lstClases.push({ label: element.nombre, value: element.id });
+                });
+            }
+        })
+        return 1;
+    }
+
+    inicializarDocentes()
+    {
+        this.lstDocentes.push({ label: '--- Todos ---', value: null });
+        this.docentesServicee.listarActivos().then( td => {
+            if(!this.esListaVacia(td))
+            {
+                td.forEach(element => {
+                    this.lstDocentes.push({ label: element.nombre, value: element.id });
                 });
             }
         })

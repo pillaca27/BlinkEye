@@ -6,27 +6,29 @@
                     <div class="p-field p-grid">
                         <label class="p-col-fixed label">Clase</label>
                         <div class="p-col">
-                            <p-dropdown [options]="lstClases" filter="true" [(ngModel)]="filtro.idClase" [style]="{'width':'100%'}">
+                            <p-dropdown [options]="lstClases" [(ngModel)]="filtro.idClase" filter="true" filterPlaceholder="Buscar" [style]="{'width':'100%'}">
                             </p-dropdown>
                         </div>
                     </div>
                 </div>
-                <div class="p-fluid p-formgrid p-grid">
-                    <div class="p-col-12 p-md-3">
-                        <div class="p-field p-grid">
-                            <label class="p-col-fixed label">Alumno</label>
-                            <div class="p-col">
-                                <!-- <p-dropdown [options]="estados" [(ngModel)]="filtro.idAlumno" [style]="{'width':'100%'}">
-                                </p-dropdown> -->
-                            </div>
+                
+                <div class="p-col-12 p-md-3">
+                    <div class="p-field p-grid">
+                        <label class="p-col-fixed label">Docente</label>
+                        <div class="p-col">
+                            <p-dropdown [options]="lstDocentes" [(ngModel)]="filtro.idDocente" filter="true" filterPlaceholder="Buscar" [style]="{'width':'100%'}">
+                            </p-dropdown>
                         </div>
                     </div>
                 </div>
+               
                 <div class="p-col-12 p-md-3">
                     <div class="p-field p-grid">
                         <label class="p-col-fixed label">Desde</label>
                         <div class="p-col">
-                            <p-calendar [monthNavigator]="true" [yearNavigator]="true" [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaDesde" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true" [yearNavigator]="true" [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaDesde" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -34,7 +36,9 @@
                     <div class="p-field p-grid">
                         <label class="p-col-fixed label">Hasta</label>
                         <div class="p-col">
-                            <p-calendar [monthNavigator]="true" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaHasta" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                            <div class="p-inputgroup">
+                                <p-calendar [monthNavigator]="true" [yearNavigator]="true " [locale]="es" yearRange="1940:2200" [(ngModel)]="filtro.fechaHasta" [showIcon]="true" dateFormat="dd/mm/yy"></p-calendar>
+                            </div>
                         </div>
                     </div>
                 </div>

@@ -10,6 +10,7 @@ export class FiltroMicrosuenos {
     idMicrosueno : number;
     idAlumno : number;
     idClase : number;
+    idDocente: number;
     fechaHora : Date;
     duracion : number;
 	fechaDesde: Date;

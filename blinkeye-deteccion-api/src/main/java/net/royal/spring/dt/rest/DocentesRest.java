@@ -45,7 +45,7 @@ import net.royal.spring.framework.web.rest.GenericoRest;
 import net.royal.spring.framework.web.rest.GenericoHibernateRest;
 
 @RestController
-@RequestMapping("/erp/core/docentes")
+@RequestMapping("/spring/dt/docentes")
 @CrossOrigin(origins = "*")
 public class DocentesRest extends GenericoHibernateRest {
 
@@ -120,14 +120,14 @@ public class DocentesRest extends GenericoHibernateRest {
 		return new ResponseEntity<List<DtoTabla>>(datos, HttpStatus.OK);
 	}*/
 
-	/*@Transactional
+	@Transactional
 	@GetMapping(value = "/listaractivos", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<DtoTabla>> listarActivos() {
 		logger.debug("DocentesRest.listaractivos");
 		// TODO DocentesRest.listaractivos : modificar query
 		List datos = this.listarPorQuery(DtoTabla.class, "docentes.listarActivos");
 		return new ResponseEntity<List<DtoTabla>>(datos, HttpStatus.OK);
-	}*/
+	}
 
 	/*@Transactional
 	@PutMapping(value = "/listardtofiltros", produces = MediaType.APPLICATION_JSON_VALUE)

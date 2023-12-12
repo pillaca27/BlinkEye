@@ -65,10 +65,9 @@
     </sql-query>
 
     <sql-query name="alumnos.listarActivos">
-         select 
-             'codigo' AS "codigo"
-             ,'nombre' AS "nombre"
-             ,'estadoid' AS "estadoId"
+         SELECT ID_Alumno as id,
+			   Apellido + ', ' + Nombre as nombre
+		FROM Alumnos a 
     </sql-query>
 
     <sql-query name="alumnos.listaCortaPorNombre">

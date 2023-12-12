@@ -9,7 +9,7 @@ import { DtoTabla } from 'src/app/royal/framework/modelo/generico/dto/DtoTabla';
 @Injectable()
 export class DocentesService {
 
-    private url = `${this.config.getEnv('spring-deteccion-api')}spring/publico/docentes/`;
+    private url = `${this.config.getEnv('spring-deteccion-api')}spring/dt/docentes/`;
     constructor(private config: AppConfig) { }
 
     public obtenerDtoPorId(idDocente : number, nombre : string, apellido : string, email : string): Promise<DtoDocentes> {

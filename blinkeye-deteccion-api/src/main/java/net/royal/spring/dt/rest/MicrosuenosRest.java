@@ -88,7 +88,7 @@ public class MicrosuenosRest extends GenericoHibernateRest {
 		Properties propiedades = UPropiedades.getInstance().abrir(rutaPropiedades, ConstanteBoot.PROPERTIES_GLOBAL);
 	
 		Map<String, Object> parametrosReport = new HashMap<String, Object>();
-//		parametrosReport.put("p_anio", filtro.getAnio());
+		parametrosReport.put("p_idclase", filtro.getIdClase());
 		
 		pathPrincipal = pathPrincipal + File.separator + ConstanteBoot.RECURSOS_GLOBAL + File.separator 
 				+ "autoservicios" + File.separator + "dt" + File.separator + "reporte_sesionterminada.jasper";

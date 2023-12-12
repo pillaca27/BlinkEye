@@ -9,7 +9,7 @@ import { FiltroAlumnos } from '../dominio/filtro/FiltroAlumnos';
 @Injectable()
 export class AlumnosService {
 
-    private url = `${this.config.getEnv('spring-deteccion-api')}spring/publico/alumnos/`;
+    private url = `${this.config.getEnv('spring-deteccion-api')}spring/dt/alumnos/`;
     constructor(private config: AppConfig) { }
 
     public obtenerDtoPorId(idAlumno : number, nombre : string, apellido : string, email : string): Promise<DtoAlumnos> {

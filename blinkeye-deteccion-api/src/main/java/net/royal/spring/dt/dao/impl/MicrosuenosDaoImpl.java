@@ -30,6 +30,7 @@ import net.royal.spring.framework.modelo.generico.DominioTransaccion;
 import net.royal.spring.framework.modelo.generico.dto.DtoTabla;
 import net.royal.spring.framework.modelo.seguridad.SeguridadUsuarioActual;
 import net.royal.spring.framework.util.UBigDecimal;
+import net.royal.spring.framework.util.UFechaHora;
 import net.royal.spring.framework.util.UInteger;
 import net.royal.spring.framework.util.UString;
 import net.royal.spring.framework.web.dao.impl.GenericoDaoImpl;
@@ -141,7 +142,19 @@ public class MicrosuenosDaoImpl extends GenericoDaoImpl<Microsuenos, Microsuenos
 		if (UInteger.esCeroOrNulo(filtro.getIdClase()))
 			filtro.setIdClase(null);
 
+		if (UInteger.esCeroOrNulo(filtro.getIdDocente()))
+			filtro.setIdDocente(null);
+		
+		if (UFechaHora.esNuloVacio(filtro.getFechaDesde()))
+			filtro.setFechaDesde(null);
+		
+		if (UFechaHora.esNuloVacio(filtro.getFechaHasta()))
+			filtro.setFechaHasta(null);
+
+		parametros.add(new DominioParametroPersistencia("p_iddocente", Integer.class, filtro.getIdDocente()));
 		parametros.add(new DominioParametroPersistencia("p_idclase", Integer.class, filtro.getIdClase()));
+		parametros.add(new DominioParametroPersistencia("p_fechaDesde", Date.class, filtro.getFechaDesde()));
+		parametros.add(new DominioParametroPersistencia("p_fechaHasta", Date.class, filtro.getFechaHasta()));
 
 		Integer registros = contar("microsuenos.listarPorClasepaginadoContar", parametros);
 		logger.debug(registros);

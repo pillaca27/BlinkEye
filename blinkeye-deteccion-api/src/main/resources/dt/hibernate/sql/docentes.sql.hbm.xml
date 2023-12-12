@@ -65,10 +65,11 @@
     </sql-query>
 
     <sql-query name="docentes.listarActivos">
-         select 
-             'codigo' AS "codigo"
-             ,'nombre' AS "nombre"
-             ,'estadoid' AS "estadoId"
+         SELECT em.Empleado as id,
+			   pm.ApellidoPaterno + ' ' + pm.ApellidoMaterno + ', ' + pm.Nombres as nombre
+		FROM EmpleadoMast em 
+		JOIN PersonaMast pm ON pm.Persona = em.Empleado
+		where em.TipoTrabajador = '01'
     </sql-query>
 
     <sql-query name="docentes.listaCortaPorNombre">

@@ -25,6 +25,7 @@ import net.royal.spring.framework.modelo.generico.DominioTransaccion;
 */
 public class FiltroMicrosuenos extends DominioTransaccion implements java.io.Serializable{
 
+	private Integer idDocente;
 	private Integer idMicrosueno;
 	private Integer idClase;
 	private Integer idAlumno;
@@ -90,6 +91,14 @@ public class FiltroMicrosuenos extends DominioTransaccion implements java.io.Ser
 
 	public void setFechaHasta(Date fechaHasta) {
 		this.fechaHasta = fechaHasta;
+	}
+
+	public Integer getIdDocente() {
+		return idDocente;
+	}
+
+	public void setIdDocente(Integer idDocente) {
+		this.idDocente = idDocente;
 	}
 
 }
